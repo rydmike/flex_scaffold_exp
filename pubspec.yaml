@@ -1,0 +1,18 @@
+name: flexfold
+description: Flexfold is an animated, responsive and adaptive application scaffold.
+version: 0.2.1
+homepage: https://github.com/rydmike/flexfold
+environment:
+  sdk: '>=2.18.0 <3.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  collection:
+  flutter_test:
+    sdk: flutter
+  test:
+
+flutter:
+  uses-material-design: true
