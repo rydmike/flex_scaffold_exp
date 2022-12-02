@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../widgets/wrappers/maybe_tooltip.dart';
+import 'switch_list_tile_adaptive.dart';
 
 // This is simple wrapper of the SwitchListTile.adaptive widget, used to
 // wrap it with a tooltip and show the provided tooltip if one is provided.
@@ -31,7 +32,7 @@ class SwitchTileTooltip extends StatelessWidget {
     return MaybeTooltip(
       condition: tooltipEnabled,
       tooltip: tooltip,
-      child: SwitchListTile.adaptive(
+      child: SwitchListTileAdaptive(
         value: value,
         onChanged: onChanged,
         title: title,
