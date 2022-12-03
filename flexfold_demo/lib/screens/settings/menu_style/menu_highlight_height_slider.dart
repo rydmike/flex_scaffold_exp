@@ -22,7 +22,7 @@ class MenuHighlightHeightSlider extends ConsumerWidget {
             condition: ref.watch(useTooltipsPod),
             tooltip: 'Flexfold(menuHighlightHeight: '
                 '${ref.watch(menuHighlightHeightPod).floor()})',
-            child: Slider.adaptive(
+            child: Slider(
               min: kFlexfoldHighlightHeightMin,
               max: kFlexfoldHighlightHeightMax,
               divisions:

@@ -21,7 +21,7 @@ class SidebarWidthSlider extends ConsumerWidget {
             condition: ref.watch(useTooltipsPod),
             tooltip: 'Flexfold(menuWidth: '
                 '${ref.watch(sidebarWidthPod).floor()})',
-            child: Slider.adaptive(
+            child: Slider(
               min: kFlexfoldSidebarWidthMin,
               max: kFlexfoldSidebarWidthMax,
               divisions:

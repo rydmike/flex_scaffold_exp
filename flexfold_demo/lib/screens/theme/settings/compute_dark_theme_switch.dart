@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../pods/pods_theme.dart';
+import '../../../widgets/list_tiles/switch_list_tile_adaptive.dart';
 
 @immutable
 class ComputeDarkThemeSwitch extends ConsumerWidget {
@@ -9,7 +10,7 @@ class ComputeDarkThemeSwitch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SwitchListTile.adaptive(
+    return SwitchListTileAdaptive(
       title: const Text('Compute dark scheme colors'),
       subtitle: const Text(
         'Dark scheme colors are computed from the light scheme, instead of '

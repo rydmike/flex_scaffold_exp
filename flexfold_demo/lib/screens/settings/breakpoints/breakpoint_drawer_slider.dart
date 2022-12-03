@@ -25,7 +25,7 @@ class BreakpointDrawerSlider extends ConsumerWidget {
             condition: ref.watch(useTooltipsPod),
             tooltip: 'FlexfoldThemeData(breakpointDrawer: '
                 '${ref.watch(breakpointDrawerPod).floor()})',
-            child: Slider.adaptive(
+            child: Slider(
               min: kFlexfoldBreakpointDrawerMin,
               max: kFlexfoldBreakpointDrawerMax,
               divisions:

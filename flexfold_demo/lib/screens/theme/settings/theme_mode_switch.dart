@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../pods/pods_theme.dart';
 import '../../../utils/app_insets.dart';
+import '../../../widgets/list_tiles/switch_list_tile_adaptive.dart';
 
 /// Draws selectors for Light, Dark and system theme mode using the current
 /// FlexTheme's colors in the 3 way toggle widget.
@@ -25,7 +26,7 @@ class ThemeModeSwitch extends ConsumerWidget {
         if (isDark && width >= 460)
           SizedBox(
             width: 145,
-            child: SwitchListTile.adaptive(
+            child: SwitchListTileAdaptive(
               subtitle: const Text('True\nblack'),
               value: ref.watch(darkIsTrueBlackPod),
               onChanged: (bool value) {

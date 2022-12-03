@@ -25,7 +25,7 @@ class AnimationDurationSlider extends ConsumerWidget {
                 '${ref.watch(animationDurationPod)}),\n'
                 '  bottomBarAnimationDuration: Duration(milliseconds: '
                 '${ref.watch(animationDurationPod)}))',
-            child: Slider.adaptive(
+            child: Slider(
               min: 0,
               max: 1500,
               divisions: 500,

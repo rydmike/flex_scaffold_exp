@@ -21,7 +21,7 @@ class BreakpointRailSlider extends ConsumerWidget {
             condition: ref.watch(useTooltipsPod),
             tooltip: 'FlexfoldThemeData(breakpointRail: '
                 '${ref.watch(breakpointRailPod).floor()})',
-            child: Slider.adaptive(
+            child: Slider(
               min: kFlexfoldBreakpointRailMin,
               max: kFlexfoldBreakpointRailMax,
               divisions:

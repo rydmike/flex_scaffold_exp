@@ -8,7 +8,7 @@ class DarkLevelSlider extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      title: Slider.adaptive(
+      title: Slider(
         max: 100,
         divisions: 100,
         label: ref.watch(darkLevelPod).toString(),

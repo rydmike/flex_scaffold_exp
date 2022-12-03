@@ -18,7 +18,7 @@ class BottomBarOpacitySlider extends ConsumerWidget {
             condition: ref.watch(useTooltipsPod),
             tooltip: 'FlexfoldThemeData(bottomBarOpacity: '
                 '${ref.watch(bottomBarOpacityPod)})',
-            child: Slider.adaptive(
+            child: Slider(
               min: 0,
               max: 100,
               divisions: 100,

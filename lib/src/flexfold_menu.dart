@@ -442,17 +442,16 @@ class _FlexfoldMenuState extends State<FlexfoldMenu> {
                                     !isDrawer)
                                   _FlexMenuItem(
                                     destination: widget.destinations[i],
-                                    iconTheme: widget.selectedIndex == i
-                                        ? selectedIconTheme
-                                        : unselectedIconTheme,
-                                    labelTextStyle: widget.selectedIndex == i
-                                        ? selectedLabelTextStyle
-                                        : unselectedLabelTextStyle,
+                                    iconTheme: unselectedIconTheme,
+                                    selectedIconTheme: selectedIconTheme,
+                                    labelTextStyle: unselectedLabelTextStyle,
+                                    selectedLabelTextStyle:
+                                        selectedLabelTextStyle,
                                     headingTextStyle: headingTextStyle,
-                                    selected: widget.selectedIndex == i,
+                                    isSelected: widget.selectedIndex == i,
                                     width: size.maxWidth,
                                     startPadding: startPadding,
-                                    autoFocus: i == 0,
+                                    autoFocus: widget.selectedIndex == i,
                                     onTap: () {
                                       setState(() {
                                         if (isDrawerOpen) {
@@ -489,9 +488,11 @@ class _FlexfoldMenuState extends State<FlexfoldMenu> {
 class _FlexMenuItem extends StatelessWidget {
   const _FlexMenuItem({
     required this.destination,
-    this.selected = false,
+    this.isSelected = false,
     required this.iconTheme,
+    this.selectedIconTheme,
     required this.labelTextStyle,
+    this.selectedLabelTextStyle,
     required this.headingTextStyle,
     required this.onTap,
     required this.width,
@@ -499,9 +500,11 @@ class _FlexMenuItem extends StatelessWidget {
     this.autoFocus = false,
   });
   final FlexfoldDestination destination;
-  final bool selected;
+  final bool isSelected;
   final IconThemeData iconTheme;
+  final IconThemeData? selectedIconTheme;
   final TextStyle labelTextStyle;
+  final TextStyle? selectedLabelTextStyle;
   final TextStyle headingTextStyle;
   final VoidCallback onTap;
   final double width;
@@ -521,12 +524,14 @@ class _FlexMenuItem extends StatelessWidget {
             theme.useTooltips!;
 
     final Widget themedIcon = IconTheme(
-      data: iconTheme,
-      child: selected ? destination.selectedIcon : destination.icon,
+      data: isSelected ? selectedIconTheme ?? iconTheme : iconTheme,
+      child: isSelected ? destination.selectedIcon : destination.icon,
     );
 
     final Widget styledLabel = DefaultTextStyle(
-      style: labelTextStyle,
+      style: isSelected
+          ? selectedLabelTextStyle ?? labelTextStyle
+          : labelTextStyle,
       child: Text(destination.label),
     );
 
@@ -581,11 +586,12 @@ class _FlexMenuItem extends StatelessWidget {
             padding: theme.menuHighlightMargins!,
             child: Material(
               clipBehavior: Clip.antiAlias,
-              shape:
-                  selected ? theme.menuSelectedShape : theme.menuHighlightShape,
+              shape: isSelected
+                  ? theme.menuSelectedShape
+                  : theme.menuHighlightShape,
               // If the item is selected we will draw it with grey background
               // but using different style for dark and light theme.
-              color: selected
+              color: isSelected
                   // This selection highlight is the same alpha blend as the
                   // one used as default in ChipThemeData for a selected chip.
                   ? theme.menuHighlightColor

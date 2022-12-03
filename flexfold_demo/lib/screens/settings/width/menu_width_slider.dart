@@ -20,7 +20,7 @@ class MenuWidthSlider extends ConsumerWidget {
           MaybeTooltip(
             condition: ref.read(useTooltipsPod),
             tooltip: 'Flexfold(menuWidth: ${ref.watch(menuWidthPod).floor()})',
-            child: Slider.adaptive(
+            child: Slider(
               min: kFlexfoldMenuWidthMin,
               max: kFlexfoldMenuWidthMax,
               divisions:

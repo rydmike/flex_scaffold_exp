@@ -21,7 +21,7 @@ class BreakpointMenuSlider extends ConsumerWidget {
             condition: ref.watch(useTooltipsPod),
             tooltip: 'FlexfoldThemeData(breakpointMenu: '
                 '${ref.watch(breakpointMenuPod).floor()})',
-            child: Slider.adaptive(
+            child: Slider(
               min: kFlexfoldBreakpointMenuMin,
               max: kFlexfoldBreakpointMenuMax,
               divisions:

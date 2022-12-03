@@ -20,7 +20,7 @@ class AppBarOpacitySlider extends ConsumerWidget {
                 '${ref.watch(appBarOpacityPod)}))\n\n'
                 'Equivalent for Flexfold() properties menuAppBar '
                 'and sidebarAppBar',
-            child: Slider.adaptive(
+            child: Slider(
               min: 0,
               max: 100,
               divisions: 100,

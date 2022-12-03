@@ -21,7 +21,7 @@ class BreakpointSidebarSlider extends ConsumerWidget {
             condition: ref.watch(useTooltipsPod),
             tooltip: 'FlexfoldThemeData(breakpointSidebar: '
                 '${ref.watch(breakpointSidebarPod).floor()})',
-            child: Slider.adaptive(
+            child: Slider(
               min: kFlexfoldBreakpointSidebarMin,
               max: kFlexfoldBreakpointSidebarMax,
               divisions: (kFlexfoldBreakpointSidebarMax -

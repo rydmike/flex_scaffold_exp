@@ -25,7 +25,7 @@ class RailWidthSlider extends ConsumerWidget {
           MaybeTooltip(
             condition: ref.read(useTooltipsPod),
             tooltip: 'Flexfold(railWidth: ${ref.watch(railWidthPod).floor()})',
-            child: Slider.adaptive(
+            child: Slider(
               min: kFlexfoldRailWidthMin,
               max: kFlexfoldRailWidthMax,
               divisions:
