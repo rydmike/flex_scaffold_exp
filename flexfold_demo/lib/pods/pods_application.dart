@@ -79,7 +79,7 @@ final StateProvider<bool> useModalRoutesPod =
       as bool;
 }, name: KeyStore.useModalRoutes);
 
-// StateProvider for turning n Plasma background animation on sidebar and
+// StateProvider for turning on Plasma background animation on sidebar and
 // home screen. this is just a fun demo effect.
 final StateProvider<bool> plasmaBackgroundPod =
     StateProvider<bool>((StateProviderRef<bool> ref) {

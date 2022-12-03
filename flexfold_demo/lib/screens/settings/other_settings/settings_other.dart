@@ -43,9 +43,12 @@ class SettingsOther extends ConsumerWidget {
             child: MaybeTooltip(
               condition: ref.watch(useTooltipsPod),
               tooltip: 'FlexfoldThemeData(\n'
-                  '  menuAnimationCurve: ${appAnimationCurves(ref)},\n'
-                  '  sidebarAnimationCurve: ${appAnimationCurves(ref)},\n'
-                  '  bottomBarAnimationCurve: ${appAnimationCurves(ref)})',
+                  '  menuAnimationCurve: '
+                  '${ref.watch(flexMenuCurveProvider)},\n'
+                  '  sidebarAnimationCurve: '
+                  '${ref.watch(flexMenuCurveProvider)},\n'
+                  '  bottomBarAnimationCurve: '
+                  '${ref.watch(flexMenuCurveProvider)})',
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppInsets.l,

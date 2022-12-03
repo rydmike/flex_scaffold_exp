@@ -354,21 +354,24 @@ final StateProvider<AppAnimationCurve> animationCurvePod =
           as AppAnimationCurve) as AppAnimationCurve;
 }, name: KeyStore.animationCurve);
 
-// A function that returns the actual animation Curve the enum represents.
-Curve appAnimationCurves(WidgetRef ref) {
-  switch (ref.watch(animationCurvePod)) {
-    case AppAnimationCurve.linear:
-      return Curves.linear;
-    case AppAnimationCurve.easeInOut:
-      return Curves.easeInOut;
-    case AppAnimationCurve.easeInOutQuart:
-      return Curves.easeInOutQuart;
-    case AppAnimationCurve.easeInOutExpo:
-      return Curves.easeInOutExpo;
-    case AppAnimationCurve.bounceOut:
-      return Curves.bounceOut;
-  }
-}
+// A provider that returns the actual animation Curve the enum represents.
+final Provider<Curve> flexMenuCurveProvider = Provider<Curve>(
+  (ProviderRef<Curve> ref) {
+    switch (ref.watch(animationCurvePod)) {
+      case AppAnimationCurve.linear:
+        return Curves.linear;
+      case AppAnimationCurve.easeInOut:
+        return Curves.easeInOut;
+      case AppAnimationCurve.easeInOutQuart:
+        return Curves.easeInOutQuart;
+      case AppAnimationCurve.easeInOutExpo:
+        return Curves.easeInOutExpo;
+      case AppAnimationCurve.bounceOut:
+        return Curves.bounceOut;
+    }
+  },
+  name: 'flexMenuCurveProvider',
+);
 
 final StateProvider<int> animationDurationPod =
     StateProvider<int>((StateProviderRef<int> ref) {

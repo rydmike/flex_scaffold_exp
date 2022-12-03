@@ -46,6 +46,8 @@ class FlexScaffold extends StatefulWidget {
     required this.destinations,
     required this.selectedIndex,
     required this.onDestination,
+    // Default to using first module.
+    this.activeModule = 0,
     //
     // Enable menu and sidebar toggle.
     this.menuControlEnabled = true,
@@ -99,7 +101,7 @@ class FlexScaffold extends StatefulWidget {
     // The actual content that will be in the Flexfold scaffold body.
     this.body,
     //
-  })  : assert(
+  }) : assert(
             destinations.length >= 2, 'There must be at least 2 destinations');
 
   /// The theme for the [FlexScaffold] scaffold.
@@ -143,6 +145,31 @@ class FlexScaffold extends StatefulWidget {
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
   final ValueChanged<FlexfoldDestinationData> onDestination;
+
+  // TODO(rydmike): Implement modules!
+  //
+  // Consider using a list of destinations, which is List<FlexfoldDestination>,
+  // We should then store last used index per module.
+
+  /// Set the active module for the destinations.
+  ///
+  /// A small app usually has only one module and you can omit this property.
+  ///
+  /// If you want to create the appearance of your app having multiple modules
+  /// with different navigators, you can can give your destinations module
+  /// numbers. Destinations with the same module number appear in the same
+  /// navigation drawer, menu, rail or bottom navigation, depending on
+  /// current layout.
+  ///
+  /// FlexFold provides the method setModule(module), to change the active
+  /// module and swap out the displayed navigation destinations to the
+  /// destinations in the selected module.
+  ///
+  /// Destinations in different modules can used the same named route and via
+  /// that provide access to shared destinations (pages).
+  ///
+  /// The active module number, defaults to 0.
+  final int activeModule;
 
   /// The menu mode can be manually controlled by the user when true.
   ///
@@ -1109,7 +1136,7 @@ class _FlexScaffoldState extends State<FlexScaffold> {
       if (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS) {
         effectiveType = FlexfoldBottomBarType.cupertino;
       } else {
-        effectiveType = FlexfoldBottomBarType.material;
+        effectiveType = FlexfoldBottomBarType.material2;
       }
     }
     if (_kDebugMe) {
@@ -1119,9 +1146,9 @@ class _FlexScaffoldState extends State<FlexScaffold> {
     // to get the correct height for the effective bottom nav bar.
     // TODO(rydmike): Make this nice handle alwaysHide labels for NavigationBar.
     final double effectiveToolBarHeight =
-        effectiveType == FlexfoldBottomBarType.material
+        effectiveType == FlexfoldBottomBarType.material2
             ? kBottomNavigationBarHeight
-            : effectiveType == FlexfoldBottomBarType.materialYou
+            : effectiveType == FlexfoldBottomBarType.material3
                 ? kFlexfoldNavigationBarHeight
                 : kFlexfoldCupertinoTabBarHeight;
     // If we are not at a destination that is defined to be a bottom target,

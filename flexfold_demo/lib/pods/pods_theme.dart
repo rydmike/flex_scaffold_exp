@@ -51,7 +51,6 @@ final StateProvider<ThemeData> lightThemePod =
   // to customized sub-theme's, so we create it first.
   return FlexThemeData.light(
     colors: ref.watch(currentSchemePod).light,
-    // swapColors: ref.watch(lightSwapColorsPod).state,
     surfaceMode: ref.watch(surfaceStylePod),
     tooltipsMatchBackground: ref.watch(tooltipsMatchBackgroundPod),
     appBarStyle: ref.watch(lightAppBarStylePod),
@@ -68,8 +67,8 @@ final StateProvider<ThemeData> lightThemePod =
         : null,
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     fontFamily: AppFonts.mainFont,
-    // typography: Typography.material2021(platform: TargetPlatform.android),
     platform: ref.watch(platformPod),
+    typography: Typography.material2021(platform: ref.watch(platformPod)),
     subThemesData: const FlexSubThemesData(),
   );
 });
@@ -86,7 +85,6 @@ final StateProvider<ThemeData> darkThemePod =
   // to customized sub-theme's, so we create it first.
   return FlexThemeData.dark(
     colors: ref.watch(currentSchemePod).dark,
-    // swapColors: ref.watch(darkSwapColorsPod).state,
     surfaceMode: ref.watch(surfaceStylePod),
     tooltipsMatchBackground: ref.watch(tooltipsMatchBackgroundPod),
     appBarStyle: ref.watch(darkAppBarStylePod),
@@ -104,8 +102,8 @@ final StateProvider<ThemeData> darkThemePod =
     darkIsTrueBlack: ref.watch(darkIsTrueBlackPod),
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     fontFamily: AppFonts.mainFont,
-    // typography: Typography.material2018(platform: TargetPlatform.android),
     platform: ref.watch(platformPod),
+    typography: Typography.material2021(platform: ref.watch(platformPod)),
     subThemesData: const FlexSubThemesData(),
   );
 });
@@ -136,17 +134,20 @@ final StateProvider<List<FlexSchemeData>> schemesProvider =
         AppTheme.flexfoldLight,
         ref.watch(usedColorsPod),
         swapColors: ref.watch(lightSwapColorsPod),
+        brightness: Brightness.light,
       ),
       dark: ref.watch(useToDarkMethodPod)
           ? FlexSchemeColor.effective(
               AppTheme.flexfoldLight,
               ref.watch(usedColorsPod),
               swapColors: ref.watch(darkSwapColorsPod),
+              brightness: Brightness.dark,
             ).defaultError.toDark(ref.watch(darkLevelPod))
           : FlexSchemeColor.effective(
               AppTheme.flexfoldDark,
               ref.watch(usedColorsPod),
               swapColors: ref.watch(darkSwapColorsPod),
+              brightness: Brightness.dark,
             ),
     ),
     //
@@ -160,17 +161,20 @@ final StateProvider<List<FlexSchemeData>> schemesProvider =
         ref.watch(customLightPod),
         ref.watch(usedColorsPod),
         swapColors: ref.watch(lightSwapColorsPod),
+        brightness: Brightness.light,
       ),
       dark: ref.watch(useToDarkMethodPod)
           ? FlexSchemeColor.effective(
               ref.watch(customLightPod),
               ref.watch(usedColorsPod),
               swapColors: ref.watch(darkSwapColorsPod),
+              brightness: Brightness.dark,
             ).defaultError.toDark(ref.watch(darkLevelPod))
           : FlexSchemeColor.effective(
               ref.watch(customDarkPod),
               ref.watch(usedColorsPod),
               swapColors: ref.watch(darkSwapColorsPod),
+              brightness: Brightness.dark,
             ),
     ),
     //
@@ -182,11 +186,13 @@ final StateProvider<List<FlexSchemeData>> schemesProvider =
         ref.watch(imgLightPod),
         ref.watch(usedColorsPod),
         swapColors: ref.watch(lightSwapColorsPod),
+        brightness: Brightness.light,
       ),
       dark: FlexSchemeColor.effective(
         ref.watch(imgLightPod),
         ref.watch(usedColorsPod),
         swapColors: ref.watch(darkSwapColorsPod),
+        brightness: Brightness.dark,
       ).defaultError.toDark(ref.watch(darkLevelPod)),
     ),
     //
@@ -201,17 +207,22 @@ final StateProvider<List<FlexSchemeData>> schemesProvider =
           data.light,
           ref.watch(usedColorsPod),
           swapColors: ref.watch(lightSwapColorsPod),
+          brightness: Brightness.light,
         ),
         dark: ref.watch(useToDarkMethodPod)
             ? FlexSchemeColor.effective(
                 data.light,
                 ref.watch(usedColorsPod),
                 swapColors: ref.watch(darkSwapColorsPod),
+                swapLegacy: data.light.swapOnMaterial3,
+                brightness: Brightness.dark,
               ).defaultError.toDark(ref.watch(darkLevelPod))
             : FlexSchemeColor.effective(
                 data.dark,
                 ref.watch(usedColorsPod),
                 swapColors: ref.watch(darkSwapColorsPod),
+                swapLegacy: data.dark.swapOnMaterial3,
+                brightness: Brightness.dark,
               ),
       ),
   ];

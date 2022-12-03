@@ -12,9 +12,9 @@ class FlexfoldDestination {
   ///
   /// The [icon] and [label] are required and may not be non-null.
   const FlexfoldDestination({
-    this.module = 0,
-    // Widget? icon,
-    this.icon = const Icon(Icons.add_circle), // TODO(rydmike): change default?
+    // TODO(rydmike): Decide if use Widget or IconData,
+    // TODO(rydmike): change default to no default all nulls.
+    this.icon = const Icon(Icons.add_circle),
     this.iconData = Icons.add_circle,
     Widget? selectedIcon,
     IconData? selectedIconData,
@@ -33,27 +33,6 @@ class FlexfoldDestination {
   })  : // icon = icon ?? selectedIcon,
         selectedIcon = selectedIcon ?? icon,
         selectedIconData = selectedIconData ?? iconData;
-
-  // TODO(rydmike): Implement modules!
-  /// An optional module number for the destinations.
-  ///
-  /// A small app usually has only one module and you can omit this property.
-  ///
-  /// If you want to create the appearance of your app having multiple modules
-  /// with different navigators, you can can give your destinations module
-  /// numbers. Destinations with the same module number appear in the same
-  /// navigation drawer, menu, rail or bottom navigation, depending on
-  /// current layout.
-  ///
-  /// FlexFold provides the method setModule(module), to change the active
-  /// module and swap out the displayed navigation destinations to the
-  /// destinations in the selected module.
-  ///
-  /// Destinations in different modules can used the same named route and via
-  /// that provide access to shared destinations (pages).
-  ///
-  /// The module number, defaults to 0.
-  final int module;
 
   /// The icon widget for the icon used by the destination. Typically an
   /// [Icon] widget.
@@ -325,6 +304,7 @@ enum FlexfoldNavigationSource {
   custom,
 }
 
+// TODO(rydmike): Should also return active module index.
 /// The properties contain detailed information about a target Flexfold
 /// navigation destination. Returned by the [FlexScaffold.onDestination]
 /// callback.

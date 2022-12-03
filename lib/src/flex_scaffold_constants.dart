@@ -34,18 +34,24 @@ enum FlexfoldHighlightType {
 ///
 /// The choice [FlexfoldBottomBarType.adaptive] results in Flexfold using
 /// a [CupertinoTabBar] navigation bar on iOs and MacOS and a
-/// [BottomNavigationBar] on all other platforms.
+/// [BottomNavigationBar] or [NavigationBar] on all other platforms.
+/// The choice of Material bottom navigation style depends on if
+/// [ThemeData.useMaterial3], if true, [material3] is used, else [material2].
 enum FlexfoldBottomBarType {
-  /// Use Material style bottom navigation bar.
-  material,
+  /// Use Material 2 style bottom navigation bar.
+  material2,
 
-  /// Use Material You style navigation bar.
-  materialYou,
+  /// Use Material 3 style navigation bar.
+  material3,
 
   /// Use Cupertino style bottom navigation bar.
   cupertino,
 
-  /// Use Cupertino bottom navigation bar on iOS and macOS, Material on others.
+  /// Use Cupertino bottom navigation bar on iOS and macOS,
+  /// Material style on others.
+  ///
+  /// The choice of Material bottom navigation style depends on if
+  /// [ThemeData.useMaterial3], if true, [material3] is used, else [material2].
   adaptive,
 }
 
@@ -61,18 +67,15 @@ enum FlexfoldMenuStart {
 // TODO(rydmike): This feature is not yet implemented, under consideration.
 /// Enum used to set if menu should be on the start or end side, if left or
 /// right side is start or end, depends on current LTR RTL directionality.
+///
+/// Future version may also add totally different menu style, like top and
+/// float. Where menu is at the top of the screen or free-floating.
 enum FlexfoldMenuSide {
   /// Menu is on start side of the screen.
   start,
 
   /// Menu is on end side of the screen.
   end,
-
-  /// Menu is at the top of the screen.
-  top,
-
-  /// Menu is free-floating.
-  float,
 }
 
 /// A constant widget used as the default menu icon.

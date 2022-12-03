@@ -14,8 +14,6 @@ class MenuSideSwitch extends ConsumerWidget {
     final List<bool> isSelected = <bool>[
       side == FlexfoldMenuSide.start,
       side == FlexfoldMenuSide.end,
-      side == FlexfoldMenuSide.top,
-      side == FlexfoldMenuSide.float,
     ];
     return ToggleButtons(
       isSelected: isSelected,
@@ -38,26 +36,6 @@ class MenuSideSwitch extends ConsumerWidget {
           padding: EdgeInsets.all(6),
           child: Text(
             'At screen\nend side',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 11),
-            overflow: TextOverflow.fade,
-            softWrap: true,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(6),
-          child: Text(
-            'At screen\ntop',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 11),
-            overflow: TextOverflow.fade,
-            softWrap: true,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(6),
-          child: Text(
-            'Free\nfloating',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 11),
             overflow: TextOverflow.fade,

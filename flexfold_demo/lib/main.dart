@@ -25,7 +25,6 @@ Future<void> main() async {
   Hive.init(appDataDir);
   // Open the Hive box, we just keep it open all the time in this demo app.
   await Hive.openBox<dynamic>(kHiveBox);
-  // Routemaster.setPathUrlStrategy();
   runApp(
     // const Directionality(
     //   textDirection: TextDirection.ltr,
@@ -119,6 +118,7 @@ class DemoApp extends ConsumerWidget {
     return MaterialApp.router(
       useInheritedMediaQuery: true,
       builder: DevicePreview.appBuilder,
+      locale: DevicePreview.locale(context),
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
       scrollBehavior: AppScrollBehavior(),
@@ -129,32 +129,6 @@ class DemoApp extends ConsumerWidget {
     );
   }
 }
-
-// COMMENTED Router master implementation
-//
-// class DemoApp extends ConsumerWidget {
-//   const DemoApp({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     return MaterialApp.router(
-//       title: AppStrings.appName,
-//       debugShowCheckedModeBanner: false,
-//       scrollBehavior: AppScrollBehavior(),
-//       routeInformationParser: const RoutemasterParser(),
-//       routerDelegate: RoutemasterDelegate(
-//         observers: <RoutemasterObserver>[TitleObserver()],
-//         routesBuilder: (BuildContext context) => routeMap(),
-//       ),
-//       themeMode: ref.watch(themeModePod),
-//       theme: ref.watch(lightThemePod),
-//       darkTheme: ref.watch(darkThemePod),
-//     );
-//   }
-// }
-
-//
-// builder: DevicePreview.appBuilder,
-// locale: DevicePreview.locale(context),
 
 // TODO(rydmike): Router master change
 // return MaterialApp(

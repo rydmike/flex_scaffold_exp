@@ -12,8 +12,8 @@ class BottomBarTypeSwitch extends ConsumerWidget {
     // treeDepthInfo(context, 'BottomBarTypeSwitch');
     final FlexfoldBottomBarType type = ref.watch(bottomBarTypePod);
     final List<bool> isSelected = <bool>[
-      type == FlexfoldBottomBarType.material,
-      type == FlexfoldBottomBarType.materialYou,
+      type == FlexfoldBottomBarType.material2,
+      type == FlexfoldBottomBarType.material3,
       type == FlexfoldBottomBarType.cupertino,
       type == FlexfoldBottomBarType.adaptive,
     ];

@@ -1,4 +1,3 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flexfold/flexfold.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
@@ -9,10 +8,8 @@ import 'package:go_router/go_router.dart';
 // import 'package:routemaster/routemaster.dart';
 
 import '../model/app_navigation_state.dart';
-import '../pods/pods_application.dart';
 import '../pods/pods_flexfold.dart';
 import '../pods/pods_navigation.dart';
-import '../pods/pods_theme.dart';
 import '../utils/app_icons.dart';
 import '../utils/app_tooltips.dart';
 import '../widgets/dialogs/platform_alert_dialog.dart';
@@ -41,8 +38,6 @@ class ResponsiveLayoutShell extends StatelessWidget {
   });
   final Widget body;
 
-  // static const String route = AppRoutes.root;
-
   // This Flexfold demo app builds one single Flexfold scaffold
   // in a stateless widget using a ChangeNotifierProvider that holds
   // all the config values for the Flexfold and a few more design
@@ -64,9 +59,6 @@ class ResponsiveLayoutShell extends StatelessWidget {
   // scaffold.
   @override
   Widget build(BuildContext context) {
-    // final IndexedPageState pageState = IndexedPage.of(context);
-    // final CupertinoTabPageState pageState = CupertinoTabPage.of(context);
-
     return Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
       final AppNavigation appNav = ref.watch(navigationPod);
@@ -83,7 +75,7 @@ class ResponsiveLayoutShell extends StatelessWidget {
       // It is possible to make totally custom highlight and hover
       // shapes and they don't even have to be the same.
       final TextDirection directionality = Directionality.of(context);
-      // The style of the selected highlighted item
+      // The style of the selected highlighted item.
       final FlexfoldMenuHighlight menuSelected = FlexfoldMenuHighlight(
         highlightType: ref.watch(menuHighlightTypePod),
         borderColor: Theme.of(context).primaryColor,
@@ -164,9 +156,9 @@ class ResponsiveLayoutShell extends StatelessWidget {
         //
         // The animation curve for rail/menu, sidebar and bottom bar
         // can be set separately, but this demo uses the same setting for all.
-        menuAnimationCurve: appAnimationCurves(ref),
-        sidebarAnimationCurve: appAnimationCurves(ref),
-        bottomBarAnimationCurve: appAnimationCurves(ref),
+        menuAnimationCurve: ref.watch(flexMenuCurveProvider),
+        sidebarAnimationCurve: ref.watch(flexMenuCurveProvider),
+        bottomBarAnimationCurve: ref.watch(flexMenuCurveProvider),
         //
         // Bottom navigation bar theme and additional visual properties for
         // the bottom navigation bar.
@@ -419,16 +411,6 @@ class ResponsiveLayoutShell extends StatelessWidget {
                 // appNavNotify.useModalDestination(false);
                 appNavNotify.newDestination(destination);
                 context.go(destination.route);
-                // TODO(rydmike): Router master change
-                // Routemaster.of(context).push(destination.route);
-                // pageState.index = destination.menuIndex;
-
-                // Routemaster.of(context).replace(destination.route);
-                // await
-                // appNav.navKeyFlexfold.currentState!.pushReplacementNamed(
-                //   destination.route,
-                //   arguments: destination.copyWith(useModal: false),
-                // );
               }
             },
             //
@@ -455,6 +437,7 @@ class ResponsiveLayoutShell extends StatelessWidget {
               // Experimental new feature
               floatAppBar: ref.watch(appBarFloatPod),
               floatPadding: const EdgeInsetsDirectional.fromSTEB(3, 0, 0, 0),
+              // Elevation and scrim
               elevation: ref.watch(appBarFloatPod) ? 2 : 0,
               scrim: ref.watch(appBarScrimPod),
             ),
@@ -660,59 +643,6 @@ class ResponsiveLayoutShell extends StatelessWidget {
             //   initialRoute: AppRoutes.home,
             // ),
           ));
-    });
-  }
-}
-
-class DirectionalityWrapper extends StatelessWidget {
-  const DirectionalityWrapper({
-    super.key,
-    required this.body,
-  });
-  final Widget body;
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) {
-      // The inserted directionality is used by the toggle that allows us to
-      // control
-      return Directionality(
-        textDirection: appTextDirection(context, ref),
-        // DevicePreview.appBuilder contains brightness setting that can be in
-        // conflict with the application's overall brightness that is defined by
-        // the active MaterialApp's `theme` or `darkTheme` selected via
-        // `themeMode`. To correct the situation we insert an extra builder
-        // that overrides the theme brightness from DevicePreview with the
-        // correct Brightness for the selected active themeMode and its
-        // brightness.
-        child: Builder(builder: (BuildContext context) {
-          // Resolve which theme mode to use.
-          final ThemeMode mode = ref.watch(themeModePod);
-          final Brightness platformBrightness =
-              MediaQuery.platformBrightnessOf(context);
-          final bool useDarkTheme = mode == ThemeMode.dark ||
-              (mode == ThemeMode.system &&
-                  platformBrightness == Brightness.dark);
-          return Theme(
-            data: Theme.of(context).copyWith(
-                brightness: useDarkTheme ? Brightness.dark : Brightness.light),
-            // Home screen is a layout shell with a single Flexfold scaffold
-            // using a nested navigator as its body. The screens used by
-            // Flexfold normally only contain and change the part that goes
-            // into the body of the scaffold, thus in tablet, desktop and web
-            // views, only the body part uses the desired page transition
-            // effect for each navigation mode.
-            child: AnnotatedRegion<SystemUiOverlayStyle>(
-              value: FlexColorScheme.themedSystemNavigationBar(
-                context,
-                useDivider: false,
-              ),
-              child: ResponsiveLayoutShell(body: body),
-            ),
-          );
-        }),
-      );
     });
   }
 }

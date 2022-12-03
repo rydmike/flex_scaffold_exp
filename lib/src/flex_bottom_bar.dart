@@ -64,7 +64,7 @@ class FlexBottomBar extends StatelessWidget {
         onDestinationSelected: onDestinationSelected,
       );
     }
-    if (bottomBarType == FlexfoldBottomBarType.materialYou) {
+    if (bottomBarType == FlexfoldBottomBarType.material3) {
       return MaterialYouBottomBar(
         destinations: destinations,
         selectedIndex: selectedIndex,

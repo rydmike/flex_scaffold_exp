@@ -217,7 +217,6 @@ class AppRouter {
             path: AppRoutes.home,
             name: AppRoutes.homeLabel,
             pageBuilder: (BuildContext context, GoRouterState state) {
-              // final AppNavigation appNav = ref.watch(navigationPod);
               return NoTransitionPage<void>(
                 key: state.pageKey,
                 child: const HomeScreen(),

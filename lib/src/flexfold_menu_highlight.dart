@@ -22,10 +22,10 @@ import 'flexfold_theme.dart';
 /// If there is some style you would like to add to the ready made
 /// ones, please post a suggestion or make a pull request.
 class FlexfoldMenuHighlight {
-  /// Default constructor.
+  /// Default constructor for [FlexfoldMenuHighlight].
   FlexfoldMenuHighlight({
-    required this.highlightType,
-    required this.borderColor,
+    this.highlightType = FlexfoldHighlightType.stadium,
+    this.borderColor,
     this.highlightColor,
     this.borderRadius = 8.0,
     this.height = kFlexfoldHighlightHeight,
@@ -107,13 +107,19 @@ class FlexfoldMenuHighlight {
     }
   }
 
-  /// The type of Flexfold Shape
+  /// The type of Flexfold Shape.
+  ///
+  /// Default to [FlexfoldHighlightType.stadium].
   final FlexfoldHighlightType highlightType;
 
   /// Color of the border on the edge for the shape when used.
-  final Color borderColor;
+  ///
+  /// If not defined defaults to [Colors.transparent].
+  final Color? borderColor;
 
   /// Color of the background highlight or hover transparency.
+  ///
+  /// If not defined defaults to [Colors.transparent].
   final Color? highlightColor;
 
   /// Corner rounding diameter.
@@ -188,10 +194,18 @@ class FlexfoldMenuHighlight {
         );
       case FlexfoldHighlightType.startBar:
         return BorderDirectional(
-            start: BorderSide(color: borderColor, width: startBarWidth));
+          start: BorderSide(
+            color: borderColor ?? Colors.transparent,
+            width: startBarWidth,
+          ),
+        );
       case FlexfoldHighlightType.endBar:
         return BorderDirectional(
-            end: BorderSide(color: borderColor, width: endBarWidth));
+          end: BorderSide(
+            color: borderColor ?? Colors.transparent,
+            width: endBarWidth,
+          ),
+        );
     }
   }
 }
