@@ -6,7 +6,6 @@ import '../../model/app_navigation_state.dart';
 import '../../navigation/app_routes.dart';
 import '../../navigation/destinations.dart';
 import '../../pods/pods_application.dart';
-import '../../pods/pods_flexfold.dart';
 import '../../pods/pods_navigation.dart';
 import '../../utils/app_images.dart';
 import '../../utils/app_insets.dart';
@@ -25,13 +24,16 @@ class PreviewScreen extends ConsumerStatefulWidget {
 }
 
 class _PreviewScreenState extends ConsumerState<PreviewScreen> {
-  late ScrollController scrollController;
+  late final ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
-    scrollController =
-        ScrollController(keepScrollOffset: true, initialScrollOffset: 0);
+    scrollController = ScrollController(
+      keepScrollOffset: true,
+      initialScrollOffset: 0,
+      debugLabel: 'PreviewScreenScrollController',
+    );
     scrollController.addListener(
       () {
         hideBottomOnScroll(ref, scrollController);
@@ -48,11 +50,11 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO(rydmike): If this works, put it else where as rad too
-    final AppNavigation appNav = ref.read(navigationPod);
+    final AppNavigation appNav = ref.read(navigationProvider);
 
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final FlexfoldDestinationData destination = appNav.useModalDestination
+    final FlexDestinationTarget destination = appNav.useModalDestination
         ? appNav.modalDestination
         : appNav.destination;
     // We also use the current destination to find the destination
@@ -65,163 +67,132 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     final TextStyle linkStyle = themeData.textTheme.bodyText1!.copyWith(
         color: themeData.colorScheme.primary, fontWeight: FontWeight.bold);
 
+    // See settings_screen.dart for an explanation of these
+    // padding values and why they are VERY handy and useful.
+    final double topPadding = MediaQuery.of(context).padding.top;
+    final double bottomPadding = MediaQuery.of(context).padding.bottom;
+
     // In case we are showing the screen as modal screen it will then be
     // shown by the root navigator that does not have our custom directionality
     // wrapper above it in the tree, so we just add it once more.
-    return Directionality(
-      textDirection: appTextDirection(context, ref),
-      child: Scaffold(
-        // If a main destination is being displayed as a modal route, we add an
-        // app bar, with same style as rest of app, with an implicit back button
-        // that it will get since it was pushed on top of a base route.
-        appBar: destination.useModal && ref.watch(useModalRoutesPod)
-            ? FlexAppBar.styled(
-                context,
-                title: Text(appDestinations[destination.menuIndex].label),
-                gradient: ref.watch(appBarGradientPod),
-                blurred: ref.watch(appBarBlurPod),
-                opacity: ref.watch(appBarTransparentPod)
-                    ? ref.watch(appBarOpacityPod)
-                    : 1.0,
-                hasBorderOnSurface: ref.watch(appBarBorderOnSurfacePod),
-                hasBorder: ref.watch(appBarBorderPod),
-                showScreenSize: ref.watch(appBarShowScreenSizePod),
-              ).toAppBar()
-            // No app bar, the scaffold is being shown inside the layout screen
-            : null,
-        extendBody: ref.watch(extendBodyPod),
-        extendBodyBehindAppBar: ref.watch(extendBodyBehindAppBarPod),
-        body: Builder(builder: (BuildContext context) {
-          // See settings_screen.dart for an explanation of these
-          // padding values and why they are VERY handy and useful.
-          final double topPadding = MediaQuery.of(context).padding.top;
-          final double bottomPadding = MediaQuery.of(context).padding.bottom;
-          return Builder(builder: (BuildContext context) {
-            return PageBody(
-              // key: ValueKey<String>(destination.route),
-              controller: scrollController,
-              child: ListView(
-                // key: ValueKey<String>(destination.route),
-                controller: scrollController,
-                padding: EdgeInsets.fromLTRB(
-                  AppInsets.l,
-                  AppInsets.l + topPadding,
-                  AppInsets.l,
-                  AppInsets.l + bottomPadding,
-                ),
-                children: <Widget>[
-                  PageHeader(
-                      icon: icon, heading: heading, destination: destination),
-                  const Divider(),
-                  PageIntro(
-                    introTop: Text.rich(
-                      TextSpan(
-                        text: 'You can enable a feature called DevicePreview '
-                            'in this demo. '
-                            'When enabled, it wraps the entire '
-                            'application in a frame that simulate how the '
-                            'application looks when used on different '
-                            'mobile devices, even if it is still running in '
-                            'a Web browser or as a desktop app.\n'
-                            '\n'
-                            'You can use the DevicePreview as a way to test '
-                            'and verify how your Flexfold settings look, work '
-                            'and impact navigation on different devices.\n\n',
-                        children: <InlineSpan>[
-                          LinkTextSpan(
-                            text: 'DevicePreview',
-                            style: linkStyle,
-                            uri: Uri(
-                              scheme: 'https',
-                              host: 'pub.dev',
-                              path: 'packages/device_preview',
-                            ),
-                          ),
-                          const TextSpan(
-                              text: ' is a Flutter package '
-                                  'made by '),
-                          LinkTextSpan(
-                            text: 'Aloïs Deniel',
-                            style: linkStyle,
-                            uri: Uri(
-                              scheme: 'https',
-                              host: 'twitter.com',
-                              path: 'aloisdeniel',
-                            ),
-                          ),
-                        ],
-                      ),
+    return PageBody(
+      controller: scrollController,
+      child: ListView(
+        primary: false,
+        controller: scrollController,
+        padding: EdgeInsets.fromLTRB(
+          AppInsets.l,
+          AppInsets.l + topPadding,
+          AppInsets.l,
+          AppInsets.l + bottomPadding,
+        ),
+        children: <Widget>[
+          PageHeader(icon: icon, heading: heading, destination: destination),
+          const Divider(),
+          PageIntro(
+            introTop: Text.rich(
+              TextSpan(
+                text: 'You can enable a feature called DevicePreview '
+                    'in this demo. '
+                    'When enabled, it wraps the entire '
+                    'application in a frame that simulate how the '
+                    'application looks when used on different '
+                    'mobile devices, even if it is still running in '
+                    'a Web browser or as a desktop app.\n'
+                    '\n'
+                    'You can use the DevicePreview as a way to test '
+                    'and verify how your Flexfold settings look, work '
+                    'and impact navigation on different devices.\n\n',
+                children: <InlineSpan>[
+                  LinkTextSpan(
+                    text: 'DevicePreview',
+                    style: linkStyle,
+                    uri: Uri(
+                      scheme: 'https',
+                      host: 'pub.dev',
+                      path: 'packages/device_preview',
                     ),
-                    introBottom: const Text(
-                      'Below you can enable DevicePreview on demand at '
-                      'runtime, just select device preview below and give '
-                      'it a try.',
+                  ),
+                  const TextSpan(
+                      text: ' is a Flutter package '
+                          'made by '),
+                  LinkTextSpan(
+                    text: 'Aloïs Deniel',
+                    style: linkStyle,
+                    uri: Uri(
+                      scheme: 'https',
+                      host: 'twitter.com',
+                      path: 'aloisdeniel',
                     ),
-                    imageAssets: AppImages.route[PreviewScreen.route]!.toList(),
                   ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 20,
-                        child: SelectPreview(
-                          header: 'Native view',
-                          selected: !ref.watch(useDevicePreviewPod),
-                          onSelect: () {
-                            ref.read(useDevicePreviewPod.notifier).state =
-                                false;
-                            // ref
-                            //     .read(navigationPod.notifier)
-                            //     .useModalDestination(false);
-                            // TODO(rydmike): Where to go?
-                            // context.go(AppRoutes.root);
-                          },
-                          image: const AssetImage(AppImages.noDevice),
-                        ),
-                      ),
-                      const Spacer(),
-                      Expanded(
-                        flex: 20,
-                        child: SelectPreview(
-                          header: 'Device preview',
-                          selected: ref.watch(useDevicePreviewPod),
-                          onSelect: () {
-                            ref.read(useDevicePreviewPod.notifier).state = true;
-                          },
-                          image: const AssetImage(AppImages.asDevice),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  // Text(
-                  //   'Setting up DevicePreview in a Flutter app is simple. '
-                  //   'The "main.dart" code '
-                  //   'snippet below from this application, '
-                  //  'show one example of how enabling it from within the app '
-                  //   'can be done when using Riverpod '
-                  //   'and HookWidget. It is very simple and it looks quite '
-                  //   'elegant. Clicking on the images above just toggles the '
-                  //   'state of the StateProvider useDevicePreviewProvider.\n'
-                  //   '\n'
-                  //  'DevicePreview comes with its own built in ON/OFF toggle '
-                  //   'too, but it leaves an always visible row at the bottom '
-                  //  'of the app, where you can see and use the toggle switch '
-                  //   'at all times. This is fine and even convenient for dev '
-                  //   'and test mode, but in app you may also '
-                  //   'to hide it totally when it is not being used.\n'
-                  //   '\n'
-                  //   'The implementation below uses the above fancy in app '
-                  //   'image toggle instead to completely disable and remove '
-                  //   'the DevicePreview when it is not used.\n',
-                  //   style: themeData.textTheme.bodyText1,
-                  // ),
-                  // const MainDartExample(),
                 ],
               ),
-            );
-          });
-        }),
+            ),
+            introBottom: const Text(
+              'Below you can enable DevicePreview on demand at '
+              'runtime, just select device preview below and give '
+              'it a try.',
+            ),
+            imageAssets: AppImages.route[PreviewScreen.route]!.toList(),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 20,
+                child: SelectPreview(
+                  header: 'Native view',
+                  selected: !ref.watch(useDevicePreviewProvider),
+                  onSelect: () {
+                    ref.read(useDevicePreviewProvider.notifier).state = false;
+                    // ref
+                    //     .read(navigationPod.notifier)
+                    //     .useModalDestination(false);
+                    // TODO(rydmike): Where to go?
+                    // context.go(AppRoutes.root);
+                  },
+                  image: const AssetImage(AppImages.noDevice),
+                ),
+              ),
+              const Spacer(),
+              Expanded(
+                flex: 20,
+                child: SelectPreview(
+                  header: 'Device preview',
+                  selected: ref.watch(useDevicePreviewProvider),
+                  onSelect: () {
+                    ref.read(useDevicePreviewProvider.notifier).state = true;
+                  },
+                  image: const AssetImage(AppImages.asDevice),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Setting up DevicePreview in a Flutter app is simple. '
+            'The "main.dart" code '
+            'snippet below from this application, '
+            'show one example of how enabling it from within the app '
+            'can be done when using Riverpod '
+            'and HookWidget. It is very simple and it looks quite '
+            'elegant. Clicking on the images above just toggles the '
+            'state of the StateProvider useDevicePreviewProvider.\n'
+            '\n'
+            'DevicePreview comes with its own built in ON/OFF toggle '
+            'too, but it leaves an always visible row at the bottom '
+            'of the app, where you can see and use the toggle switch '
+            'at all times. This is fine and even convenient for dev '
+            'and test mode, but in app you may also '
+            'to hide it totally when it is not being used.\n'
+            '\n'
+            'The implementation below uses the above fancy in app '
+            'image toggle instead to completely disable and remove '
+            'the DevicePreview when it is not used.\n',
+            style: themeData.textTheme.bodyText1,
+          ),
+          const MainDartExample(),
+        ],
       ),
     );
   }

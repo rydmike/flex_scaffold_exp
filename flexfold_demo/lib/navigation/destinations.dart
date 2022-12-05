@@ -5,28 +5,28 @@ import '../utils/app_icons.dart';
 import 'app_routes.dart';
 
 // A list with all the destinations we want to use for the
-// Flexfold scaffold in this demo application.
-const List<FlexfoldDestination> appDestinations = <FlexfoldDestination>[
-  FlexfoldDestination(
+// FlexScaffold in this application.
+const List<FlexDestination> appDestinations = <FlexDestination>[
+  FlexDestination(
     label: AppRoutes.homeLabel,
     route: AppRoutes.home,
     iconData: AppIcons.home,
     selectedIconData: AppIcons.homeSelected,
     icon: Icon(AppIcons.home),
     selectedIcon: Icon(AppIcons.homeSelected),
-    maybeModal: false,
+    maybePush: false,
   ),
-  FlexfoldDestination(
+  FlexDestination(
     label: AppRoutes.infoLabel,
     route: AppRoutes.info,
     iconData: AppIcons.info,
     selectedIconData: AppIcons.infoSelected,
     icon: Icon(AppIcons.info),
     selectedIcon: Icon(AppIcons.infoSelected),
-    inBottomBar: true,
+    inBottomNavigation: true,
     dividerBefore: true,
   ),
-  FlexfoldDestination(
+  FlexDestination(
     label: AppRoutes.settingsLabel,
     route: AppRoutes.settings,
     iconData: AppIcons.settings,
@@ -35,9 +35,9 @@ const List<FlexfoldDestination> appDestinations = <FlexfoldDestination>[
     selectedIcon: Icon(AppIcons.settingsSelected),
     hasFloatingActionButton: true,
     hasSidebar: true,
-    inBottomBar: true,
+    inBottomNavigation: true,
   ),
-  FlexfoldDestination(
+  FlexDestination(
     label: AppRoutes.themeLabel,
     route: AppRoutes.theme,
     iconData: AppIcons.theme,
@@ -46,9 +46,9 @@ const List<FlexfoldDestination> appDestinations = <FlexfoldDestination>[
     selectedIcon: Icon(AppIcons.themeSelected),
     hasFloatingActionButton: true,
     hasSidebar: true,
-    inBottomBar: true,
+    inBottomNavigation: true,
   ),
-  FlexfoldDestination(
+  FlexDestination(
     label: AppRoutes.tabsLabel,
     route: AppRoutes.tabs,
     iconData: AppIcons.tabs,
@@ -56,9 +56,9 @@ const List<FlexfoldDestination> appDestinations = <FlexfoldDestination>[
     icon: Icon(AppIcons.tabs),
     selectedIcon: Icon(AppIcons.tabsSelected),
     hasSidebar: true,
-    inBottomBar: true,
+    inBottomNavigation: true,
   ),
-  FlexfoldDestination(
+  FlexDestination(
     label: AppRoutes.sliversLabel,
     tooltip: 'Other tooltip on Slivers than the label',
     route: AppRoutes.slivers,
@@ -68,28 +68,28 @@ const List<FlexfoldDestination> appDestinations = <FlexfoldDestination>[
     selectedIcon: Icon(AppIcons.sliversSelected),
     hasAppBar: false,
     hasSidebar: true,
-    inBottomBar: true,
+    inBottomNavigation: true,
   ),
-  FlexfoldDestination(
+  FlexDestination(
     label: AppRoutes.previewLabel,
     route: AppRoutes.preview,
     iconData: AppIcons.preview,
     selectedIconData: AppIcons.previewSelected,
     icon: Icon(AppIcons.preview),
     selectedIcon: Icon(AppIcons.previewSelected),
-    maybeModal: true,
+    maybePush: true,
     dividerBefore: true,
   ),
-  FlexfoldDestination(
+  FlexDestination(
     label: AppRoutes.helpLabel,
     route: AppRoutes.help,
     iconData: AppIcons.help,
     selectedIconData: AppIcons.helpSelected,
     icon: Icon(AppIcons.help),
     selectedIcon: Icon(AppIcons.helpSelected),
-    maybeModal: true,
+    maybePush: true,
   ),
-  FlexfoldDestination(
+  FlexDestination(
     label: AppRoutes.aboutLabel,
     tooltip: 'About has a longer tooltip than the label, for demo purposes',
     route: AppRoutes.about,
@@ -97,6 +97,6 @@ const List<FlexfoldDestination> appDestinations = <FlexfoldDestination>[
     selectedIconData: AppIcons.aboutSelected,
     icon: Icon(AppIcons.about),
     selectedIcon: Icon(AppIcons.aboutSelected),
-    maybeModal: true,
+    maybePush: true,
   ),
 ];

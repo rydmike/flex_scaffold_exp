@@ -10,7 +10,7 @@ class AppTextDirectionSwitch extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // treeDepthInfo(context, 'AppTextDirectionSwitch');
-    final AppTextDirection type = ref.watch(appTextDirectionPod);
+    final AppTextDirection type = ref.watch(appTextDirectionProvider);
     final List<bool> isSelected = <bool>[
       type == AppTextDirection.localeBased,
       type == AppTextDirection.ltr,
@@ -19,7 +19,7 @@ class AppTextDirectionSwitch extends ConsumerWidget {
     return ToggleButtons(
       isSelected: isSelected,
       onPressed: (int newIndex) {
-        ref.read(appTextDirectionPod.notifier).state =
+        ref.read(appTextDirectionProvider.notifier).state =
             AppTextDirection.values[newIndex];
       },
       children: const <Widget>[

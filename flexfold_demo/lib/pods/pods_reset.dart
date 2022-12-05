@@ -37,11 +37,11 @@ import 'pods_theme.dart';
 void resetAppSettingsPods(WidgetRef ref) {
   // Reset the platform to actual real current platform.
   //***************************************************************************
-  ref.read(platformPod.notifier).state = defaultTargetPlatform;
+  ref.read(platformProvider.notifier).state = defaultTargetPlatform;
 
   // Reset the custom text direction Riverpod "Pod" providers to default value.
   //***************************************************************************
-  ref.read(appTextDirectionPod.notifier).state =
+  ref.read(appTextDirectionProvider.notifier).state =
       KeyStore.defaults[KeyStore.appTextDirection]! as AppTextDirection;
 }
 
@@ -49,7 +49,7 @@ void resetAppSettingsPods(WidgetRef ref) {
 void resetThemePods(WidgetRef ref) {
   // Reset the theme mode Riverpod "Pod" providers to default value.
   //***************************************************************************
-  ref.read(themeModePod.notifier).state =
+  ref.read(themeModeProvider.notifier).state =
       KeyStore.defaults[KeyStore.themeMode]! as ThemeMode;
 
   // Reset the all the FlexColorScheme Riverpod "Pod" providers to defaults.

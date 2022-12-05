@@ -69,80 +69,68 @@ class _TabsScreenState extends ConsumerState<TabsScreen>
     //     ref.read(scrollHiddenBottomBarPod.state).state = false;
     //   }
     // });
-
-    return Scaffold(
-      // TODO(rydmike): Routemaster commented This was in body
-      // DefaultTabController(
-      //   length: 4,
-      //   child: Builder(
-      //     builder: (BuildContext context) {
-      //       final TabController tabController =
-      //           DefaultTabController.of(context)!;
-      //       tabController.addListener(() {
-      //         if (!tabController.indexIsChanging) {
-      //           // If we are changing the tab bar item, we will reveal any
-      //           // scroll hidden bottom navigation bar
-      //           appOptions.setScrollHiddenBottomBar(false);
-      //         }
-      //       });
-      //       return
-      body: Padding(
-        padding: EdgeInsets.only(top: topPadding),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            TabBar(
+    // TODO(rydmike): Routemaster commented This was in body
+    // DefaultTabController(
+    //   length: 4,
+    //   child: Builder(
+    //     builder: (BuildContext context) {
+    //       final TabController tabController =
+    //           DefaultTabController.of(context)!;
+    //       tabController.addListener(() {
+    //         if (!tabController.indexIsChanging) {
+    //           // If we are changing the tab bar item, we will reveal any
+    //           // scroll hidden bottom navigation bar
+    //           appOptions.setScrollHiddenBottomBar(false);
+    //         }
+    //       });
+    //
+    return Padding(
+      padding: EdgeInsets.only(top: topPadding),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TabBar(
+            // key: const ValueKey<String>(route),
+            // key: const PageStorageKey<String>(route),
+            controller: _controller,
+            tabs: <Widget>[
+              Tab(text: AppRoutes.tabsGuideLabel.toUpperCase()),
+              Tab(text: AppRoutes.tabsAppbarLabel.toUpperCase()),
+              Tab(text: AppRoutes.tabsImagesLabel.toUpperCase()),
+              Tab(text: AppRoutes.tabsModalLabel.toUpperCase()),
+            ],
+            onTap: (int index) {
+              // If we tapped on a tab bar item, we will reveal any
+              // scroll hidden bottom navigation bar
+              ref.read(scrollHiddenBottomBarPod.notifier).state = false;
+              _controller.index = index;
+              // if (index == 0) context.goNamed(AppRoutes.tabsGuideLabel);
+              // if (index == 1) context.goNamed(AppRoutes.tabsAppbarLabel);
+              // if (index == 2) context.goNamed(AppRoutes.tabsImagesLabel);
+              // if (index == 3) context.goNamed(AppRoutes.tabsModalLabel);
+            },
+          ),
+          const Divider(
+            height: 0,
+            thickness: 0,
+          ),
+          Flexible(
+            child: TabBarView(
               // key: const ValueKey<String>(route),
               // key: const PageStorageKey<String>(route),
               controller: _controller,
-              tabs: <Widget>[
-                Tab(text: AppRoutes.tabsGuideLabel.toUpperCase()),
-                Tab(text: AppRoutes.tabsAppbarLabel.toUpperCase()),
-                Tab(text: AppRoutes.tabsImagesLabel.toUpperCase()),
-                Tab(text: AppRoutes.tabsModalLabel.toUpperCase()),
+              dragStartBehavior: DragStartBehavior.start,
+              children: const <Widget>[
+                TabGuide(),
+                TabAppBar(),
+                TabImages(),
+                TabModal(),
               ],
-              onTap: (int index) {
-                // If we tapped on a tab bar item, we will reveal any
-                // scroll hidden bottom navigation bar
-                ref.read(scrollHiddenBottomBarPod.notifier).state = false;
-                _controller.index = index;
-                // if (index == 0) context.goNamed(AppRoutes.tabsGuideLabel);
-                // if (index == 1) context.goNamed(AppRoutes.tabsAppbarLabel);
-                // if (index == 2) context.goNamed(AppRoutes.tabsImagesLabel);
-                // if (index == 3) context.goNamed(AppRoutes.tabsModalLabel);
-              },
             ),
-            const Divider(
-              height: 0,
-              thickness: 0,
-            ),
-            Flexible(
-              child: TabBarView(
-                // key: const ValueKey<String>(route),
-                // key: const PageStorageKey<String>(route),
-                controller: _controller,
-                dragStartBehavior: DragStartBehavior.start,
-                children: const <Widget>[
-                  TabGuide(),
-                  TabAppBar(),
-                  TabImages(),
-                  TabModal(),
-                ],
-                // TODO(rydmike): Route master commented
-                // <Widget>[
-                //   for (final PageStack stack in tabPage.stacks)
-                //     PageStackNavigator(stack: stack),
-                // ],
-              ),
-            )
-          ],
-        ),
-        //   );
-        // },
+          )
+        ],
       ),
-      // ),
     );
-    // });
   }
 }

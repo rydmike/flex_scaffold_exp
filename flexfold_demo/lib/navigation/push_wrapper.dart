@@ -1,15 +1,18 @@
 import 'package:flexfold/flexfold.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/app_navigation_state.dart';
-import '../pods/pods_application.dart';
 import '../pods/pods_flexfold.dart';
 import '../pods/pods_navigation.dart';
 import 'destinations.dart';
+import 'directionality_wrapper.dart';
 
-class AppBarWrapper extends ConsumerWidget {
-  const AppBarWrapper({
+const bool _kDebugMe = kDebugMode && true;
+
+class PushWrapper extends ConsumerWidget {
+  const PushWrapper({
     super.key,
     required this.child,
   });
@@ -18,23 +21,19 @@ class AppBarWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppNavigation appNav = ref.watch(navigationPod);
+    final AppNavigation appNav = ref.watch(navigationProvider);
 
-    // Get the current destination details, we will use it's info in the
+    // Get the current modal destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final FlexfoldDestinationData destination = appNav.destination;
-
-    // TODO(rydmike): Remove me totally
-    debugPrint('AppBarWrapper: Destination = $destination');
-
+    final FlexDestinationTarget destination = appNav.modalDestination;
+    if (_kDebugMe) {
+      debugPrint('PushWrapper: Destination = $destination');
+    }
     // In case we are showing the screen as modal screen it will then be
     // shown by the root navigator that does not have our custom directionality
-    // wrapper above it in the tree, so we just add it once more.
-    return Directionality(
-      textDirection: appTextDirection(context, ref),
+    // control and wrapper above it in the tree, so we add it here too.
+    return DirectionalityWrapper(
       child: Scaffold(
-        // key: const PageStorageKey<String>(route),
-
         // When a main destination is being displayed as a modal route, we add
         // an AppBar, with same style as rest of app, with an implicit back
         // button that it will get since it was pushed.
@@ -49,6 +48,11 @@ class AppBarWrapper extends ConsumerWidget {
           hasBorderOnSurface: ref.watch(appBarBorderOnSurfacePod),
           hasBorder: ref.watch(appBarBorderPod),
           showScreenSize: ref.watch(appBarShowScreenSizePod),
+          // TODO(rydmike): Experimental AppBar feature, keep or not?
+          floatAppBar: ref.watch(appBarFloatPod),
+          floatPadding: const EdgeInsetsDirectional.fromSTEB(3, 4, 3, 4),
+          elevation: ref.watch(appBarFloatPod) ? 1 : 0,
+          scrim: ref.watch(appBarScrimPod),
         ).toAppBar(),
         extendBody: ref.watch(extendBodyPod),
         extendBodyBehindAppBar: ref.watch(extendBodyBehindAppBarPod),

@@ -35,11 +35,11 @@ class ThemeModeSwitch extends ConsumerWidget {
             ),
           ),
       ]),
-      themeMode: ref.watch(themeModePod),
+      themeMode: ref.watch(themeModeProvider),
       onThemeModeChanged: (ThemeMode themeMode) {
-        ref.read(themeModePod.notifier).state = themeMode;
+        ref.read(themeModeProvider.notifier).state = themeMode;
       },
-      flexSchemeData: ref.watch(currentSchemePod),
+      flexSchemeData: ref.watch(currentSchemeProvider),
       // Style the selected theme mode's label
       selectedLabelStyle: Theme.of(context).textTheme.caption!.copyWith(
           fontWeight: FontWeight.bold,

@@ -53,13 +53,13 @@ class _TabModalState extends ConsumerState<TabModal>
   Widget build(BuildContext context) {
     // Must call super.
     super.build(context);
-    final AppNavigation appNav = ref.watch(navigationPod);
+    final AppNavigation appNav = ref.watch(navigationProvider);
     // Put some elements inside an extra card at this larger size
     final bool isDesktop =
         MediaQuery.of(context).size.width >= AppInsets.desktopSize;
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final FlexfoldDestinationData destination = appNav.destination;
+    final FlexDestinationTarget destination = appNav.destination;
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
@@ -71,6 +71,7 @@ class _TabModalState extends ConsumerState<TabModal>
       controller: scrollController,
       child: ListView(
         // key: ValueKey<String>('${destination.route}${AppRoutes.tabsModal}'),
+        primary: false,
         controller: scrollController,
         padding: const EdgeInsets.only(top: AppInsets.l),
         children: <Widget>[
@@ -94,12 +95,12 @@ class _TabModalState extends ConsumerState<TabModal>
                 'does not '
                 'show all the destinations in a rail or side menu.\n'
                 '\n'
-                'With Flexfold you can use the source of the navigation to '
+                'With FlexScaffold you can use the source of the navigation to '
                 'determine if you want push a full screen route on top of the '
-                'Flexfold scaffold with only back option available or push a '
-                'replacement named version of it, into the body part.\n'
+                'FlexScaffold scaffold with only back option available or push '
+                'a replacement named version of it, into the body part.\n'
                 '\n'
-                'Flexfold does not normally show bottom navigation '
+                'FlexScaffold does not normally show bottom navigation '
                 'bar destinations '
                 'in the drawer during bottom bar navigation mode. '
                 'However, if you '
@@ -116,7 +117,7 @@ class _TabModalState extends ConsumerState<TabModal>
                 'to push the '
                 'destinations that are only in the drawer in '
                 'this navigation mode '
-                'as new modal full screen on top of the entire Flexfold '
+                'as new modal full screen on top of the entire FlexScaffold '
                 'scaffold, with only back navigation option available. This '
                 'is the normal and often preferred way of navigating '
                 'from such extra drawer destinations on a phone.\n'
@@ -143,7 +144,7 @@ class _TabModalState extends ConsumerState<TabModal>
                 'a back button, to take you back to last used bottom '
                 'navigation destination. \n'
                 '\n'
-                'With Flexfold, navigation to the bottom '
+                'With FlexScaffold, navigation to the bottom '
                 'navigation bar destinations, '
                 'will also be possible in this scenario, since these '
                 'destinations are now automatically available in the drawer.',

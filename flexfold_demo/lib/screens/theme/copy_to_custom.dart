@@ -40,7 +40,7 @@ class CopySchemeToCustom extends ConsumerWidget {
 }
 
 void _copyThemeToCustom(WidgetRef ref) {
-  final FlexSchemeData fsData = ref.read(currentSchemePod.notifier).state;
+  final FlexSchemeData fsData = ref.read(currentSchemeProvider.notifier).state;
   ref.read(lightPrimaryPod.notifier).state = fsData.light.primary;
   ref.read(lightPrimaryVariantPod.notifier).state =
       fsData.light.primaryContainer;

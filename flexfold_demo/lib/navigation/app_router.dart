@@ -17,9 +17,10 @@ import '../screens/tabs/tab_images.dart';
 import '../screens/tabs/tab_modal.dart';
 import '../screens/tabs/tabs_screen.dart';
 import '../screens/theme/theme_screen.dart';
-import 'app_bar_wrapper.dart';
 import 'app_routes.dart';
-import 'responsive_layout_shell.dart';
+import 'directionality_wrapper.dart';
+import 'layout_shell.dart';
+import 'push_wrapper.dart';
 
 // Set to true to observe debug prints. In release mode this compile time
 // const always evaluates to false, so in theory anything with only an
@@ -91,7 +92,7 @@ const bool _kDebugMe = kDebugMode && false;
 // navigation (forward or reverse) could be used.
 PageRouteBuilder<dynamic> adaptiveTransition(
   Widget screen,
-  FlexfoldDestinationData destination,
+  FlexDestinationTarget destination,
   RouteSettings settings,
   // bool fullScreen
 ) {
@@ -105,8 +106,8 @@ PageRouteBuilder<dynamic> adaptiveTransition(
   // platform native, but the drawer can potentially also be used on a very
   // large canvas if the user chooses to do so. The platform default page
   // transition are not so nice on a very large canvas.
-  if (destination.source == FlexfoldNavigationSource.rail ||
-      destination.source == FlexfoldNavigationSource.drawer) {
+  if (destination.source == FlexNavigation.rail ||
+      destination.source == FlexNavigation.drawer) {
     return PageRouteBuilder<dynamic>(
       settings: settings,
       transitionDuration: const Duration(milliseconds: 300),
@@ -139,7 +140,7 @@ PageRouteBuilder<dynamic> adaptiveTransition(
     // reverse direction when using it in a PageRouteBuilder, when using it in
     // a PageTransitionSwitcher it is a piece of cake, but here we need to
     // use the PageRouteBuilder and the reverse direction eludes me.
-  } else if (destination.source == FlexfoldNavigationSource.bottom) {
+  } else if (destination.source == FlexNavigation.bottom) {
     return PageRouteBuilder<dynamic>(
       settings: settings,
       transitionDuration: const Duration(milliseconds: 300),
@@ -204,13 +205,35 @@ class AppRouter {
         pageBuilder: (BuildContext context, GoRouterState state) =>
             NoTransitionPage<void>(
           key: state.pageKey,
-          child: const AppBarWrapper(child: AboutScreen()),
+          child: const PushWrapper(child: AboutScreen()),
+        ),
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '${AppRoutes.preview}_modal',
+        name: '${AppRoutes.previewLabel}_modal',
+        pageBuilder: (BuildContext context, GoRouterState state) =>
+            NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const PushWrapper(child: PreviewScreen()),
+        ),
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '${AppRoutes.help}_modal',
+        name: '${AppRoutes.helpLabel}_modal',
+        pageBuilder: (BuildContext context, GoRouterState state) =>
+            NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const PushWrapper(child: HelpScreen()),
         ),
       ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (BuildContext context, GoRouterState state, Widget child) {
-          return ResponsiveLayoutShell(body: child);
+          return DirectionalityWrapper(
+            child: LayoutShell(body: child),
+          );
         },
         routes: <RouteBase>[
           GoRoute(

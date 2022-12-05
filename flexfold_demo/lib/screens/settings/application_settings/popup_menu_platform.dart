@@ -81,23 +81,23 @@ class PopupMenuPlatform extends ConsumerWidget {
     };
 
     String subtitle =
-        'Current platform: ${platformString[ref.watch(platformPod)]}';
-    if (ref.watch(useDevicePreviewPod)) {
+        'Current platform: ${platformString[ref.watch(platformProvider)]}';
+    if (ref.watch(useDevicePreviewProvider)) {
       subtitle = 'Platform mechanics selection in the app is disabled in '
           'DevicePreview mode. The platform selection is controlled by '
           'DevicePreview';
     }
     return PopupMenuButton<TargetPlatform>(
-      enabled: !ref.watch(useDevicePreviewPod),
+      enabled: !ref.watch(useDevicePreviewProvider),
       padding: const EdgeInsets.all(10),
       onSelected: (TargetPlatform value) {
         subtitle = 'Current platform: ${platformString[value]}';
-        ref.read(platformPod.notifier).state = value;
+        ref.read(platformProvider.notifier).state = value;
       },
       itemBuilder: (BuildContext context) =>
           <PopupMenuItem<TargetPlatform>>[...platformItems.values],
       child: ListTile(
-        trailing: platformIcon[ref.watch(platformPod)],
+        trailing: platformIcon[ref.watch(platformProvider)],
         title: const Text('Select platform mechanics'),
         subtitle: Text(subtitle),
       ),

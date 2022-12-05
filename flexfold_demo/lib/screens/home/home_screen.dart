@@ -24,12 +24,12 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppNavigation appNav = ref.watch(navigationPod);
+    final AppNavigation appNav = ref.watch(navigationProvider);
     final AppNavigationStateNotifier appNavNotify =
-        ref.read(navigationPod.notifier);
+        ref.read(navigationProvider.notifier);
     // Get the current destination details, we will use it's info in the page
     // header to display where we are and how we navigated to this page.
-    final FlexfoldDestinationData destination = appNav.destination;
+    final FlexDestinationTarget destination = appNav.destination;
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
@@ -53,125 +53,118 @@ class HomeScreen extends ConsumerWidget {
     // quick and simple approach.
     final Widget welcome = Text('Welcome to',
         style: isSmall ? textTheme.caption : textTheme.headline5);
-    final Widget flexfold = Text('Flexfold',
+    final Widget flexfold = Text('FlexScaffold',
         style: isSmall ? textTheme.headline5 : textTheme.headline3);
     final Widget whatIsFlexfold = Text(
-      'What is Flexfold?',
+      'What is FlexScaffold?',
       style: isSmall ? textTheme.subtitle1 : textTheme.headline5,
       textAlign: TextAlign.center,
     );
     final Widget noOneCanBeTold = Text(
-      'No one can be told what the Flexfold is!\n'
+      'No one can be told what the FlexScaffold is!\n'
       'Click on the image to experience it...',
       style: isSmall ? textTheme.caption : textTheme.bodyText1,
       textAlign: TextAlign.center,
     );
 
-    return Scaffold(
-      body: IfWrapper(
-        condition: ref.watch(plasmaBackgroundPod),
-        builder: (BuildContext context, Widget child) =>
-            PlasmaBackground(child: child),
-        child: GestureDetector(
-          // We want to go to the info screen when any widget is tapped.
-          onTap: () {
-            // We are going to use the Info screen as a direct button link on
-            // this screen, so we create its destination info from the route to
-            // its screen and our const list of destinations.
-            // In this case we want our navigation to the new screen to behave
-            // the same as if we had tapped on its target from the rail.
-            final FlexfoldDestinationData newDestination =
-                FlexfoldDestinationData.fromRoute(
-              InfoScreen.route,
-              appDestinations,
-              source: FlexfoldNavigationSource.rail,
-            );
-            // We update the FlexfoldModel with info about where we
-            // are going, so it can update itself too, this will trigger a
-            // navigation indication change on Flexfold menu as well and
-            // our current destination info will be correct after the
-            // manual navigation to a Flexfold destination from the
-            // outside of Flexfold.
-            appNavNotify.newDestination(newDestination);
-            context.go(newDestination.route);
-            // TODO(rydmike): Remove old Nav global root key navigator.
-            // appNav.navKeyFlexfold.currentState!
-            //     .pushReplacementNamed(newDestination.route);
-          },
-          child: Center(
-            child: ConstrainedBox(
-              constraints:
-                  const BoxConstraints(maxWidth: AppInsets.maxBodyWidth),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(
-                  AppInsets.l,
-                  AppInsets.l + topPadding,
-                  AppInsets.l,
-                  AppInsets.l + bottomPadding,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    PageHeader(
-                        icon: icon, heading: heading, destination: destination),
-                    const Divider(),
-                    Expanded(
-                      child: isLow
-                          ? Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      const Spacer(),
-                                      welcome,
-                                      flexfold,
-                                      const Spacer(),
-                                      whatIsFlexfold,
-                                      const SizedBox(height: 5),
-                                      noOneCanBeTold,
-                                      const Spacer(),
-                                    ],
-                                  ),
+    return IfWrapper(
+      condition: ref.watch(plasmaBackgroundProvider),
+      builder: (BuildContext context, Widget child) =>
+          PlasmaBackground(child: child),
+      child: GestureDetector(
+        // We want to go to the info screen when any widget is tapped.
+        onTap: () {
+          // We are going to use the Info screen as a direct button link on
+          // this screen, so we create its destination info from the route to
+          // its screen and our const list of destinations.
+          // In this case we want our navigation to the new screen to behave
+          // the same as if we had tapped on its target from the rail.
+          final FlexDestinationTarget destination =
+              FlexDestinationTarget.fromRoute(
+            InfoScreen.route,
+            appDestinations,
+            source: FlexNavigation.rail,
+          );
+          // We update the FlexfoldModel with info about where we
+          // are going, so it can update itself too, this will trigger a
+          // navigation indication change on Flexfold menu as well and
+          // our current destination info will be correct after the
+          // manual navigation to a Flexfold destination from the
+          // outside of Flexfold.
+          appNavNotify.setDestination(destination);
+          context.go(destination.route);
+        },
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: AppInsets.maxBodyWidth),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                AppInsets.l,
+                AppInsets.l + topPadding,
+                AppInsets.l,
+                AppInsets.l + bottomPadding,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  PageHeader(
+                      icon: icon, heading: heading, destination: destination),
+                  const Divider(),
+                  Expanded(
+                    child: isLow
+                        ? Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    const Spacer(),
+                                    welcome,
+                                    flexfold,
+                                    const Spacer(),
+                                    whatIsFlexfold,
+                                    const SizedBox(height: 5),
+                                    noOneCanBeTold,
+                                    const Spacer(),
+                                  ],
                                 ),
-                                const Expanded(
-                                    child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 15,
-                                    vertical: 10,
-                                  ),
-                                  child: FrontPageImages(),
-                                )),
-                              ],
-                            )
-                          : Column(
-                              children: <Widget>[
-                                const Spacer(),
-                                welcome,
-                                flexfold,
-                                const Spacer(),
-                                const Expanded(
-                                    flex: 10,
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 35,
-                                        vertical: 20,
-                                      ),
-                                      child: FrontPageImages(),
-                                    )),
-                                const SizedBox(height: 20),
-                                whatIsFlexfold,
-                                const SizedBox(height: 10),
-                                noOneCanBeTold,
-                                const Spacer(),
-                              ],
-                            ),
-                    ),
-                  ],
-                ),
+                              ),
+                              const Expanded(
+                                  child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 15,
+                                  vertical: 10,
+                                ),
+                                child: FrontPageImages(),
+                              )),
+                            ],
+                          )
+                        : Column(
+                            children: <Widget>[
+                              const Spacer(),
+                              welcome,
+                              flexfold,
+                              const Spacer(),
+                              const Expanded(
+                                  flex: 10,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 35,
+                                      vertical: 20,
+                                    ),
+                                    child: FrontPageImages(),
+                                  )),
+                              const SizedBox(height: 20),
+                              whatIsFlexfold,
+                              const SizedBox(height: 10),
+                              noOneCanBeTold,
+                              const Spacer(),
+                            ],
+                          ),
+                  ),
+                ],
               ),
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flexfold/flexfold.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,23 +16,47 @@ import '../../widgets/text/link_text_span.dart';
 import '../page_body.dart';
 import 'about_dialog.dart';
 
-class AboutScreen extends ConsumerWidget {
+const bool _kDebugMe = kDebugMode && true;
+
+class AboutScreen extends ConsumerStatefulWidget {
   const AboutScreen({super.key});
   static const String route = AppRoutes.about;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final AppNavigation appNav = ref.watch(navigationPod);
+  ConsumerState<AboutScreen> createState() => _AboutScreenState();
+}
+
+class _AboutScreenState extends ConsumerState<AboutScreen> {
+  late final ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController(
+      keepScrollOffset: true,
+      initialScrollOffset: 0,
+      debugLabel: 'AboutScreenScrollController',
+    );
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final AppNavigation appNav = ref.watch(navigationProvider);
 
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final FlexfoldDestinationData destination = appNav.useModalDestination
+    final FlexDestinationTarget destination = appNav.useModalDestination
         ? appNav.modalDestination
         : appNav.destination;
-
-    // TODO(rydmike): Remove me totally
-    // debugPrint('Destination: $destination');
-
+    if (_kDebugMe) {
+      debugPrint('AboutScreen: Destination = $destination');
+    }
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
@@ -41,51 +66,14 @@ class AboutScreen extends ConsumerWidget {
     final ThemeData themeData = Theme.of(context);
     final TextStyle linkStyle = themeData.textTheme.bodyText1!.copyWith(
         color: themeData.colorScheme.primary, fontWeight: FontWeight.bold);
-
-    // // In case we are showing the screen as modal screen it will then be
-    // // shown by the root navigator that does not have our custom directionality
-    // // wrapper above it in the tree, so we just add it once more.
-    // return Directionality(
-    //   textDirection: appTextDirection(context, ref),
-    //   child: Scaffold(
-    //     // key: const PageStorageKey<String>(route),
-    //
-    //     // If a main destination is being displayed as a modal route, we add an
-    //     // app bar, with same style as rest of app, with an implicit back button
-    //     // that it will get since it was pushed on top of a base route.
-    //     appBar: destination.useModal && ref.watch(useModalRoutesPod)
-    //         ? FlexAppBar.styled(
-    //             context,
-    //             title: Text(appDestinations[destination.menuIndex].label),
-    //             gradient: ref.watch(appBarGradientPod),
-    //             blurred: ref.watch(appBarBlurPod),
-    //             opacity: ref.watch(appBarTransparentPod)
-    //                 ? ref.watch(appBarOpacityPod)
-    //                 : 1.0,
-    //             hasBorderOnSurface: ref.watch(appBarBorderOnSurfacePod),
-    //             hasBorder: ref.watch(appBarBorderPod),
-    //             showScreenSize: ref.watch(appBarShowScreenSizePod),
-    //           ).toAppBar()
-    //         // No app bar, the scaffold is being shown inside the layout screen
-    //         : null,
-    //     extendBody: ref.watch(extendBodyPod),
-    //     extendBodyBehindAppBar: ref.watch(extendBodyBehindAppBarPod),
-    //
-    //     // If the body part is not shown as only a body in another Scaffold
-    //     // we need an extra builder here to get the right top and bottom padding
-    //     // values if we are extending body and/or extending body behind app bar.
-    //     body: Builder(
-    //       builder: (BuildContext context) {
-    //         // See settings_screen.dart for an explanation of these
-    //         // padding values and why they are VERY handy and useful.
-    //
-    //
-
     final double topPadding = MediaQuery.of(context).padding.top;
     final double bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return PageBody(
+      controller: scrollController,
       child: ListView(
+        primary: false,
+        controller: scrollController,
         padding: EdgeInsets.fromLTRB(
           AppInsets.l,
           AppInsets.l + topPadding,
@@ -99,7 +87,7 @@ class AboutScreen extends ConsumerWidget {
             introTop: Text.rich(
               TextSpan(
                 text: "This application's main purpose is to "
-                    'demonstrate the Flexfold responsive scaffold '
+                    'demonstrate the FlexScaffold responsive scaffold '
                     'package and its core features.\n'
                     '\n'
                     'As one extra feature it also shows Flutter '
@@ -155,7 +143,7 @@ class AboutScreen extends ConsumerWidget {
             ),
             introBottom: const Text(
               'Full responsive layout of the content body in this app '
-              'is not part of the Flexfold demo and has not been paid '
+              'is not part of the FlexScaffold demo and has not been paid '
               'too much attention to, but it has been verified to work '
               'well enough from normal phone sizes to large web and '
               'desktop canvas sizes. The content presentation is '
@@ -163,7 +151,7 @@ class AboutScreen extends ConsumerWidget {
               'mostly because it contains a lot of text and '
               'explanations.',
             ),
-            imageAssets: AppImages.route[route]!.toList(),
+            imageAssets: AppImages.route[AboutScreen.route]!.toList(),
           ),
           const SizedBox(height: 20),
           Center(
@@ -171,7 +159,7 @@ class AboutScreen extends ConsumerWidget {
               onPressed: () {
                 showAppAboutDialog(context);
               },
-              child: const Text('About Flexfold demo...'),
+              child: const Text('About FlexScaffold demo...'),
             ),
           ),
           const SizedBox(height: 20),
@@ -191,7 +179,7 @@ class AboutScreen extends ConsumerWidget {
           ),
           Center(
             child: Text(
-                'Flexfold is not '
+                'FlexScaffold is not '
                 'yet available on pub.dev',
                 style: Theme.of(context).textTheme.subtitle1!.copyWith(
                     color: Theme.of(context).primaryColor,
@@ -206,9 +194,5 @@ class AboutScreen extends ConsumerWidget {
         ],
       ),
     );
-    //       },
-    //     ),
-    //   ),
-    // );
   }
 }

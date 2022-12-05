@@ -32,11 +32,11 @@ class SliverAppBarDemo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppNavigation appNav = ref.read(navigationPod);
+    final AppNavigation appNav = ref.read(navigationProvider);
 
     // Get the current destination details, we will use its info in the
     // page header to display info on how we navigated to this page.
-    final FlexfoldDestinationData destination = appNav.destination;
+    final FlexDestinationTarget destination = appNav.destination;
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.

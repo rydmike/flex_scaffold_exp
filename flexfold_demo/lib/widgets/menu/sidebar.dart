@@ -18,14 +18,14 @@ class Sidebar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Get the current destination details, we use the info in the
     // page header to display info on how we navigated to this page.
-    final FlexfoldDestinationData destination =
-        ref.watch(navigationPod).destination;
+    final FlexDestinationTarget destination =
+        ref.watch(navigationProvider).destination;
     final String screenName = appDestinations[destination.menuIndex].label;
 
     // We can remove the plasma animation from the widget tree with the
     // if wrapper by toggling a switch.
     return IfWrapper(
-      condition: ref.watch(plasmaBackgroundPod),
+      condition: ref.watch(plasmaBackgroundProvider),
       builder: (BuildContext context, Widget child) =>
           PlasmaBackground(child: child),
       child: Scrollbar(

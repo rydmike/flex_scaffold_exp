@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../store/hive_store.dart';
 import '../store/key_store.dart';
 
+const bool _kDebugMe = kDebugMode && true;
+
 /// Provider "Pods" observer used to store the state of selected Riverpod
 /// providers and debugPrint changes to them in debug mode.
 class PodsObserver extends ProviderObserver {
@@ -19,7 +21,7 @@ class PodsObserver extends ProviderObserver {
       if (newValue != previousValue &&
           KeyStore.defaults.containsKey(provider.name)) {
         // Log the new value, but not in Release, just a debugPrint.
-        if (!kReleaseMode) {
+        if (_kDebugMe) {
           debugPrint('Store: ${provider.name ?? provider.runtimeType}\n'
               '  new value: $newValue\n'
               '  old value: $previousValue');

@@ -56,8 +56,8 @@ class ThemePopupMenu extends ConsumerWidget {
           children: <Widget>[
             Expanded(
               child: ListTile(
-                title: Text('${ref.watch(currentSchemePod).name} theme'),
-                subtitle: Text(ref.watch(currentSchemePod).description),
+                title: Text('${ref.watch(currentSchemeProvider).name} theme'),
+                subtitle: Text(ref.watch(currentSchemeProvider).description),
               ),
             ),
             SizedBox(

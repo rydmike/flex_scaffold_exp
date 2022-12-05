@@ -16,9 +16,9 @@ class PlasmaBackgroundSwitch extends ConsumerWidget {
       subtitle: const Text(
         'Fun plasma animation on sidebars and home screen.',
       ),
-      value: ref.watch(plasmaBackgroundPod),
+      value: ref.watch(plasmaBackgroundProvider),
       onChanged: (bool value) =>
-          ref.read(plasmaBackgroundPod.notifier).state = value,
+          ref.read(plasmaBackgroundProvider.notifier).state = value,
       tooltipEnabled: ref.watch(useTooltipsPod),
       tooltip: 'This is just a fun demo effect. OFF by default',
     );

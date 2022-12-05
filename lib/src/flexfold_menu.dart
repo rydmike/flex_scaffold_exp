@@ -48,17 +48,17 @@ class FlexfoldMenu extends StatefulWidget {
   /// Defines the appearance of the button items that are arrayed within the
   /// drawer, rail, menu and bottom bar.
   ///
-  /// The value must be a list of two or more [FlexfoldDestination] values.
-  final List<FlexfoldDestination> destinations;
+  /// The value must be a list of two or more [FlexDestination] values.
+  final List<FlexDestination> destinations;
 
   /// The index into [destinations] for the current selected
-  /// [FlexfoldDestination].
+  /// [FlexDestination].
   final int selectedIndex;
 
   /// Called when one of the [destinations] is selected.
   ///
   /// The stateful widget that creates the navigation rail needs to keep
-  /// track of the index of the selected [FlexfoldDestination] and call
+  /// track of the index of the selected [FlexDestination] and call
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
   final ValueChanged<int> onDestinationSelected;
@@ -127,7 +127,7 @@ class FlexfoldMenu extends StatefulWidget {
   /// The default value is null.
   final Widget? menuLeading;
 
-  /// Trailing menu widget is placed below the last [FlexfoldDestination].
+  /// Trailing menu widget is placed below the last [FlexDestination].
   ///
   /// It needs to fit and look good both in rail and side menu mode. Use a
   /// layout builder to make an adaptive trailing widget that fits both sizes.
@@ -435,10 +435,12 @@ class _FlexfoldMenuState extends State<FlexfoldMenu> {
                               for (int i = 0;
                                   i < widget.destinations.length;
                                   i++)
-                                if ((widget.destinations[i].inBottomBar &&
+                                if ((widget.destinations[i]
+                                            .inBottomNavigation &&
                                         widget
                                             .showBottomDestinationsInDrawer) ||
-                                    !widget.destinations[i].inBottomBar ||
+                                    !widget
+                                        .destinations[i].inBottomNavigation ||
                                     !isDrawer)
                                   _FlexMenuItem(
                                     destination: widget.destinations[i],
@@ -499,7 +501,7 @@ class _FlexMenuItem extends StatelessWidget {
     required this.startPadding,
     this.autoFocus = false,
   });
-  final FlexfoldDestination destination;
+  final FlexDestination destination;
   final bool isSelected;
   final IconThemeData iconTheme;
   final IconThemeData? selectedIconTheme;

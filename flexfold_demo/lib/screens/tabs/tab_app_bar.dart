@@ -52,10 +52,10 @@ class _TabAppBarState extends ConsumerState<TabAppBar>
   Widget build(BuildContext context) {
     // Must call super.
     super.build(context);
-    final AppNavigation appNav = ref.watch(navigationPod);
+    final AppNavigation appNav = ref.watch(navigationProvider);
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final FlexfoldDestinationData destination = appNav.destination;
+    final FlexDestinationTarget destination = appNav.destination;
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
@@ -67,6 +67,7 @@ class _TabAppBarState extends ConsumerState<TabAppBar>
       controller: scrollController,
       child: ListView(
         // key: ValueKey<String>('${destination.route}${AppRoutes.tabsAppbar}'),
+        primary: false,
         controller: scrollController,
         padding: const EdgeInsets.only(top: AppInsets.l),
         children: <Widget>[
@@ -101,8 +102,8 @@ class _TabAppBarState extends ConsumerState<TabAppBar>
                 'styled app bar constructor at all.\n',
               ),
               introBottom: const Text(
-                'With Flexfold it is easy to include a gradient transparent '
-                'app bar. There is a styled app bar '
+                'With FlexScaffold it is easy to include a gradient '
+                'transparent AppBar. There is a styled AppBar '
                 'factory to help make app bars like the one you '
                 'see in this demo. '
                 'When you combine the gradient transparent app bar with a '
@@ -140,8 +141,8 @@ class _TabAppBarState extends ConsumerState<TabAppBar>
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: AppInsets.l),
             child: Text(
-              'Flexfold app bars can be made with an optional '
-              'FlexfoldAppBar.styled constructor to create gradient and '
+              'FlexScaffold app bars can be made with an optional '
+              'FlexAppBar.styled constructor to create gradient and '
               'partially transparent app bars. '
               'When you use transparency on the app bar you '
               'normally also enable scrolling behind the app bar, '

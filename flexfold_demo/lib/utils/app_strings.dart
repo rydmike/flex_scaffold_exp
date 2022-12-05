@@ -8,10 +8,10 @@ class AppStrings {
   // name spaces them and gives them a self documenting group and context that
   // they belong to.
   AppStrings._();
-  static const String appName = 'Flexfold demo';
-  static const String version = '0.91.0 pre-release';
+  static const String appName = 'FlexScaffold demo';
+  static const String version = '0.0.1';
   static const String flutter = 'Built with channel Stable, 3.3.9, CanvasKit';
-  static const String copyright = '© 2021, 2022';
+  static const String copyright = '© 2022';
   static const String author = 'Mike Rydstrom';
   static const String license = 'BSD 3-Clause License';
 

@@ -15,7 +15,7 @@ class PageHeader extends StatelessWidget {
 
   final Widget icon;
   final Widget heading;
-  final FlexfoldDestinationData destination;
+  final FlexDestinationTarget destination;
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +51,14 @@ class PageHeader extends StatelessWidget {
         ),
         Wrap(
           children: <Widget>[
-            SizedText('Page route: ${destination.route}'),
+            SizedText('Route: ${destination.route}'),
             SizedText('Menu index: ${destination.menuIndex}'),
             SizedText('Bottom index: ${destination.bottomIndex}'),
-            SizedText('Tapped via: '
+            SizedText('Tapped: '
                 '${destination.source.toString().dotTail.capitalize}'),
             SizedText(
                 'Direction: ${destination.reverse ? 'Reverse' : 'Forward'}'),
-            SizedText('Use modal: ${destination.useModal ? 'Yes' : 'No'}'),
+            SizedText('Prefer push: ${destination.preferPush ? 'Yes' : 'No'}'),
           ],
         ),
       ],

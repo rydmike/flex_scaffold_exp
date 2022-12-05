@@ -6,7 +6,7 @@ import '../model/app_navigation_state.dart';
 // and current FlexfoldDestinationData.
 
 final StateNotifierProvider<AppNavigationStateNotifier, AppNavigation>
-    navigationPod =
+    navigationProvider =
     StateNotifierProvider<AppNavigationStateNotifier, AppNavigation>(
   (StateNotifierProviderRef<AppNavigationStateNotifier, AppNavigation> ref) {
     return AppNavigationStateNotifier();

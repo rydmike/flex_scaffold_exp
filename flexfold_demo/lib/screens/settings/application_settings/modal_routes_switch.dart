@@ -17,9 +17,9 @@ class ModalRoutesSwitch extends ConsumerWidget {
         'If bottom navigation is used and there are extra drawer destinations, '
         'when ON they will be modal destinations.',
       ),
-      value: ref.watch(useModalRoutesPod),
+      value: ref.watch(useModalRoutesProvider),
       onChanged: (bool value) =>
-          ref.read(useModalRoutesPod.notifier).state = value,
+          ref.read(useModalRoutesProvider.notifier).state = value,
       tooltipEnabled: ref.watch(useTooltipsPod),
       tooltip: 'This is a demo app feature, not a direct part of Flexfold',
     );

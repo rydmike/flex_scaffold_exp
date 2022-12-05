@@ -25,13 +25,7 @@ Future<void> main() async {
   Hive.init(appDataDir);
   // Open the Hive box, we just keep it open all the time in this demo app.
   await Hive.openBox<dynamic>(kHiveBox);
-  runApp(
-    // const Directionality(
-    //   textDirection: TextDirection.ltr,
-    //   child:
-    const ScopeWrapper(),
-    // ),
-  );
+  runApp(const ScopeWrapper());
 }
 
 class ScopeWrapper extends StatelessWidget {
@@ -43,7 +37,6 @@ class ScopeWrapper extends StatelessWidget {
       child: const Directionality(
         textDirection: TextDirection.ltr,
         child: DeviceWrapper(),
-        // child: DemoApp(),
       ),
     );
   }
@@ -54,12 +47,11 @@ class DeviceWrapper extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
-      textDirection: TextDirection.ltr,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Expanded(
           child: DevicePreview(
-            enabled: ref.watch(useDevicePreviewPod),
+            enabled: ref.watch(useDevicePreviewProvider),
             storage: DevicePreviewStorage.none(),
             // plugins: const <DevicePreviewPlugin>[
             //   ScreenshotPlugin(),
@@ -85,7 +77,7 @@ class DeviceWrapper extends ConsumerWidget {
             //   ),
             // ),
             isToolbarVisible: true,
-            builder: (_) => const DemoApp(),
+            builder: (_) => const FlexScaffoldDemoApp(),
           ),
         ),
       ],
@@ -111,8 +103,8 @@ class DeviceWrapper extends ConsumerWidget {
 //   }
 // }
 
-class DemoApp extends ConsumerWidget {
-  const DemoApp({super.key});
+class FlexScaffoldDemoApp extends ConsumerWidget {
+  const FlexScaffoldDemoApp({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
@@ -123,9 +115,9 @@ class DemoApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       scrollBehavior: AppScrollBehavior(),
       routerConfig: AppRouter.go,
-      themeMode: ref.watch(themeModePod),
-      theme: ref.watch(lightThemePod),
-      darkTheme: ref.watch(darkThemePod),
+      themeMode: ref.watch(themeModeProvider),
+      theme: ref.watch(lightThemeProvider),
+      darkTheme: ref.watch(darkThemeProvider),
     );
   }
 }

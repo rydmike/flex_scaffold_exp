@@ -40,17 +40,17 @@ class FlexBottomBar extends StatelessWidget {
   /// Defines the appearance of the button items that are arrayed within the
   /// drawer, rail, menu and bottom bar.
   ///
-  /// The value must be a list of two or more [FlexfoldDestination] values.
-  final List<FlexfoldDestination> destinations;
+  /// The value must be a list of two or more [FlexDestination] values.
+  final List<FlexDestination> destinations;
 
   /// The index into [destinations] for the current selected
-  /// [FlexfoldDestination].
+  /// [FlexDestination].
   final int selectedIndex;
 
   /// Called when one of the [destinations] is selected.
   ///
   /// The stateful widget that creates the Flexfold navigation needs to keep
-  /// track of the index of the selected [FlexfoldDestination] and call
+  /// track of the index of the selected [FlexDestination] and call
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
   final ValueChanged<int> onDestinationSelected;
@@ -100,18 +100,18 @@ class MaterialBottomBar extends StatefulWidget {
   /// Defines the appearance of the button items that are arrayed within the
   /// drawer, rail, menu and bottom bar.
   ///
-  /// The value must be a list of two or more [FlexfoldDestination]
+  /// The value must be a list of two or more [FlexDestination]
   /// values.
-  final List<FlexfoldDestination> destinations;
+  final List<FlexDestination> destinations;
 
   /// The index into [destinations] for the current selected
-  /// [FlexfoldDestination].
+  /// [FlexDestination].
   final int selectedIndex;
 
   /// Called when one of the [destinations] is selected.
   ///
   /// The stateful widget that creates the Flexfold navigation needs to keep
-  /// track of the index of the selected [FlexfoldDestination] and call
+  /// track of the index of the selected [FlexDestination] and call
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
   final ValueChanged<int> onDestinationSelected;
@@ -226,7 +226,7 @@ class _MaterialBottomBarState extends State<MaterialBottomBar> {
           backgroundColor: Colors.transparent,
           //
           items: <BottomNavigationBarItem>[
-            for (FlexfoldDestination item in widget.destinations)
+            for (FlexDestination item in widget.destinations)
               BottomNavigationBarItem(
                 icon: item.icon,
                 activeIcon: item.selectedIcon,
@@ -286,18 +286,18 @@ class MaterialYouBottomBar extends StatefulWidget {
   /// Defines the appearance of the button items that are arrayed within the
   /// drawer, rail, menu and bottom bar.
   ///
-  /// The value must be a list of two or more [FlexfoldDestination]
+  /// The value must be a list of two or more [FlexDestination]
   /// values.
-  final List<FlexfoldDestination> destinations;
+  final List<FlexDestination> destinations;
 
   /// The index into [destinations] for the current selected
-  /// [FlexfoldDestination].
+  /// [FlexDestination].
   final int selectedIndex;
 
   /// Called when one of the [destinations] is selected.
   ///
   /// The stateful widget that creates the Flexfold navigation needs to keep
-  /// track of the index of the selected [FlexfoldDestination] and call
+  /// track of the index of the selected [FlexDestination] and call
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
   final ValueChanged<int> onDestinationSelected;
@@ -495,7 +495,7 @@ class _MaterialYouBottomBarState extends State<MaterialYouBottomBar> {
           selectedIndex: widget.selectedIndex,
           //
           destinations: <Widget>[
-            for (FlexfoldDestination item in widget.destinations)
+            for (FlexDestination item in widget.destinations)
               NavigationDestination(
                 label: item.label,
                 icon: Theme(
@@ -546,18 +546,18 @@ class CupertinoBottomBar extends StatefulWidget {
   /// Defines the appearance of the button items that are arrayed within the
   /// drawer, rail, menu and bottom bar.
   ///
-  /// The value must be a list of two or more [FlexfoldDestination]
+  /// The value must be a list of two or more [FlexDestination]
   /// values.
-  final List<FlexfoldDestination> destinations;
+  final List<FlexDestination> destinations;
 
   /// The index into [destinations] for the current selected
-  /// [FlexfoldDestination].
+  /// [FlexDestination].
   final int selectedIndex;
 
   /// Called when one of the [destinations] is selected.
   ///
   /// The stateful widget that creates the Flexfold navigation needs to keep
-  /// track of the index of the selected [FlexfoldDestination] and call
+  /// track of the index of the selected [FlexDestination] and call
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
   final ValueChanged<int> onDestinationSelected;
@@ -604,7 +604,7 @@ class _CupertinoBottomBarState extends State<CupertinoBottomBar> {
     // BottomNavigationBarItem will also follow standard themes.
     return CupertinoTabBar(
       items: <BottomNavigationBarItem>[
-        for (FlexfoldDestination item in widget.destinations)
+        for (FlexDestination item in widget.destinations)
           BottomNavigationBarItem(
             icon: item.icon,
             activeIcon: item.selectedIcon,

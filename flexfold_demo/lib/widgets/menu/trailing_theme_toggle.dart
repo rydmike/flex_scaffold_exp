@@ -40,9 +40,9 @@ class TrailingThemeToggle extends ConsumerWidget {
                   Navigator.of(context).pop();
                 }
                 if (isDark) {
-                  ref.read(themeModePod.notifier).state = ThemeMode.light;
+                  ref.read(themeModeProvider.notifier).state = ThemeMode.light;
                 } else {
-                  ref.read(themeModePod.notifier).state = ThemeMode.dark;
+                  ref.read(themeModeProvider.notifier).state = ThemeMode.dark;
                 }
               },
               child: Row(
@@ -60,10 +60,10 @@ class TrailingThemeToggle extends ConsumerWidget {
                             Navigator.of(context).pop();
                           }
                           if (isDark) {
-                            ref.read(themeModePod.notifier).state =
+                            ref.read(themeModeProvider.notifier).state =
                                 ThemeMode.light;
                           } else {
-                            ref.read(themeModePod.notifier).state =
+                            ref.read(themeModeProvider.notifier).state =
                                 ThemeMode.dark;
                           }
                         },

@@ -20,7 +20,7 @@ class DirectionalityWrapper extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Directionality(
-      textDirection: appTextDirection(context, ref),
+      textDirection: ref.watch(appDirectionality) ?? Directionality.of(context),
       // DevicePreview.appBuilder contains brightness setting that can be in
       // conflict with the application's overall brightness that is defined by
       // the active MaterialApp's `theme` or `darkTheme` selected via
@@ -30,7 +30,7 @@ class DirectionalityWrapper extends ConsumerWidget {
       // brightness.
       child: Builder(builder: (BuildContext context) {
         // Resolve which theme mode to use.
-        final ThemeMode mode = ref.watch(themeModePod);
+        final ThemeMode mode = ref.watch(themeModeProvider);
         final Brightness platformBrightness =
             MediaQuery.platformBrightnessOf(context);
         final bool useDarkTheme = mode == ThemeMode.dark ||
@@ -38,9 +38,9 @@ class DirectionalityWrapper extends ConsumerWidget {
         return Theme(
           data: Theme.of(context).copyWith(
               brightness: useDarkTheme ? Brightness.dark : Brightness.light),
-          // Home screen is a layout shell with a single Flexfold scaffold
+          // Home screen is a layout shell with a single FlexScaffold
           // using a nested navigator as its body. The screens used by
-          // Flexfold normally only contain and change the part that goes
+          // FlexScaffold normally only contain and change the part that goes
           // into the body of the scaffold, thus in tablet, desktop and web
           // views, only the body part uses the desired page transition
           // effect for each navigation mode.

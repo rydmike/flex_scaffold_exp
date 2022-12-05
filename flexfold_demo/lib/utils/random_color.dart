@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+const bool _kDebugMe = kDebugMode && false;
+
 /// Generate random colors that are visually appealing.
 ///
 /// This is a port of: https://github.com/lzyzsd/AndroidRandomColor to dart.
@@ -17,8 +19,6 @@ class RandomColor {
     }
   }
 
-  bool debug = false;
-
   final int minBrightness = 16;
   final int maxBrightness = 84;
   late Random _random;
@@ -29,15 +29,11 @@ class RandomColor {
   /// [colorHue] Random color hue [Range] to use
   /// [colorSaturation] Random color saturation [Range]
   /// [colorBrightness] Random color brightness [Range]
-  /// [debug] debug color creation. defaults to false
   Color randomColor({
     ColorHue colorHue = ColorHue.random,
     ColorSaturation colorSaturation = ColorSaturation.random,
     ColorBrightness colorBrightness = ColorBrightness.random,
-    bool debug = false,
   }) {
-    this.debug = debug;
-
     int s;
     int h;
     int b;
@@ -111,7 +107,6 @@ class RandomColor {
         colorHue: colorHue,
         colorSaturation: colorSaturation,
         colorBrightness: colorBrightness,
-        debug: debug,
       ));
     }
     return colors;
@@ -126,8 +121,8 @@ class RandomColor {
   }
 
   void _log(String s) {
-    if (debug) {
-      if (!kReleaseMode) debugPrint('Random color: $s');
+    if (_kDebugMe) {
+      debugPrint('RandomColor: $s');
     }
   }
 }

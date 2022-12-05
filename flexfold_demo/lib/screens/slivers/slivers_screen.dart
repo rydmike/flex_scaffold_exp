@@ -86,11 +86,11 @@ class _SliversScreenState extends ConsumerState<SliversScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final AppNavigation appNav = ref.watch(navigationPod);
+    final AppNavigation appNav = ref.watch(navigationProvider);
 
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final FlexfoldDestinationData destination = appNav.destination;
+    final FlexDestinationTarget destination = appNav.destination;
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
@@ -136,6 +136,7 @@ class _SliversScreenState extends ConsumerState<SliversScreen> {
           key: ValueKey<String>(destination.route),
           // key: const PageStorageKey<String>(SliversScreen.route),
           child: CustomScrollView(
+            primary: false,
             key: ValueKey<String>(destination.route),
             controller: scrollController,
             physics: const BouncingScrollPhysics(),

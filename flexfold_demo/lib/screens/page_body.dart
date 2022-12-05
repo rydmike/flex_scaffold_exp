@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
 
-/// A centered width constrained web layout page body.
+/// A centered width constrained web style page body.
+///
+/// This type of layout is often used on web pages.
+///
+/// It provides the following features to the content of the page:
+/// - Adds a scrollbar
+/// - Adds the capability to un-focus a control like a TextFiled by clicking on
+///   the background.
+/// - Center the content and limit the content width when a given max width
+///   constraint is exceeded.
+///
+///  This implementation has a flaw, you cannot mouse or touch/drag scroll from
+///  expanding margin areas like you could in a Web view. Read more about
+///  it here: https://rydmike.com/blog_layout_and_theming
+///
+/// This is a Flutter "Universal" Widget that only depends on the SDK and
+/// can be dropped into any application.
 class PageBody extends StatelessWidget {
   /// Default constructor for the constrained PageBody.
   const PageBody({
@@ -21,7 +37,7 @@ class PageBody extends StatelessWidget {
 
   /// The constraints for the constrained layout.
   ///
-  /// Default to max width constraint, with a value of 900 dp.
+  /// Default to max width constraint, with a value of 1000 dp.
   final BoxConstraints constraints;
 
   /// Padding around the page body.
@@ -41,15 +57,22 @@ class PageBody extends StatelessWidget {
     // the screen where it belongs.
     return Scrollbar(
       controller: controller,
-      child: Center(
-        child: ConstrainedBox(
-          constraints: constraints,
-          child: ScrollConfiguration(
-            behavior:
-                ScrollConfiguration.of(context).copyWith(scrollbars: false),
-            child: Padding(
-              padding: padding,
-              child: child,
+      child: GestureDetector(
+        // This allows us to un-focus a widget, typically a TextField with focus
+        // by tapping somewhere outside it. It is no longer needed on desktop
+        // builds, it is done automatically there, but not on tablet and phone
+        // app. In this demo we want it on them too.
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: constraints,
+            child: ScrollConfiguration(
+              behavior:
+                  ScrollConfiguration.of(context).copyWith(scrollbars: false),
+              child: Padding(
+                padding: padding,
+                child: child,
+              ),
             ),
           ),
         ),

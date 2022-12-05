@@ -131,20 +131,20 @@ class FlexScaffold extends StatefulWidget {
   /// Defines the appearance of the navigation button items that are listed in
   /// the drawer, rail, menu and bottom bar.
   ///
-  /// The value must be a list of two or more [FlexfoldDestination] values.
-  final List<FlexfoldDestination> destinations;
+  /// The value must be a list of two or more [FlexDestination] values.
+  final List<FlexDestination> destinations;
 
   /// The index into [destinations] for the current selected
-  /// [FlexfoldDestination].
+  /// [FlexDestination].
   final int selectedIndex;
 
   /// Callback called when one of the [destinations] is selected.
   ///
   /// The stateful widget that creates the navigation rail needs to keep
-  /// track of the index of the selected [FlexfoldDestination] and call
+  /// track of the index of the selected [FlexDestination] and call
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
-  final ValueChanged<FlexfoldDestinationData> onDestination;
+  final ValueChanged<FlexDestinationTarget> onDestination;
 
   // TODO(rydmike): Implement modules!
   //
@@ -246,7 +246,7 @@ class FlexScaffold extends StatefulWidget {
   /// The default value is null.
   final Widget? menuLeading;
 
-  /// Trailing menu widget that is placed below the last [FlexfoldDestination].
+  /// Trailing menu widget that is placed below the last [FlexDestination].
   ///
   /// It needs to fit and look good both in rail and side menu mode.
   /// The default value is null.
@@ -448,50 +448,139 @@ class FlexScaffold extends StatefulWidget {
   /// The content widget for the Flexfold scaffold screen.
   final Widget? body;
 
+  /// Finds the [FlexScaffoldState] from the closest instance of this class that
+  /// encloses the given context.
+  ///
+  /// If no instance of this class encloses the given context, will cause an
+  /// assert in debug mode, and throw an exception in release mode.
+  ///
+  /// This method can be expensive (it walks the element tree).
+  ///
+  /// Typical usage of the [FlexScaffold.of] function is to call it from
+  /// within the `build` method of a child of a [FlexScaffold].
+  ///
+  /// When the [FlexScaffold] is actually created in the same `build` function,
+  /// the `context` argument to the `build` function can't be used to find the
+  /// [FlexScaffold] (since it's "above" the widget being returned in the widget
+  /// tree). In such cases, the wrapping `body` with a [Builder] can be used
+  /// to provide a new scope with a [BuildContext] that is "under" the
+  /// [FlexScaffold].
+  ///
+  /// A more efficient solution is to split your build function into several
+  /// widgets. This introduces a new context from which you can obtain the
+  /// [FlexScaffold]. In this solution, you would have an outer widget that
+  /// creates the [FlexScaffold] populated by instances of your new inner
+  /// widgets, and then in these inner widgets you would use [FlexScaffold.of].
+  ///
+  /// A less elegant but more expedient solution is assign a [GlobalKey] to the
+  /// [FlexScaffold], then use the `key.currentState` property to obtain the
+  /// [FlexScaffoldState] rather than using the [FlexScaffold.of] function.
+  ///
+  /// If there is no [FlexScaffold] in scope, then this will throw an exception.
+  static FlexScaffoldState of(BuildContext context) {
+    final FlexScaffoldState? result =
+        context.findAncestorStateOfType<FlexScaffoldState>();
+    if (result != null) {
+      return result;
+    }
+    throw FlutterError.fromParts(<DiagnosticsNode>[
+      ErrorSummary(
+        'FlexScaffold.of() called with a context that does not '
+        'contain a FlexScaffold.',
+      ),
+      ErrorDescription(
+        'No FlexScaffoldState ancestor could be found starting from the '
+        'context that was passed to FlexScaffold.of(). '
+        'This usually happens when the context provided is from the same '
+        'StatefulWidget as that whose build function actually creates the '
+        'FlexScaffold widget being sought.',
+      ),
+      ErrorHint(
+        'There are several ways to avoid this problem. The simplest is to use '
+        'a Builder to get a context that is "under" the FlexScaffold. '
+        'For a similar example of this, please see the '
+        'documentation for Scaffold.of():\n'
+        '  https://api.flutter.dev/flutter/material/Scaffold/of.html',
+      ),
+      ErrorHint(
+        'A more efficient solution is to split your build function into '
+        'several widgets. This introduces a new context from which you can '
+        'obtain the FlexScaffold. In this solution, you would have an outer '
+        'widget that creates the FlexScaffold populated by instances of '
+        'your new inner widgets, and then in these inner widgets you would use '
+        'FlexScaffold.of().\n'
+        'A less elegant but more expedient solution is assign a GlobalKey to '
+        'the FlexScaffold, then use the key.currentState property to obtain '
+        'the FlexScaffoldState rather than using the FlexScaffold.of() '
+        'function.',
+      ),
+      context.describeElement('The context used was'),
+    ]);
+  }
+
   @override
-  State<FlexScaffold> createState() => _FlexScaffoldState();
+  State<FlexScaffold> createState() => FlexScaffoldState();
 }
 
-class _FlexScaffoldState extends State<FlexScaffold> {
+/// State for a [FlexScaffold].
+///
+/// Retrieve a [ScaffoldState] from the current
+/// [BuildContext] using [FlexScaffold.of].
+class FlexScaffoldState extends State<FlexScaffold> {
   // State that might be changed via widget
-  late int selectedIndex;
-  final FlexfoldIndexTracker indexMenu = FlexfoldIndexTracker();
-  final FlexfoldIndexTracker indexBottom = FlexfoldIndexTracker();
-  late FlexfoldDestination target;
-  late bool hideMenu;
-  late bool hideSidebar;
-  late bool preferRail;
-  late bool isBottomTarget;
-  late bool scrollHiddenBottomBar;
+  late int _selectedIndex;
+  final FlexfoldIndexTracker _indexMenu = FlexfoldIndexTracker();
+  final FlexfoldIndexTracker _indexBottom = FlexfoldIndexTracker();
+  late FlexDestination _target;
+  late bool _hideMenu;
+  late bool _hideSidebar;
+  late bool _preferRail;
+  late bool _isBottomTarget;
+  late bool _scrollHiddenBottomBar;
 
   // Local state
-  late bool isPhone;
-  late bool isPhoneLandscape;
-  late bool isTablet;
-  late bool isDesktop;
-  late bool isMenuInDrawer;
-  late bool isMenuInMenu;
-  late bool isSidebarInEndDrawer;
-  late bool isSidebarInMenu;
-  late bool isBottomBarVisible;
-  late bool showBottomDestinationsInDrawer;
-  late Orientation currentOrientation;
+  late bool _isPhone;
+  late bool _isPhoneLandscape;
+  late bool _isTablet;
+  late bool _isDesktop;
+  late bool _isMenuInDrawer;
+  late bool _isMenuInMenu;
+  late bool _isSidebarInEndDrawer;
+  late bool _isSidebarInMenu;
+  late bool _isBottomBarVisible;
+  late bool _showBottomDestinationsInDrawer;
+  late Orientation _currentOrientation;
+
+  /// Returns true if the menu is currently in the Drawer.
+  bool get isMenuInDrawer => _isMenuInDrawer;
+
+  void _assumePushed() {
+    // setState(() {
+    _selectedIndex = widget.selectedIndex;
+    _indexMenu.setIndex(widget.selectedIndex);
+    _target = widget.destinations[_indexMenu.index];
+    final int? bottomIndex =
+        FlexDestination.toBottomIndex(_target, widget.destinations);
+    _indexBottom.setIndex(bottomIndex);
+    _isBottomTarget = bottomIndex != null;
+    // });
+  }
 
   @override
   void initState() {
     super.initState();
-    selectedIndex = widget.selectedIndex;
-    indexMenu.setIndex(widget.selectedIndex);
-    target = widget.destinations[indexMenu.index];
+    _selectedIndex = widget.selectedIndex;
+    _indexMenu.setIndex(widget.selectedIndex);
+    _target = widget.destinations[_indexMenu.index];
     final int? bottomIndex =
-        FlexfoldDestination.toBottomIndex(target, widget.destinations);
+        FlexDestination.toBottomIndex(_target, widget.destinations);
     // TODO(rydmike): This must work when called with null!
-    indexBottom.setIndex(bottomIndex);
-    isBottomTarget = bottomIndex != null;
-    hideMenu = widget.hideMenu;
-    hideSidebar = widget.hideSidebar;
-    preferRail = widget.preferRail;
-    scrollHiddenBottomBar = widget.scrollHiddenBottomBar;
+    _indexBottom.setIndex(bottomIndex);
+    _isBottomTarget = bottomIndex != null;
+    _hideMenu = widget.hideMenu;
+    _hideSidebar = widget.hideSidebar;
+    _preferRail = widget.preferRail;
+    _scrollHiddenBottomBar = widget.scrollHiddenBottomBar;
     // TODO(rydmike): Changing orientation with drawer open may break it! Fix?
     // currentOrientation = MediaQuery.of(context).orientation;
   }
@@ -500,25 +589,25 @@ class _FlexScaffoldState extends State<FlexScaffold> {
   void didUpdateWidget(FlexScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.selectedIndex != oldWidget.selectedIndex) {
-      selectedIndex = widget.selectedIndex;
-      indexMenu.setIndex(widget.selectedIndex);
-      target = widget.destinations[indexMenu.index];
+      _selectedIndex = widget.selectedIndex;
+      _indexMenu.setIndex(widget.selectedIndex);
+      _target = widget.destinations[_indexMenu.index];
       final int? bottomIndex =
-          FlexfoldDestination.toBottomIndex(target, widget.destinations);
-      indexBottom.setIndex(bottomIndex);
-      isBottomTarget = bottomIndex != null;
+          FlexDestination.toBottomIndex(_target, widget.destinations);
+      _indexBottom.setIndex(bottomIndex);
+      _isBottomTarget = bottomIndex != null;
     }
     if (widget.hideMenu != oldWidget.hideMenu) {
-      hideMenu = widget.hideMenu;
+      _hideMenu = widget.hideMenu;
     }
     if (widget.hideSidebar != oldWidget.hideSidebar) {
-      hideSidebar = widget.hideSidebar;
+      _hideSidebar = widget.hideSidebar;
     }
     if (widget.preferRail != oldWidget.preferRail) {
-      preferRail = widget.preferRail;
+      _preferRail = widget.preferRail;
     }
     if (widget.scrollHiddenBottomBar != oldWidget.scrollHiddenBottomBar) {
-      scrollHiddenBottomBar = widget.scrollHiddenBottomBar;
+      _scrollHiddenBottomBar = widget.scrollHiddenBottomBar;
     }
   }
 
@@ -689,47 +778,48 @@ class _FlexScaffoldState extends State<FlexScaffold> {
         final double height = mediaData.size.height;
 
         // Based on width and breakpoint limit, this is a phone sized layout.
-        isPhone = width < flexTheme.breakpointRail!;
+        _isPhone = width < flexTheme.breakpointRail!;
         // Based on height and breakpoint, this is a phone landscape layout.
-        isPhoneLandscape = height < flexTheme.breakpointDrawer!;
+        _isPhoneLandscape = height < flexTheme.breakpointDrawer!;
         // Based on width and breakpoint limit, this is a desktop sized layout.
-        isDesktop = (width >= flexTheme.breakpointMenu!) && !isPhoneLandscape;
+        _isDesktop = (width >= flexTheme.breakpointMenu!) && !_isPhoneLandscape;
         // The menu will exist as a Drawer widget in the widget tree.
-        isMenuInDrawer = isPhone || widget.hideMenu || isPhoneLandscape;
+        _isMenuInDrawer = _isPhone || widget.hideMenu || _isPhoneLandscape;
         // The menu is shown as a full sized menu before the body.
-        isMenuInMenu = isDesktop && !widget.hideMenu && !widget.preferRail;
+        _isMenuInMenu = _isDesktop && !widget.hideMenu && !widget.preferRail;
         // The sidebar will exist in an end Drawer widget in the widget tree.
-        isSidebarInEndDrawer =
+        _isSidebarInEndDrawer =
             (width < flexTheme.breakpointSidebar! || widget.hideSidebar) &&
-                widget.destinations[selectedIndex].hasSidebar &&
+                widget.destinations[_selectedIndex].hasSidebar &&
                 widget.sidebar != null;
         // The sidebar is shown as a widget after the body.
-        isSidebarInMenu = width >= flexTheme.breakpointSidebar! &&
+        _isSidebarInMenu = width >= flexTheme.breakpointSidebar! &&
             !widget.hideSidebar &&
-            widget.destinations[selectedIndex].hasSidebar &&
+            widget.destinations[_selectedIndex].hasSidebar &&
             widget.sidebar != null;
         // The bottom navigation bar is visible.
         // Tricky logic here, many config options leads to stuff like this.
-        isBottomBarVisible = !(widget.hideBottomBar || scrollHiddenBottomBar) &&
-            (isPhone ||
-                widget.showBottomBarWhenMenuShown ||
-                (widget.showBottomBarWhenMenuInDrawer && isMenuInDrawer));
+        _isBottomBarVisible =
+            !(widget.hideBottomBar || _scrollHiddenBottomBar) &&
+                (_isPhone ||
+                    widget.showBottomBarWhenMenuShown ||
+                    (widget.showBottomBarWhenMenuInDrawer && _isMenuInDrawer));
         // The bottom destinations are to be shown and included in the drawer.
         // Again nasty logic, caused by many options and possibilities
-        showBottomDestinationsInDrawer = widget.bottomDestinationsInDrawer ||
-            !isBottomTarget ||
+        _showBottomDestinationsInDrawer = widget.bottomDestinationsInDrawer ||
+            !_isBottomTarget ||
             widget.hideBottomBar ||
-            (!isPhone &&
+            (!_isPhone &&
                 (!widget.showBottomBarWhenMenuInDrawer &&
                     !widget.showBottomBarWhenMenuShown));
         // Set location of floating action button (FAB) depending on media
         // size, use default locations if null.
-        final FloatingActionButtonLocation effectiveFabLocation = isPhone
+        final FloatingActionButtonLocation effectiveFabLocation = _isPhone
             // FAB on phone size
             ? widget.floatingActionButtonLocationPhone ??
                 // Default uses end float location, the official standard.
                 FloatingActionButtonLocation.endFloat
-            : isDesktop
+            : _isDesktop
                 ? widget.floatingActionButtonLocationDesktop ??
                     // Material default position would be startTop at desktop
                     // size, or possibly also endTop, but the FAB gets in the in
@@ -767,12 +857,12 @@ class _FlexScaffoldState extends State<FlexScaffold> {
                 //
                 // Build the app bar with leading and actions buttons, but only
                 // if the destination has an app bar.
-                appBar: widget.destinations[selectedIndex].hasAppBar
+                appBar: widget.destinations[_selectedIndex].hasAppBar
                     ? _buildMainAppBar(context)
                     : null,
                 //
                 // The menu when used as a drawer.
-                drawer: isMenuInDrawer
+                drawer: _isMenuInDrawer
                     ? FlexfoldDrawer(
                         elevation: flexTheme.drawerElevation!,
                         drawerWidth: flexTheme.drawerWidth! + startPadding,
@@ -783,7 +873,7 @@ class _FlexScaffoldState extends State<FlexScaffold> {
                     : null,
                 //
                 // The end drawer, ie tools menu when used as an end drawer.
-                endDrawer: isSidebarInEndDrawer
+                endDrawer: _isSidebarInEndDrawer
                     ? FlexfoldDrawer(
                         elevation: flexTheme.endDrawerElevation!,
                         drawerWidth: flexTheme.endDrawerWidth!,
@@ -803,19 +893,19 @@ class _FlexScaffoldState extends State<FlexScaffold> {
                           hideSidebar: widget.hideSidebar,
                           onHideSidebar: (bool value) {
                             setState(() {
-                              hideSidebar = value;
+                              _hideSidebar = value;
                               if (widget.onHideSidebar != null) {
-                                widget.onHideSidebar?.call(hideSidebar);
+                                widget.onHideSidebar?.call(_hideSidebar);
                               }
                             });
                             if (_kDebugMe) {
                               debugPrint(
-                                  'Flexfold() onHideSidebar: $hideSidebar');
+                                  'Flexfold() onHideSidebar: $_hideSidebar');
                             }
                           },
                           sidebarBelongsToBody: widget.sidebarBelongsToBody,
                           hasAppBar:
-                              widget.destinations[selectedIndex].hasAppBar,
+                              widget.destinations[_selectedIndex].hasAppBar,
                           child: widget.sidebar,
                         ),
                       )
@@ -826,7 +916,7 @@ class _FlexScaffoldState extends State<FlexScaffold> {
                 //
                 // Floating action button in its effective location.
                 floatingActionButton:
-                    widget.destinations[selectedIndex].hasFloatingActionButton
+                    widget.destinations[_selectedIndex].hasFloatingActionButton
                         ? widget.floatingActionButton
                         : null,
                 floatingActionButtonLocation: effectiveFabLocation,
@@ -841,7 +931,7 @@ class _FlexScaffoldState extends State<FlexScaffold> {
                     //
                     // The Sidebar when shown as a fixed item and it belongs
                     // to the body. Material default sidebar layout.
-                    if (widget.destinations[selectedIndex].hasSidebar &&
+                    if (widget.destinations[_selectedIndex].hasSidebar &&
                         widget.sidebar != null &&
                         widget.sidebarBelongsToBody)
                       ConstrainedBox(
@@ -864,19 +954,19 @@ class _FlexScaffoldState extends State<FlexScaffold> {
                             hideSidebar: widget.hideSidebar,
                             onHideSidebar: (bool value) {
                               setState(() {
-                                hideSidebar = value;
+                                _hideSidebar = value;
                                 if (widget.onHideSidebar != null) {
-                                  widget.onHideSidebar?.call(hideSidebar);
+                                  widget.onHideSidebar?.call(_hideSidebar);
                                 }
                               });
                               if (_kDebugMe) {
                                 debugPrint(
-                                    'Flexfold() onHideSidebar: $hideSidebar');
+                                    'Flexfold() onHideSidebar: $_hideSidebar');
                               }
                             },
                             sidebarBelongsToBody: widget.sidebarBelongsToBody,
                             hasAppBar:
-                                widget.destinations[selectedIndex].hasAppBar,
+                                widget.destinations[_selectedIndex].hasAppBar,
                             child: widget.sidebar,
                           ),
                         ),
@@ -892,7 +982,7 @@ class _FlexScaffoldState extends State<FlexScaffold> {
             // works better if we also show a bottom navigation bar together
             // with the sidebar and it works better with the built-in
             // FAB locations.
-            if (widget.destinations[selectedIndex].hasSidebar &&
+            if (widget.destinations[_selectedIndex].hasSidebar &&
                 widget.sidebar != null &&
                 !widget.sidebarBelongsToBody)
               ConstrainedBox(
@@ -912,17 +1002,17 @@ class _FlexScaffoldState extends State<FlexScaffold> {
                     hideSidebar: widget.hideSidebar,
                     onHideSidebar: (bool value) {
                       setState(() {
-                        hideSidebar = value;
+                        _hideSidebar = value;
                         if (widget.onHideSidebar != null) {
-                          widget.onHideSidebar?.call(hideSidebar);
+                          widget.onHideSidebar?.call(_hideSidebar);
                         }
                       });
                       if (_kDebugMe) {
-                        debugPrint('Flexfold() onHideSidebar: $hideSidebar');
+                        debugPrint('Flexfold() onHideSidebar: $_hideSidebar');
                       }
                     },
                     sidebarBelongsToBody: widget.sidebarBelongsToBody,
-                    hasAppBar: widget.destinations[selectedIndex].hasAppBar,
+                    hasAppBar: widget.destinations[_selectedIndex].hasAppBar,
                     child: widget.sidebar,
                   ),
                 ),
@@ -950,32 +1040,32 @@ class _FlexScaffoldState extends State<FlexScaffold> {
     return appbar.toAppBar(
       automaticallyImplyLeading: false,
       // Only add the menu button on the main app bar if menu is in a drawer.
-      leading: isMenuInDrawer
+      leading: _isMenuInDrawer
           ? FlexfoldMenuButton(
               menuIcon: widget.menuIcon,
               menuIconExpand: widget.menuIconExpand,
               menuIconExpandHidden: widget.menuIconExpandHidden,
               menuIconCollapse: widget.menuIconCollapse,
-              isHidden: hideMenu,
+              isHidden: _hideMenu,
               cycleViaDrawer: widget.cycleViaDrawer,
-              isRail: preferRail,
+              isRail: _preferRail,
               setMenuHidden: (bool value) {
                 setState(() {
-                  hideMenu = value;
+                  _hideMenu = value;
                   if (widget.onHideMenu != null) widget.onHideMenu?.call(value);
                   if (_kDebugMe) {
-                    debugPrint('Flexfold(): onHideMenu: $hideMenu');
+                    debugPrint('Flexfold(): onHideMenu: $_hideMenu');
                   }
                 });
               },
               setPreferRail: (bool value) {
                 setState(() {
-                  preferRail = value;
+                  _preferRail = value;
                   if (widget.onPreferRail != null) {
                     widget.onPreferRail?.call(value);
                   }
                   if (_kDebugMe) {
-                    debugPrint('Flexfold(): onPreferRail: $preferRail');
+                    debugPrint('Flexfold(): onPreferRail: $_preferRail');
                   }
                 });
               },
@@ -991,8 +1081,8 @@ class _FlexScaffoldState extends State<FlexScaffold> {
         // a default action button to show the menu, we do not want that.
         const SizedBox.shrink(),
         // Then we insert the sidebar menu button
-        if (isSidebarInEndDrawer ||
-            (isSidebarInMenu &&
+        if (_isSidebarInEndDrawer ||
+            (_isSidebarInMenu &&
                 widget.sidebarBelongsToBody &&
                 widget.sidebarControlEnabled))
           FlexfoldSidebarButton(
@@ -1001,15 +1091,15 @@ class _FlexScaffoldState extends State<FlexScaffold> {
             menuIconExpandHidden: widget.sidebarIconExpandHidden,
             menuIconCollapse: widget.sidebarIconCollapse,
             cycleViaDrawer: widget.cycleViaDrawer,
-            isHidden: hideSidebar,
+            isHidden: _hideSidebar,
             setMenuHidden: (bool value) {
               setState(() {
-                hideSidebar = value;
+                _hideSidebar = value;
                 if (widget.onHideSidebar != null) {
                   widget.onHideSidebar?.call(value);
                 }
                 if (_kDebugMe) {
-                  debugPrint('Flexfold(): setMenuHidden: $hideSidebar');
+                  debugPrint('Flexfold(): setMenuHidden: $_hideSidebar');
                 }
               });
             },
@@ -1055,31 +1145,35 @@ class _FlexScaffoldState extends State<FlexScaffold> {
 
         setState(() {
           // After moving to a new destination, bottom bar is not scroll hidden.
-          scrollHiddenBottomBar = false;
+          _scrollHiddenBottomBar = false;
 
-          selectedIndex = index;
-          indexMenu.setIndex(index);
-          target = widget.destinations[index];
+          _selectedIndex = index;
+          _indexMenu.setIndex(index);
+          _target = widget.destinations[index];
           final int? bottomIndex =
-              FlexfoldDestination.toBottomIndex(target, widget.destinations);
-          indexBottom.setIndex(bottomIndex);
-          isBottomTarget = bottomIndex != null;
+              FlexDestination.toBottomIndex(_target, widget.destinations);
+          _indexBottom.setIndex(bottomIndex);
+          _isBottomTarget = bottomIndex != null;
 
-          FlexfoldNavigationSource source = FlexfoldNavigationSource.rail;
-          if (isMenuInDrawer) source = FlexfoldNavigationSource.drawer;
-          if (isMenuInMenu) source = FlexfoldNavigationSource.menu;
+          FlexNavigation source = FlexNavigation.rail;
+          if (_isMenuInDrawer) source = FlexNavigation.drawer;
+          if (_isMenuInMenu) source = FlexNavigation.menu;
+
+          final bool preferPush =
+              (_isPhone && widget.destinations[index].maybePush) ||
+                  widget.destinations[index].alwaysPush;
 
           // Make tap destination data to return
-          final FlexfoldDestinationData destination = FlexfoldDestinationData(
+          final FlexDestinationTarget destination = FlexDestinationTarget(
             bottomIndex: bottomIndex,
-            menuIndex: selectedIndex,
-            reverse: indexMenu.reverse,
+            menuIndex: _selectedIndex,
+            reverse: _indexMenu.reverse,
             source: source,
             route: widget.destinations[index].route,
-            useModal: (isPhone && widget.destinations[index].maybeModal) ||
-                widget.destinations[index].alwaysModal,
+            preferPush: preferPush,
           );
           widget.onDestination(destination);
+          if (preferPush) _assumePushed();
         });
       },
       menuToggleEnabled: widget.menuControlEnabled,
@@ -1096,10 +1190,10 @@ class _FlexScaffoldState extends State<FlexScaffold> {
       hideMenu: widget.hideMenu,
       onHideMenu: (bool value) {
         setState(() {
-          hideMenu = value;
-          if (widget.onHideMenu != null) widget.onHideMenu?.call(hideMenu);
+          _hideMenu = value;
+          if (widget.onHideMenu != null) widget.onHideMenu?.call(_hideMenu);
           if (_kDebugMe) {
-            debugPrint('Flexfold() onHideMenu: $hideMenu');
+            debugPrint('Flexfold() onHideMenu: $_hideMenu');
           }
         });
       },
@@ -1107,23 +1201,23 @@ class _FlexScaffoldState extends State<FlexScaffold> {
       preferRail: widget.preferRail,
       onPreferRail: (bool value) {
         setState(() {
-          preferRail = value;
+          _preferRail = value;
           if (widget.onPreferRail != null) {
-            widget.onPreferRail?.call(preferRail);
+            widget.onPreferRail?.call(_preferRail);
           }
           if (_kDebugMe) {
-            debugPrint('Flexfold() onPreferRail: $preferRail');
+            debugPrint('Flexfold() onPreferRail: $_preferRail');
           }
         });
       },
-      showBottomDestinationsInDrawer: showBottomDestinationsInDrawer,
+      showBottomDestinationsInDrawer: _showBottomDestinationsInDrawer,
     );
   }
 
   Widget? _buildBottomBar(BuildContext context) {
     // Make a list that only contains the bottom bar options
-    final List<FlexfoldDestination> bottomDestinations = widget.destinations
-        .where((FlexfoldDestination item) => item.inBottomBar)
+    final List<FlexDestination> bottomDestinations = widget.destinations
+        .where((FlexDestination item) => item.inBottomNavigation)
         .toList();
     // Current platform
     final TargetPlatform platform = Theme.of(context).platform;
@@ -1142,18 +1236,19 @@ class _FlexScaffoldState extends State<FlexScaffold> {
     if (_kDebugMe) {
       debugPrint('Flexfold() effectiveType: $effectiveType');
     }
-    // The height of the Material and Cupertino bottom nav bars differ, we need
+    // The height of the bottom nav bars may differ, we need
     // to get the correct height for the effective bottom nav bar.
     // TODO(rydmike): Make this nice handle alwaysHide labels for NavigationBar.
     final double effectiveToolBarHeight =
         effectiveType == FlexfoldBottomBarType.material2
             ? kBottomNavigationBarHeight
             : effectiveType == FlexfoldBottomBarType.material3
-                ? kFlexfoldNavigationBarHeight
+                ? (NavigationBarTheme.of(context).height ??
+                    kFlexfoldNavigationBarHeight)
                 : kFlexfoldCupertinoTabBarHeight;
     // If we are not at a destination that is defined to be a bottom target,
     // we are not inserting a bottom nav bar in the widget tree all
-    return isBottomTarget
+    return _isBottomTarget
         // This setup with the bottom bar in an animated container inside a
         // Wrap animate the size and it looks like the bottom bar slides
         // down and away when you do that in a Wrap.
@@ -1166,35 +1261,35 @@ class _FlexScaffoldState extends State<FlexScaffold> {
         ? AnimatedContainer(
             duration: theme.bottomBarAnimationDuration!,
             curve: theme.bottomBarAnimationCurve!,
-            height: isBottomBarVisible ? effectiveToolBarHeight : 0.0,
+            height: _isBottomBarVisible ? effectiveToolBarHeight : 0.0,
             child: Wrap(
               children: <Widget>[
                 FlexBottomBar(
                   bottomBarType: effectiveType,
                   destinations: bottomDestinations,
-                  selectedIndex: indexBottom.index,
+                  selectedIndex: _indexBottom.index,
                   onDestinationSelected: (int index) {
                     // If we click the current index we don't do anything
-                    if (index == indexBottom.index) return;
+                    if (index == _indexBottom.index) return;
                     setState(
                       () {
                         // Ensure that after moving to a new destination, that
                         // the bottom navigation bar is never scrollHidden.
-                        scrollHiddenBottomBar = false;
+                        _scrollHiddenBottomBar = false;
 
-                        target = bottomDestinations[index];
-                        indexBottom.setIndex(index);
-                        selectedIndex = FlexfoldDestination.toMenuIndex(
-                            target, widget.destinations);
-                        indexMenu.setIndex(selectedIndex);
+                        _target = bottomDestinations[index];
+                        _indexBottom.setIndex(index);
+                        _selectedIndex = FlexDestination.toMenuIndex(
+                            _target, widget.destinations);
+                        _indexMenu.setIndex(_selectedIndex);
                         // Make tap destination data to return
-                        final FlexfoldDestinationData destination =
-                            FlexfoldDestinationData(
+                        final FlexDestinationTarget destination =
+                            FlexDestinationTarget(
                           bottomIndex: index,
-                          menuIndex: selectedIndex,
-                          reverse: indexMenu.reverse,
-                          source: FlexfoldNavigationSource.bottom,
-                          route: widget.destinations[selectedIndex].route,
+                          menuIndex: _selectedIndex,
+                          reverse: _indexMenu.reverse,
+                          source: FlexNavigation.bottom,
+                          route: widget.destinations[_selectedIndex].route,
                         );
                         widget.onDestination(destination);
                       },

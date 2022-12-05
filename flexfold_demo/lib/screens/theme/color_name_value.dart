@@ -1,6 +1,9 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+const bool _kDebugMe = kDebugMode && true;
 
 /// This widget is intended to be wrapped in material with [color].
 ///
@@ -43,7 +46,9 @@ class _ColorNameValueState extends State<ColorNameValue> {
     if (widget.color != oldWidget.color) {
       materialName = ColorTools.materialName(widget.color);
       nameThatColor = ColorTools.nameThatColor(widget.color);
-      // debugPrint('ColorNameValue: didUpdateWidget() called names changed');
+      if (_kDebugMe) {
+        debugPrint('ColorNameValue: didUpdateWidget() called names changed');
+      }
     }
     super.didUpdateWidget(oldWidget);
   }

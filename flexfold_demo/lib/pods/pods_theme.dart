@@ -31,18 +31,18 @@ import 'pods_application.dart';
 // the property that changed. The myriad of individual StateProviders gives
 // us that desired feature automatically.
 
-/// The [themeModePod] is a [StateProvider] to provide the state of
+/// The [themeModeProvider] is a [StateProvider] to provide the state of
 /// the [ThemeMode] used to toggle the application's theme mode.
-final StateProvider<ThemeMode> themeModePod =
+final StateProvider<ThemeMode> themeModeProvider =
     StateProvider<ThemeMode>((StateProviderRef<ThemeMode> ref) {
   return hiveStore.get(KeyStore.themeMode,
           defaultValue: KeyStore.defaults[KeyStore.themeMode]! as ThemeMode)
       as ThemeMode;
 }, name: KeyStore.themeMode);
 
-/// The [lightThemePod] is a [StateProvider] to provide the state of
+/// The [lightThemeProvider] is a [StateProvider] to provide the state of
 /// the light [ThemeData] used to define the light theme of the app.
-final StateProvider<ThemeData> lightThemePod =
+final StateProvider<ThemeData> lightThemeProvider =
     StateProvider<ThemeData>((StateProviderRef<ThemeData> ref) {
   // The surface style is needed as means to select and to provide custom
   // surface colors as input to the FlexColorScheme.
@@ -50,7 +50,7 @@ final StateProvider<ThemeData> lightThemePod =
   // We need to use the ColorScheme defined by used FlexColorScheme as input
   // to customized sub-theme's, so we create it first.
   return FlexThemeData.light(
-    colors: ref.watch(currentSchemePod).light,
+    colors: ref.watch(currentSchemeProvider).light,
     surfaceMode: ref.watch(surfaceStylePod),
     tooltipsMatchBackground: ref.watch(tooltipsMatchBackgroundPod),
     appBarStyle: ref.watch(lightAppBarStylePod),
@@ -67,15 +67,15 @@ final StateProvider<ThemeData> lightThemePod =
         : null,
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     fontFamily: AppFonts.mainFont,
-    platform: ref.watch(platformPod),
-    typography: Typography.material2021(platform: ref.watch(platformPod)),
+    platform: ref.watch(platformProvider),
+    typography: Typography.material2021(platform: ref.watch(platformProvider)),
     subThemesData: const FlexSubThemesData(),
   );
 });
 
-/// The [darkThemePod] is a [StateProvider] to provide the state of
+/// The [darkThemeProvider] is a [StateProvider] to provide the state of
 /// the light [ThemeData] used to define the light theme of the app.
-final StateProvider<ThemeData> darkThemePod =
+final StateProvider<ThemeData> darkThemeProvider =
     StateProvider<ThemeData>((StateProviderRef<ThemeData> ref) {
   // The surface style is needed as means to select and to provide custom
   // surface colors as input to the FlexColorScheme.
@@ -84,7 +84,7 @@ final StateProvider<ThemeData> darkThemePod =
   // We need to use the ColorScheme defined by used FlexColorScheme as input
   // to customized sub-theme's, so we create it first.
   return FlexThemeData.dark(
-    colors: ref.watch(currentSchemePod).dark,
+    colors: ref.watch(currentSchemeProvider).dark,
     surfaceMode: ref.watch(surfaceStylePod),
     tooltipsMatchBackground: ref.watch(tooltipsMatchBackgroundPod),
     appBarStyle: ref.watch(darkAppBarStylePod),
@@ -102,23 +102,22 @@ final StateProvider<ThemeData> darkThemePod =
     darkIsTrueBlack: ref.watch(darkIsTrueBlackPod),
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     fontFamily: AppFonts.mainFont,
-    platform: ref.watch(platformPod),
-    typography: Typography.material2021(platform: ref.watch(platformPod)),
+    platform: ref.watch(platformProvider),
+    typography: Typography.material2021(platform: ref.watch(platformProvider)),
     subThemesData: const FlexSubThemesData(),
   );
 });
 
 // Get the currently selected color scheme.
-final StateProvider<FlexSchemeData> currentSchemePod =
+final StateProvider<FlexSchemeData> currentSchemeProvider =
     StateProvider<FlexSchemeData>((StateProviderRef<FlexSchemeData> ref) {
   return ref.watch(schemesProvider)[ref.watch(schemeIndexPod)];
 });
 
 // Create a list with our custom color schemes and add
 // all the FlexColorScheme built-in ones as well.
-final StateProvider<List<FlexSchemeData>> schemesProvider =
-    StateProvider<List<FlexSchemeData>>(
-        (StateProviderRef<List<FlexSchemeData>> ref) {
+final Provider<List<FlexSchemeData>> schemesProvider =
+    Provider<List<FlexSchemeData>>((ProviderRef<List<FlexSchemeData>> ref) {
   return <FlexSchemeData>[
     // Add all our schemes to the list of schemes. By using references to
     // the pods that determine effective colors and computing effective colors

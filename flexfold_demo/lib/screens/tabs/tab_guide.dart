@@ -50,13 +50,13 @@ class _TabGuideState extends ConsumerState<TabGuide>
   Widget build(BuildContext context) {
     // Must call super.
     super.build(context);
-    final AppNavigation appNav = ref.watch(navigationPod);
+    final AppNavigation appNav = ref.watch(navigationProvider);
     final ThemeData themeData = Theme.of(context);
     final TextStyle linkStyle = themeData.textTheme.bodyText1!.copyWith(
         color: themeData.colorScheme.primary, fontWeight: FontWeight.bold);
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final FlexfoldDestinationData destination = appNav.destination;
+    final FlexDestinationTarget destination = appNav.destination;
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
@@ -68,6 +68,7 @@ class _TabGuideState extends ConsumerState<TabGuide>
       controller: scrollController,
       child: ListView(
         // key: ValueKey<String>('${destination.route}${AppRoutes.tabsGuide}'),
+        primary: false,
         controller: scrollController,
         padding: const EdgeInsets.only(top: AppInsets.l),
         children: <Widget>[

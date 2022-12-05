@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -10,6 +11,8 @@ import '../../../pods/pods_theme.dart';
 import '../../../store/key_store.dart';
 import '../../../utils/app_images.dart';
 import '../../../utils/app_insets.dart';
+
+const bool _kDebugMe = kDebugMode && true;
 
 const Color _kPlaceholderColor = Color(0x80404040);
 
@@ -488,7 +491,9 @@ class PaletteSwatch extends StatelessWidget {
 
 Color _ensureDarkColor(Color color) {
   if (ThemeData.estimateBrightnessForColor(color) == Brightness.light) {
-    debugPrint('Darkened 25%');
+    if (_kDebugMe) {
+      debugPrint('Settings: _ensureDarkColor Darkened 25%');
+    }
     return color.darken(25);
   } else {
     return color;

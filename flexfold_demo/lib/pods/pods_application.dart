@@ -32,7 +32,7 @@ import '../store/key_store.dart';
 
 // A state provider to enable and disable DevicePreview.
 // This provider is on purpose not persisted.
-final StateProvider<bool> useDevicePreviewPod =
+final StateProvider<bool> useDevicePreviewProvider =
     StateProvider<bool>((StateProviderRef<bool> ref) {
   return false;
 });
@@ -40,39 +40,42 @@ final StateProvider<bool> useDevicePreviewPod =
 // StateProvider for the platform. This one is currently not persisted on
 // on purpose. We always want to get it reset to native platform when
 // restarting. It is mostly available for debugging purposes.
-final StateProvider<TargetPlatform> platformPod =
+final StateProvider<TargetPlatform> platformProvider =
     StateProvider<TargetPlatform>((StateProviderRef<TargetPlatform> ref) {
   return defaultTargetPlatform;
 });
 
-// StateProvider for the custom text direction.
 // TODO(rydmike): Maybe remove persistence from this one too?
-final StateProvider<AppTextDirection> appTextDirectionPod =
+// StateProvider for the custom text direction.
+final StateProvider<AppTextDirection> appTextDirectionProvider =
     StateProvider<AppTextDirection>((StateProviderRef<AppTextDirection> ref) {
   return hiveStore.get(KeyStore.appTextDirection,
       defaultValue: KeyStore.defaults[KeyStore.appTextDirection]!
           as AppTextDirection) as AppTextDirection;
 }, name: KeyStore.appTextDirection);
 
-// If not using explicit RTL or LTR direction, then use context direction.
-TextDirection appTextDirection(BuildContext context, WidgetRef ref) {
-  if (ref.read(appTextDirectionPod) == AppTextDirection.rtl) {
-    return TextDirection.rtl;
-  } else if (ref.read(appTextDirectionPod) == AppTextDirection.ltr) {
-    return TextDirection.ltr;
-  } else {
-    // Return explicit TextDirection in Else so we get LTR if not defined too.
-    if (Directionality.of(context) == TextDirection.rtl) {
-      return TextDirection.rtl;
-    } else {
-      return TextDirection.ltr;
+// A provider that returns the actual TextDirection from out wrapper enum
+// that has a local based option as well.
+//
+// When local based is used, we will return null and we will use
+// Directionality.of(context) as fallback for the app directionality.
+final Provider<TextDirection?> appDirectionality = Provider<TextDirection?>(
+  (ProviderRef<TextDirection?> ref) {
+    switch (ref.watch(appTextDirectionProvider)) {
+      case AppTextDirection.ltr:
+        return TextDirection.ltr;
+      case AppTextDirection.rtl:
+        return TextDirection.rtl;
+      case AppTextDirection.localeBased:
+        return null;
     }
-  }
-}
+  },
+  name: 'appDirectionalityProvider',
+);
 
 // StateProvider for using modal routes on non bottom bar destinations on
 // phone sized canvas, ie navigation from Drawer.
-final StateProvider<bool> useModalRoutesPod =
+final StateProvider<bool> useModalRoutesProvider =
     StateProvider<bool>((StateProviderRef<bool> ref) {
   return hiveStore.get(KeyStore.useModalRoutes,
           defaultValue: KeyStore.defaults[KeyStore.useModalRoutes]! as bool)
@@ -81,7 +84,7 @@ final StateProvider<bool> useModalRoutesPod =
 
 // StateProvider for turning on Plasma background animation on sidebar and
 // home screen. this is just a fun demo effect.
-final StateProvider<bool> plasmaBackgroundPod =
+final StateProvider<bool> plasmaBackgroundProvider =
     StateProvider<bool>((StateProviderRef<bool> ref) {
   return hiveStore.get(KeyStore.plasmaBackground,
           defaultValue: KeyStore.defaults[KeyStore.plasmaBackground]! as bool)
