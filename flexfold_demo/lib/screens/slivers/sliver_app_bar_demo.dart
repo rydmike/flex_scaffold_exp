@@ -93,33 +93,20 @@ class SliverAppBarDemo extends ConsumerWidget {
     // again from a destination that uses a custom sliver app bar,
     // or a persistent custom header.
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
-    final bool hasDrawer = scaffold?.hasDrawer ?? false;
+    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
+    // final bool hasDrawer = scaffold?.hasDrawer ?? false;
     final bool hasEndDrawer = scaffold?.hasEndDrawer ?? false;
 
-    // Figure out the effective tooltip, including using the same material
-    // localization in case we do not have a custom string. In this case
-    // that will never happen, it is just there as a reminder of which one is
-    // used. In the app we have no access to the Flexfold theme setting here,
-    // but as for the other properties, we do have the value that controls it
-    // via the provider.
-    final String? effectiveMenuTooltip = ref.watch(useTooltipsPod)
-        ? AppTooltips.openMenu
-        // TODO(rydmike): Maybe put these back somehow
-        // ??
-        //     MaterialLocalizations.of(context).openAppDrawerTooltip
-        : null;
+    // Needed for the height of the flexible space, we need to pass it to
+    // gradient container to know how high to make it to fill the AppBar.
+    final double height = const Size.fromHeight(kToolbarHeight).height +
+        MediaQuery.of(context).padding.top;
 
     // Leading widget, including open drawer action and effective tooltip
     Widget? leading;
-    if (hasDrawer) {
-      leading = IconButton(
-        icon: ref.watch(useCustomMenuIconsPod)
-            ? AppIcons.menuIcon
-            : kFlexfoldMenuIcon,
-        onPressed: () {
-          Scaffold.of(context).openDrawer();
-        },
-        tooltip: effectiveMenuTooltip,
+    if (flexScaffold.isMenuInDrawer) {
+      leading = FlexScaffoldMenuButton(
+        onPressed: () {},
       );
     }
     if (leading != null) {
@@ -168,37 +155,51 @@ class SliverAppBarDemo extends ConsumerWidget {
       expandedHeight: 220,
       backgroundColor: Colors.transparent,
       stretchTriggerOffset: 220,
-      flexibleSpace: FlexibleSpaceBar(
-        title: Text(title, style: TextStyle(color: textColor)),
-        centerTitle: false,
-        stretchModes: const <StretchMode>[
-          StretchMode.zoomBackground,
-          // StretchMode.fadeTitle,
-          StretchMode.blurBackground,
+      flexibleSpace: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          FlexAppBarStyling(
+            color: appBarColor,
+            endColor: endColor,
+            opacity: opacity,
+            blurred: useBlur,
+            hasBorder: effectiveBottomBorder,
+            borderColor: bottomBorderColor,
+            height: height,
+          ),
+          FlexibleSpaceBar(
+            title: Text(title, style: TextStyle(color: textColor)),
+            centerTitle: false,
+            stretchModes: const <StretchMode>[
+              StretchMode.zoomBackground,
+              StretchMode.fadeTitle,
+              StretchMode.blurBackground,
+            ],
+            background: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                FlexAppBarStyling(
+                  color: appBarColor,
+                  endColor: endColor,
+                  opacity: opacity,
+                  blurred: useBlur,
+                  hasBorder: effectiveBottomBorder,
+                  borderColor: bottomBorderColor,
+                  height: 220,
+                ),
+                SvgAssetImageSwitcher(
+                  assetNames: AppImages.route[AppRoutes.slivers]!.toList(),
+                  showDuration: const Duration(milliseconds: 3500),
+                  color: Theme.of(context).colorScheme.primary,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(20),
+                  fit: BoxFit.fitHeight,
+                  switchType: ImageSwitchType.random,
+                ),
+              ],
+            ),
+          ),
         ],
-        background: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            FlexAppBarStyling(
-              color: appBarColor,
-              endColor: endColor,
-              opacity: opacity,
-              blurred: useBlur,
-              hasBorder: effectiveBottomBorder,
-              borderColor: bottomBorderColor,
-              height: 220,
-            ),
-            SvgAssetImageSwitcher(
-              assetNames: AppImages.route[AppRoutes.slivers]!.toList(),
-              showDuration: const Duration(milliseconds: 3500),
-              color: Theme.of(context).colorScheme.primary,
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(20),
-              fit: BoxFit.fitHeight,
-              switchType: ImageSwitchType.random,
-            ),
-          ],
-        ),
       ),
     );
   }

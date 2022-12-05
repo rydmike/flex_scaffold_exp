@@ -22,6 +22,8 @@ class Sidebar extends ConsumerWidget {
         ref.watch(navigationProvider).destination;
     final String screenName = appDestinations[destination.menuIndex].label;
 
+    final ScrollController controller = ScrollController();
+
     // We can remove the plasma animation from the widget tree with the
     // if wrapper by toggling a switch.
     return IfWrapper(
@@ -29,7 +31,10 @@ class Sidebar extends ConsumerWidget {
       builder: (BuildContext context, Widget child) =>
           PlasmaBackground(child: child),
       child: Scrollbar(
+        controller: controller,
         child: ListView(
+          primary: false,
+          controller: controller,
           key: const PageStorageKey<String>('Sidebar'),
           padding: const EdgeInsets.all(16),
           children: <Widget>[

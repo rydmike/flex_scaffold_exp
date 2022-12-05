@@ -1,83 +1,71 @@
 import 'package:flutter/material.dart';
 
+import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
 import 'flexfold_theme.dart';
 
-/// The menu button for the Flexfold scaffold.
+/// The menu button for the FlexScaffold menu, rail and drawer operation.
 ///
 /// The button holds the logic for managing toggling the state of the menu
 /// between hidden, rail and side menu.
-class FlexfoldMenuButton extends StatelessWidget {
+///
+/// I uses an IconButton under the hood, looks up proper behavior from
+/// FlexScaffold.of(context) that must exist in the widget tree above this
+/// context. The icons can be customized, but if not, it uses those provided
+/// to the [FlexScaffold], or falls back to default icons.
+class FlexScaffoldMenuButton extends StatelessWidget {
   /// Default constructor
-  const FlexfoldMenuButton({
+  const FlexScaffoldMenuButton({
     super.key,
     this.menuIcon,
     this.menuIconExpand,
     this.menuIconExpandHidden,
     this.menuIconCollapse,
-    this.isHidden = false,
-    this.cycleViaDrawer = true,
-    this.isRail = false,
-    required this.setMenuHidden,
-    required this.setPreferRail,
+    required this.onPressed,
   });
 
   /// A Widget used to open the menu, typically an [Icon] widget is used.
   ///
   /// The same icon will also be used on the AppBar when the menu or rail is
-  /// hidden in a drawer. If no icon is provided it defaults to a widget with
-  /// value [kFlexfoldMenuIcon].
+  /// hidden in a drawer.
+  ///
+  /// If no icon is provided and there was none give to it in the FlexScaffold
+  /// it defaults to a widget with value [kFlexfoldMenuIcon].
   final Widget? menuIcon;
 
   /// A widget used to expand the drawer to a menu from an opened drawer,
   /// typically an [Icon] widget is used.
   ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldMenuIconExpand].
+  /// If no icon is provided and there was none give to it in the FlexScaffold
+  /// it defaults to a widget with value [kFlexfoldMenuIconExpand].
   final Widget? menuIconExpand;
 
   /// A widget used to expand the drawer to a menu when the rail/menu is
   /// hidden but may be expanded based on screen width and breakpoints.
   /// Typically an [Icon] widget is used.
   ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldMenuIconExpandHidden].
+  /// If no icon is provided and there was none give to it in the FlexScaffold
+  /// it defaults to a widget with value [kFlexfoldMenuIconExpandHidden].
   final Widget? menuIconExpandHidden;
 
   /// A widget used to expand the drawer to a menu, typically an [Icon]
   /// widget is used.
   ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldMenuIconCollapse].
+  /// If no icon is provided and there was none give to it in the FlexScaffold
+  /// it defaults to a widget with value [kFlexfoldMenuIconCollapse].
   final Widget? menuIconCollapse;
 
-  /// The menu is hidden in a drawer.
-  final bool isHidden;
-
-  /// Cycle via drawer menu when opening a hidden menu.
+  /// The callback that is called when the button is tapped or otherwise
+  /// activated.
   ///
-  /// When the menu may be shown as locked on screen, as a rail or menu, and
-  /// we expand it again, it first cycles via the drawer menu option if true.
-  /// If set to false it skips the cycle via the drawer and expands it directly
-  /// to a rail or side menu, depending on current screen width and if it is
-  /// larger than the breakpoint for menu or not. If screen width is below rail
-  /// breakpoint this setting has no effect, the only way to show the menu is
-  /// as a drawer, so the drawer will be opened.
-  final bool cycleViaDrawer;
-
-  /// The menu is a rail.
-  final bool isRail;
-
-  /// Callback to hide the menu.
-  final ValueChanged<bool> setMenuHidden;
-
-  /// Callback to set that the menu should remain in rail state even if
-  /// the defined breakpoint for switching to menu has been exceeded.
-  final ValueChanged<bool> setPreferRail;
+  /// If this is set to null, the button will be disabled.
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
+    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
+
     final bool hasDrawer = scaffold?.hasDrawer ?? false;
     final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
 
@@ -96,13 +84,20 @@ class FlexfoldMenuButton extends StatelessWidget {
     final bool mustBeRail = width < breakpointMenu;
 
     // Set effective expand and collapse icons
-    Widget effectiveMenuIcon = menuIcon ?? kFlexfoldMenuIcon;
-    Widget effectiveMenuIconExpand =
-        menuIconExpand ?? menuIcon ?? kFlexfoldMenuIconExpand;
-    Widget effectiveMenuIconExpandHidden =
-        menuIconExpandHidden ?? menuIcon ?? kFlexfoldMenuIconExpandHidden;
-    Widget effectiveMenuIconCollapse =
-        menuIconCollapse ?? menuIcon ?? kFlexfoldMenuIconCollapse;
+    Widget effectiveMenuIcon =
+        menuIcon ?? flexScaffold.widget.menuIcon ?? kFlexfoldMenuIcon;
+    Widget effectiveMenuIconExpand = menuIconExpand ??
+        flexScaffold.widget.menuIconExpand ??
+        menuIcon ??
+        kFlexfoldMenuIconExpand;
+    Widget effectiveMenuIconExpandHidden = menuIconExpandHidden ??
+        flexScaffold.widget.menuIconExpandHidden ??
+        menuIcon ??
+        kFlexfoldMenuIconExpandHidden;
+    Widget effectiveMenuIconCollapse = menuIconCollapse ??
+        flexScaffold.widget.menuIconCollapse ??
+        menuIcon ??
+        kFlexfoldMenuIconCollapse;
     // If directionality is RTL we rotate the icons 180 degrees, if directional
     // icons were used in a LTR design, the result should be fairly OK of this,
     // unless the APP was really designed with a RTL mindset, then we should
@@ -124,16 +119,20 @@ class FlexfoldMenuButton extends StatelessWidget {
     // tooltip labels in FlexfoldThemeData if other labels were not specified.
     String tooltip;
     Widget effectiveMenuButton;
-    if (hasDrawer && !isDrawerOpen && (!canLockMenu || cycleViaDrawer)) {
+    if (hasDrawer &&
+        !isDrawerOpen &&
+        (!canLockMenu || flexScaffold.widget.cycleViaDrawer)) {
       tooltip = theme.menuOpenTooltip!;
       effectiveMenuButton = effectiveMenuIcon;
-    } else if (hasDrawer && !isDrawerOpen && (canLockMenu || !cycleViaDrawer)) {
+    } else if (hasDrawer &&
+        !isDrawerOpen &&
+        (canLockMenu || !flexScaffold.widget.cycleViaDrawer)) {
       tooltip = theme.menuExpandHiddenTooltip!;
       effectiveMenuButton = effectiveMenuIconExpandHidden;
     } else if (hasDrawer && isDrawerOpen && !canLockMenu) {
       tooltip = theme.menuCloseTooltip!;
       effectiveMenuButton = effectiveMenuIcon;
-    } else if (isHidden) {
+    } else if (flexScaffold.menuIsHidden) {
       tooltip = theme.menuExpandTooltip!;
       effectiveMenuButton = effectiveMenuIconExpand;
     } else {
@@ -144,35 +143,42 @@ class FlexfoldMenuButton extends StatelessWidget {
     return IconButton(
       icon: effectiveMenuButton,
       tooltip: theme.useTooltips! ? tooltip : null,
-      onPressed: () {
-        if (hasDrawer && !isDrawerOpen && (!canLockMenu || cycleViaDrawer)) {
-          Scaffold.of(context).openDrawer();
-        } else if (hasDrawer && isDrawerOpen && !canLockMenu) {
-          Navigator.of(context).pop();
-        } else if (isHidden) {
-          setPreferRail(false);
-          if (hasDrawer && isDrawerOpen) {
-            Navigator.of(context).pop();
-            // TODO(rydmike): Maybe improve this delays for the menu to close?
-            // This will give the correct time to allow the menu to close,
-            // after which we set hidden to false and it will animate open to
-            // appropriate lock position. Would be nice if we could (probably
-            // possible somehow) listen to and know when the Drawer has closed
-            // fully and open the locked menu/rail then, but this works too.
-            Future<void>.delayed(kFlexfoldFlutterDrawerDuration, () {
-              setMenuHidden(false);
-            });
-          } else {
-            setMenuHidden(false);
-          }
-        } else {
-          if (isRail || mustBeRail) {
-            setMenuHidden(true);
-          } else {
-            setPreferRail(true);
-          }
-        }
-      },
+      onPressed: onPressed == null
+          ? null
+          : () {
+              if (hasDrawer &&
+                  !isDrawerOpen &&
+                  (!canLockMenu || flexScaffold.widget.cycleViaDrawer)) {
+                scaffold?.openDrawer();
+              } else if (hasDrawer && isDrawerOpen && !canLockMenu) {
+                Navigator.of(context).pop();
+              } else if (flexScaffold.menuIsHidden) {
+                flexScaffold.setMenuPrefersRail(false);
+                if (hasDrawer && isDrawerOpen) {
+                  Navigator.of(context).pop();
+                  // TODO(rydmike): Maybe improve this for the menu to close?
+                  // This will give the correct time to allow the menu to close,
+                  // after which we set hidden to false and it will animate open
+                  // to appropriate lock position. Would be nice if we could
+                  // (probably possible somehow) listen to and know when the
+                  // Drawer has closed fully and open the locked menu/rail
+                  // then, but this works too, but it is a bit of a hack.
+                  Future<void>.delayed(kFlexfoldFlutterDrawerDuration, () {
+                    flexScaffold.hideMenu(false);
+                  });
+                } else {
+                  flexScaffold.hideMenu(false);
+                }
+              } else {
+                if (flexScaffold.menuPrefersRail || mustBeRail) {
+                  flexScaffold.hideMenu(true);
+                } else {
+                  flexScaffold.setMenuPrefersRail(true);
+                }
+              }
+              // Call the onPressed.
+              onPressed?.call();
+            },
     );
   }
 }

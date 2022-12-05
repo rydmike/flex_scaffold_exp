@@ -366,26 +366,27 @@ class _FlexfoldMenuState extends State<FlexfoldMenu> {
                     widget.menuAppBar!.toAppBar(
                       automaticallyImplyLeading: false,
                       leading: widget.menuToggleEnabled
-                          ? FlexfoldMenuButton(
-                              menuIcon: widget.menuIcon,
-                              menuIconExpand: widget.menuIconExpand,
-                              menuIconExpandHidden: widget.menuIconExpandHidden,
-                              menuIconCollapse: widget.menuIconCollapse,
-                              isHidden: hideMenu,
-                              cycleViaDrawer: widget.cycleViaDrawer,
-                              isRail: preferRail,
-                              setMenuHidden: (bool value) {
-                                setState(() {
-                                  hideMenu = value;
-                                  widget.onHideMenu(value);
-                                });
-                              },
-                              setPreferRail: (bool value) {
-                                setState(() {
-                                  preferRail = value;
-                                  widget.onPreferRail(value);
-                                });
-                              },
+                          ? FlexScaffoldMenuButton(
+                              onPressed: () {},
+                              // menuIcon: widget.menuIcon,
+                              // menuIconExpand: widget.menuIconExpand,
+                              // menuIconExpandHidden: widget.menuIconExpandHidden,
+                              // menuIconCollapse: widget.menuIconCollapse,
+                              // isHidden: hideMenu,
+                              // cycleViaDrawer: widget.cycleViaDrawer,
+                              // isRail: preferRail,
+                              // setMenuHidden: (bool value) {
+                              //   setState(() {
+                              //     hideMenu = value;
+                              //     widget.onHideMenu(value);
+                              //   });
+                              // },
+                              // setPreferRail: (bool value) {
+                              //   setState(() {
+                              //     preferRail = value;
+                              //     widget.onPreferRail(value);
+                              //   });
+                              // },
                             )
                           : railLeadingFiller,
                       // Insert any existing actions

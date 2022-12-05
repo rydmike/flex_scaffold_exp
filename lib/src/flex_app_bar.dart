@@ -911,10 +911,9 @@ class FlexAppBar {
 
     // Needed for the height of the flexible space, we need to pass it to
     // gradient container to know how high to make it to fill the AppBar.
-    final double height =
-        Size.fromHeight(kToolbarHeight + (bottom?.preferredSize.height ?? 0.0))
-                .height +
-            MediaQuery.of(context).padding.top;
+    final double height = kToolbarHeight +
+        (bottom?.preferredSize.height ?? 0.0) +
+        MediaQuery.of(context).padding.top;
 
     // Get current screen size that we will show on the screen's app bar, if
     // [showScreenSize] is true.
@@ -1017,7 +1016,7 @@ class FlexAppBar {
       // The styled AppBar is actually fully transparent, the used color and
       // gradient is added via the flexible space
       // TODO(rydmike): Expose this transparency as a scrim option.
-      backgroundColor: const Color(0x01000000), // Colors.transparent,
+      backgroundColor: Colors.transparent,
       foregroundColor: foregroundColor,
       iconTheme: iconTheme,
       actionsIconTheme: actionsIconTheme,
