@@ -13,9 +13,9 @@ import 'flexfold_theme.dart';
 /// FlexScaffold.of(context) that must exist in the widget tree above this
 /// context. The icons can be customized, but if not, it uses those provided
 /// to the [FlexScaffold], or falls back to default icons.
-class FlexScaffoldMenuButton extends StatelessWidget {
+class FlexMenuButton extends StatelessWidget {
   /// Default constructor
-  const FlexScaffoldMenuButton({
+  const FlexMenuButton({
     super.key,
     this.menuIcon,
     this.menuIconExpand,
@@ -24,20 +24,25 @@ class FlexScaffoldMenuButton extends StatelessWidget {
     required this.onPressed,
   });
 
-  /// A Widget used to open the menu, typically an [Icon] widget is used.
+  // TODO(rydmike): Fix and update icon doc comments.
+
+  /// A Widget used on the button when the menu is operated as a Drawer.
+  ///
+  /// Typically an [Icon] widget is used with the hamburger menu icon.
   ///
   /// The same icon will also be used on the AppBar when the menu or rail is
   /// hidden in a drawer.
   ///
-  /// If no icon is provided and there was none give to it in the FlexScaffold
-  /// it defaults to a widget with value [kFlexfoldMenuIcon].
+  /// If no icon is provided and there was none given to it in a parent
+  /// [FlexScaffold] it defaults to a widget with value [kFlexfoldMenuIcon].
   final Widget? menuIcon;
 
   /// A widget used to expand the drawer to a menu from an opened drawer,
   /// typically an [Icon] widget is used.
   ///
-  /// If no icon is provided and there was none give to it in the FlexScaffold
-  /// it defaults to a widget with value [kFlexfoldMenuIconExpand].
+  /// If no icon is provided and there was none given to it in a [FlexScaffold]
+  /// higher up in the widget tree and if [menuIcon] was not defined. it
+  /// defaults to a widget with value [kFlexfoldMenuIconExpand].
   final Widget? menuIconExpand;
 
   /// A widget used to expand the drawer to a menu when the rail/menu is
@@ -72,7 +77,7 @@ class FlexScaffoldMenuButton extends StatelessWidget {
     final double width = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    final FlexfoldThemeData theme = FlexfoldTheme.of(context);
+    final FlexScaffoldThemeData theme = FlexScaffoldTheme.of(context);
     final double breakpointDrawer = theme.breakpointDrawer!;
     final double breakpointRail = theme.breakpointRail!;
     final double breakpointMenu = theme.breakpointMenu!;

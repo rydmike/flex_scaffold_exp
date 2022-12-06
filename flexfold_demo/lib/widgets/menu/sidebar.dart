@@ -19,8 +19,8 @@ class Sidebar extends ConsumerWidget {
     // Get the current destination details, we use the info in the
     // page header to display info on how we navigated to this page.
     final FlexDestinationTarget destination =
-        ref.watch(navigationProvider).destination;
-    final String screenName = appDestinations[destination.menuIndex].label;
+        ref.watch(currentRouteProvider).destination;
+    final String screenName = appDestinations[destination.index].label;
 
     final ScrollController controller = ScrollController();
 

@@ -2,77 +2,76 @@ import 'package:flexfold/flexfold.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// Data class to hold current Flexfold destination and navigation key.
+// Data class to hold current FlexScaffold destination route for top level and
+// top level destination pushed on top in small device navigation.
 @immutable
-class AppNavigation {
-  const AppNavigation({
-    this.useModalDestination = false,
+class CurrentRoute {
+  const CurrentRoute({
+    this.usePush = false,
     required this.destination,
-    required this.modalDestination,
+    required this.pushedDestination,
     // required this.navKey,
   });
 
-  /// Use the modal destination?
-  final bool useModalDestination;
+  /// Use push to put the destination as a route on top of other top level
+  /// navigation destinations.
+  final bool usePush;
 
-  /// Current Flexfold destination
+  /// Current top level destination
   final FlexDestinationTarget destination;
 
-  /// Current Flexfold modal destination
-  final FlexDestinationTarget modalDestination;
+  /// Current top level destination, but pushed on top in mobile/small views.
+  final FlexDestinationTarget pushedDestination;
 
-  AppNavigation copyWith({
-    bool? useModalDestination,
+  CurrentRoute copyWith({
+    bool? usePush,
     FlexDestinationTarget? destination,
-    FlexDestinationTarget? modalDestination,
-    GlobalKey<NavigatorState>? navKey,
+    FlexDestinationTarget? pushedDestination,
   }) {
-    return AppNavigation(
-      useModalDestination: useModalDestination ?? this.useModalDestination,
+    return CurrentRoute(
+      usePush: usePush ?? this.usePush,
       destination: destination ?? this.destination,
-      modalDestination: modalDestination ?? this.modalDestination,
+      pushedDestination: pushedDestination ?? this.pushedDestination,
     );
   }
 
   @override
   String toString() {
-    return 'AppNavigation(useModalDestination: $useModalDestination, '
-        'destination: $destination, modalDestination: $modalDestination';
+    return 'AppNavigation(useModalDestination: $usePush, '
+        'destination: $destination, modalDestination: $pushedDestination';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is AppNavigation &&
-        other.useModalDestination == useModalDestination &&
+    return other is CurrentRoute &&
+        other.usePush == usePush &&
         other.destination == destination &&
-        other.modalDestination == modalDestination;
+        other.pushedDestination == pushedDestination;
   }
 
   @override
   int get hashCode {
-    return useModalDestination.hashCode ^
-        destination.hashCode ^
-        modalDestination.hashCode;
+    return usePush.hashCode ^ destination.hashCode ^ pushedDestination.hashCode;
   }
 }
 
 // StateNotifier for the immutable AppNavigation data.
-class AppNavigationStateNotifier extends StateNotifier<AppNavigation> {
-  AppNavigationStateNotifier([AppNavigation? appNavigation])
+class CurrentRouteStateNotifier extends StateNotifier<CurrentRoute> {
+  CurrentRouteStateNotifier([CurrentRoute? appNavigation])
       : super(
           appNavigation ??
-              const AppNavigation(
-                modalDestination: FlexDestinationTarget(),
+              const CurrentRoute(
+                pushedDestination: FlexDestinationTarget(),
                 destination: FlexDestinationTarget(),
               ),
         );
 
   void setDestination(FlexDestinationTarget value) {
-    state = state.copyWith(destination: value, useModalDestination: false);
+    state = state.copyWith(destination: value, usePush: false);
   }
 
   void setModalDestination(FlexDestinationTarget value) {
-    state = state.copyWith(modalDestination: value, useModalDestination: true);
+    state = state.copyWith(pushedDestination: value, usePush: true);
   }
 }

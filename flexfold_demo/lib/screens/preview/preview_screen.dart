@@ -50,18 +50,17 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO(rydmike): If this works, put it else where as rad too
-    final AppNavigation appNav = ref.read(navigationProvider);
+    final CurrentRoute appNav = ref.read(currentRouteProvider);
 
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final FlexDestinationTarget destination = appNav.useModalDestination
-        ? appNav.modalDestination
-        : appNav.destination;
+    final FlexDestinationTarget destination =
+        appNav.usePush ? appNav.pushedDestination : appNav.destination;
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final Widget icon = appDestinations[destination.menuIndex].selectedIcon;
-    final Widget heading = Text(appDestinations[destination.menuIndex].label);
+    final Widget icon = appDestinations[destination.index].selectedIcon;
+    final Widget heading = Text(appDestinations[destination.index].label);
 
     final ThemeData themeData = Theme.of(context);
     final TextStyle linkStyle = themeData.textTheme.bodyText1!.copyWith(

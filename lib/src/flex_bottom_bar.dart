@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'flex_destination.dart';
 import 'flex_scaffold_constants.dart';
-import 'flexfold_destination.dart';
-import 'flexfold_helpers.dart';
+import 'flex_scaffold_helpers.dart';
 import 'flexfold_theme.dart';
 
 /// Bottom navigation bar used by Flexfold in situations where it should use a
@@ -140,7 +140,7 @@ class _MaterialBottomBarState extends State<MaterialBottomBar> {
   @override
   Widget build(BuildContext context) {
     // Get the inherited FlexfoldTheme
-    final FlexfoldThemeData flexTheme = FlexfoldTheme.of(context);
+    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
     // Get the active color scheme
     final ColorScheme scheme = Theme.of(context).colorScheme;
 
@@ -388,7 +388,7 @@ class _MaterialYouBottomBarState extends State<MaterialYouBottomBar> {
   @override
   Widget build(BuildContext context) {
     // Get the inherited FlexfoldTheme
-    final FlexfoldThemeData flexTheme = FlexfoldTheme.of(context);
+    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
     // Get the active color scheme
     final ColorScheme scheme = Theme.of(context).colorScheme;
 
@@ -586,7 +586,7 @@ class _CupertinoBottomBarState extends State<CupertinoBottomBar> {
   @override
   Widget build(BuildContext context) {
     // Get the inherited FlexfoldTheme
-    final FlexfoldThemeData flexTheme = FlexfoldTheme.of(context);
+    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
     // Get the active color scheme
     final ColorScheme scheme = Theme.of(context).colorScheme;
 

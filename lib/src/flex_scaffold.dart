@@ -3,16 +3,15 @@ import 'package:flutter/material.dart';
 
 import 'flex_app_bar.dart';
 import 'flex_bottom_bar.dart';
+import 'flex_destination.dart';
+import 'flex_drawer.dart';
+import 'flex_menu.dart';
+import 'flex_menu_button.dart';
 import 'flex_scaffold_constants.dart';
-import 'flexfold_destination.dart';
-import 'flexfold_drawer.dart';
-import 'flexfold_helpers.dart';
-import 'flexfold_menu.dart';
-import 'flexfold_menu_button.dart';
-import 'flexfold_sidebar.dart';
-import 'flexfold_sidebar_button.dart';
+import 'flex_scaffold_helpers.dart';
+import 'flex_sidebar.dart';
+import 'flex_sidebar_button.dart';
 import 'flexfold_theme.dart';
-import 'inherited_flex_scaffold.dart';
 
 // Set to true to observe debug prints. In release mode this compile time
 // const always evaluate to false, so in theory anything with only an
@@ -109,14 +108,14 @@ class FlexScaffold extends StatefulWidget {
   ///
   /// The theme contains a large number of style and other properties that
   /// can be modified modify to customize the look of the [FlexScaffold]
-  /// responsive scaffold. See [FlexfoldThemeData] for more details.
+  /// responsive scaffold. See [FlexScaffoldThemeData] for more details.
   ///
   /// Changes to passed in theme's properties are animated. Changes to a
   /// FlexfoldTheme higher up in the widget tree that Flexfold inherits it theme
   /// from will also animate the properties in Flexfold that depends on the
   /// inherited theme data. The passed in theme is merged with any inherited
   /// theme.
-  final FlexfoldThemeData? flexfoldTheme;
+  final FlexScaffoldThemeData? flexfoldTheme;
 
   /// The appbar for the main scaffold body.
   ///
@@ -479,8 +478,8 @@ class FlexScaffold extends StatefulWidget {
   ///
   /// If there is no [FlexScaffold] in scope, then this will throw an exception.
   static FlexScaffoldState of(BuildContext context) {
-    final InheritedFlexScaffold? result =
-        context.dependOnInheritedWidgetOfExactType<InheritedFlexScaffold>();
+    final _InheritedFlexScaffold? result =
+        context.dependOnInheritedWidgetOfExactType<_InheritedFlexScaffold>();
     if (result != null) {
       return result.data;
     }
@@ -519,6 +518,24 @@ class FlexScaffold extends StatefulWidget {
     ]);
   }
 
+  /// Finds the [FlexScaffoldState] from the closest instance of this class that
+  /// encloses the given context.
+  ///
+  /// If no instance of this class encloses the given context, will return null.
+  /// To throw an exception instead, use [of] instead of this function.
+  ///
+  /// This method can be expensive (it walks the element tree).
+  ///
+  /// See also:
+  ///
+  ///  * [of], a similar function to this one that throws if no instance
+  ///    encloses the given context.
+  static FlexScaffoldState? maybeOf(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<_InheritedFlexScaffold>()
+        ?.data;
+  }
+
   @override
   State<FlexScaffold> createState() => FlexScaffoldState();
 }
@@ -527,11 +544,11 @@ class FlexScaffold extends StatefulWidget {
 ///
 /// Retrieve a [ScaffoldState] from the current
 /// [BuildContext] using [FlexScaffold.of].
-class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
+class FlexScaffoldState extends State<FlexScaffold> {
   // State that might be changed via widget
   late int _selectedIndex;
-  final FlexfoldIndexTracker _indexMenu = FlexfoldIndexTracker();
-  final FlexfoldIndexTracker _indexBottom = FlexfoldIndexTracker();
+  final IndexTracker _indexMenu = IndexTracker();
+  final IndexTracker _indexBottom = IndexTracker();
   late FlexDestination _target;
   late bool _hideMenu;
   late bool _hideSidebar;
@@ -555,18 +572,17 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
   /// Returns true if the menu is currently hidden.
   bool get menuIsHidden => _hideMenu;
 
-  /// Set the FlexScaffold menu to be hidden.
+  /// Set the FlexScaffold menu to be hidden. If set to false, the menu will be
+  /// shown as a rail or menu when it should, based on its breakpoints.
   void hideMenu(bool value) {
     if (value != _hideMenu) {
       setState(() {
         _hideMenu = value;
-        // if (widget.onHideMenu != null) widget.onHideMenu?.call(value);
         widget.onHideMenu?.call(value);
         if (_kDebugMe) {
           debugPrint('FlexScaffold: menuIsHidden set to $_hideMenu');
         }
       });
-      notifyListeners();
     }
   }
 
@@ -589,6 +605,18 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
 
   /// Returns true if the sidebar is currently hidden.
   bool get sidebarIsHidden => _hideSidebar;
+
+  /// Set the FlexScaffold sidebar to be hidden. If set to false, the sidebar
+  /// will be shown when it should automatically, based on its breakpoint.
+  void hideSidebar(bool value) {
+    setState(() {
+      _hideSidebar = value;
+      widget.onHideSidebar?.call(value);
+      if (_kDebugMe) {
+        debugPrint('FlexScaffold: sidebarIsHidden set to $_hideSidebar');
+      }
+    });
+  }
 
   /// Returns true if the menu is currently in the Drawer.
   bool get isMenuInDrawer => _isMenuInDrawer;
@@ -658,7 +686,7 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
         widget.flexfoldTheme?.bottomNavigationBarTheme;
     // The closest inherited Flexfold Theme has the 2nd highest prio for
     // effective theme data.
-    final FlexfoldThemeData flexTheme = FlexfoldTheme.of(context);
+    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
     // Get its bottom navigation bar theme
     final BottomNavigationBarThemeData? bottomFlex =
         flexTheme.bottomNavigationBarTheme;
@@ -730,8 +758,8 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
     );
 
     // Get Flexfold default theme data
-    final FlexfoldThemeData defaultFlexTheme =
-        const FlexfoldThemeData().withDefaults(context);
+    final FlexScaffoldThemeData defaultFlexTheme =
+        const FlexScaffoldThemeData().withDefaults(context);
 
     // Merge the other sub-themes than the Bottom navigation bar with
     // the default values, first merge the inherited Flexfold sub theme
@@ -762,10 +790,11 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
         .merge(widget.flexfoldTheme!.headingTextStyle);
 
     // Merge the inherited Flexfold theme with the default Flexfold theme.
-    final FlexfoldThemeData flexThemeMerged = defaultFlexTheme.merge(flexTheme);
+    final FlexScaffoldThemeData flexThemeMerged =
+        defaultFlexTheme.merge(flexTheme);
 
     // Then merge widget passed in theme, with the above merge theme.
-    final FlexfoldThemeData fullFlexTheme =
+    final FlexScaffoldThemeData fullFlexTheme =
         flexThemeMerged.merge(widget.flexfoldTheme);
 
     // Then the fully merged Flexfold theme gets a copy of all the effective
@@ -773,7 +802,7 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
     // and all effective text styles and icon themes.
     // This creates a theme that has all the ambient Flexfold theme data
     // and defaults as fallback, in a single summarized merged theme.
-    final FlexfoldThemeData effectiveFlexTheme = fullFlexTheme.copyWith(
+    final FlexScaffoldThemeData effectiveFlexTheme = fullFlexTheme.copyWith(
       bottomNavigationBarTheme: effectiveBottomTheme,
       unselectedLabelTextStyle: effectiveUnselectedLabelStyle,
       selectedLabelTextStyle: effectiveSelectedLabelStyle,
@@ -783,7 +812,7 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
     );
 
     // Then make an animated FlexfoldTheme of the final effective theme.
-    return InheritedFlexScaffold(
+    return _InheritedFlexScaffold(
       data: this,
       child: AnimatedFlexfoldTheme(
         data: effectiveFlexTheme,
@@ -803,7 +832,7 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
           //
           // This makes accessing the correct theme result further down the
           // widget tree easier, since we can always get it like this now:
-          final FlexfoldThemeData flexTheme = FlexfoldTheme.of(context);
+          final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
 
           // Get media width, height, and safe area padding
           assert(debugCheckHasMediaQuery(context),
@@ -905,7 +934,7 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
                   //
                   // The menu when used as a drawer.
                   drawer: _isMenuInDrawer
-                      ? FlexfoldDrawer(
+                      ? FlexDrawer(
                           elevation: flexTheme.drawerElevation!,
                           drawerWidth: flexTheme.drawerWidth! + startPadding,
                           currentScreenWidth: width,
@@ -916,12 +945,12 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
                   //
                   // The end drawer, ie tools menu when used as an end drawer.
                   endDrawer: _isSidebarInEndDrawer
-                      ? FlexfoldDrawer(
+                      ? FlexDrawer(
                           elevation: flexTheme.endDrawerElevation!,
                           drawerWidth: flexTheme.endDrawerWidth!,
                           currentScreenWidth: width,
                           backgroundColor: flexTheme.sidebarBackgroundColor,
-                          child: FlexfoldSidebar(
+                          child: FlexSidebar(
                             sidebarIcon: widget.sidebarIcon,
                             sidebarIconExpand: widget.sidebarIconExpand,
                             sidebarIconExpandHidden:
@@ -931,20 +960,20 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
                             // If no sidebar app bar given make a default one.
                             sidebarAppBar:
                                 widget.sidebarAppBar ?? const FlexAppBar(),
-                            cycleViaDrawer: widget.cycleViaDrawer,
-                            hideSidebar: widget.hideSidebar,
-                            onHideSidebar: (bool value) {
-                              setState(() {
-                                _hideSidebar = value;
-                                if (widget.onHideSidebar != null) {
-                                  widget.onHideSidebar?.call(_hideSidebar);
-                                }
-                              });
-                              if (_kDebugMe) {
-                                debugPrint(
-                                    'Flexfold() onHideSidebar: $_hideSidebar');
-                              }
-                            },
+                            // cycleViaDrawer: widget.cycleViaDrawer,
+                            // hideSidebar: widget.hideSidebar,
+                            // onHideSidebar: (bool value) {
+                            //   setState(() {
+                            //     _hideSidebar = value;
+                            //     if (widget.onHideSidebar != null) {
+                            //       widget.onHideSidebar?.call(_hideSidebar);
+                            //     }
+                            //   });
+                            //   if (_kDebugMe) {
+                            //     debugPrint(
+                            //         'Flexfold() onHideSidebar: $_hideSidebar');
+                            //   }
+                            // },
                             sidebarBelongsToBody: widget.sidebarBelongsToBody,
                             hasAppBar:
                                 widget.destinations[_selectedIndex].hasAppBar,
@@ -982,7 +1011,7 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
                           child: Material(
                             color: flexTheme.sidebarBackgroundColor,
                             elevation: flexTheme.sidebarElevation!,
-                            child: FlexfoldSidebar(
+                            child: FlexSidebar(
                               sidebarIcon: widget.sidebarIcon,
                               sidebarIconExpand: widget.sidebarIconExpand,
                               sidebarIconExpandHidden:
@@ -993,20 +1022,6 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
                               // If no sidebar app bar given make a default one.
                               sidebarAppBar:
                                   widget.sidebarAppBar ?? const FlexAppBar(),
-                              cycleViaDrawer: widget.cycleViaDrawer,
-                              hideSidebar: widget.hideSidebar,
-                              onHideSidebar: (bool value) {
-                                setState(() {
-                                  _hideSidebar = value;
-                                  if (widget.onHideSidebar != null) {
-                                    widget.onHideSidebar?.call(_hideSidebar);
-                                  }
-                                });
-                                if (_kDebugMe) {
-                                  debugPrint(
-                                      'Flexfold() onHideSidebar: $_hideSidebar');
-                                }
-                              },
                               sidebarBelongsToBody: widget.sidebarBelongsToBody,
                               hasAppBar:
                                   widget.destinations[_selectedIndex].hasAppBar,
@@ -1034,27 +1049,14 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
                   child: Material(
                     color: flexTheme.sidebarBackgroundColor,
                     elevation: flexTheme.sidebarElevation!,
-                    child: FlexfoldSidebar(
+                    child: FlexSidebar(
                       sidebarIcon: widget.sidebarIcon,
                       sidebarIconExpand: widget.sidebarIconExpand,
                       sidebarIconExpandHidden: widget.sidebarIconExpandHidden,
                       sidebarIconCollapse: widget.sidebarIconCollapse,
                       sidebarToggleEnabled: widget.sidebarControlEnabled,
-                      // If no sidebar app bar is provided we make a default one.
+                      // If no Sidebar AppBar is provided we make a default one.
                       sidebarAppBar: widget.sidebarAppBar ?? const FlexAppBar(),
-                      cycleViaDrawer: widget.cycleViaDrawer,
-                      hideSidebar: widget.hideSidebar,
-                      onHideSidebar: (bool value) {
-                        setState(() {
-                          _hideSidebar = value;
-                          if (widget.onHideSidebar != null) {
-                            widget.onHideSidebar?.call(_hideSidebar);
-                          }
-                        });
-                        if (_kDebugMe) {
-                          debugPrint('Flexfold() onHideSidebar: $_hideSidebar');
-                        }
-                      },
                       sidebarBelongsToBody: widget.sidebarBelongsToBody,
                       hasAppBar: widget.destinations[_selectedIndex].hasAppBar,
                       child: widget.sidebar,
@@ -1085,38 +1087,7 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
     return appbar.toAppBar(
       automaticallyImplyLeading: false,
       // Only add the menu button on the main app bar if menu is in a drawer.
-      leading: _isMenuInDrawer
-          ? FlexScaffoldMenuButton(
-              // menuIcon: widget.menuIcon,
-              // menuIconExpand: widget.menuIconExpand,
-              // menuIconExpandHidden: widget.menuIconExpandHidden,
-              // menuIconCollapse: widget.menuIconCollapse,
-              onPressed: () {},
-              // isHidden: _hideMenu,
-              // cycleViaDrawer: widget.cycleViaDrawer,
-              // isRail: _preferRail,
-              // setMenuHidden: (bool value) {
-              //   setState(() {
-              //     _hideMenu = value;
-              //     if (widget.onHideMenu != null) widget.onHideMenu?.call(value);
-              //     if (_kDebugMe) {
-              //       debugPrint('Flexfold(): onHideMenu: $_hideMenu');
-              //     }
-              //   });
-              // },
-              // setPreferRail: (bool value) {
-              //   setState(() {
-              //     _preferRail = value;
-              //     if (widget.onPreferRail != null) {
-              //       widget.onPreferRail?.call(value);
-              //     }
-              //     if (_kDebugMe) {
-              //       debugPrint('Flexfold(): onPreferRail: $_preferRail');
-              //     }
-              //   });
-              // },
-            )
-          : null,
+      leading: _isMenuInDrawer ? FlexMenuButton(onPressed: () {}) : null,
       actions: <Widget>[
         // Insert any pre-existing actions
         ...?widget.appBar?.actions, // TODO(rydmike): Is this safe?
@@ -1131,58 +1102,13 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
             (_isSidebarInMenu &&
                 widget.sidebarBelongsToBody &&
                 widget.sidebarControlEnabled))
-          FlexfoldSidebarButton(
-            menuIcon: widget.sidebarIcon,
-            menuIconExpand: widget.sidebarIconExpand,
-            menuIconExpandHidden: widget.sidebarIconExpandHidden,
-            menuIconCollapse: widget.sidebarIconCollapse,
-            cycleViaDrawer: widget.cycleViaDrawer,
-            isHidden: _hideSidebar,
-            setMenuHidden: (bool value) {
-              setState(() {
-                _hideSidebar = value;
-                if (widget.onHideSidebar != null) {
-                  widget.onHideSidebar?.call(value);
-                }
-                if (_kDebugMe) {
-                  debugPrint('Flexfold(): setMenuHidden: $_hideSidebar');
-                }
-              });
-            },
-          ),
+          FlexSidebarButton(onPressed: () {}),
       ],
     );
   }
 
-  // Widget _buildSidebar(BuildContext context) {
-  //   return FlexfoldSidebar(
-  //     sidebarIcon: widget.sidebarIcon,
-  //     sidebarIconExpand: widget.sidebarIconExpand,
-  //     sidebarIconExpandHidden: widget.sidebarIconExpandHidden,
-  //     sidebarIconCollapse: widget.sidebarIconCollapse,
-  //     sidebarToggleEnabled: widget.sidebarToggleEnabled,
-  //     // If no sidebar app bar is provided we make a default one.
-  //     sidebarAppBar: widget.sidebarAppBar ?? const FlexAppBar(),
-  //     cycleViaDrawer: widget.cycleViaDrawer,
-  //     hideSidebar: widget.hideSidebar,
-  //     onHideSidebar: (bool value) {
-  //       setState(() {
-  //         hideSidebar = value;
-  //         if (widget.onHideSidebar != null)
-  //           widget.onHideSidebar!(hideSidebar);
-  //         if (_kDebugMe) {
-  //           debugPrint('Flexfold() onHideSidebar: $hideSidebar');
-  //         }
-  //       });
-  //     },
-  //     sidebarBelongsToBody: widget.sidebarBelongsToBody,
-  //     hasAppBar: widget.destinations[selectedIndex].hasAppBar,
-  //     child: widget.sidebar,
-  //   );
-  // }
-
   Widget _buildMenu(BuildContext context) {
-    return FlexfoldMenu(
+    return FlexMenu(
       destinations: widget.destinations,
       selectedIndex: widget.selectedIndex,
       onDestinationSelected: (int index) {
@@ -1212,7 +1138,7 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
           // Make tap destination data to return
           final FlexDestinationTarget destination = FlexDestinationTarget(
             bottomIndex: bottomIndex,
-            menuIndex: _selectedIndex,
+            index: _selectedIndex,
             reverse: _indexMenu.reverse,
             source: source,
             route: widget.destinations[index].route,
@@ -1265,22 +1191,26 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
     final List<FlexDestination> bottomDestinations = widget.destinations
         .where((FlexDestination item) => item.inBottomNavigation)
         .toList();
-    // Current platform
-    final TargetPlatform platform = Theme.of(context).platform;
+    // Current platform and useMaterial3?
+    final ThemeData theme = Theme.of(context);
+    final TargetPlatform platform = theme.platform;
+    final bool useMaterial3 = theme.useMaterial3;
     // Get the custom Flexfold theme, closest inherited one.
-    final FlexfoldThemeData theme = FlexfoldTheme.of(context);
+    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
     // Resolve the effective bottom bar type
     // TODO(rydmike): Is this always safe?
-    FlexfoldBottomBarType effectiveType = theme.bottomBarType!;
+    FlexfoldBottomBarType effectiveType = flexTheme.bottomBarType!;
     if (effectiveType == FlexfoldBottomBarType.adaptive) {
       if (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS) {
         effectiveType = FlexfoldBottomBarType.cupertino;
       } else {
-        effectiveType = FlexfoldBottomBarType.material2;
+        effectiveType = useMaterial3
+            ? FlexfoldBottomBarType.material3
+            : FlexfoldBottomBarType.material2;
       }
     }
     if (_kDebugMe) {
-      debugPrint('Flexfold() effectiveType: $effectiveType');
+      debugPrint('FlexScaffold: effectiveType = $effectiveType');
     }
     // The height of the bottom nav bars may differ, we need
     // to get the correct height for the effective bottom nav bar.
@@ -1305,8 +1235,8 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
         // toggle between them is animated.
         // It is just cool bonus effect of this setup.
         ? AnimatedContainer(
-            duration: theme.bottomBarAnimationDuration!,
-            curve: theme.bottomBarAnimationCurve!,
+            duration: flexTheme.bottomBarAnimationDuration!,
+            curve: flexTheme.bottomBarAnimationCurve!,
             height: _isBottomBarVisible ? effectiveToolBarHeight : 0.0,
             child: Wrap(
               children: <Widget>[
@@ -1332,7 +1262,7 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
                         final FlexDestinationTarget destination =
                             FlexDestinationTarget(
                           bottomIndex: index,
-                          menuIndex: _selectedIndex,
+                          index: _selectedIndex,
                           reverse: _indexMenu.reverse,
                           source: FlexNavigation.bottom,
                           route: widget.destinations[_selectedIndex].route,
@@ -1346,6 +1276,40 @@ class FlexScaffoldState extends State<FlexScaffold> with ChangeNotifier {
             ),
           )
         : null; // TODO(rydmike): Good idea? OR const SizedBox.shrink()?
+  }
+}
+
+/// FlexScaffold implementation of InheritedWidget.
+///
+/// Used for to find the current FlexScaffold in the widget tree. This is useful
+/// when reading FlexScaffold properties and using it methods from anywhere
+/// in your app.
+class _InheritedFlexScaffold extends InheritedWidget {
+  /// Data is the entire FlexScaffoldState.
+  final FlexScaffoldState data;
+
+  /// You must pass through a child and your state.
+  const _InheritedFlexScaffold({
+    super.key,
+    required this.data,
+    required super.child,
+  });
+
+  /// We only notify [FlexScaffoldState] descendants of changes that needs to
+  /// be used and tracked by its own sub widgets and custom widget usage.
+  ///
+  /// If some additional properties needs change notification raise issue/PR.
+  @override
+  bool updateShouldNotify(_InheritedFlexScaffold oldWidget) {
+    if (oldWidget.data.isMenuInDrawer != data.isMenuInDrawer ||
+        oldWidget.data.menuPrefersRail != data.menuPrefersRail ||
+        oldWidget.data.menuIsHidden != data.menuIsHidden ||
+        oldWidget.data.sidebarIsHidden != data.sidebarIsHidden ||
+        oldWidget.data.widget.cycleViaDrawer != data.widget.cycleViaDrawer) {
+      return true;
+    }
+    // TODO(rydmike): Change below to false, when the above list if determined.
+    return true;
   }
 }
 

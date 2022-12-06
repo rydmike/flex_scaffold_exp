@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../pods/pods_flexfold.dart';
 import '../../utils/app_tooltips.dart';
 
-/// A provider for our used [FlexfoldThemeData].
-final Provider<FlexfoldThemeData> flexScaffoldThemeProvider =
-    Provider<FlexfoldThemeData>(
-  (ProviderRef<FlexfoldThemeData> ref) {
+/// A provider for our used [FlexScaffoldThemeData].
+final Provider<FlexScaffoldThemeData> flexScaffoldThemeProvider =
+    Provider<FlexScaffoldThemeData>(
+  (ProviderRef<FlexScaffoldThemeData> ref) {
     // TODO(rydmike): Remove the context usage, somehow.
     // We use the Flexfold menu highlight helper class to make
     // border shapes and let it adjust margins for the shapes.
@@ -16,27 +16,28 @@ final Provider<FlexfoldThemeData> flexScaffoldThemeProvider =
     // shapes and they don't even have to be the same.
 
     // final TextDirection directionality = Directionality.of(context);
+    const TextDirection directionality = TextDirection.ltr;
 
     // The style of the selected highlighted item.
-    final FlexfoldMenuHighlight menuSelected = FlexfoldMenuHighlight(
+    final FlexMenuIndicator menuSelected = FlexMenuIndicator(
       highlightType: ref.watch(menuHighlightTypePod),
       // borderColor: Theme.of(context).primaryColor,
       // highlightColor: Theme.of(context).colorScheme.primary.withAlpha(0x3d),
       height: ref.watch(menuHighlightHeightPod),
       borderRadius: ref.watch(menuHighlightHeightPod) / 6,
-      // directionality: directionality,
+      directionality: directionality,
     );
     // The style of the item that is hovered on web and desktop.
-    final FlexfoldMenuHighlight menuHover = FlexfoldMenuHighlight(
+    final FlexMenuIndicator menuHover = FlexMenuIndicator(
       highlightType: ref.watch(menuHighlightTypePod),
       borderColor: Colors.transparent,
       highlightColor: Colors.transparent,
       height: ref.watch(menuHighlightHeightPod),
       borderRadius: ref.watch(menuHighlightHeightPod) / 6,
-      // directionality: directionality,
+      directionality: directionality,
     );
 
-    return FlexfoldThemeData(
+    return FlexScaffoldThemeData(
       // TODO(rydmike): Uncomment to test background colors via properties.
       // menuBackgroundColor: isLight ? Color(0xFFE9EFEA) : Color(0xFF18231B),
       //     Theme.of(context).backgroundColor, //Colors.pink[100],

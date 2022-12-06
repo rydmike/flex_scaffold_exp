@@ -1,32 +1,34 @@
+// ignore_for_file: comment_references
 import 'package:flutter/material.dart';
 
+import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
 import 'flexfold_theme.dart';
 
 const double _kLeadingWidth = kToolbarHeight;
 
-/// The sidebar menu button for the Flexfold scaffold.
+/// The sidebar menu button used in a [FlexScaffold] and its [FlexSidebar].
 ///
 /// The button holds the logic for managing toggling the state of the sidebar
 /// menu between hidden in drawer and locked on screen.
-class FlexfoldSidebarButton extends StatelessWidget {
+class FlexSidebarButton extends StatelessWidget {
   /// Default constructor.
-  const FlexfoldSidebarButton({
+  const FlexSidebarButton({
     super.key,
     this.menuIcon,
     this.menuIconExpand,
     this.menuIconExpandHidden,
     this.menuIconCollapse,
-    this.cycleViaDrawer = true,
-    this.isHidden = false,
-    required this.setMenuHidden,
+    required this.onPressed,
   });
+
+  // TODO(rydmike): Fix and update icon doc comments.
 
   /// A Widget used to open the menu, typically an [Icon] widget is used.
   ///
   /// The same icon will also be used on the AppBar when the menu or rail is
   /// hidden in a drawer. If no icon is provided it defaults to a widget with
-  /// value [kFlexfoldMenuIcon].
+  /// value [kFlexfoldSidebarIcon].
   final Widget? menuIcon;
 
   /// A widget used to expand the drawer to a menu from an opened drawer,
@@ -51,43 +53,42 @@ class FlexfoldSidebarButton extends StatelessWidget {
   /// [kFlexfoldMenuIconCollapse].
   final Widget? menuIconCollapse;
 
-  /// Cycle via drawer menu when opening a hidden menu.
+  /// The callback that is called when the button is tapped or otherwise
+  /// activated.
   ///
-  /// When the menu may be shown as locked on screen, as a rail or menu, and
-  /// we expand it again, it first cycles via the drawer menu option if true.
-  /// If set to false it skips the cycle via the drawer and expands it directly
-  /// to a rail or side menu, depending on current screen width and if it is
-  /// larger than the breakpoint for menu or not. If screen width is below rail
-  /// breakpoint this setting has no effect, the only way to show the menu is
-  /// as a drawer, so the drawer will be opened.
-  final bool cycleViaDrawer;
-
-  /// The sidebar menu is hidden in a drawer.
-  final bool isHidden;
-
-  /// Callback to hide the sidebar menu.
-  final ValueChanged<bool> setMenuHidden;
+  /// If this is set to null, the button will be disabled.
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
+    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
+
     final bool hasEndDrawer = scaffold?.hasEndDrawer ?? false;
     final bool isEndDrawerOpen = scaffold?.isEndDrawerOpen ?? false;
+
     final double width = MediaQuery.of(context).size.width;
 
-    final FlexfoldThemeData theme = FlexfoldTheme.of(context);
+    final FlexScaffoldThemeData theme = FlexScaffoldTheme.of(context);
     final double breakpointSidebar = theme.breakpointSidebar!;
 
     final bool canLockMenu = width >= breakpointSidebar;
 
     // Set effective expand and collapse icons
-    Widget effectiveMenuIcon = menuIcon ?? kFlexfoldSidebarIcon;
-    Widget effectiveMenuIconExpand =
-        menuIconExpand ?? menuIcon ?? kFlexfoldSidebarIconExpand;
-    Widget effectiveMenuIconExpandHidden =
-        menuIconExpandHidden ?? menuIcon ?? kFlexfoldSidebarIconExpandHidden;
-    Widget effectiveMenuIconCollapse =
-        menuIconCollapse ?? menuIcon ?? kFlexfoldSidebarIconCollapse;
+    Widget effectiveMenuIcon =
+        menuIcon ?? flexScaffold.widget.sidebarIcon ?? kFlexfoldSidebarIcon;
+    Widget effectiveMenuIconExpand = menuIconExpand ??
+        flexScaffold.widget.sidebarIconExpand ??
+        menuIcon ??
+        kFlexfoldSidebarIconExpand;
+    Widget effectiveMenuIconExpandHidden = menuIconExpandHidden ??
+        flexScaffold.widget.sidebarIconExpandHidden ??
+        menuIcon ??
+        kFlexfoldSidebarIconExpandHidden;
+    Widget effectiveMenuIconCollapse = menuIconCollapse ??
+        flexScaffold.widget.sidebarIconCollapse ??
+        menuIcon ??
+        kFlexfoldSidebarIconCollapse;
     // If directionality is RTL we rotate the icons 180 degrees, if directional
     // icons were used in a LTR design, the result should be fairly OK of this,
     // unless the APP was really designed with a RTL mindset, then we should
@@ -109,18 +110,20 @@ class FlexfoldSidebarButton extends StatelessWidget {
     // tooltip labels in FlexfoldThemeData if other labels were not specified.
     String tooltip;
     Widget effectiveMenuButton;
-    if (hasEndDrawer && !isEndDrawerOpen && (!canLockMenu || cycleViaDrawer)) {
+    if (hasEndDrawer &&
+        !isEndDrawerOpen &&
+        (!canLockMenu || flexScaffold.widget.cycleViaDrawer)) {
       tooltip = theme.sidebarOpenTooltip!;
       effectiveMenuButton = effectiveMenuIcon;
     } else if (hasEndDrawer &&
         !isEndDrawerOpen &&
-        (canLockMenu || !cycleViaDrawer)) {
+        (canLockMenu || !flexScaffold.widget.cycleViaDrawer)) {
       tooltip = theme.sidebarExpandHiddenTooltip!;
       effectiveMenuButton = effectiveMenuIconExpandHidden;
     } else if (hasEndDrawer && isEndDrawerOpen && !canLockMenu) {
       tooltip = theme.sidebarCloseTooltip!;
       effectiveMenuButton = effectiveMenuIcon;
-    } else if (isHidden) {
+    } else if (flexScaffold.sidebarIsHidden) {
       tooltip = theme.sidebarExpandTooltip!;
       effectiveMenuButton = effectiveMenuIconExpand;
     } else {
@@ -136,11 +139,11 @@ class FlexfoldSidebarButton extends StatelessWidget {
         onPressed: () {
           if (hasEndDrawer &&
               !isEndDrawerOpen &&
-              (!canLockMenu || cycleViaDrawer)) {
+              (!canLockMenu || flexScaffold.widget.cycleViaDrawer)) {
             Scaffold.of(context).openEndDrawer();
           } else if (hasEndDrawer && isEndDrawerOpen && !canLockMenu) {
             Navigator.of(context).pop();
-          } else if (isHidden) {
+          } else if (flexScaffold.sidebarIsHidden) {
             if (hasEndDrawer && isEndDrawerOpen) {
               Navigator.of(context).pop();
               // TODO(rydmike): Improve this that waits for the menu to close.
@@ -151,13 +154,13 @@ class FlexfoldSidebarButton extends StatelessWidget {
               // closed fully and open the locked menu/rail then, but this
               // works too.
               Future<void>.delayed(kFlexfoldFlutterDrawerDuration, () {
-                setMenuHidden(false);
+                flexScaffold.hideSidebar(false);
               });
             } else {
-              setMenuHidden(false);
+              flexScaffold.hideSidebar(false);
             }
           } else {
-            setMenuHidden(true);
+            flexScaffold.hideSidebar(true);
           }
         },
       ),

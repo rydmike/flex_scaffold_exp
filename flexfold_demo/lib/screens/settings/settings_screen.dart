@@ -56,7 +56,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final AppNavigation appNav = ref.watch(navigationProvider);
+    final CurrentRoute appNav = ref.watch(currentRouteProvider);
 
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
@@ -64,8 +64,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final Widget icon = appDestinations[destination.menuIndex].selectedIcon;
-    final Widget heading = Text(appDestinations[destination.menuIndex].label);
+    final Widget icon = appDestinations[destination.index].selectedIcon;
+    final Widget heading = Text(appDestinations[destination.index].label);
 
     // Frequently used text style on this page, so let's store a ref to it.
     final TextStyle headline5 = Theme.of(context).textTheme.headline5!;

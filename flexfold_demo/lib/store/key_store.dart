@@ -248,7 +248,7 @@ class KeyStore {
     showMenuLeading: true,
     showMenuTrailing: true,
     showMenuFooter: true,
-    menuHighlightType: FlexfoldHighlightType.endStadium,
+    menuHighlightType: FlexIndicatorStyle.endStadium,
     menuHighlightHeight: 50.0,
     menuStart: FlexfoldMenuStart.top,
     menuSide: FlexfoldMenuSide.start,

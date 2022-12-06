@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 /// This information is useful for going forward or back in a navigation bar,
 /// which can be used/ for different animation on forward and back from
 /// current index.
-class FlexfoldIndexTracker {
+class IndexTracker {
   int _index = 0;
 
   /// Returns the current index of the index tracker.
@@ -41,8 +41,8 @@ class FlexfoldIndexTracker {
 /// never have any scroll glow or bounce.
 ///
 /// The no effect could e.g. be for a side drawer or rail that just needs to
-/// scroll because it is in a very small height limited viewport. Bounce
-/// and scroll in this case often feels wrong.
+/// scroll a bit because it is in a very small height limited viewport. Bounce
+/// and scroll effects in this case often feels wrong.
 ///
 /// Found this solution here:
 /// https://stackoverflow.com/questions/51119795/how-to-remove-scroll-glow
@@ -54,7 +54,7 @@ class ScrollNoEdgeEffect extends ScrollBehavior {
   }
 }
 
-/// Type definition for a builder function used by IfWrapper.
+/// Type definition for the builder function used by IfWrapper.
 typedef IfWrapBuilder = Widget Function(BuildContext context, Widget child);
 
 /// A builder that if the [condition] is true, will run its builder and the
@@ -153,7 +153,7 @@ class MaybeTooltip extends StatelessWidget {
 /// Included functions from TinyColor re-implemented as color extension are:
 /// * lighten (int)
 /// * darken(int)
-extension FlexfoldColorExtensions on Color {
+extension FlexScaffoldColorExtensions on Color {
   /// Like TinyColor's lighten function, it lightens the color with the
   /// given percentage amount.
   Color lighten([int amount = 10]) {

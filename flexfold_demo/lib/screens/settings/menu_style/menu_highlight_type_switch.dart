@@ -9,21 +9,21 @@ class MenuHighlightTypeSwitch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final FlexfoldHighlightType style = ref.watch(menuHighlightTypePod);
+    final FlexIndicatorStyle style = ref.watch(menuHighlightTypePod);
     final List<bool> isSelected = <bool>[
-      style == FlexfoldHighlightType.none,
-      style == FlexfoldHighlightType.row,
-      style == FlexfoldHighlightType.box,
-      style == FlexfoldHighlightType.stadium,
-      style == FlexfoldHighlightType.endStadium,
-      style == FlexfoldHighlightType.startBar,
-      style == FlexfoldHighlightType.endBar,
+      style == FlexIndicatorStyle.none,
+      style == FlexIndicatorStyle.row,
+      style == FlexIndicatorStyle.box,
+      style == FlexIndicatorStyle.stadium,
+      style == FlexIndicatorStyle.endStadium,
+      style == FlexIndicatorStyle.startBar,
+      style == FlexIndicatorStyle.endBar,
     ];
     return ToggleButtons(
       isSelected: isSelected,
       onPressed: (int newIndex) {
         ref.read(menuHighlightTypePod.notifier).state =
-            FlexfoldHighlightType.values[newIndex];
+            FlexIndicatorStyle.values[newIndex];
       },
       children: const <Widget>[
         Padding(

@@ -3,18 +3,18 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import 'flex_app_bar.dart';
+import 'flex_destination.dart';
+import 'flex_menu_button.dart';
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
-import 'flexfold_destination.dart';
-import 'flexfold_helpers.dart';
-import 'flexfold_menu_button.dart';
+import 'flex_scaffold_helpers.dart';
 import 'flexfold_theme.dart';
 
 /// Flexfold internal widget that manages the animated showing and hiding of
 /// the menu and rail, plus building and managing its menu content.
-class FlexfoldMenu extends StatefulWidget {
+class FlexMenu extends StatefulWidget {
   /// Default constructor
-  const FlexfoldMenu({
+  const FlexMenu({
     super.key,
     // Destination properties for the menu, rail and bottom navbar
     required this.destinations,
@@ -175,10 +175,10 @@ class FlexfoldMenu extends StatefulWidget {
   final bool showBottomDestinationsInDrawer;
 
   @override
-  State<FlexfoldMenu> createState() => _FlexfoldMenuState();
+  State<FlexMenu> createState() => _FlexMenuState();
 }
 
-class _FlexfoldMenuState extends State<FlexfoldMenu> {
+class _FlexMenuState extends State<FlexMenu> {
   // Local state
   late int selectedIndex;
   late double width;
@@ -201,7 +201,7 @@ class _FlexfoldMenuState extends State<FlexfoldMenu> {
   }
 
   @override
-  void didUpdateWidget(FlexfoldMenu oldWidget) {
+  void didUpdateWidget(FlexMenu oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selectedIndex != widget.selectedIndex) {
       selectedIndex = widget.selectedIndex;
@@ -218,7 +218,7 @@ class _FlexfoldMenuState extends State<FlexfoldMenu> {
   Widget build(BuildContext context) {
     //
     // Get all the effective FlexfoldThemeData
-    final FlexfoldThemeData flexTheme = FlexfoldTheme.of(context);
+    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
 
     // Get all the theme based behavior properties
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
@@ -301,7 +301,7 @@ class _FlexfoldMenuState extends State<FlexfoldMenu> {
         final Color scaffoldColor = theme.scaffoldBackgroundColor;
 
         // Get FlexfoldThemeData
-        final FlexfoldThemeData flexTheme = FlexfoldTheme.of(context);
+        final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
         // Get effective icon and text themes
         final IconThemeData unselectedIconTheme =
             flexTheme.unselectedIconTheme!;
@@ -366,27 +366,12 @@ class _FlexfoldMenuState extends State<FlexfoldMenu> {
                     widget.menuAppBar!.toAppBar(
                       automaticallyImplyLeading: false,
                       leading: widget.menuToggleEnabled
-                          ? FlexScaffoldMenuButton(
+                          ? FlexMenuButton(
                               onPressed: () {},
-                              // menuIcon: widget.menuIcon,
-                              // menuIconExpand: widget.menuIconExpand,
-                              // menuIconExpandHidden: widget.menuIconExpandHidden,
-                              // menuIconCollapse: widget.menuIconCollapse,
-                              // isHidden: hideMenu,
-                              // cycleViaDrawer: widget.cycleViaDrawer,
-                              // isRail: preferRail,
-                              // setMenuHidden: (bool value) {
-                              //   setState(() {
-                              //     hideMenu = value;
-                              //     widget.onHideMenu(value);
-                              //   });
-                              // },
-                              // setPreferRail: (bool value) {
-                              //   setState(() {
-                              //     preferRail = value;
-                              //     widget.onPreferRail(value);
-                              //   });
-                              // },
+                              menuIcon: widget.menuIcon,
+                              menuIconExpand: widget.menuIconExpand,
+                              menuIconExpandHidden: widget.menuIconExpandHidden,
+                              menuIconCollapse: widget.menuIconCollapse,
                             )
                           : railLeadingFiller,
                       // Insert any existing actions
@@ -516,7 +501,7 @@ class _FlexMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlexfoldThemeData theme = FlexfoldTheme.of(context);
+    final FlexScaffoldThemeData theme = FlexScaffoldTheme.of(context);
 
     // Get effective menu and rail width
     final double railWidth = theme.railWidth!;

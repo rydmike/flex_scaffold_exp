@@ -4,10 +4,10 @@ import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
 import 'flexfold_theme.dart';
 
-/// Makes a ShapeBorder based on the [FlexfoldHighlightType] enum.
+/// Makes a ShapeBorder based on the [FlexIndicatorStyle] enum.
 ///
 /// This is a helper class that makes a hover and selected menu item highlight
-/// indicator for the [FlexScaffold| menu items.
+/// indicator for the [FlexScaffold] menu items.
 ///
 /// You can provide custom margin values, if none are provided then
 /// suitable defaults are used that you can get with the [margins]
@@ -21,10 +21,10 @@ import 'flexfold_theme.dart';
 ///
 /// If there is some style you would like to add to the ready made
 /// ones, please post a suggestion or make a pull request.
-class FlexfoldMenuHighlight {
-  /// Default constructor for [FlexfoldMenuHighlight].
-  FlexfoldMenuHighlight({
-    this.highlightType = FlexfoldHighlightType.stadium,
+class FlexMenuIndicator {
+  /// Default constructor for [FlexMenuIndicator].
+  FlexMenuIndicator({
+    this.highlightType = FlexIndicatorStyle.stadium,
     this.borderColor,
     this.highlightColor,
     this.borderRadius = 8.0,
@@ -35,13 +35,13 @@ class FlexfoldMenuHighlight {
     this.menuHighlightMarginBottom,
     this.startBarWidth = 5.0,
     this.endBarWidth = 6.0,
-    this.directionality = TextDirection.ltr,
+    required this.directionality,
   })  : assert(borderRadius >= 0, 'The border radius must be >= 0.'),
         assert(height >= 0, 'The height must be >= 0.'),
         assert(startBarWidth >= 0, 'The startBarWidth must be >= 0.'),
         assert(endBarWidth >= 0, 'The endBarWidth must be >= 0.') {
     switch (highlightType) {
-      case FlexfoldHighlightType.none:
+      case FlexIndicatorStyle.none:
         {
           _start = 0.0;
           _end = 0.0;
@@ -50,7 +50,7 @@ class FlexfoldMenuHighlight {
           _highLightColor = Colors.transparent;
         }
         break;
-      case FlexfoldHighlightType.row:
+      case FlexIndicatorStyle.row:
         {
           _start = menuHighlightMarginStart ?? 0;
           _end = menuHighlightMarginEnd ?? 0;
@@ -59,7 +59,7 @@ class FlexfoldMenuHighlight {
           _highLightColor = highlightColor ?? Colors.transparent;
         }
         break;
-      case FlexfoldHighlightType.box:
+      case FlexIndicatorStyle.box:
         {
           _start = menuHighlightMarginStart ?? 4;
           _end = menuHighlightMarginEnd ?? 4;
@@ -68,7 +68,7 @@ class FlexfoldMenuHighlight {
           _highLightColor = highlightColor ?? Colors.transparent;
         }
         break;
-      case FlexfoldHighlightType.stadium:
+      case FlexIndicatorStyle.stadium:
         {
           _start = menuHighlightMarginStart ?? 3;
           _end = menuHighlightMarginEnd ?? 3;
@@ -77,7 +77,7 @@ class FlexfoldMenuHighlight {
           _highLightColor = highlightColor ?? Colors.transparent;
         }
         break;
-      case FlexfoldHighlightType.endStadium:
+      case FlexIndicatorStyle.endStadium:
         {
           _start = menuHighlightMarginStart ?? 0;
           _end = menuHighlightMarginEnd ?? 3;
@@ -86,7 +86,7 @@ class FlexfoldMenuHighlight {
           _highLightColor = highlightColor ?? Colors.transparent;
         }
         break;
-      case FlexfoldHighlightType.startBar:
+      case FlexIndicatorStyle.startBar:
         {
           _start = menuHighlightMarginStart ?? 0;
           _end = menuHighlightMarginEnd ?? 0;
@@ -95,7 +95,7 @@ class FlexfoldMenuHighlight {
           _highLightColor = Colors.transparent;
         }
         break;
-      case FlexfoldHighlightType.endBar:
+      case FlexIndicatorStyle.endBar:
         {
           _start = menuHighlightMarginStart ?? 0;
           _end = menuHighlightMarginEnd ?? 0;
@@ -109,8 +109,8 @@ class FlexfoldMenuHighlight {
 
   /// The type of Flexfold Shape.
   ///
-  /// Default to [FlexfoldHighlightType.stadium].
-  final FlexfoldHighlightType highlightType;
+  /// Default to [FlexIndicatorStyle.stadium].
+  final FlexIndicatorStyle highlightType;
 
   /// Color of the border on the edge for the shape when used.
   ///
@@ -151,6 +151,10 @@ class FlexfoldMenuHighlight {
   /// Only used to resolve the circular side direction for the end stadium style
   /// from BorderRadiusDirectional to normal BorderRadius that is used by
   /// the ShapeBorder RoundedRectangleBorder.
+  ///
+  /// If this is not done, the Shape theme animation throws an exception.
+  /// The Directionality will still be resolved correctly later, but the theme
+  /// cannot animate the shape change.
   final TextDirection directionality;
 
   late double _start;
@@ -167,7 +171,7 @@ class FlexfoldMenuHighlight {
       EdgeInsetsDirectional.fromSTEB(_start, _top, _end, _bottom);
 
   /// Return the highlight color. Typically assigned to the [FlexScaffold] theme
-  /// property [FlexfoldThemeData.menuHighlightColor]. Some types do not use a
+  /// property [FlexScaffoldThemeData.menuHighlightColor]. Some types do not use a
   /// highlight color and will
   /// return [Colors.transparent]. If a highlight color for a selected item
   /// is used for the highlight type, the [highlightColor] color will be
@@ -177,29 +181,29 @@ class FlexfoldMenuHighlight {
   /// Returns the defined shape border.
   ShapeBorder? shape() {
     switch (highlightType) {
-      case FlexfoldHighlightType.none:
+      case FlexIndicatorStyle.none:
         return null;
-      case FlexfoldHighlightType.row:
+      case FlexIndicatorStyle.row:
         return RoundedRectangleBorder(borderRadius: BorderRadius.circular(0));
-      case FlexfoldHighlightType.box:
+      case FlexIndicatorStyle.box:
         return RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius));
-      case FlexfoldHighlightType.stadium:
+      case FlexIndicatorStyle.stadium:
         return const StadiumBorder();
-      case FlexfoldHighlightType.endStadium:
+      case FlexIndicatorStyle.endStadium:
         return RoundedRectangleBorder(
           borderRadius: BorderRadiusDirectional.horizontal(
             end: Radius.circular(height / 2.0),
           ).resolve(directionality),
         );
-      case FlexfoldHighlightType.startBar:
+      case FlexIndicatorStyle.startBar:
         return BorderDirectional(
           start: BorderSide(
             color: borderColor ?? Colors.transparent,
             width: startBarWidth,
           ),
         );
-      case FlexfoldHighlightType.endBar:
+      case FlexIndicatorStyle.endBar:
         return BorderDirectional(
           end: BorderSide(
             color: borderColor ?? Colors.transparent,

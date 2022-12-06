@@ -57,9 +57,7 @@ class LayoutShell extends ConsumerWidget {
   // scaffold.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppNavigation appNav = ref.watch(navigationProvider);
-    final AppNavigationStateNotifier appNavNotify =
-        ref.read(navigationProvider.notifier);
+    final CurrentRoute route = ref.watch(currentRouteProvider);
 
     final String goRouterPath = GoRouter.of(context).location;
     if (_kDebugMe) {
@@ -73,7 +71,7 @@ class LayoutShell extends ConsumerWidget {
     final TextDirection directionality = Directionality.of(context);
 
     // The style of the selected highlighted item.
-    final FlexfoldMenuHighlight menuSelected = FlexfoldMenuHighlight(
+    final FlexMenuIndicator menuSelected = FlexMenuIndicator(
       highlightType: ref.watch(menuHighlightTypePod),
       borderColor: Theme.of(context).primaryColor,
       highlightColor: Theme.of(context).colorScheme.primary.withAlpha(0x3d),
@@ -82,7 +80,7 @@ class LayoutShell extends ConsumerWidget {
       directionality: directionality,
     );
     // The style of the item that is hovered on web and desktop.
-    final FlexfoldMenuHighlight menuHover = FlexfoldMenuHighlight(
+    final FlexMenuIndicator menuHover = FlexMenuIndicator(
       highlightType: ref.watch(menuHighlightTypePod),
       borderColor: Colors.transparent,
       highlightColor: Colors.transparent,
@@ -95,7 +93,7 @@ class LayoutShell extends ConsumerWidget {
     // configure its style and behavior. This demo uses a lot more
     // properties than one would typically use or allow users to adjust.
     // It is done so in order to demonstrate the features of Flexfold.
-    final FlexfoldThemeData flexfoldTheme = FlexfoldThemeData(
+    final FlexScaffoldThemeData flexfoldTheme = FlexScaffoldThemeData(
       // TODO(rydmike): Uncomment to test background colors via properties.
       // menuBackgroundColor: isLight ? Color(0xFFE9EFEA) : Color(0xFF18231B),
       //     Theme.of(context).backgroundColor, //Colors.pink[100],
@@ -190,7 +188,7 @@ class LayoutShell extends ConsumerWidget {
       // TODO(rydmike): Maybe add ask about going "back" out of app on Web?
       onWillPop: () async {
         // Store the start destination.
-        final FlexDestinationTarget startDestination = appNav.destination;
+        final FlexDestinationTarget startDestination = route.destination;
         // If we can pop, then we pop.
         if (Navigator.of(context).canPop()) {
           if (_kDebugMe) {
@@ -204,26 +202,28 @@ class LayoutShell extends ConsumerWidget {
         // to first item in bottom nav, but if it is null or 0, then
         // we will go to the Home screen.
         else {
-          if (appNav.destination.bottomIndex != null &&
-              appNav.destination.bottomIndex != 0) {
+          if (route.destination.bottomIndex != null &&
+              route.destination.bottomIndex != 0) {
             // Set first bottom nav screen, "Info" as back destination.
             final FlexDestinationTarget backDestination =
                 FlexDestinationTarget.fromRoute(
               AppRoutes.info,
               appDestinations,
-              source: appNav.destination.source,
-              reverse: appNav.destination.reverse,
+              source: route.destination.source,
+              reverse: route.destination.reverse,
               preferPush: false,
             );
-            // Update the appNav with the selected back destination = Info
-            appNavNotify.setDestination(backDestination);
+            // Update the route with the selected back destination = Info
+            ref
+                .read(currentRouteProvider.notifier)
+                .setDestination(backDestination);
             // Navigate to Info screen
-            context.go(appNav.destination.route);
+            context.go(route.destination.route);
             // TODO(rydmike): Remove old Nav1 navigation.
             // The old navigation with my custom Nav1 nested navigator.
             // await
-            // appNav.navKeyFlexfold.currentState!.pushReplacementNamed(
-            //   appNav.currentDestination.route,
+            // route.navKeyFlexfold.currentState!.pushReplacementNamed(
+            //   route.currentDestination.route,
             //   arguments: backDestination,
             // );
           }
@@ -234,19 +234,21 @@ class LayoutShell extends ConsumerWidget {
                 FlexDestinationTarget.fromRoute(
               AppRoutes.home,
               appDestinations,
-              source: appNav.destination.source,
-              reverse: appNav.destination.reverse,
+              source: route.destination.source,
+              reverse: route.destination.reverse,
               preferPush: false,
             );
-            // Update the appNav with the selected back destination = Home
-            appNavNotify.setDestination(backDestination);
+            // Update the route with the selected back destination = Home
+            ref
+                .read(currentRouteProvider.notifier)
+                .setDestination(backDestination);
             // Navigate to home screen
-            context.go(appNav.destination.route);
+            context.go(route.destination.route);
             // TODO(rydmike): Remove old Nav1 navigation.
             // The old navigation with my custom Nav1 nested navigator.
             // await
-            // appNav.navKeyFlexfold.currentState!.pushReplacementNamed(
-            //   appNav.currentDestination.route,
+            // route.navKeyFlexfold.currentState!.pushReplacementNamed(
+            //   route.currentDestination.route,
             //   arguments: backDestination,
             // );
           }
@@ -266,7 +268,7 @@ class LayoutShell extends ConsumerWidget {
 
       // Build the Flexfold scaffold.
       //
-      // The is example is over complex due to all the customizable
+      // The is example is more complex than needed due to all the customizable
       // settings it demonstrates.
       child: FlexScaffold(
         //
@@ -282,8 +284,9 @@ class LayoutShell extends ConsumerWidget {
         // demonstrate how to use the styled appbar factory.
         appBar: FlexAppBar.styled(
           context,
+          // TODO(rydmike): Add implicit title
           // We use our destination labels as headings for the app bar
-          title: Text(appDestinations[appNav.destination.menuIndex].label),
+          title: Text(appDestinations[route.destination.index].label),
           gradient: ref.watch(appBarGradientPod),
           blurred: ref.watch(appBarBlurPod),
           opacity: ref.watch(appBarTransparentPod)
@@ -316,7 +319,7 @@ class LayoutShell extends ConsumerWidget {
         destinations: appDestinations,
         //
         // Currently selected destination
-        selectedIndex: appNav.destination.menuIndex,
+        selectedIndex: route.destination.index,
         //
         // When destination is changed we get a FlexfoldSelectedDestination
         // object in a callback that we can use to control how we do
@@ -331,7 +334,9 @@ class LayoutShell extends ConsumerWidget {
             if (_kDebugMe) {
               debugPrint('onDestination Push: ${destination.route}');
             }
-            appNavNotify.setModalDestination(destination);
+            ref
+                .read(currentRouteProvider.notifier)
+                .setModalDestination(destination);
             context.push('${destination.route}_modal');
             // FlexScaffold.of(context).assumePushed();
             // This would be an alternative way to route to the modal
@@ -354,16 +359,16 @@ class LayoutShell extends ConsumerWidget {
             // );
 
           } else {
-            // Update the appNav with the selected destination.
+            // Update the route with the selected destination.
             // This demo app uses the info in the current destination to
             // display info on how we navigated to the screen, so we
-            // need to update the appNav with this info where we
+            // need to update the route with this info where we
             // navigated to show it and keep track where we are on the
             // main root nav as well.
             if (_kDebugMe) {
               debugPrint('onDestination Go: ${destination.route}');
             }
-            appNavNotify.setDestination(destination);
+            ref.read(currentRouteProvider.notifier).setDestination(destination);
             context.go(destination.route);
           }
         },
@@ -539,7 +544,7 @@ class LayoutShell extends ConsumerWidget {
                   'and where it appears on a phone, tablet and desktop. '
                   'This demo app only has FABs on the Settings and '
                   'Theme screens.\n\nThis is a FAB on the '
-                  '${appDestinations[appNav.destination.menuIndex].label}'
+                  '${appDestinations[route.destination.index].label}'
                   ' screen.',
               defaultActionText: ' OK ',
             ).show(context, useRootNavigator: true);
@@ -577,7 +582,7 @@ class LayoutShell extends ConsumerWidget {
         // from and if it was forward or reverse direction in the
         // destination list.
         // Navigator(
-        //   key: appNav.navKeyFlexfold,
+        //   key: route.navKeyFlexfold,
         //   onGenerateRoute: (RouteSettings settings) {
         //     if (_kDebugMe) {
         //       debugPrint(
@@ -585,7 +590,7 @@ class LayoutShell extends ConsumerWidget {
         //           '** onGenerateRoute **');
         //       debugPrint(
         //           'LayoutScreen(): settings: '
-        //           '${appNav.currentDestination}');
+        //           '${route.currentDestination}');
         //     }
         //     return router.generateRoute(settings);
         //   },

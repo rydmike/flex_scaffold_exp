@@ -53,7 +53,7 @@ class _TabModalState extends ConsumerState<TabModal>
   Widget build(BuildContext context) {
     // Must call super.
     super.build(context);
-    final AppNavigation appNav = ref.watch(navigationProvider);
+    final CurrentRoute appNav = ref.watch(currentRouteProvider);
     // Put some elements inside an extra card at this larger size
     final bool isDesktop =
         MediaQuery.of(context).size.width >= AppInsets.desktopSize;
@@ -63,8 +63,8 @@ class _TabModalState extends ConsumerState<TabModal>
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final Widget icon = appDestinations[destination.menuIndex].selectedIcon;
-    final String heading = appDestinations[destination.menuIndex].label;
+    final Widget icon = appDestinations[destination.index].selectedIcon;
+    final String heading = appDestinations[destination.index].label;
 
     return PageBody(
       // key: ValueKey<String>('${destination.route}${AppRoutes.tabsModal}'),

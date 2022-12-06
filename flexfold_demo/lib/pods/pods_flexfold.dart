@@ -196,12 +196,12 @@ final StateProvider<bool> showMenuFooterPod =
       as bool;
 }, name: KeyStore.showMenuFooter);
 
-final StateProvider<FlexfoldHighlightType> menuHighlightTypePod =
-    StateProvider<FlexfoldHighlightType>(
-        (StateProviderRef<FlexfoldHighlightType> ref) {
+final StateProvider<FlexIndicatorStyle> menuHighlightTypePod =
+    StateProvider<FlexIndicatorStyle>(
+        (StateProviderRef<FlexIndicatorStyle> ref) {
   return hiveStore.get(KeyStore.menuHighlightType,
       defaultValue: KeyStore.defaults[KeyStore.menuHighlightType]!
-          as FlexfoldHighlightType) as FlexfoldHighlightType;
+          as FlexIndicatorStyle) as FlexIndicatorStyle;
 }, name: KeyStore.menuHighlightType);
 
 final StateProvider<double> menuHighlightHeightPod =

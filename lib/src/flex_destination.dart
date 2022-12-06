@@ -331,7 +331,7 @@ enum FlexNavigation {
 class FlexDestinationTarget {
   /// Default const constructor.
   const FlexDestinationTarget({
-    this.menuIndex = 0,
+    this.index = 0,
     this.bottomIndex = 0,
     this.route = '/',
     this.source = FlexNavigation.rail,
@@ -361,7 +361,7 @@ class FlexDestinationTarget {
     );
 
     return FlexDestinationTarget(
-      menuIndex: FlexDestination.toMenuIndex(destination, destinations),
+      index: FlexDestination.toMenuIndex(destination, destinations),
       bottomIndex: FlexDestination.toBottomIndex(destination, destinations),
       route: route,
       source: source,
@@ -371,7 +371,7 @@ class FlexDestinationTarget {
   }
 
   /// Menu, rail or drawer index of selected destination.
-  final int menuIndex;
+  final int index;
 
   /// The bottom navigation index of selected destination.
   ///
@@ -436,7 +436,7 @@ class FlexDestinationTarget {
 
   /// Copy properties to create a new object.
   FlexDestinationTarget copyWith({
-    int? menuIndex,
+    int? index,
     int? bottomIndex,
     String? route,
     FlexNavigation? source,
@@ -444,7 +444,7 @@ class FlexDestinationTarget {
     bool? preferPush,
   }) {
     return FlexDestinationTarget(
-      menuIndex: menuIndex ?? this.menuIndex,
+      index: index ?? this.index,
       bottomIndex: bottomIndex ?? this.bottomIndex,
       route: route ?? this.route,
       source: source ?? this.source,
@@ -455,7 +455,7 @@ class FlexDestinationTarget {
 
   @override
   String toString() {
-    return 'FlexfoldSelectedDestination(menuIndex: $menuIndex, '
+    return 'FlexfoldSelectedDestination(index: $index, '
         'bottomIndex: $bottomIndex, '
         'route: $route, '
         'source: $source, '
@@ -468,7 +468,7 @@ class FlexDestinationTarget {
     if (identical(this, other)) return true;
 
     return other is FlexDestinationTarget &&
-        other.menuIndex == menuIndex &&
+        other.index == index &&
         other.bottomIndex == bottomIndex &&
         other.route == route &&
         other.source == source &&
@@ -478,7 +478,7 @@ class FlexDestinationTarget {
 
   @override
   int get hashCode {
-    return menuIndex.hashCode ^
+    return index.hashCode ^
         bottomIndex.hashCode ^
         route.hashCode ^
         source.hashCode ^

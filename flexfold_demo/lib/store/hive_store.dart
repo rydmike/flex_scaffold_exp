@@ -22,6 +22,7 @@ void registerHiveAdapters() {
   Hive.registerAdapter(FlexTabBarStyleAdapter());
   Hive.registerAdapter(FlexAppBarStyleAdapter());
   Hive.registerAdapter(AppTextDirectionAdapter());
+  Hive.registerAdapter(FlexfoldHighlightTypeAdapter());
   Hive.registerAdapter(TargetPlatformAdapter());
   Hive.registerAdapter(FlexfoldMenuStartAdapter());
   Hive.registerAdapter(FlexfoldMenuSideAdapter());
@@ -149,15 +150,15 @@ class TargetPlatformAdapter extends TypeAdapter<TargetPlatform> {
 }
 
 // A Hive data type adapter for enum FlexfoldHighlightType.
-class FlexfoldHighlightTypeAdapter extends TypeAdapter<FlexfoldHighlightType> {
+class FlexfoldHighlightTypeAdapter extends TypeAdapter<FlexIndicatorStyle> {
   @override
-  FlexfoldHighlightType read(BinaryReader reader) {
+  FlexIndicatorStyle read(BinaryReader reader) {
     final int index = reader.readInt();
-    return FlexfoldHighlightType.values[index];
+    return FlexIndicatorStyle.values[index];
   }
 
   @override
-  void write(BinaryWriter writer, FlexfoldHighlightType obj) {
+  void write(BinaryWriter writer, FlexIndicatorStyle obj) {
     writer.writeInt(obj.index);
   }
 

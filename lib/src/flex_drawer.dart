@@ -13,9 +13,9 @@ const bool _kDebugMe = kDebugMode && true;
 
 /// A stateful wrapper for a [Drawer] that holds a width value in its local
 /// state and pops away any open drawer if the parent changes the width.
-class FlexfoldDrawer extends StatefulWidget {
+class FlexDrawer extends StatefulWidget {
   /// Default const constructor.
-  const FlexfoldDrawer({
+  const FlexDrawer({
     super.key,
     required this.currentScreenWidth,
     this.elevation = 16.0,
@@ -67,10 +67,10 @@ class FlexfoldDrawer extends StatefulWidget {
   final Widget? child;
 
   @override
-  State<FlexfoldDrawer> createState() => _FlexfoldDrawerState();
+  State<FlexDrawer> createState() => _FlexDrawerState();
 }
 
-class _FlexfoldDrawerState extends State<FlexfoldDrawer> {
+class _FlexDrawerState extends State<FlexDrawer> {
   late bool shouldCloseDrawer;
 
   @override
@@ -80,7 +80,7 @@ class _FlexfoldDrawerState extends State<FlexfoldDrawer> {
   }
 
   @override
-  void didUpdateWidget(FlexfoldDrawer oldWidget) {
+  void didUpdateWidget(FlexDrawer oldWidget) {
     if (widget.currentScreenWidth != oldWidget.currentScreenWidth) {
       // TODO(rydmike): Need to better solution for the Drawer removal handling.
       // If the screen WIDTH is being resized we need to close any open

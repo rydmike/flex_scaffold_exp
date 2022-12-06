@@ -32,7 +32,7 @@ class SliverAppBarDemo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppNavigation appNav = ref.read(navigationProvider);
+    final CurrentRoute appNav = ref.read(currentRouteProvider);
 
     // Get the current destination details, we will use its info in the
     // page header to display info on how we navigated to this page.
@@ -40,7 +40,7 @@ class SliverAppBarDemo extends ConsumerWidget {
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final String title = appDestinations[destination.menuIndex].label;
+    final String title = appDestinations[destination.index].label;
 
     // There is no pre-made sliver app bar in Flexfold (yet), you have to
     // make one yourself. You can make it however you like. In this demo we
@@ -105,7 +105,7 @@ class SliverAppBarDemo extends ConsumerWidget {
     // Leading widget, including open drawer action and effective tooltip
     Widget? leading;
     if (flexScaffold.isMenuInDrawer) {
-      leading = FlexScaffoldMenuButton(
+      leading = FlexMenuButton(
         onPressed: () {},
       );
     }

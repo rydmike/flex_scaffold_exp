@@ -3,27 +3,31 @@ import 'package:flutter/material.dart';
 
 /// Constants used as default values by the Flexfold scaffold.
 
-/// Pre-configured selected destination highlight styles for the rail and menu.
-enum FlexfoldHighlightType {
-  /// No highlight on the selected menu item.
+/// Pre-configured selected destination highlight indicator styles for the
+/// rail and menu.
+enum FlexIndicatorStyle {
+  /// No highlight indicator of selected menu item.
+  ///
+  /// The selected item is only indicated by different style on text and
+  /// and icon color of selected item.
   none,
 
-  /// Row highlight on the selected menu item.
+  /// Entire row highlight indicator of elected menu item.
   row,
 
-  /// Rounded box highlight on the selected menu item.
+  /// Rounded box highlight indicator of selected menu item.
   box,
 
-  /// Stadium highlight on the selected menu item.
+  /// Stadium highlight indicator of selected menu item.
   stadium,
 
-  /// End stadium highlight on the selected menu item.
+  /// End stadium highlight indicator of selected menu item.
   endStadium,
 
-  /// Vertical bar before the selected menu item.
+  /// Vertical bar indicator before the selected menu item.
   startBar,
 
-  /// Vertical bar after the selected menu item.
+  /// Vertical bar indciator after the selected menu item.
   endBar
 }
 
@@ -220,8 +224,8 @@ const double kFlexfoldHighlightMarginBottom = 2;
 ///
 /// The CupertinoTabBar is a PreferredSizedWidget with height of 50dp based
 /// on iOS10 and later standard. There is no Flutter SDK global constant for
-/// this, on a local const '_kTabBarHeight' with value 50 in the source.
-/// We define our own Flexfold const for it that we can use.
+/// this, only a local const '_kTabBarHeight' with value 50 in the source.
+/// We define our own const for it that we can use.
 const double kFlexfoldCupertinoTabBarHeight = 50;
 
 /// Flexfold NavigationBar height when labels are always hidden.

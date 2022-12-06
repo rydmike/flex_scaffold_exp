@@ -21,11 +21,11 @@ class PushWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppNavigation appNav = ref.watch(navigationProvider);
+    final CurrentRoute appNav = ref.watch(currentRouteProvider);
 
     // Get the current modal destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final FlexDestinationTarget destination = appNav.modalDestination;
+    final FlexDestinationTarget destination = appNav.pushedDestination;
     if (_kDebugMe) {
       debugPrint('PushWrapper: Destination = $destination');
     }
@@ -39,7 +39,7 @@ class PushWrapper extends ConsumerWidget {
         // button that it will get since it was pushed.
         appBar: FlexAppBar.styled(
           context,
-          title: Text(appDestinations[destination.menuIndex].label),
+          title: Text(appDestinations[destination.index].label),
           gradient: ref.watch(appBarGradientPod),
           blurred: ref.watch(appBarBlurPod),
           opacity: ref.watch(appBarTransparentPod)

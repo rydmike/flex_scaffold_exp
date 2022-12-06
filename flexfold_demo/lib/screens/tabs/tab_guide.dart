@@ -50,7 +50,7 @@ class _TabGuideState extends ConsumerState<TabGuide>
   Widget build(BuildContext context) {
     // Must call super.
     super.build(context);
-    final AppNavigation appNav = ref.watch(navigationProvider);
+    final CurrentRoute appNav = ref.watch(currentRouteProvider);
     final ThemeData themeData = Theme.of(context);
     final TextStyle linkStyle = themeData.textTheme.bodyText1!.copyWith(
         color: themeData.colorScheme.primary, fontWeight: FontWeight.bold);
@@ -60,8 +60,8 @@ class _TabGuideState extends ConsumerState<TabGuide>
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final Widget icon = appDestinations[destination.menuIndex].selectedIcon;
-    final String heading = appDestinations[destination.menuIndex].label;
+    final Widget icon = appDestinations[destination.index].selectedIcon;
+    final String heading = appDestinations[destination.index].label;
 
     return PageBody(
       // key: ValueKey<String>('${destination.route}${AppRoutes.tabsGuide}'),

@@ -52,7 +52,7 @@ class PageHeader extends StatelessWidget {
         Wrap(
           children: <Widget>[
             SizedText('Route: ${destination.route}'),
-            SizedText('Menu index: ${destination.menuIndex}'),
+            SizedText('Menu index: ${destination.index}'),
             SizedText('Bottom index: ${destination.bottomIndex}'),
             SizedText('Tapped: '
                 '${destination.source.toString().dotTail.capitalize}'),

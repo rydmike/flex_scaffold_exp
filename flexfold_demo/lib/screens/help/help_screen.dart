@@ -41,18 +41,17 @@ class _HelpScreenState extends ConsumerState<HelpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final AppNavigation appNav = ref.watch(navigationProvider);
+    final CurrentRoute appNav = ref.watch(currentRouteProvider);
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final FlexDestinationTarget destination = appNav.useModalDestination
-        ? appNav.modalDestination
-        : appNav.destination;
+    final FlexDestinationTarget destination =
+        appNav.usePush ? appNav.pushedDestination : appNav.destination;
 
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final Widget icon = appDestinations[destination.menuIndex].selectedIcon;
-    final Widget heading = Text(appDestinations[destination.menuIndex].label);
+    final Widget icon = appDestinations[destination.index].selectedIcon;
+    final Widget heading = Text(appDestinations[destination.index].label);
 
     // See settings_screen.dart for an explanation of these
     // padding values and why they are VERY handy and useful.

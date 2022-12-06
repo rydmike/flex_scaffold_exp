@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'flex_scaffold.dart';
-import 'flexfold_helpers.dart';
+import 'flex_scaffold_helpers.dart';
 
 /// Material dark default surface color
 const Color _kMaterialDarkSurface = Color(0xff121212);

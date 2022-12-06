@@ -8,17 +8,17 @@ import 'flex_scaffold_constants.dart';
 
 /// Defines default property values for descendant [FlexScaffold] widgets.
 ///
-/// Descendant widgets obtain the current [FlexfoldThemeData] object
+/// Descendant widgets obtain the current [FlexScaffoldThemeData] object
 /// using `FlexfoldTheme.of(context)`. Instances of
-/// [FlexfoldThemeData] can be customized with
-/// [FlexfoldThemeData.copyWith].
+/// [FlexScaffoldThemeData] can be customized with
+/// [FlexScaffoldThemeData.copyWith].
 ///
-/// Typically a [FlexfoldThemeData] is passed in to the [FlexScaffold] via its
-/// [FlexfoldTheme] property, but it can also be inherited from [FlexfoldTheme]
+/// Typically a [FlexScaffoldThemeData] is passed in to the [FlexScaffold] via its
+/// [FlexScaffoldTheme] property, but it can also be inherited from [FlexScaffoldTheme]
 /// widget higher up in the widget tree. A passed in theme is merged with the
 /// theme higher up in the tree for the effective theme.
 ///
-/// All [FlexfoldThemeData] properties are `null` by default.
+/// All [FlexScaffoldThemeData] properties are `null` by default.
 /// When null, the [FlexScaffold] will provide its own defaults based on the
 /// overall [Theme]'s [DividerTheme], [BottomNavigationBarTheme] and
 /// [NavigationRailTheme] if they exist, if not it will be based on base
@@ -26,11 +26,11 @@ import 'flex_scaffold_constants.dart';
 /// well as Flexfold constant values or SDK constants and values matching the
 /// material standards and guidelines.
 ///
-/// See the individual [FlexfoldThemeData] properties for default value details.
+/// See the individual [FlexScaffoldThemeData] properties for default value details.
 @immutable
-class FlexfoldThemeData with Diagnosticable {
+class FlexScaffoldThemeData with Diagnosticable {
   /// Creates a theme that can be used for [FlexScaffold].
-  const FlexfoldThemeData({
+  const FlexScaffoldThemeData({
     //
     // Background color properties
     this.menuBackgroundColor,
@@ -783,14 +783,14 @@ class FlexfoldThemeData with Diagnosticable {
   ///   MaterialLocalizations.of(context).expandedIconTapHint
   final String? sidebarCollapseTooltip;
 
-  /// Merge the other [FlexfoldThemeData] with the theme data of this
+  /// Merge the other [FlexScaffoldThemeData] with the theme data of this
   /// instance.
   ///
   /// This is typically used to merge a theme data object with some overriding
   /// properties defined with it's parent inherited theme data, creating
   /// a resulting merged theme where the 'other' values override any inherited
   /// data, but none defined values keeps using the inherited values.
-  FlexfoldThemeData merge(FlexfoldThemeData? other) {
+  FlexScaffoldThemeData merge(FlexScaffoldThemeData? other) {
     if (other == null) {
       return this;
     }
@@ -853,9 +853,9 @@ class FlexfoldThemeData with Diagnosticable {
     );
   }
 
-  /// Merge this instance of [FlexfoldThemeData] with the hard coded default
-  /// values for [FlexfoldThemeData] in the build context.
-  FlexfoldThemeData withDefaults(BuildContext context) {
+  /// Merge this instance of [FlexScaffoldThemeData] with the hard coded default
+  /// values for [FlexScaffoldThemeData] in the build context.
+  FlexScaffoldThemeData withDefaults(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final MaterialLocalizations hints = MaterialLocalizations.of(context);
     final String openHint = hints.openAppDrawerTooltip;
@@ -982,7 +982,7 @@ class FlexfoldThemeData with Diagnosticable {
   }
 
   /// Copy this object with the given fields replaced with the new values.
-  FlexfoldThemeData copyWith({
+  FlexScaffoldThemeData copyWith({
     Color? menuBackgroundColor,
     Color? sidebarBackgroundColor,
     FlexfoldMenuStart? menuStart,
@@ -1039,7 +1039,7 @@ class FlexfoldThemeData with Diagnosticable {
     String? sidebarExpandHiddenTooltip,
     String? sidebarCollapseTooltip,
   }) {
-    return FlexfoldThemeData(
+    return FlexScaffoldThemeData(
       menuBackgroundColor: menuBackgroundColor ?? this.menuBackgroundColor,
       sidebarBackgroundColor:
           sidebarBackgroundColor ?? this.sidebarBackgroundColor,
@@ -1115,9 +1115,9 @@ class FlexfoldThemeData with Diagnosticable {
   ///
   /// If both arguments are null then null is returned.
   // ignore: prefer_constructors_over_static_methods
-  static FlexfoldThemeData lerp(
-      FlexfoldThemeData a, FlexfoldThemeData b, double t) {
-    return FlexfoldThemeData(
+  static FlexScaffoldThemeData lerp(
+      FlexScaffoldThemeData a, FlexScaffoldThemeData b, double t) {
+    return FlexScaffoldThemeData(
       menuBackgroundColor:
           Color.lerp(a.menuBackgroundColor, b.menuBackgroundColor, t),
       sidebarBackgroundColor:
@@ -1267,7 +1267,7 @@ class FlexfoldThemeData with Diagnosticable {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    return other is FlexfoldThemeData &&
+    return other is FlexScaffoldThemeData &&
         other.menuBackgroundColor == menuBackgroundColor &&
         other.sidebarBackgroundColor == sidebarBackgroundColor &&
         other.menuStart == menuStart &&
@@ -1328,7 +1328,7 @@ class FlexfoldThemeData with Diagnosticable {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    const FlexfoldThemeData defaultData = FlexfoldThemeData();
+    const FlexScaffoldThemeData defaultData = FlexScaffoldThemeData();
 
     properties.add(ColorProperty('menuBackgroundColor', menuBackgroundColor,
         defaultValue: defaultData.menuBackgroundColor,
@@ -1530,12 +1530,12 @@ class FlexfoldThemeData with Diagnosticable {
 ///
 /// Values specified here are used for [FlexScaffold] properties that are not
 /// given an explicit non-null value.
-class FlexfoldTheme extends InheritedTheme {
+class FlexScaffoldTheme extends InheritedTheme {
   /// Creates a flexfold theme that controls the
-  /// [FlexfoldThemeData] properties for a [FlexScaffold] scaffold.
+  /// [FlexScaffoldThemeData] properties for a [FlexScaffold] scaffold.
   ///
   /// The data argument must not be null.
-  const FlexfoldTheme({
+  const FlexScaffoldTheme({
     super.key,
     required this.data,
     required super.child,
@@ -1543,17 +1543,17 @@ class FlexfoldTheme extends InheritedTheme {
 
   /// Specifies visual style, layout and some functional properties for
   /// for descendant [FlexScaffold] widgets.
-  final FlexfoldThemeData data;
+  final FlexScaffoldThemeData data;
 
   /// The closest instance of this class that encloses the given context.
   ///
-  /// If there is no enclosing [FlexfoldTheme] widget, then a default
+  /// If there is no enclosing [FlexScaffoldTheme] widget, then a default
   /// FlexfoldThemeData() object will be created and returned, resulting in
   /// all null values that will result in [FlexScaffold] determining its own
   /// default values, some of which depend on [Theme] and some on Material
   /// standards and guidelines.
   ///
-  /// See the individual [FlexfoldThemeData] properties for details.
+  /// See the individual [FlexScaffoldThemeData] properties for details.
   ///
   /// Typical usage is as follows:
   ///
@@ -1562,49 +1562,51 @@ class FlexfoldTheme extends InheritedTheme {
   /// ```
   /// The above theme data, will never be null, but the data values in it will
   /// be null if not defined in any inherited widget.
-  static FlexfoldThemeData of(BuildContext context) {
-    final FlexfoldTheme? flexfoldTheme =
-        context.dependOnInheritedWidgetOfExactType<FlexfoldTheme>();
-    return flexfoldTheme?.data ?? const FlexfoldThemeData();
+  static FlexScaffoldThemeData of(BuildContext context) {
+    final FlexScaffoldTheme? flexfoldTheme =
+        context.dependOnInheritedWidgetOfExactType<FlexScaffoldTheme>();
+    return flexfoldTheme?.data ?? const FlexScaffoldThemeData();
   }
 
   @override
   Widget wrap(BuildContext context, Widget child) {
-    final FlexfoldTheme? ancestorTheme =
-        context.findAncestorWidgetOfExactType<FlexfoldTheme>();
+    final FlexScaffoldTheme? ancestorTheme =
+        context.findAncestorWidgetOfExactType<FlexScaffoldTheme>();
     return identical(this, ancestorTheme)
         ? child
-        : FlexfoldTheme(data: data, child: child);
+        : FlexScaffoldTheme(data: data, child: child);
   }
 
   @override
-  bool updateShouldNotify(FlexfoldTheme oldWidget) => data != oldWidget.data;
+  bool updateShouldNotify(FlexScaffoldTheme oldWidget) =>
+      data != oldWidget.data;
 }
 
-/// An interpolation between two [FlexfoldThemeData]s.
+/// An interpolation between two [FlexScaffoldThemeData]s.
 ///
 /// This class specializes the interpolation of [Tween<FlexfoldThemeData>]
-/// to call the [FlexfoldThemeData.lerp] method.
+/// to call the [FlexScaffoldThemeData.lerp] method.
 ///
 /// See [Tween] for a discussion on how to use interpolation objects.
-class FlexfoldThemeDataTween extends Tween<FlexfoldThemeData> {
-  /// Creates a [FlexfoldThemeData] tween.
+class FlexScaffoldThemeDataTween extends Tween<FlexScaffoldThemeData> {
+  /// Creates a [FlexScaffoldThemeData] tween.
   ///
   /// The [begin] and [end] properties must be non-null before the tween is
   /// first used, but the arguments can be null if the values are going to be
   /// filled in later.
-  FlexfoldThemeDataTween({super.begin, super.end});
+  FlexScaffoldThemeDataTween({super.begin, super.end});
 
   @override
-  FlexfoldThemeData lerp(double t) => FlexfoldThemeData.lerp(begin!, end!, t);
+  FlexScaffoldThemeData lerp(double t) =>
+      FlexScaffoldThemeData.lerp(begin!, end!, t);
 }
 
-/// Animated version of [FlexfoldTheme] which automatically transitions the
+/// Animated version of [FlexScaffoldTheme] which automatically transitions the
 /// colors, etc, over a given duration whenever the given theme changes.
 ///
 /// See also:
 ///
-///  * [FlexfoldTheme], which [AnimatedFlexfoldTheme] uses to actually apply
+///  * [FlexScaffoldTheme], which [AnimatedFlexfoldTheme] uses to actually apply
 ///    the interpolated theme.
 class AnimatedFlexfoldTheme extends ImplicitlyAnimatedWidget {
   /// Creates an animated Flexfold theme.
@@ -1621,7 +1623,7 @@ class AnimatedFlexfoldTheme extends ImplicitlyAnimatedWidget {
   });
 
   /// Specifies the theme for descendant widgets.
-  final FlexfoldThemeData data;
+  final FlexScaffoldThemeData data;
 
   /// The widget below this widget in the tree.
   ///
@@ -1635,21 +1637,21 @@ class AnimatedFlexfoldTheme extends ImplicitlyAnimatedWidget {
 
 class _AnimatedFlexfoldThemeState
     extends AnimatedWidgetBaseState<AnimatedFlexfoldTheme> {
-  FlexfoldThemeDataTween? _data;
+  FlexScaffoldThemeDataTween? _data;
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
     _data = visitor(
             _data,
             widget.data,
-            (dynamic value) =>
-                FlexfoldThemeDataTween(begin: value as FlexfoldThemeData))!
-        as FlexfoldThemeDataTween;
+            (dynamic value) => FlexScaffoldThemeDataTween(
+                begin: value as FlexScaffoldThemeData))!
+        as FlexScaffoldThemeDataTween;
   }
 
   @override
   Widget build(BuildContext context) {
-    return FlexfoldTheme(
+    return FlexScaffoldTheme(
       data: _data!.evaluate(animation),
       child: widget.child,
     );
@@ -1658,7 +1660,8 @@ class _AnimatedFlexfoldThemeState
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder description) {
     super.debugFillProperties(description);
-    description.add(DiagnosticsProperty<FlexfoldThemeDataTween>('data', _data,
+    description.add(DiagnosticsProperty<FlexScaffoldThemeDataTween>(
+        'data', _data,
         showName: false, defaultValue: null));
   }
 }

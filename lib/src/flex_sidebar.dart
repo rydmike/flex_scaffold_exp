@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'flex_app_bar.dart';
+import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
-import 'flexfold_sidebar_button.dart';
+import 'flex_sidebar_button.dart';
 import 'flexfold_theme.dart';
 
-/// Flexfold internal widget that manages the animated showing and hiding of
+/// FlexScaffold widget that manages the animated showing and hiding of
 /// the sidebar menu.
-class FlexfoldSidebar extends StatefulWidget {
+class FlexSidebar extends StatefulWidget {
   /// Default constructor
-  const FlexfoldSidebar({
+  const FlexSidebar({
     super.key,
     this.sidebarIcon,
     this.sidebarIconExpand,
@@ -17,9 +18,6 @@ class FlexfoldSidebar extends StatefulWidget {
     this.sidebarIconCollapse,
     this.sidebarToggleEnabled = true,
     required this.sidebarAppBar,
-    this.cycleViaDrawer = false,
-    this.hideSidebar = false,
-    required this.onHideSidebar,
     this.sidebarBelongsToBody = true,
     this.hasAppBar = true,
     this.child,
@@ -71,23 +69,6 @@ class FlexfoldSidebar extends StatefulWidget {
   /// actual appbar that will be built using a real AppBar widget.
   final FlexAppBar? sidebarAppBar;
 
-  /// Cycle via drawer menu when opening a hidden menu.
-  ///
-  /// When the menu may be shown as locked on screen, as a rail or menu, and
-  /// we expand it again, it first cycles via the drawer menu option if true.
-  /// If set to false it skips the cycle via the drawer and expands it directly
-  /// to a rail or side menu, depending on current screen width and if it is
-  /// larger than the breakpoint for menu or not. If screen width is below rail
-  /// breakpoint this setting has no effect, the only way to show the menu is
-  /// as a drawer, so the drawer will be opened.
-  final bool cycleViaDrawer;
-
-  /// Keep sidebar hidden in an end drawer, even when breakpoint is exceeded.
-  final bool hideSidebar;
-
-  /// Callback that is called when [hideSidebar] changes
-  final ValueChanged<bool> onHideSidebar;
-
   /// When sidebar belongs to the body, it is a vertical end column made in a
   /// row item after the body content.
   ///
@@ -131,19 +112,19 @@ class FlexfoldSidebar extends StatefulWidget {
   final Widget? child;
 
   @override
-  State<FlexfoldSidebar> createState() => _FlexfoldSidebarState();
+  State<FlexSidebar> createState() => _FlexSidebarState();
 }
 
-class _FlexfoldSidebarState extends State<FlexfoldSidebar> {
+class _FlexSidebarState extends State<FlexSidebar> {
   // Local build state
   late double width;
-  late bool hideSidebar;
+  // late bool hideSidebar;
 
   @override
   void initState() {
     super.initState();
     width = 0.0;
-    hideSidebar = widget.hideSidebar;
+    // hideSidebar = widget.hideSidebar;
   }
 
   @override
@@ -152,23 +133,25 @@ class _FlexfoldSidebarState extends State<FlexfoldSidebar> {
   }
 
   @override
-  void didUpdateWidget(FlexfoldSidebar oldWidget) {
+  void didUpdateWidget(FlexSidebar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.hideSidebar != widget.hideSidebar) {
-      hideSidebar = widget.hideSidebar;
-    }
+    // if (oldWidget.hideSidebar != widget.hideSidebar) {
+    //   hideSidebar = widget.hideSidebar;
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
+    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
+
     final bool hasEndDrawer = scaffold?.hasEndDrawer ?? false;
     final bool isEndDrawerOpen = scaffold?.isEndDrawerOpen ?? false;
 
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final FlexfoldThemeData theme =
-        FlexfoldTheme.of(context); //.withDefaults(context);
+    final FlexScaffoldThemeData theme =
+        FlexScaffoldTheme.of(context); //.withDefaults(context);
 
     final double breakpointSidebar = theme.breakpointSidebar!;
     final bool borderOnSidebar = theme.borderOnSidebar!;
@@ -182,7 +165,7 @@ class _FlexfoldSidebarState extends State<FlexfoldSidebar> {
     final double sidebarWidth = theme.sidebarWidth!;
 
     final bool isInEndDrawer =
-        (hideSidebar || screenWidth < breakpointSidebar) &&
+        (flexScaffold.sidebarIsHidden || screenWidth < breakpointSidebar) &&
             hasEndDrawer &&
             isEndDrawerOpen;
 
@@ -204,7 +187,7 @@ class _FlexfoldSidebarState extends State<FlexfoldSidebar> {
         borderColor,
       );
     } else {
-      if (screenWidth < breakpointSidebar || hideSidebar) {
+      if (screenWidth < breakpointSidebar || flexScaffold.sidebarIsHidden) {
         width = 0.0;
       } else {
         width = sidebarWidth;
@@ -265,7 +248,6 @@ class _FlexfoldSidebarState extends State<FlexfoldSidebar> {
             //
             // Build a sidebarAppBar if in drawer mode or sidebar is a menu
             // and it does not belong to the body.
-
             if (isEndDrawerOpen ||
                 !widget.sidebarBelongsToBody ||
                 !widget.hasAppBar)
@@ -308,7 +290,7 @@ class _FlexfoldSidebarState extends State<FlexfoldSidebar> {
 
     return Stack(
       children: <Widget>[
-        // We put the appbar in Stack so we can put the scaffold background
+        // We put the appbar in a Stack so we can put the scaffold background
         // color on a Container behind the AppBar so we get transparency against
         // the scaffold background color and not the canvas color.
         Container(
@@ -338,19 +320,12 @@ class _FlexfoldSidebarState extends State<FlexfoldSidebar> {
             const SizedBox.shrink(), // TODO(rydmike): Needed w above fallback?
             // Then we insert the sidebar menu button last in the actions list
             if (widget.sidebarToggleEnabled)
-              FlexfoldSidebarButton(
+              FlexSidebarButton(
                 menuIcon: widget.sidebarIcon,
                 menuIconExpand: widget.sidebarIconExpand,
                 menuIconExpandHidden: widget.sidebarIconExpandHidden,
                 menuIconCollapse: widget.sidebarIconCollapse,
-                cycleViaDrawer: widget.cycleViaDrawer,
-                isHidden: hideSidebar,
-                setMenuHidden: (bool value) {
-                  setState(() {
-                    hideSidebar = value;
-                    widget.onHideSidebar(value);
-                  });
-                },
+                onPressed: () {},
               ),
           ],
         ),
