@@ -2,8 +2,8 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flexfold/flexfold.dart';
 import 'package:flutter/material.dart';
 
-import '../model/app_animation_curve.dart';
-import '../model/app_text_direction.dart';
+import '../core/models/app_animation_curve.dart';
+import '../core/models/app_text_direction.dart';
 
 // Constants used as key values for storing, ie persisting all the
 // settings and options used in this Flexfold demo app.

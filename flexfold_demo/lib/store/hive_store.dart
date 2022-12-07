@@ -3,8 +3,8 @@ import 'package:flexfold/flexfold.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-import '../model/app_animation_curve.dart';
-import '../model/app_text_direction.dart';
+import '../core/models/app_animation_curve.dart';
+import '../core/models/app_text_direction.dart';
 
 // Hive box name, used for the Hive box that stores all settings.
 const String kHiveBox = 'flexfold_demo_store';

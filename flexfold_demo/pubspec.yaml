@@ -1,7 +1,7 @@
 name: flexfold_demo
 description: Flexfold responsive scaffold package demo.
 publish_to: 'none'
-version: 0.90.3
+version: 0.0.1
 environment:
   sdk: '>=2.18.0 <3.0.0'
 dependencies:
@@ -19,7 +19,7 @@ dependencies:
 
   # Color picker package (by Mike Rydstrom, rydmike.com).
   # https://pub.dev/packages/flex_color_picker
-  flex_color_picker: ^2.3.1
+  flex_color_picker: ^3.0.0
   #flex_color_picker:
   #  path: ../../flex_color_picker
 
@@ -48,7 +48,7 @@ dependencies:
 
   # Easy-to-use URL-based router for Flutter web, mobile and desktop apps.
   # https://pub.dev/packages/go_router (by Chris Sells)
-  go_router: ^5.2.0
+  go_router: ^5.2.1
 
   # Google fonts (by Google material.io).
   # https://pub.dev/packages/google_fonts
@@ -75,6 +75,10 @@ dependencies:
   # Plasma liquid animation from simple_animations 3.x (by felix-blaschke.de).
   # https://pub.dev/packages/sa3_liquid
   sa3_liquid: ^1.0.1
+
+  # Store value pair shared preference data, by Google flutter.dev.
+  # https://pub.dev/packages/shared_preferences
+  shared_preferences: ^2.0.15
 
   # Used for launching a WEB URL (by Google flutter.dev).
   # https://pub.dev/packages/url_launcher

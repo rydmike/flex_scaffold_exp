@@ -2,8 +2,8 @@ import 'package:flexfold/flexfold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../pods/pods_flexfold.dart';
-import '../../utils/app_tooltips.dart';
+import '../../app/const/app_tooltips.dart';
+import '../../settings/controllers/pods_flexfold.dart';
 
 /// A provider for our used [FlexScaffoldThemeData].
 final Provider<FlexScaffoldThemeData> flexScaffoldThemeProvider =

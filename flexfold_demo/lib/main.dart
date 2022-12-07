@@ -1,19 +1,16 @@
 import 'package:device_preview/device_preview.dart';
-// import 'package:device_preview/plugins.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
-// import 'package:routemaster/routemaster.dart';
-
-import 'navigation/app_router.dart';
-import 'pods/pods_application.dart';
-import 'pods/pods_observer.dart';
-import 'pods/pods_theme.dart';
+import 'app/const/app_strings.dart';
+import 'core/utils/app_data_dir/app_data_dir.dart';
+import 'core/utils/app_provider_observer.dart';
+import 'core/utils/app_scroll_behavior.dart';
+import 'navigation/models/app_router.dart';
+import 'preview/controller/device_provider.dart';
 import 'store/hive_store.dart';
-import 'utils/app_data_dir/app_data_dir.dart';
-import 'utils/app_scroll_behavior.dart';
-import 'utils/app_strings.dart';
+import 'theme/controllers/pods_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +30,7 @@ class ScopeWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
-      observers: <ProviderObserver>[PodsObserver()],
+      observers: <ProviderObserver>[AppProviderObserver()],
       child: const Directionality(
         textDirection: TextDirection.ltr,
         child: DeviceWrapper(),
