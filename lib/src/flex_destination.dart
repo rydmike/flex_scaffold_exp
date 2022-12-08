@@ -334,6 +334,7 @@ class FlexDestinationTarget {
     this.index = 0,
     this.bottomIndex = 0,
     this.route = '/',
+    this.label = 'Home',
     this.source = FlexNavigation.rail,
     this.reverse = false,
     this.preferPush = false,
@@ -360,10 +361,12 @@ class FlexDestinationTarget {
       destinations,
     );
 
+    final int index = FlexDestination.toMenuIndex(destination, destinations);
     return FlexDestinationTarget(
-      index: FlexDestination.toMenuIndex(destination, destinations),
+      index: index,
       bottomIndex: FlexDestination.toBottomIndex(destination, destinations),
       route: route,
+      label: destinations[index].label,
       source: source,
       reverse: reverse,
       preferPush: preferPush,
@@ -380,6 +383,9 @@ class FlexDestinationTarget {
 
   /// Named route of the selected destination.
   final String route;
+
+  /// The label of the selected destination.
+  final String label;
 
   /// The navigator source that was used to select the destination.
   ///
@@ -439,6 +445,7 @@ class FlexDestinationTarget {
     int? index,
     int? bottomIndex,
     String? route,
+    String? label,
     FlexNavigation? source,
     bool? reverse,
     bool? preferPush,
@@ -447,6 +454,7 @@ class FlexDestinationTarget {
       index: index ?? this.index,
       bottomIndex: bottomIndex ?? this.bottomIndex,
       route: route ?? this.route,
+      label: label ?? this.label,
       source: source ?? this.source,
       reverse: reverse ?? this.reverse,
       preferPush: preferPush ?? this.preferPush,
@@ -458,6 +466,7 @@ class FlexDestinationTarget {
     return 'FlexfoldSelectedDestination(index: $index, '
         'bottomIndex: $bottomIndex, '
         'route: $route, '
+        'label: $label, '
         'source: $source, '
         'reverse: $reverse, '
         'useModal: $preferPush)';
@@ -471,6 +480,7 @@ class FlexDestinationTarget {
         other.index == index &&
         other.bottomIndex == bottomIndex &&
         other.route == route &&
+        other.label == label &&
         other.source == source &&
         other.reverse == reverse &&
         other.preferPush == preferPush;
@@ -481,6 +491,7 @@ class FlexDestinationTarget {
     return index.hashCode ^
         bottomIndex.hashCode ^
         route.hashCode ^
+        label.hashCode ^
         source.hashCode ^
         reverse.hashCode ^
         preferPush.hashCode;

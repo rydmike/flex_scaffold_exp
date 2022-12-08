@@ -171,6 +171,7 @@ class FlexAppBar {
     this.leading,
     this.automaticallyImplyLeading = true,
     this.title,
+    this.automaticallyImplyTitle = false,
     this.actions,
     this.flexibleSpace,
     this.bottom,
@@ -287,6 +288,15 @@ class FlexAppBar {
   /// )
   /// ```
   final Widget? title;
+
+  /// If set to true and no title is defined, AppBar gets an automatic title
+  /// depend on the string label for the current destination.
+  ///
+  /// This automation only happens when the [FlexAppBar] is used in a
+  /// [FlexScaffold].
+  ///
+  /// Defaults to false.
+  final bool automaticallyImplyTitle;
 
   /// A list of Widgets to display in a row after the [title] widget.
   ///
@@ -596,6 +606,15 @@ class FlexAppBar {
     /// The primary widget displayed in the app bar.
     Widget? title,
 
+    /// If set to true and no title is defined, AppBar gets an automatic title
+    /// depend on the string label for the current destination.
+    ///
+    /// This automation only happens when the [FlexAppBar] is used in a
+    /// [FlexScaffold]. Cannot be true if [title] is not null.
+    ///
+    /// Defaults to false.
+    bool automaticallyImplyTitle = false,
+
     /// A list of Widgets to display in a row after the [title] widget.
     List<Widget>? actions,
 
@@ -872,6 +891,10 @@ class FlexAppBar {
         'endPercentage must be >= 0 and <= 100');
     assert(floatScrim >= 0 && floatScrim <= 255,
         'looseScrim must be >= 0 and <= 255');
+    assert(
+        automaticallyImplyTitle == false || title == null,
+        'With FlexAppBar.style automaticallyImplyTitle can only be '
+        'true when title is null!');
 
     final ThemeData theme = Theme.of(context);
     final AppBarTheme appBarTheme = AppBarTheme.of(context);
@@ -923,8 +946,8 @@ class FlexAppBar {
     // can get same logic also for the styled app bar when screen size is shown.
     bool effectiveCenterTitle() {
       if (centerTitle != null) return centerTitle;
-      if (theme.appBarTheme.centerTitle != null) {
-        return theme.appBarTheme.centerTitle!;
+      if (appBarTheme.centerTitle != null) {
+        return appBarTheme.centerTitle!;
       }
       switch (theme.platform) {
         case TargetPlatform.android:
@@ -980,7 +1003,7 @@ class FlexAppBar {
               // platform centering logic if the value is null.
               if (effectiveCenterTitle()) const Spacer(),
               title ?? const SizedBox.shrink(),
-              if (actions == null) const SizedBox(width: 56),
+              // if (actions == null) const SizedBox(width: 56),
               Expanded(
                 child: Text(
                   ' ${size.width.round()}x${size.height.round()}',
@@ -991,6 +1014,7 @@ class FlexAppBar {
             ])
           // No screen size shown, just include the title, nothing else
           : title,
+      automaticallyImplyTitle: automaticallyImplyTitle,
 
       actions: actions,
       flexibleSpace: FlexAppBarStyling(
@@ -1015,7 +1039,7 @@ class FlexAppBar {
       shape: shape,
       // The styled AppBar is actually fully transparent, the used color and
       // gradient is added via the flexible space
-      // TODO(rydmike): Expose this transparency as a scrim option.
+      // TODO(rydmike): Maybe expose this transparency as a scrim option.
       backgroundColor: Colors.transparent,
       foregroundColor: foregroundColor,
       iconTheme: iconTheme,
@@ -1099,7 +1123,7 @@ class FlexAppBar {
   }
 
   // TODO(rydmike): Make a toSliverAppBar() method.
-  /// Return an actual [AppBar] widget from the [FlexAppBar] data object.
+  /// Return an actual [SliverAppBar] widget from the [FlexAppBar] data object.
   ///
   /// Any pre-existing property values in the [FlexAppBar] object can
   /// be overridden before creating the [AppBar]. Flexfold uses this to adjust

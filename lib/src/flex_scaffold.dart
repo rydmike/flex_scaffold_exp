@@ -6,11 +6,10 @@ import 'flex_bottom_bar.dart';
 import 'flex_destination.dart';
 import 'flex_drawer.dart';
 import 'flex_menu.dart';
-import 'flex_menu_button.dart';
+import 'flex_scaffold_app_bar.dart';
 import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
 import 'flex_sidebar.dart';
-import 'flex_sidebar_button.dart';
 import 'flexfold_theme.dart';
 
 // Set to true to observe debug prints. In release mode this compile time
@@ -569,6 +568,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
   late bool _showBottomDestinationsInDrawer;
   late Orientation _currentOrientation;
 
+  /// Returns true if the menu is currently in the Drawer.
+  bool get isMenuInDrawer => _isMenuInDrawer;
+
   /// Returns true if the menu is currently hidden.
   bool get menuIsHidden => _hideMenu;
 
@@ -603,6 +605,12 @@ class FlexScaffoldState extends State<FlexScaffold> {
     });
   }
 
+  /// Returns true if the sidebar is currently in the EndDrawer.
+  bool get isSidebarInEndDrawer => _isSidebarInEndDrawer;
+
+  /// Returns true if the sidebar is currently in the locked menu state.
+  bool get isSidebarInMenu => _isSidebarInMenu;
+
   /// Returns true if the sidebar is currently hidden.
   bool get sidebarIsHidden => _hideSidebar;
 
@@ -618,8 +626,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
     });
   }
 
-  /// Returns true if the menu is currently in the Drawer.
-  bool get isMenuInDrawer => _isMenuInDrawer;
+  /// Returns the implied AppBar string title for current destination
+  String get currentImpliedTitle =>
+      widget.destinations[widget.selectedIndex].label;
 
   void _assumePushed() {
     // setState(() {
@@ -926,10 +935,10 @@ class FlexScaffoldState extends State<FlexScaffold> {
                   extendBody: widget.extendBody,
                   extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
                   //
-                  // Build the app bar with leading and actions buttons, but only
+                  // Add AppBar with leading and actions buttons, but only
                   // if the destination has an app bar.
                   appBar: widget.destinations[_selectedIndex].hasAppBar
-                      ? _buildMainAppBar(context)
+                      ? FlexScaffoldAppBar(appBar: widget.appBar)
                       : null,
                   //
                   // The menu when used as a drawer.
@@ -960,20 +969,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
                             // If no sidebar app bar given make a default one.
                             sidebarAppBar:
                                 widget.sidebarAppBar ?? const FlexAppBar(),
-                            // cycleViaDrawer: widget.cycleViaDrawer,
-                            // hideSidebar: widget.hideSidebar,
-                            // onHideSidebar: (bool value) {
-                            //   setState(() {
-                            //     _hideSidebar = value;
-                            //     if (widget.onHideSidebar != null) {
-                            //       widget.onHideSidebar?.call(_hideSidebar);
-                            //     }
-                            //   });
-                            //   if (_kDebugMe) {
-                            //     debugPrint(
-                            //         'Flexfold() onHideSidebar: $_hideSidebar');
-                            //   }
-                            // },
                             sidebarBelongsToBody: widget.sidebarBelongsToBody,
                             hasAppBar:
                                 widget.destinations[_selectedIndex].hasAppBar,
@@ -1074,39 +1069,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
 // Build the widgets for the Flexfold scaffold
 // ****************************************************************************
 
-  PreferredSizeWidget _buildMainAppBar(BuildContext context) {
-    // If no FlexfoldAppBar was given we make a default one
-    final FlexAppBar appbar = widget.appBar ?? const FlexAppBar();
-    assert(
-        appbar.leading == null,
-        'The main app bar in Flexfold cannot have a leading widget '
-        'just leave it as null, it will get one assigned automatically. You '
-        'can assign it a custom icon widget separately but its onTap event '
-        'handler will be added by FlexScaffold.');
-    // Convert the main FlexfoldAppBar data object to a real AppBar.
-    return appbar.toAppBar(
-      automaticallyImplyLeading: false,
-      // Only add the menu button on the main app bar if menu is in a drawer.
-      leading: _isMenuInDrawer ? FlexMenuButton(onPressed: () {}) : null,
-      actions: <Widget>[
-        // Insert any pre-existing actions
-        ...?widget.appBar?.actions, // TODO(rydmike): Is this safe?
-        // In order to not get a default shown end drawer button in the
-        // appbar for the sidebar when it is shown as a drawer, we need to
-        // insert an invisible widget into the actions list in case it is
-        // empty, because if it is totally empty the framework will create
-        // a default action button to show the menu, we do not want that.
-        const SizedBox.shrink(),
-        // Then we insert the sidebar menu button
-        if (_isSidebarInEndDrawer ||
-            (_isSidebarInMenu &&
-                widget.sidebarBelongsToBody &&
-                widget.sidebarControlEnabled))
-          FlexSidebarButton(onPressed: () {}),
-      ],
-    );
-  }
-
   Widget _buildMenu(BuildContext context) {
     return FlexMenu(
       destinations: widget.destinations,
@@ -1142,6 +1104,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
             reverse: _indexMenu.reverse,
             source: source,
             route: widget.destinations[index].route,
+            label: widget.destinations[index].label,
             preferPush: preferPush,
           );
           widget.onDestination(destination);
@@ -1275,7 +1238,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
               ],
             ),
           )
-        : null; // TODO(rydmike): Good idea? OR const SizedBox.shrink()?
+        : null; // Not a bottom target, we have no bottom nav at all.
   }
 }
 
@@ -1290,7 +1253,6 @@ class _InheritedFlexScaffold extends InheritedWidget {
 
   /// You must pass through a child and your state.
   const _InheritedFlexScaffold({
-    super.key,
     required this.data,
     required super.child,
   });
@@ -1302,39 +1264,41 @@ class _InheritedFlexScaffold extends InheritedWidget {
   @override
   bool updateShouldNotify(_InheritedFlexScaffold oldWidget) {
     if (oldWidget.data.isMenuInDrawer != data.isMenuInDrawer ||
-        oldWidget.data.menuPrefersRail != data.menuPrefersRail ||
         oldWidget.data.menuIsHidden != data.menuIsHidden ||
+        oldWidget.data.menuPrefersRail != data.menuPrefersRail ||
+        oldWidget.data.isSidebarInEndDrawer != data.isSidebarInEndDrawer ||
+        oldWidget.data.isSidebarInMenu != data.isSidebarInMenu ||
         oldWidget.data.sidebarIsHidden != data.sidebarIsHidden ||
-        oldWidget.data.widget.cycleViaDrawer != data.widget.cycleViaDrawer) {
+        oldWidget.data.currentImpliedTitle != data.currentImpliedTitle ||
+        oldWidget.data.widget.menuIcon != data.widget.menuIcon ||
+        oldWidget.data.widget.menuIconExpand != data.widget.menuIconExpand ||
+        oldWidget.data.widget.menuIconExpandHidden !=
+            data.widget.menuIconExpandHidden ||
+        oldWidget.data.widget.menuIconCollapse !=
+            data.widget.menuIconCollapse ||
+        oldWidget.data.widget.sidebarIcon != data.widget.sidebarIcon ||
+        oldWidget.data.widget.sidebarIconExpand !=
+            data.widget.sidebarIconExpand ||
+        oldWidget.data.widget.sidebarIconExpandHidden !=
+            data.widget.sidebarIconExpandHidden ||
+        oldWidget.data.widget.sidebarIconCollapse !=
+            data.widget.sidebarIconCollapse ||
+        oldWidget.data.widget.cycleViaDrawer != data.widget.cycleViaDrawer ||
+        oldWidget.data.widget.sidebarBelongsToBody !=
+            data.widget.sidebarBelongsToBody ||
+        oldWidget.data.widget.menuControlEnabled !=
+            data.widget.menuControlEnabled ||
+        oldWidget.data.widget.sidebarControlEnabled !=
+            data.widget.sidebarControlEnabled) {
       return true;
     }
     // TODO(rydmike): Change below to false, when the above list if determined.
-    return true;
+    return false;
   }
 }
 
-// class _FlexAppBar extends StatelessWidget {
-//   const _FlexAppBar({
-//     Key? key,
-//   }) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
-
 // class _FlexMenu extends StatelessWidget {
 //   const _FlexMenu({
-//     Key? key,
-//   }) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
-
-// class _FlexSideBar extends StatelessWidget {
-//   const _FlexSideBar({
 //     Key? key,
 //   }) : super(key: key);
 //   @override

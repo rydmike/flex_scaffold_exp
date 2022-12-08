@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../settings/controllers/pods_flexfold.dart';
-import '../../constants/destinations.dart';
 import '../../controllers/current_route_provider.dart';
 import '../../models/app_navigation_state.dart';
 import 'directionality_wrapper.dart';
@@ -39,7 +38,7 @@ class PushWrapper extends ConsumerWidget {
         // button that it will get since it was pushed.
         appBar: FlexAppBar.styled(
           context,
-          title: Text(appDestinations[destination.index].label),
+          title: Text(destination.label),
           gradient: ref.watch(appBarGradientPod),
           blurred: ref.watch(appBarBlurPod),
           opacity: ref.watch(appBarTransparentPod)

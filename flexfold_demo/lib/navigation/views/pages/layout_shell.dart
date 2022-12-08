@@ -286,7 +286,9 @@ class LayoutShell extends ConsumerWidget {
           context,
           // TODO(rydmike): Add implicit title
           // We use our destination labels as headings for the app bar
-          title: Text(appDestinations[route.destination.index].label),
+          // title: Text(appDestinations[route.destination.index].label),
+          automaticallyImplyTitle: true,
+          // centerTitle: false,
           gradient: ref.watch(appBarGradientPod),
           blurred: ref.watch(appBarBlurPod),
           opacity: ref.watch(appBarTransparentPod)
@@ -338,7 +340,6 @@ class LayoutShell extends ConsumerWidget {
                 .read(currentRouteProvider.notifier)
                 .setModalDestination(destination);
             context.push('${destination.route}_modal');
-            // FlexScaffold.of(context).assumePushed();
             // This would be an alternative way to route to the modal
             // screens when we use one. This way does not use the package
             // nav2 router or named routes, it just builds a page route
