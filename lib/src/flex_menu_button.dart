@@ -69,18 +69,17 @@ class FlexMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
-    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
-
     final bool hasDrawer = scaffold?.hasDrawer ?? false;
     final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
 
-    final double width = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
+    final Size size = MediaQuery.of(context).size;
+    final double width = size.width;
+    final double screenHeight = size.height;
 
-    final FlexScaffoldThemeData theme = FlexScaffoldTheme.of(context);
-    final double breakpointDrawer = theme.breakpointDrawer!;
-    final double breakpointRail = theme.breakpointRail!;
-    final double breakpointMenu = theme.breakpointMenu!;
+    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
+    final double breakpointDrawer = flexTheme.breakpointDrawer!;
+    final double breakpointRail = flexTheme.breakpointRail!;
+    final double breakpointMenu = flexTheme.breakpointMenu!;
 
     // Based on height and breakpoint, we are making a phone landscape layout.
     final bool isPhoneLandscape = screenHeight < breakpointDrawer;
@@ -88,6 +87,7 @@ class FlexMenuButton extends StatelessWidget {
     final bool canLockMenu = (width >= breakpointRail) && !isPhoneLandscape;
     final bool mustBeRail = width < breakpointMenu;
 
+    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
     // Set effective expand and collapse icons
     Widget effectiveMenuIcon =
         menuIcon ?? flexScaffold.widget.menuIcon ?? kFlexfoldMenuIcon;
@@ -127,27 +127,27 @@ class FlexMenuButton extends StatelessWidget {
     if (hasDrawer &&
         !isDrawerOpen &&
         (!canLockMenu || flexScaffold.widget.cycleViaDrawer)) {
-      tooltip = theme.menuOpenTooltip!;
+      tooltip = flexTheme.menuOpenTooltip!;
       effectiveMenuButton = effectiveMenuIcon;
     } else if (hasDrawer &&
         !isDrawerOpen &&
         (canLockMenu || !flexScaffold.widget.cycleViaDrawer)) {
-      tooltip = theme.menuExpandHiddenTooltip!;
+      tooltip = flexTheme.menuExpandHiddenTooltip!;
       effectiveMenuButton = effectiveMenuIconExpandHidden;
     } else if (hasDrawer && isDrawerOpen && !canLockMenu) {
-      tooltip = theme.menuCloseTooltip!;
+      tooltip = flexTheme.menuCloseTooltip!;
       effectiveMenuButton = effectiveMenuIcon;
     } else if (flexScaffold.menuIsHidden) {
-      tooltip = theme.menuExpandTooltip!;
+      tooltip = flexTheme.menuExpandTooltip!;
       effectiveMenuButton = effectiveMenuIconExpand;
     } else {
-      tooltip = theme.menuCollapseTooltip!;
+      tooltip = flexTheme.menuCollapseTooltip!;
       effectiveMenuButton = effectiveMenuIconCollapse;
     }
 
     return IconButton(
       icon: effectiveMenuButton,
-      tooltip: theme.useTooltips! ? tooltip : null,
+      tooltip: flexTheme.useTooltips! ? tooltip : null,
       onPressed: onPressed == null
           ? null
           : () {

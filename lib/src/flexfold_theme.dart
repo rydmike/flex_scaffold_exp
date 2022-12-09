@@ -13,10 +13,10 @@ import 'flex_scaffold_constants.dart';
 /// [FlexScaffoldThemeData] can be customized with
 /// [FlexScaffoldThemeData.copyWith].
 ///
-/// Typically a [FlexScaffoldThemeData] is passed in to the [FlexScaffold] via its
-/// [FlexScaffoldTheme] property, but it can also be inherited from [FlexScaffoldTheme]
-/// widget higher up in the widget tree. A passed in theme is merged with the
-/// theme higher up in the tree for the effective theme.
+/// Typically a [FlexScaffoldThemeData] is passed in to the [FlexScaffold] via
+/// its [FlexScaffoldTheme] property, but it can also be inherited from
+/// [FlexScaffoldTheme] widget higher up in the widget tree. A passed in theme
+/// is merged with the theme higher up in the tree for the effective theme.
 ///
 /// All [FlexScaffoldThemeData] properties are `null` by default.
 /// When null, the [FlexScaffold] will provide its own defaults based on the
@@ -26,7 +26,8 @@ import 'flex_scaffold_constants.dart';
 /// well as Flexfold constant values or SDK constants and values matching the
 /// material standards and guidelines.
 ///
-/// See the individual [FlexScaffoldThemeData] properties for default value details.
+/// See the individual [FlexScaffoldThemeData] properties for default value
+/// details.
 @immutable
 class FlexScaffoldThemeData with Diagnosticable {
   /// Creates a theme that can be used for [FlexScaffold].

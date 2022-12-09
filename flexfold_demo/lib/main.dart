@@ -110,7 +110,7 @@ class FlexScaffoldDemoApp extends ConsumerWidget {
       locale: DevicePreview.locale(context),
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
-      scrollBehavior: AppScrollBehavior(),
+      scrollBehavior: const AppScrollBehavior(),
       routerConfig: AppRouter.go,
       themeMode: ref.watch(themeModeProvider),
       theme: ref.watch(lightThemeProvider),

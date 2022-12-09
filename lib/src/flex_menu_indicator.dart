@@ -171,11 +171,10 @@ class FlexMenuIndicator {
       EdgeInsetsDirectional.fromSTEB(_start, _top, _end, _bottom);
 
   /// Return the highlight color. Typically assigned to the [FlexScaffold] theme
-  /// property [FlexScaffoldThemeData.menuHighlightColor]. Some types do not use a
-  /// highlight color and will
-  /// return [Colors.transparent]. If a highlight color for a selected item
-  /// is used for the highlight type, the [highlightColor] color will be
-  /// returned.
+  /// property [FlexScaffoldThemeData.menuHighlightColor]. Some types do not
+  /// use a highlight color and will return [Colors.transparent].
+  /// If a highlight color for a selected item is used for the highlight type,
+  /// the [highlightColor] color will be returned.
   Color get highlight => _highLightColor;
 
   /// Returns the defined shape border.
@@ -191,6 +190,7 @@ class FlexMenuIndicator {
       case FlexIndicatorStyle.stadium:
         return const StadiumBorder();
       case FlexIndicatorStyle.endStadium:
+        // TODO(rydmike): How to deal with this without resolve? Resolve later?
         return RoundedRectangleBorder(
           borderRadius: BorderRadiusDirectional.horizontal(
             end: Radius.circular(height / 2.0),
