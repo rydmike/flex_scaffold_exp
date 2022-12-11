@@ -60,10 +60,10 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get to flex scaffold state from inherited widget.
+    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
+    //
     final CurrentRoute appNav = ref.watch(currentRouteProvider);
-    final CurrentRouteStateNotifier appNavNotify =
-        ref.read(currentRouteProvider.notifier);
-
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
     final FlexDestinationTarget destination = appNav.destination;
@@ -154,16 +154,17 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
                 // behave the same as if we had tapped on its target from
                 // the rail.
                 final FlexDestinationTarget newDestination =
-                    FlexDestinationTarget.fromRoute(
+                    flexScaffold.fromRoute(
                   SettingsPage.route,
-                  appDestinations,
                   source: FlexNavigation.rail,
                 );
                 // We update the FlexfoldModel with info about where we
                 // are going, so it can update itself too, this will trigger a
                 // navigation indication change on the Flexfold as well and
                 // all our current destination info will be correct too.
-                appNavNotify.setDestination(newDestination);
+                ref
+                    .read(currentRouteProvider.notifier)
+                    .setDestination(newDestination);
                 // Make sure our bottom navigation bar is not hidden.
                 // ref.read(scrollHiddenBottomBarPod.notifier).state = false;
                 FlexScaffold.of(context).scrollHideBottomBar(false);

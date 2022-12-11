@@ -204,46 +204,19 @@ class LayoutShell extends ConsumerWidget {
         else {
           if (route.destination.bottomIndex != null &&
               route.destination.bottomIndex != 0) {
-            // Set first bottom nav screen, "Info" as back destination.
-            final FlexDestinationTarget backDestination =
-                FlexDestinationTarget.fromRoute(
-              AppRoutes.info,
-              appDestinations,
-              source: route.destination.source,
-              reverse: route.destination.reverse,
-              preferPush: false,
-            );
-            // Update the route with the selected back destination = Info
+            // Set first bottom nav screen, "Info" as back button destination.
             ref
                 .read(currentRouteProvider.notifier)
-                .setDestination(backDestination);
-            // Navigate to Info screen
-            context.go(route.destination.route);
+                .setDestination(goFirstBottom);
+            // Navigate to Info screen, first bottom route
+            context.go(goFirstBottom.route);
           }
           // We go back to the "Home" screen
           else {
-            // Set "Home" screen as back destination.
-            final FlexDestinationTarget backDestination =
-                FlexDestinationTarget.fromRoute(
-              AppRoutes.home,
-              appDestinations,
-              source: route.destination.source,
-              reverse: route.destination.reverse,
-              preferPush: false,
-            );
             // Update the route with the selected back destination = Home
-            ref
-                .read(currentRouteProvider.notifier)
-                .setDestination(backDestination);
+            ref.read(currentRouteProvider.notifier).setDestination(goHome);
             // Navigate to home screen
-            context.go(route.destination.route);
-            // TODO(rydmike): Remove old Nav1 navigation.
-            // The old navigation with my custom Nav1 nested navigator.
-            // await
-            // route.navKeyFlexfold.currentState!.pushReplacementNamed(
-            //   route.currentDestination.route,
-            //   arguments: backDestination,
-            // );
+            context.go(goHome.route);
           }
           // Current platform
           final TargetPlatform platform = Theme.of(context).platform;

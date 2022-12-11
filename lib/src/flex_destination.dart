@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'flex_scaffold.dart';
@@ -17,7 +18,7 @@ class FlexDestination {
   ///
   /// The [icon] and [label] are required and may not be non-null.
   const FlexDestination({
-    this.icon = const Icon(Icons.add_circle),
+    this.icon = const Icon(Icons.home),
     Widget? selectedIcon,
     this.label = 'Home',
     this.tooltip,
@@ -195,84 +196,84 @@ class FlexDestination {
   /// In a rail or menu, draw a divider after the destination
   final bool dividerAfter;
 
-  /// Given a destination in a list of destinations, return its bottom
-  /// navigation bar index.
-  ///
-  /// If the destination does not exist in the valid destinations, null will
-  /// be returned to indicate that destination was not found in the bottom
-  /// navigation bar. The destination could still exist in the destinations
-  /// none bottom navigation part, null is a valid result of this function.
-  static int? toBottomIndex(
-      FlexDestination destination, List<FlexDestination> destinations) {
-    assert(destinations.length >= 2, 'There must be at least 2 destinations.');
-
-    // Check for valid target and destinations
-    if (destinations.length < 2) {
-      // Bad input, but let's return the 0 index to use first destination.
-      return 0;
-    }
-    int countBottomIndex = 0;
-    for (int i = 0; i < destinations.length; i++) {
-      if (destinations[i].inBottomNavigation) {
-        if (destination.route == destinations[i].route) {
-          return countBottomIndex;
-        }
-        countBottomIndex++;
-      }
-    }
-    // There was no match for bottom index, it could still be a destination
-    // that is only available in the rail or menu.
-    // Null is a valid result of this function!
-    // ignore: avoid_returning_null
-    return null;
-  }
-
-  /// Given a destination in a list of destinations, return its menu index.
-  ///
-  /// If the destination is not found in the given destinations or the
-  /// destinations input is invalid, this function always returns zero, which
-  /// will correspond to the first destination in any list of destinations.
-  static int toMenuIndex(
-      FlexDestination destination, List<FlexDestination> destinations) {
-    // Debug assertions for the inputs
-    assert(destinations.length >= 2, 'There must be at least 2 destinations.');
-
-    // Check for valid target and destinations
-    if (destinations.length < 2) {
-      // Bad input, but let's return the 0 index to use first option in any
-      // destinations lists.
-      return 0;
-    }
-    for (int i = 0; i < destinations.length; i++) {
-      if (destination.route == destinations[i].route) return i;
-    }
-    // The destination was not found, we return 0 index to use first destination
-    // in any valid destinations list.
-    return 0;
-  }
-
-  /// Find a given route in a list of destinations and return the destination.
-  /// If no route is found, the first destination is returned.
-  static FlexDestination forRoute(
-      String route, List<FlexDestination> destinations) {
-    assert(destinations.length >= 2, 'There must be at least 2 destinations.');
-
-    // Check for valid target and destinations
-    if (destinations.length < 2) {
-      // Bad input, but let's return the first one if destinations is not empty
-      return destinations.isNotEmpty
-          ? destinations[0]
-          // If it was empty, then it was really bad we return a default
-          // const destination, not very helpful, but call can check for it.
-          : const FlexDestination();
-    }
-    for (int i = 0; i < destinations.length; i++) {
-      if (route == destinations[i].route) return destinations[i];
-    }
-    // We did not find the given route, in that case we navigate to
-    // to the first destination. Case of bad input, bad output.
-    return destinations[0];
-  }
+//   /// Given a destination in a list of destinations, return its bottom
+//   /// navigation bar index.
+//   ///
+//   /// If the destination does not exist in the valid destinations, null will
+//   /// be returned to indicate that destination was not found in the bottom
+//   /// navigation bar. The destination could still exist in the destinations
+//   /// none bottom navigation part, null is a valid result of this function.
+//   static int? toBottomIndex(
+//       FlexDestination destination, List<FlexDestination> destinations) {
+//     assert(destinations.length >= 2, 'There must be at least 2 destinations.');
+//
+//     // Check for valid target and destinations
+//     if (destinations.length < 2) {
+//       // Bad input, but let's return the 0 index to use first destination.
+//       return 0;
+//     }
+//     int countBottomIndex = 0;
+//     for (int i = 0; i < destinations.length; i++) {
+//       if (destinations[i].inBottomNavigation) {
+//         if (destination.route == destinations[i].route) {
+//           return countBottomIndex;
+//         }
+//         countBottomIndex++;
+//       }
+//     }
+//     // There was no match for bottom index, it could still be a destination
+//     // that is only available in the rail or menu.
+//     // Null is a valid result of this function!
+//     // ignore: avoid_returning_null
+//     return null;
+//   }
+//
+//   /// Given a destination in a list of destinations, return its menu index.
+//   ///
+//   /// If the destination is not found in the given destinations or the
+//   /// destinations input is invalid, this function always returns zero, which
+//   /// will correspond to the first destination in any list of destinations.
+//   static int toMenuIndex(
+//       FlexDestination destination, List<FlexDestination> destinations) {
+//     // Debug assertions for the inputs
+//     assert(destinations.length >= 2, 'There must be at least 2 destinations.');
+//
+//     // Check for valid target and destinations
+//     if (destinations.length < 2) {
+//       // Bad input, but let's return the 0 index to use first option in any
+//       // destinations lists.
+//       return 0;
+//     }
+//     for (int i = 0; i < destinations.length; i++) {
+//       if (destination.route == destinations[i].route) return i;
+//     }
+//     // The destination was not found, we return 0 index to use first destination
+//     // in any valid destinations list.
+//     return 0;
+//   }
+//
+//   /// Find a given route in a list of destinations and return the destination.
+//   /// If no route is found, the first destination is returned.
+//   static FlexDestination forRoute(
+//       String route, List<FlexDestination> destinations) {
+//     assert(destinations.length >= 2, 'There must be at least 2 destinations.');
+//
+//     // Check for valid target and destinations
+//     if (destinations.length < 2) {
+//       // Bad input, but let's return the first one if destinations is not empty
+//       return destinations.isNotEmpty
+//           ? destinations[0]
+//           // If it was empty, then it was really bad we return a default
+//           // const destination, not very helpful, but call can check for it.
+//           : const FlexDestination();
+//     }
+//     for (int i = 0; i < destinations.length; i++) {
+//       if (route == destinations[i].route) return destinations[i];
+//     }
+//     // We did not find the given route, in that case we navigate to
+//     // to the first destination. Case of bad input, bad output.
+//     return destinations[0];
+//   }
 }
 
 /// Describes the source of the last navigation action in a FlexScaffold.
@@ -341,50 +342,19 @@ enum FlexNavigation {
 /// It is up to the used navigation implementation in an app using Flexfold
 /// to implement the actual navigation and different transitions.
 @immutable
-class FlexDestinationTarget {
+class FlexDestinationTarget with Diagnosticable {
   /// Default const constructor.
   const FlexDestinationTarget({
     this.index = 0,
     this.bottomIndex = 0,
     this.route = '/',
+    this.icon = const Icon(Icons.home),
+    Widget? selectedIcon,
     this.label = 'Home',
     this.source = FlexNavigation.rail,
     this.reverse = false,
     this.preferPush = false,
-  });
-
-  /// Factory to create a [FlexDestinationTarget] from a [route], with
-  /// optional values for navigation source and reverse direction.
-  ///
-  /// The String [route] and [destinations] of type List<[FlexDestination]>
-  /// are required positional parameters.
-  factory FlexDestinationTarget.fromRoute(
-    String route,
-    List<FlexDestination> destinations, {
-    FlexNavigation source = FlexNavigation.custom,
-    bool reverse = false,
-    bool preferPush = false,
-  }) {
-    assert(destinations.isNotEmpty, 'Destinations may not be empty');
-    assert(destinations.length >= 2, 'Amount of destinations must be >= 2');
-
-    // Get the destination
-    final FlexDestination destination = FlexDestination.forRoute(
-      route,
-      destinations,
-    );
-
-    final int index = FlexDestination.toMenuIndex(destination, destinations);
-    return FlexDestinationTarget(
-      index: index,
-      bottomIndex: FlexDestination.toBottomIndex(destination, destinations),
-      route: route,
-      label: destinations[index].label,
-      source: source,
-      reverse: reverse,
-      preferPush: preferPush,
-    );
-  }
+  }) : selectedIcon = selectedIcon ?? icon;
 
   /// Menu, rail or drawer index of selected destination.
   final int index;
@@ -396,6 +366,14 @@ class FlexDestinationTarget {
 
   /// Named route of the selected destination.
   final String route;
+
+  /// The icon widget for the icon used by the selected destination.
+  final Widget icon;
+
+  /// The alternative icon displayed used this destination when it is selected.
+  ///
+  /// If this icon is not defined in the destination, it is same as [icon].
+  final Widget selectedIcon;
 
   /// The label of the selected destination.
   final String label;
@@ -453,11 +431,13 @@ class FlexDestinationTarget {
   /// case bottom destinations are always also present in the drawer.
   final bool preferPush;
 
-  /// Copy properties to create a new object.
+  /// Copy the object with one or more provided properties changed.
   FlexDestinationTarget copyWith({
     int? index,
     int? bottomIndex,
     String? route,
+    Widget? icon,
+    Widget? selectedIcon,
     String? label,
     FlexNavigation? source,
     bool? reverse,
@@ -467,6 +447,8 @@ class FlexDestinationTarget {
       index: index ?? this.index,
       bottomIndex: bottomIndex ?? this.bottomIndex,
       route: route ?? this.route,
+      icon: icon ?? this.icon,
+      selectedIcon: selectedIcon ?? this.selectedIcon,
       label: label ?? this.label,
       source: source ?? this.source,
       reverse: reverse ?? this.reverse,
@@ -474,39 +456,49 @@ class FlexDestinationTarget {
     );
   }
 
-  @override
-  String toString() {
-    return 'FlexfoldSelectedDestination(index: $index, '
-        'bottomIndex: $bottomIndex, '
-        'route: $route, '
-        'label: $label, '
-        'source: $source, '
-        'reverse: $reverse, '
-        'useModal: $preferPush)';
-  }
-
+  /// Override the equality operator.
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
+    if (other.runtimeType != runtimeType) return false;
     return other is FlexDestinationTarget &&
         other.index == index &&
         other.bottomIndex == bottomIndex &&
         other.route == route &&
+        other.icon == icon &&
+        other.selectedIcon == selectedIcon &&
         other.label == label &&
         other.source == source &&
         other.reverse == reverse &&
         other.preferPush == preferPush;
   }
 
+  /// Override for hashcode. Using Darts object hash.
   @override
-  int get hashCode {
-    return index.hashCode ^
-        bottomIndex.hashCode ^
-        route.hashCode ^
-        label.hashCode ^
-        source.hashCode ^
-        reverse.hashCode ^
-        preferPush.hashCode;
+  int get hashCode => Object.hash(
+        index,
+        bottomIndex,
+        route,
+        icon,
+        selectedIcon,
+        label,
+        source,
+        reverse,
+        preferPush,
+      );
+
+  /// Flutter debug properties override, includes toString.
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<int>('index', index));
+    properties.add(DiagnosticsProperty<int>('bottomIndex', bottomIndex));
+    properties.add(DiagnosticsProperty<String>('route', route));
+    properties.add(DiagnosticsProperty<Widget>('icon', icon));
+    properties.add(DiagnosticsProperty<Widget>('selectedIcon', selectedIcon));
+    properties.add(DiagnosticsProperty<String>('label', label));
+    properties.add(EnumProperty<FlexNavigation>('source', source));
+    properties.add(DiagnosticsProperty<bool>('reverse', reverse));
+    properties.add(DiagnosticsProperty<bool>('preferPush', preferPush));
   }
 }

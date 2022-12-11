@@ -15,6 +15,7 @@ const List<FlexDestination> appDestinations = <FlexDestination>[
   ),
   FlexDestination(
     label: AppRoutes.infoLabel,
+    heading: Text('Energy'),
     route: AppRoutes.info,
     icon: Icon(AppIcons.info),
     selectedIcon: Icon(AppIcons.infoSelected),
@@ -81,3 +82,27 @@ const List<FlexDestination> appDestinations = <FlexDestination>[
     maybePush: true,
   ),
 ];
+
+const FlexDestinationTarget goHome = FlexDestinationTarget(
+  index: 0,
+  bottomIndex: null,
+  route: AppRoutes.home,
+  icon: Icon(AppIcons.home),
+  selectedIcon: Icon(AppIcons.homeSelected),
+  label: AppRoutes.homeLabel,
+  source: FlexNavigation.menu,
+  reverse: true,
+  preferPush: false,
+);
+
+const FlexDestinationTarget goFirstBottom = FlexDestinationTarget(
+  index: 1,
+  bottomIndex: 0,
+  route: AppRoutes.info,
+  icon: Icon(AppIcons.info),
+  selectedIcon: Icon(AppIcons.infoSelected),
+  label: AppRoutes.infoLabel,
+  source: FlexNavigation.bottom,
+  reverse: true,
+  preferPush: false,
+);

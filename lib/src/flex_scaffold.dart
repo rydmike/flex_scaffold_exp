@@ -713,16 +713,18 @@ class FlexScaffoldState extends State<FlexScaffold> {
 
         _target = bottomDestinations[index];
         _indexBottom.setIndex(index);
-        _selectedIndex =
-            FlexDestination.toMenuIndex(_target, widget.destinations);
+        _selectedIndex = toMenuIndex(_target);
         _indexMenu.setIndex(_selectedIndex);
         // Make tap destination data to return
         final FlexDestinationTarget destination = FlexDestinationTarget(
-          bottomIndex: index,
           index: _selectedIndex,
+          bottomIndex: index,
+          route: widget.destinations[_selectedIndex].route,
+          icon: widget.destinations[_selectedIndex].icon,
+          selectedIcon: widget.destinations[_selectedIndex].selectedIcon,
+          label: widget.destinations[_selectedIndex].label,
           reverse: _indexMenu.reverse,
           source: FlexNavigation.bottom,
-          route: widget.destinations[_selectedIndex].route,
         );
         widget.onDestination(destination);
         if (_kDebugMe) {
@@ -732,12 +734,106 @@ class FlexScaffoldState extends State<FlexScaffold> {
     );
   }
 
+  /// Given a [FlexDestination], return its bottom navigation bar index.
+  ///
+  /// If the destination does not exist in the valid destinations, null will
+  /// be returned to indicate that destination was not found in the bottom
+  /// navigation bar. The destination could still exist in the destinations
+  /// none bottom navigation part, null is a valid result of this function.
+  int? toBottomIndex(FlexDestination destination) {
+    // Check for valid target and destinations
+    if (widget.destinations.length < 2) {
+      // Bad input, but let's return the 0 index to use first destination.
+      return 0;
+    }
+    int countBottomIndex = 0;
+    for (int i = 0; i < widget.destinations.length; i++) {
+      if (widget.destinations[i].inBottomNavigation) {
+        if (destination.route == widget.destinations[i].route) {
+          return countBottomIndex;
+        }
+        countBottomIndex++;
+      }
+    }
+    // There was no match for bottom index, it could still be a destination
+    // that is only available in the rail or menu.
+    // Null is a valid result of this function!
+    // ignore: avoid_returning_null
+    return null;
+  }
+
+  /// Given a [FlexDestination], return its menu index.
+  ///
+  /// If the destination is not found in the given destinations or the
+  /// destinations input is invalid, this function always returns zero, which
+  /// will correspond to the first destination in any list of destinations.
+  int toMenuIndex(FlexDestination destination) {
+    // Check for valid target and destinations
+    if (widget.destinations.length < 2) {
+      // Bad input, but let's return the 0 index to use first option in any
+      // destinations lists.
+      return 0;
+    }
+    for (int i = 0; i < widget.destinations.length; i++) {
+      if (destination.route == widget.destinations[i].route) return i;
+    }
+    // The destination was not found, we return 0 index to use first destination
+    // in any valid destinations list.
+    return 0;
+  }
+
+  /// For a given route return the [FlexDestination].
+  ///
+  /// If no route is found, the first destination is returned.
+  FlexDestination forRoute(String route) {
+    // Check for valid target and destinations
+    if (widget.destinations.length < 2) {
+      // Bad input, but let's return the first one if destinations is not empty
+      return widget.destinations.isNotEmpty
+          ? widget.destinations[0]
+          // If it was empty, then it was really bad we return a default
+          // const destination, not very helpful, but caller can check for it.
+          : const FlexDestination();
+    }
+    for (int i = 0; i < widget.destinations.length; i++) {
+      if (route == widget.destinations[i].route) return widget.destinations[i];
+    }
+    // We did not find the given route, in that case we return
+    // the first destination. Case of bad input, bad output.
+    return widget.destinations[0];
+  }
+
+  /// Create a [FlexDestinationTarget] from a [route], with
+  /// optional values for navigation source and reverse direction.
+  ///
+  /// The String [route] is required.
+  FlexDestinationTarget fromRoute(
+    String route, {
+    FlexNavigation source = FlexNavigation.custom,
+    bool reverse = false,
+    bool preferPush = false,
+  }) {
+    // Get the destination
+    final FlexDestination destination = forRoute(route);
+    final int index = toMenuIndex(destination);
+    return FlexDestinationTarget(
+      index: index,
+      bottomIndex: toBottomIndex(destination),
+      route: route,
+      icon: widget.destinations[index].icon,
+      selectedIcon: widget.destinations[index].selectedIcon,
+      label: widget.destinations[index].label,
+      source: source,
+      reverse: reverse,
+      preferPush: preferPush,
+    );
+  }
+
   void _assumePushed() {
     _selectedIndex = widget.selectedIndex;
     _indexMenu.setIndex(widget.selectedIndex);
     _target = widget.destinations[_indexMenu.index];
-    final int? bottomIndex =
-        FlexDestination.toBottomIndex(_target, widget.destinations);
+    final int? bottomIndex = toBottomIndex(_target);
     _indexBottom.setIndex(bottomIndex);
     _isBottomTarget = bottomIndex != null;
   }
@@ -751,8 +847,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
     _bottomDestinations = widget.destinations
         .where((FlexDestination item) => item.inBottomNavigation)
         .toList();
-    final int? bottomIndex =
-        FlexDestination.toBottomIndex(_target, widget.destinations);
+    final int? bottomIndex = toBottomIndex(_target);
     _indexBottom.setIndex(bottomIndex);
     _isBottomTarget = bottomIndex != null;
     _hideMenu = widget.hideMenu;
@@ -770,8 +865,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
       _selectedIndex = widget.selectedIndex;
       _indexMenu.setIndex(widget.selectedIndex);
       _target = widget.destinations[_indexMenu.index];
-      final int? bottomIndex =
-          FlexDestination.toBottomIndex(_target, widget.destinations);
+      final int? bottomIndex = toBottomIndex(_target);
       _indexBottom.setIndex(bottomIndex);
       _isBottomTarget = bottomIndex != null;
     }
@@ -1197,8 +1291,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
           _selectedIndex = index;
           _indexMenu.setIndex(index);
           _target = widget.destinations[index];
-          final int? bottomIndex =
-              FlexDestination.toBottomIndex(_target, widget.destinations);
+          final int? bottomIndex = toBottomIndex(_target);
           _indexBottom.setIndex(bottomIndex);
           _isBottomTarget = bottomIndex != null;
 
@@ -1212,12 +1305,14 @@ class FlexScaffoldState extends State<FlexScaffold> {
 
           // Make tap destination data to return
           final FlexDestinationTarget destination = FlexDestinationTarget(
-            bottomIndex: bottomIndex,
             index: _selectedIndex,
-            reverse: _indexMenu.reverse,
-            source: source,
+            bottomIndex: bottomIndex,
             route: widget.destinations[index].route,
+            icon: widget.destinations[index].icon,
+            selectedIcon: widget.destinations[index].selectedIcon,
             label: widget.destinations[index].label,
+            source: source,
+            reverse: _indexMenu.reverse,
             preferPush: preferPush,
           );
           widget.onDestination(destination);

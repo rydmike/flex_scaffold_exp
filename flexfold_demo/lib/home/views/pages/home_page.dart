@@ -22,9 +22,10 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Get to flex scaffold state from inherited widget.
+    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
+    //
     final CurrentRoute appNav = ref.watch(currentRouteProvider);
-    final CurrentRouteStateNotifier appNavNotify =
-        ref.read(currentRouteProvider.notifier);
     // Get the current destination details, we will use it's info in the page
     // header to display where we are and how we navigated to this page.
     final FlexDestinationTarget destination = appNav.destination;
@@ -73,14 +74,11 @@ class HomePage extends ConsumerWidget {
         // We want to go to the info screen when any widget is tapped.
         onTap: () {
           // We are going to use the Info screen as a direct button link on
-          // this screen, so we create its destination info from the route to
-          // its screen and our const list of destinations.
+          // this screen, so we create its destination info from the route.
           // In this case we want our navigation to the new screen to behave
           // the same as if we had tapped on its target from the rail.
-          final FlexDestinationTarget destination =
-              FlexDestinationTarget.fromRoute(
+          final FlexDestinationTarget destination = flexScaffold.fromRoute(
             InfoPage.route,
-            appDestinations,
             source: FlexNavigation.rail,
           );
           // We update the FlexfoldModel with info about where we
@@ -89,7 +87,7 @@ class HomePage extends ConsumerWidget {
           // our current destination info will be correct after the
           // manual navigation to a Flexfold destination from the
           // outside of Flexfold.
-          appNavNotify.setDestination(destination);
+          ref.read(currentRouteProvider.notifier).setDestination(destination);
           context.go(destination.route);
         },
         child: Center(
