@@ -878,9 +878,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
     // the default values, first merge the inherited Flexfold sub theme
     // values and then the sub theme values passed in via widget.theme
     final TextStyle effectiveUnselectedLabelStyle = defaultFlexTheme
-        .unselectedLabelTextStyle!
-        .merge(flexTheme.unselectedLabelTextStyle)
-        .merge(widget.flexfoldTheme!.unselectedLabelTextStyle);
+        .labelTextStyle!
+        .merge(flexTheme.labelTextStyle)
+        .merge(widget.flexfoldTheme!.labelTextStyle);
 
     final TextStyle effectiveSelectedLabelStyle = defaultFlexTheme
         .selectedLabelTextStyle!
@@ -888,9 +888,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
         .merge(widget.flexfoldTheme!.selectedLabelTextStyle);
 
     final IconThemeData effectiveUnselectedIconTheme = defaultFlexTheme
-        .unselectedIconTheme!
-        .merge(flexTheme.unselectedIconTheme)
-        .merge(widget.flexfoldTheme!.unselectedIconTheme);
+        .iconTheme!
+        .merge(flexTheme.iconTheme)
+        .merge(widget.flexfoldTheme!.iconTheme);
 
     final IconThemeData effectiveSelectedIconTheme = defaultFlexTheme
         .selectedIconTheme!
@@ -917,9 +917,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
     // and defaults as fallback, in a single summarized merged theme.
     final FlexScaffoldThemeData effectiveFlexTheme = fullFlexTheme.copyWith(
       bottomNavigationBarTheme: effectiveBottomTheme,
-      unselectedLabelTextStyle: effectiveUnselectedLabelStyle,
+      labelTextStyle: effectiveUnselectedLabelStyle,
       selectedLabelTextStyle: effectiveSelectedLabelStyle,
-      unselectedIconTheme: effectiveUnselectedIconTheme,
+      iconTheme: effectiveUnselectedIconTheme,
       selectedIconTheme: effectiveSelectedIconTheme,
       headingTextStyle: effectiveHeadingTextStyle,
     );

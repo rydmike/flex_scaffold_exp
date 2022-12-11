@@ -305,11 +305,9 @@ class _FlexMenuState extends State<FlexMenu> {
         // Get FlexfoldThemeData
         final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
         // Get effective icon and text themes
-        final IconThemeData unselectedIconTheme =
-            flexTheme.unselectedIconTheme!;
+        final IconThemeData unselectedIconTheme = flexTheme.iconTheme!;
         final IconThemeData selectedIconTheme = flexTheme.selectedIconTheme!;
-        final TextStyle unselectedLabelTextStyle =
-            flexTheme.unselectedLabelTextStyle!;
+        final TextStyle unselectedLabelTextStyle = flexTheme.labelTextStyle!;
         final TextStyle selectedLabelTextStyle =
             flexTheme.selectedLabelTextStyle!;
         final TextStyle headingTextStyle = flexTheme.headingTextStyle!;

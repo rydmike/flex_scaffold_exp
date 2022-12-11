@@ -90,11 +90,11 @@ class FlexScaffoldThemeData with Diagnosticable {
     this.bottomBarOpacity = 0.9,
     this.bottomBarTopBorder = true,
     //
-    // The selected and unselected icon and text styles of the menu and rail
-    this.unselectedLabelTextStyle,
-    this.selectedLabelTextStyle,
-    this.unselectedIconTheme,
+    // The icon and text styles of the menu and rail
+    this.iconTheme,
     this.selectedIconTheme,
+    this.labelTextStyle,
+    this.selectedLabelTextStyle,
     // The text style for headings above menu label items
     this.headingTextStyle,
     //
@@ -608,39 +608,17 @@ class FlexScaffoldThemeData with Diagnosticable {
   /// color, if not otherwise defined by [borderColor].
   final bool? bottomBarTopBorder;
 
-  /// The style to merge with the default text style for
-  /// Flexfold destination labels, when the destination is not selected.
-  ///
-  /// The [unselectedLabelTextStyle] is determined in the order:
-  /// * None null passed in via Flexfold.theme.[unselectedLabelTextStyle].
-  /// * None null values of the property in the inherited FlexfoldTheme.
-  /// * If the above values are null, defaults to:
-  ///   theme.of(context).textTheme.bodyText1.copyWith(color:
-  ///     theme.colorScheme.onSurface.withOpacity(0.64))
-  final TextStyle? unselectedLabelTextStyle;
-
-  /// The style to merge with the default text style for
-  /// Flexfold destination labels, when the destination is selected.
-  ///
-  /// The [selectedLabelTextStyle] is determined in the order:
-  /// * None null values passed in via Flexfold.theme.[selectedLabelTextStyle].
-  /// * None null values of the property in the inherited FlexfoldTheme.
-  /// * If the above values are null, defaults to:
-  ///   theme?.primaryTextTheme?.bodyText1?.copyWith(color:
-  ///     theme?.colorScheme?.primary)
-  final TextStyle? selectedLabelTextStyle;
-
   /// The theme to merge with the default icon theme for
   /// Flexfold destination icons, when the destination is not selected.
   ///
-  /// The [unselectedIconTheme] is determined in the order:
-  /// * None null values passed in via Flexfold.theme.[unselectedIconTheme].
+  /// The [iconTheme] is determined in the order:
+  /// * None null values passed in via Flexfold.theme.[iconTheme].
   /// * None null values of the property in the inherited FlexfoldTheme.
   /// * If above are null or any property in them are null, they default to:
   ///   size: 24.0
   ///   color: theme?.colorScheme?.onSurface ?? const Color(0xFF888888)
   ///   opacity: 0.55
-  final IconThemeData? unselectedIconTheme;
+  final IconThemeData? iconTheme;
 
   /// The theme to merge with the default icon theme for
   /// [FlexScaffold] destination icons, when the destination is selected.
@@ -653,6 +631,28 @@ class FlexScaffoldThemeData with Diagnosticable {
   ///   color: theme?.colorScheme?.primary ?? const Color(0xFF2196F3)
   ///   opacity: 1.0
   final IconThemeData? selectedIconTheme;
+
+  /// The style to merge with the default text style for
+  /// Flexfold destination labels, when the destination is not selected.
+  ///
+  /// The [labelTextStyle] is determined in the order:
+  /// * None null passed in via Flexfold.theme.[labelTextStyle].
+  /// * None null values of the property in the inherited FlexfoldTheme.
+  /// * If the above values are null, defaults to:
+  ///   theme.of(context).textTheme.bodyText1.copyWith(color:
+  ///     theme.colorScheme.onSurface.withOpacity(0.64))
+  final TextStyle? labelTextStyle;
+
+  /// The style to merge with the default text style for
+  /// Flexfold destination labels, when the destination is selected.
+  ///
+  /// The [selectedLabelTextStyle] is determined in the order:
+  /// * None null values passed in via Flexfold.theme.[selectedLabelTextStyle].
+  /// * None null values of the property in the inherited FlexfoldTheme.
+  /// * If the above values are null, defaults to:
+  ///   theme?.primaryTextTheme?.bodyText1?.copyWith(color:
+  ///     theme?.colorScheme?.primary)
+  final TextStyle? selectedLabelTextStyle;
 
   /// The text style for headings above menu label items.
   ///
@@ -835,9 +835,9 @@ class FlexScaffoldThemeData with Diagnosticable {
       bottomBarBlur: other.bottomBarBlur,
       bottomBarOpacity: other.bottomBarOpacity,
       bottomBarTopBorder: other.bottomBarTopBorder,
-      unselectedLabelTextStyle: other.unselectedLabelTextStyle,
+      labelTextStyle: other.labelTextStyle,
       selectedLabelTextStyle: other.selectedLabelTextStyle,
-      unselectedIconTheme: other.unselectedIconTheme,
+      iconTheme: other.iconTheme,
       selectedIconTheme: other.selectedIconTheme,
       headingTextStyle: other.headingTextStyle,
       useTooltips: other.useTooltips,
@@ -931,25 +931,13 @@ class FlexScaffoldThemeData with Diagnosticable {
       bottomBarOpacity: bottomBarOpacity ?? 0.90,
       bottomBarTopBorder: bottomBarTopBorder ?? true,
 
-      // The default unselected label text styles with a merge of the provided
-      // style, if any style was given.
-      unselectedLabelTextStyle: theme.textTheme.bodyText1!
-          .copyWith(color: theme.colorScheme.onSurface.withOpacity(0.64))
-          .merge(unselectedLabelTextStyle),
-
-      // The default selected label text styles with a merge of the provided
-      // style, if any style was given.
-      selectedLabelTextStyle: theme.textTheme.bodyText1!
-          .copyWith(color: theme.colorScheme.primary)
-          .merge(selectedLabelTextStyle),
-
       // The default unselected menu icon styles, provided values from the
       // passed in IconThemeData are used if the theme was not null and any
       // property in it had a none null value.
-      unselectedIconTheme: IconThemeData(
-          size: unselectedIconTheme?.size ?? 24.0,
-          color: unselectedIconTheme?.color ?? theme.colorScheme.onSurface,
-          opacity: unselectedIconTheme?.opacity ?? 0.55),
+      iconTheme: IconThemeData(
+          size: iconTheme?.size ?? 24.0,
+          color: iconTheme?.color ?? theme.colorScheme.onSurface,
+          opacity: iconTheme?.opacity ?? 0.55),
 
       // The default selected menu icon styles, provided values from the
       // passed in IconThemeData are used if the theme was not null and any
@@ -959,7 +947,18 @@ class FlexScaffoldThemeData with Diagnosticable {
           color: selectedIconTheme?.color ?? theme.colorScheme.primary,
           opacity: selectedIconTheme?.opacity ?? 1.0),
 
-      // The default for the hading tex style with a merge of the provided
+      // The default unselected label text styles with a merge of the provided
+      // style, if any style was given.
+      labelTextStyle: theme.textTheme.bodyText1!
+          .copyWith(color: theme.colorScheme.onSurface.withOpacity(0.64))
+          .merge(labelTextStyle),
+
+      // The default selected label text styles with a merge of the provided
+      // style, if any style was given.
+      selectedLabelTextStyle: theme.textTheme.bodyText1!
+          .copyWith(color: theme.colorScheme.primary)
+          .merge(selectedLabelTextStyle),
+
       // style, if any style was given.
       headingTextStyle: theme.textTheme.bodyText1!
           .copyWith(
@@ -1023,11 +1022,13 @@ class FlexScaffoldThemeData with Diagnosticable {
     bool? bottomBarBlur,
     double? bottomBarOpacity,
     bool? bottomBarTopBorder,
-    TextStyle? unselectedLabelTextStyle,
-    TextStyle? selectedLabelTextStyle,
-    IconThemeData? unselectedIconTheme,
+    //
+    IconThemeData? iconTheme,
     IconThemeData? selectedIconTheme,
+    TextStyle? labelTextStyle,
+    TextStyle? selectedLabelTextStyle,
     TextStyle? headingTextStyle,
+    //
     bool? useTooltips,
     String? menuOpenTooltip,
     String? menuCloseTooltip,
@@ -1088,11 +1089,10 @@ class FlexScaffoldThemeData with Diagnosticable {
       bottomBarBlur: bottomBarBlur ?? this.bottomBarBlur,
       bottomBarOpacity: bottomBarOpacity ?? this.bottomBarOpacity,
       bottomBarTopBorder: bottomBarTopBorder ?? this.bottomBarTopBorder,
-      unselectedLabelTextStyle:
-          unselectedLabelTextStyle ?? this.unselectedLabelTextStyle,
+      labelTextStyle: labelTextStyle ?? this.labelTextStyle,
       selectedLabelTextStyle:
           selectedLabelTextStyle ?? this.selectedLabelTextStyle,
-      unselectedIconTheme: unselectedIconTheme ?? this.unselectedIconTheme,
+      iconTheme: iconTheme ?? this.iconTheme,
       selectedIconTheme: selectedIconTheme ?? this.selectedIconTheme,
       headingTextStyle: headingTextStyle ?? this.headingTextStyle,
       useTooltips: useTooltips ?? this.useTooltips,
@@ -1175,16 +1175,16 @@ class FlexScaffoldThemeData with Diagnosticable {
       bottomBarBlur: t < 0.5 ? a.bottomBarBlur : b.bottomBarBlur,
       bottomBarOpacity: lerpDouble(a.bottomBarOpacity, b.bottomBarOpacity, t),
       bottomBarTopBorder: t < 0.5 ? a.bottomBarTopBorder : b.bottomBarTopBorder,
-      unselectedLabelTextStyle: TextStyle.lerp(
-          a.unselectedLabelTextStyle, b.unselectedLabelTextStyle, t),
-      selectedLabelTextStyle:
-          TextStyle.lerp(a.selectedLabelTextStyle, b.selectedLabelTextStyle, t),
-      unselectedIconTheme:
-          IconThemeData.lerp(a.unselectedIconTheme, b.unselectedIconTheme, t),
+      //
+      iconTheme: IconThemeData.lerp(a.iconTheme, b.iconTheme, t),
       selectedIconTheme:
           IconThemeData.lerp(a.selectedIconTheme, b.selectedIconTheme, t),
+      labelTextStyle: TextStyle.lerp(a.labelTextStyle, b.labelTextStyle, t),
+      selectedLabelTextStyle:
+          TextStyle.lerp(a.selectedLabelTextStyle, b.selectedLabelTextStyle, t),
       headingTextStyle:
           TextStyle.lerp(a.headingTextStyle, b.headingTextStyle, t),
+      //
       useTooltips: t < 0.5 ? a.useTooltips : b.useTooltips,
       menuOpenTooltip: t < 0.5 ? a.menuOpenTooltip : b.menuOpenTooltip,
       menuCloseTooltip: t < 0.5 ? a.menuCloseTooltip : b.menuCloseTooltip,
@@ -1246,11 +1246,13 @@ class FlexScaffoldThemeData with Diagnosticable {
         bottomBarBlur,
         bottomBarOpacity,
         bottomBarTopBorder,
-        unselectedLabelTextStyle,
-        selectedLabelTextStyle,
-        unselectedIconTheme,
+        //
+        iconTheme,
         selectedIconTheme,
+        labelTextStyle,
+        selectedLabelTextStyle,
         headingTextStyle,
+        //
         useTooltips,
         menuOpenTooltip,
         menuCloseTooltip,
@@ -1308,11 +1310,13 @@ class FlexScaffoldThemeData with Diagnosticable {
         other.bottomBarBlur == bottomBarBlur &&
         other.bottomBarOpacity == bottomBarOpacity &&
         other.bottomBarTopBorder == bottomBarTopBorder &&
-        other.unselectedLabelTextStyle == unselectedLabelTextStyle &&
-        other.selectedLabelTextStyle == selectedLabelTextStyle &&
-        other.unselectedIconTheme == unselectedIconTheme &&
+        //
+        other.iconTheme == iconTheme &&
         other.selectedIconTheme == selectedIconTheme &&
+        other.labelTextStyle == labelTextStyle &&
+        other.selectedLabelTextStyle == selectedLabelTextStyle &&
         other.headingTextStyle == headingTextStyle &&
+        //
         other.useTooltips == useTooltips &&
         other.menuOpenTooltip == menuOpenTooltip &&
         other.menuCloseTooltip == menuCloseTooltip &&
@@ -1463,21 +1467,20 @@ class FlexScaffoldThemeData with Diagnosticable {
         defaultValue: defaultData.bottomBarTopBorder,
         level: DiagnosticLevel.debug));
 
+    properties.add(DiagnosticsProperty<IconThemeData>(
+        'unselectedIconTheme', iconTheme,
+        defaultValue: defaultData.iconTheme, level: DiagnosticLevel.debug));
+    properties.add(DiagnosticsProperty<IconThemeData>(
+        'selectedIconTheme', selectedIconTheme,
+        defaultValue: defaultData.selectedIconTheme,
+        level: DiagnosticLevel.debug));
     properties.add(DiagnosticsProperty<TextStyle>(
-        'unselectedLabelTextStyle', unselectedLabelTextStyle,
-        defaultValue: defaultData.unselectedLabelTextStyle,
+        'unselectedLabelTextStyle', labelTextStyle,
+        defaultValue: defaultData.labelTextStyle,
         level: DiagnosticLevel.debug));
     properties.add(DiagnosticsProperty<TextStyle>(
         'selectedLabelTextStyle', selectedLabelTextStyle,
         defaultValue: defaultData.selectedLabelTextStyle,
-        level: DiagnosticLevel.debug));
-    properties.add(DiagnosticsProperty<IconThemeData>(
-        'unselectedIconTheme', unselectedIconTheme,
-        defaultValue: defaultData.unselectedIconTheme,
-        level: DiagnosticLevel.debug));
-    properties.add(DiagnosticsProperty<IconThemeData>(
-        'selectedIconTheme', selectedIconTheme,
-        defaultValue: defaultData.selectedIconTheme,
         level: DiagnosticLevel.debug));
 
     properties.add(DiagnosticsProperty<TextStyle>(
