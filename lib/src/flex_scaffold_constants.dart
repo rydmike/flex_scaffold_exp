@@ -27,7 +27,7 @@ enum FlexIndicatorStyle {
   /// Vertical bar indicator before the selected menu item.
   startBar,
 
-  /// Vertical bar indciator after the selected menu item.
+  /// Vertical bar indicator after the selected menu item.
   endBar
 }
 
