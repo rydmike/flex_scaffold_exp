@@ -51,7 +51,7 @@ class _AboutScreenState extends ConsumerState<AboutPage> {
 
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final FlexDestinationTarget destination =
+    final GoFlexDestination destination =
         appNav.usePush ? appNav.pushedDestination : appNav.destination;
     if (_kDebugMe) {
       debugPrint('AboutScreen: Destination = $destination');

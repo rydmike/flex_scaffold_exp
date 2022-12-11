@@ -18,15 +18,15 @@ class CurrentRoute {
   final bool usePush;
 
   /// Current top level destination
-  final FlexDestinationTarget destination;
+  final GoFlexDestination destination;
 
   /// Current top level destination, but pushed on top in mobile/small views.
-  final FlexDestinationTarget pushedDestination;
+  final GoFlexDestination pushedDestination;
 
   CurrentRoute copyWith({
     bool? usePush,
-    FlexDestinationTarget? destination,
-    FlexDestinationTarget? pushedDestination,
+    GoFlexDestination? destination,
+    GoFlexDestination? pushedDestination,
   }) {
     return CurrentRoute(
       usePush: usePush ?? this.usePush,
@@ -62,16 +62,16 @@ class CurrentRouteStateNotifier extends StateNotifier<CurrentRoute> {
       : super(
           appNavigation ??
               const CurrentRoute(
-                pushedDestination: FlexDestinationTarget(),
-                destination: FlexDestinationTarget(),
+                pushedDestination: GoFlexDestination(),
+                destination: GoFlexDestination(),
               ),
         );
 
-  void setDestination(FlexDestinationTarget value) {
+  void setDestination(GoFlexDestination value) {
     state = state.copyWith(destination: value, usePush: false);
   }
 
-  void setModalDestination(FlexDestinationTarget value) {
+  void setModalDestination(GoFlexDestination value) {
     state = state.copyWith(pushedDestination: value, usePush: true);
   }
 }

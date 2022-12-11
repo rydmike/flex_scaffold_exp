@@ -18,7 +18,7 @@ class Sidebar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Get the current destination details, we use the info in the
     // page header to display info on how we navigated to this page.
-    final FlexDestinationTarget destination =
+    final GoFlexDestination destination =
         ref.watch(currentRouteProvider).destination;
     final String screenName = appDestinations[destination.index].label;
 

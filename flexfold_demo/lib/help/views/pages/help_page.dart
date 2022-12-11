@@ -44,7 +44,7 @@ class _HelpScreenState extends ConsumerState<HelpPage> {
     final CurrentRoute appNav = ref.watch(currentRouteProvider);
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final FlexDestinationTarget destination =
+    final GoFlexDestination destination =
         appNav.usePush ? appNav.pushedDestination : appNav.destination;
 
     // We also use the current destination to find the destination

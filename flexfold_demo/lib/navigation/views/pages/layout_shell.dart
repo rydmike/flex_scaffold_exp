@@ -188,7 +188,7 @@ class LayoutShell extends ConsumerWidget {
       // TODO(rydmike): Maybe add ask about going "back" out of app on Web?
       onWillPop: () async {
         // Store the start destination.
-        final FlexDestinationTarget startDestination = route.destination;
+        final GoFlexDestination startDestination = route.destination;
         // If we can pop, then we pop.
         if (Navigator.of(context).canPop()) {
           if (_kDebugMe) {
@@ -293,7 +293,7 @@ class LayoutShell extends ConsumerWidget {
         // object in a callback that we can use to control how we do
         // routing, which can vary based on if we navigated from bottom,
         // rail or menu and if we moved forward or backwards in the index.
-        onDestination: (FlexDestinationTarget destination) async {
+        onDestination: (GoFlexDestination destination) async {
           // If destinations prefers pushed route, then do so:
           if (destination.preferPush) {
             if (_kDebugMe) {

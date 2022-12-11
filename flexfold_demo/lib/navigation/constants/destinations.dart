@@ -83,7 +83,7 @@ const List<FlexDestination> appDestinations = <FlexDestination>[
   ),
 ];
 
-const FlexDestinationTarget goHome = FlexDestinationTarget(
+const GoFlexDestination goHome = GoFlexDestination(
   index: 0,
   bottomIndex: null,
   route: AppRoutes.home,
@@ -95,7 +95,7 @@ const FlexDestinationTarget goHome = FlexDestinationTarget(
   preferPush: false,
 );
 
-const FlexDestinationTarget goFirstBottom = FlexDestinationTarget(
+const GoFlexDestination goFirstBottom = GoFlexDestination(
   index: 1,
   bottomIndex: 0,
   route: AppRoutes.info,

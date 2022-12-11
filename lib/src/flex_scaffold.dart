@@ -144,7 +144,7 @@ class FlexScaffold extends StatefulWidget {
   /// track of the index of the selected [FlexDestination] and call
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
-  final ValueChanged<FlexDestinationTarget> onDestination;
+  final ValueChanged<GoFlexDestination> onDestination;
 
   // TODO(rydmike): Implement modules!
   //
@@ -716,7 +716,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
         _selectedIndex = toMenuIndex(_target);
         _indexMenu.setIndex(_selectedIndex);
         // Make tap destination data to return
-        final FlexDestinationTarget destination = FlexDestinationTarget(
+        final GoFlexDestination destination = GoFlexDestination(
           index: _selectedIndex,
           bottomIndex: index,
           route: widget.destinations[_selectedIndex].route,
@@ -803,11 +803,11 @@ class FlexScaffoldState extends State<FlexScaffold> {
     return widget.destinations[0];
   }
 
-  /// Create a [FlexDestinationTarget] from a [route], with
+  /// Create a [GoFlexDestination] from a [route], with
   /// optional values for navigation source and reverse direction.
   ///
   /// The String [route] is required.
-  FlexDestinationTarget fromRoute(
+  GoFlexDestination fromRoute(
     String route, {
     FlexNavigation source = FlexNavigation.custom,
     bool reverse = false,
@@ -816,7 +816,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
     // Get the destination
     final FlexDestination destination = forRoute(route);
     final int index = toMenuIndex(destination);
-    return FlexDestinationTarget(
+    return GoFlexDestination(
       index: index,
       bottomIndex: toBottomIndex(destination),
       route: route,
@@ -1304,7 +1304,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
                   widget.destinations[index].alwaysPush;
 
           // Make tap destination data to return
-          final FlexDestinationTarget destination = FlexDestinationTarget(
+          final GoFlexDestination destination = GoFlexDestination(
             index: _selectedIndex,
             bottomIndex: bottomIndex,
             route: widget.destinations[index].route,

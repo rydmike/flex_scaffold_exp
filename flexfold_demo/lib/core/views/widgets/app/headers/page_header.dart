@@ -15,7 +15,7 @@ class PageHeader extends StatelessWidget {
 
   final Widget icon;
   final Widget heading;
-  final FlexDestinationTarget destination;
+  final GoFlexDestination destination;
 
   @override
   Widget build(BuildContext context) {
