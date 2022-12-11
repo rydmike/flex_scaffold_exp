@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/const/app_images.dart';
 import '../../../app/const/app_insets.dart';
-import '../../../core/utils/hide_bottom_on_scroll.dart';
 import '../../../core/views/widgets/app/headers/page_header.dart';
 import '../../../core/views/widgets/app/headers/page_intro.dart';
 import '../../../core/views/widgets/universal/page_body.dart';
@@ -28,6 +27,8 @@ class InfoPage extends ConsumerStatefulWidget {
 
 class _InfoScreenState extends ConsumerState<InfoPage> {
   late final ScrollController scrollController;
+  late bool useHide;
+  late ValueChanged<bool> hide;
 
   @override
   void initState() {
@@ -39,9 +40,16 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
     );
     scrollController.addListener(
       () {
-        hideBottomOnScroll(ref, scrollController);
+        FlexScaffold.hideBottomBarOnScroll(scrollController, hide, useHide);
       },
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    useHide = ref.watch(hideBottomBarOnScrollPod);
+    hide = FlexScaffold.of(context).scrollHideBottomBar;
   }
 
   @override
@@ -157,7 +165,8 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
                 // all our current destination info will be correct too.
                 appNavNotify.setDestination(newDestination);
                 // Make sure our bottom navigation bar is not hidden.
-                ref.read(scrollHiddenBottomBarPod.notifier).state = false;
+                // ref.read(scrollHiddenBottomBarPod.notifier).state = false;
+                FlexScaffold.of(context).scrollHideBottomBar(false);
                 // Actually navigate to the target route.
                 context.go(newDestination.route);
               },

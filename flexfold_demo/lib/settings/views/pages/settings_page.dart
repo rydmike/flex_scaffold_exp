@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/const/app_images.dart';
 import '../../../app/const/app_insets.dart';
-import '../../../core/utils/hide_bottom_on_scroll.dart';
 import '../../../core/views/widgets/app/headers/page_header.dart';
 import '../../../core/views/widgets/app/headers/page_intro.dart';
 import '../../../core/views/widgets/universal/page_body.dart';
@@ -12,6 +11,7 @@ import '../../../navigation/constants/app_routes.dart';
 import '../../../navigation/constants/destinations.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
+import '../../controllers/pods_flexfold.dart';
 import '../widgets/app_bar/settings_app_bar.dart';
 import '../widgets/application_settings/settings_application.dart';
 import '../widgets/bottom_bar/settings_bottom_bar.dart';
@@ -32,6 +32,8 @@ class SettingsPage extends ConsumerStatefulWidget {
 
 class _SettingsScreenState extends ConsumerState<SettingsPage> {
   late final ScrollController scrollController;
+  late bool useHide;
+  late ValueChanged<bool> hide;
 
   @override
   void initState() {
@@ -43,9 +45,16 @@ class _SettingsScreenState extends ConsumerState<SettingsPage> {
     );
     scrollController.addListener(
       () {
-        hideBottomOnScroll(ref, scrollController);
+        FlexScaffold.hideBottomBarOnScroll(scrollController, hide, useHide);
       },
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    useHide = ref.watch(hideBottomBarOnScrollPod);
+    hide = FlexScaffold.of(context).scrollHideBottomBar;
   }
 
   @override

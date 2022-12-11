@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'flex_scaffold.dart';
 
+// TODO(rydmike): Add tap only command, only work with side item.
+// TODO(rydmike): Add toggle tap only command, only work with side item.
+
 /// Defines a [FlexDestination] that represents a top level navigation
 /// destination or view in the FlexScaffold.
 ///
@@ -12,12 +15,8 @@ class FlexDestination {
   ///
   /// The [icon] and [label] are required and may not be non-null.
   const FlexDestination({
-    // TODO(rydmike): Decide if use Widget or IconData,
-    // TODO(rydmike): change default to no default all nulls.
     this.icon = const Icon(Icons.add_circle),
-    this.iconData = Icons.add_circle,
     Widget? selectedIcon,
-    IconData? selectedIconData,
     this.label = 'Home',
     this.tooltip,
     this.heading,
@@ -30,9 +29,8 @@ class FlexDestination {
     this.inBottomNavigation = false,
     this.dividerBefore = false,
     this.dividerAfter = false,
-  })  : // icon = icon ?? selectedIcon,
-        selectedIcon = selectedIcon ?? icon,
-        selectedIconData = selectedIconData ?? iconData;
+  }) : // icon = icon ?? selectedIcon,
+        selectedIcon = selectedIcon ?? icon;
 
   /// The icon widget for the icon used by the destination. Typically an
   /// [Icon] widget.
@@ -43,23 +41,12 @@ class FlexDestination {
   /// and [selectedIcon] to the filled version.
   final Widget icon;
 
-  // TODO(rydmike): Determine if use Widget or IconData, for icon.
-  /// IconData version of the above.
-  ///
-  /// Experimenting with the API still.
-  final IconData iconData;
-
   /// An alternative icon displayed when this destination is selected.
   ///
   /// If this icon is not provided, the [FlexDestination] will display
   /// [IconData] in both states. The size, color, and opacity of the
   /// [FlexScaffold.flexfoldTheme] will apply.
   final Widget selectedIcon;
-
-  /// IconData version of the above.
-  ///
-  /// Experimenting with the API still.
-  final IconData selectedIconData;
 
   /// The string label for the destination.
   ///

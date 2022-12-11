@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/const/app_images.dart';
 import '../../../app/const/app_insets.dart';
-import '../../../core/utils/hide_bottom_on_scroll.dart';
 import '../../../core/utils/link_text_span.dart';
 import '../../../core/views/widgets/app/headers/page_header.dart';
 import '../../../core/views/widgets/app/headers/page_intro.dart';
@@ -13,6 +12,7 @@ import '../../../navigation/constants/app_routes.dart';
 import '../../../navigation/constants/destinations.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
+import '../../../settings/controllers/pods_flexfold.dart';
 
 class TabGuide extends ConsumerStatefulWidget {
   const TabGuide({super.key});
@@ -23,7 +23,9 @@ class TabGuide extends ConsumerStatefulWidget {
 
 class _TabGuideState extends ConsumerState<TabGuide>
     with AutomaticKeepAliveClientMixin {
-  late ScrollController scrollController;
+  late final ScrollController scrollController;
+  late bool useHide;
+  late ValueChanged<bool> hide;
 
   @override
   bool get wantKeepAlive => true;
@@ -35,9 +37,16 @@ class _TabGuideState extends ConsumerState<TabGuide>
         ScrollController(keepScrollOffset: true, initialScrollOffset: 0);
     scrollController.addListener(
       () {
-        hideBottomOnScroll(ref, scrollController);
+        FlexScaffold.hideBottomBarOnScroll(scrollController, hide, useHide);
       },
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    useHide = ref.watch(hideBottomBarOnScrollPod);
+    hide = FlexScaffold.of(context).scrollHideBottomBar;
   }
 
   @override

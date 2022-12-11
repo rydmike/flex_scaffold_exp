@@ -1,3 +1,4 @@
+import 'package:flexfold/flexfold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,7 +24,8 @@ class ShowBottomBarWhenMenuShownSwitch extends ConsumerWidget {
       value: ref.watch(showBottomBarWhenMenuShownPod),
       onChanged: (bool value) {
         ref.read(showBottomBarWhenMenuShownPod.notifier).state = value;
-        ref.read(scrollHiddenBottomBarPod.notifier).state = false;
+        // ref.read(scrollHiddenBottomBarPod.notifier).state = false;
+        FlexScaffold.of(context).scrollHideBottomBar(false);
       },
       tooltipEnabled: ref.watch(useTooltipsPod),
       tooltip: 'Flexfold(showBottomBarWhenMenuShown: '

@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/const/app_images.dart';
 import '../../../app/const/app_insets.dart';
 import '../../../core/utils/breakpoint.dart';
-import '../../../core/utils/hide_bottom_on_scroll.dart';
 import '../../../core/utils/random_color.dart';
 import '../../../core/views/widgets/app/headers/page_header.dart';
 import '../../../core/views/widgets/app/headers/page_intro.dart';
@@ -16,6 +15,7 @@ import '../../../navigation/constants/app_routes.dart';
 import '../../../navigation/constants/destinations.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
+import '../../../settings/controllers/pods_flexfold.dart';
 
 // This tab screen is not using any of the view models, so it was left as a
 // plain stateful widget instead of making it a HookWidget or
@@ -31,7 +31,10 @@ class TabImages extends ConsumerStatefulWidget {
 
 class _TabImagesState extends ConsumerState<TabImages>
     with AutomaticKeepAliveClientMixin {
-  late ScrollController scrollController;
+  late final ScrollController scrollController;
+  late bool useHide;
+  late ValueChanged<bool> hide;
+
   static const int _maxTiles = 1000;
   late List<MaterialColor> imageColors;
 
@@ -45,7 +48,7 @@ class _TabImagesState extends ConsumerState<TabImages>
         ScrollController(keepScrollOffset: true, initialScrollOffset: 0);
     scrollController.addListener(
       () {
-        hideBottomOnScroll(ref, scrollController);
+        FlexScaffold.hideBottomBarOnScroll(scrollController, hide, useHide);
       },
     );
     // Generate a random image color data list that we will build widgets from.
@@ -56,6 +59,13 @@ class _TabImagesState extends ConsumerState<TabImages>
     // that could be done too, but it feels a bit too random.
     imageColors = List<MaterialColor>.generate(
         _maxTiles, (int index) => RandomColor().randomMaterialColor());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    useHide = ref.watch(hideBottomBarOnScrollPod);
+    hide = FlexScaffold.of(context).scrollHideBottomBar;
   }
 
   @override

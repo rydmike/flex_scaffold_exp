@@ -1,11 +1,9 @@
+import 'package:flexfold/flexfold.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../navigation/constants/app_routes.dart';
-// import 'package:routemaster/routemaster.dart';
-
-import '../../../settings/controllers/pods_flexfold.dart';
 import '../widgets/tab_app_bar.dart';
 import 'tab_guide.dart';
 import 'tab_images.dart';
@@ -22,6 +20,7 @@ class TabsScreen extends ConsumerStatefulWidget {
 class _TabsScreenState extends ConsumerState<TabsScreen>
     with TickerProviderStateMixin {
   late final TabController _controller;
+  late ValueChanged<bool> hide;
 
   @override
   void initState() {
@@ -35,9 +34,15 @@ class _TabsScreenState extends ConsumerState<TabsScreen>
       if (!_controller.indexIsChanging) {
         // If we are changing the tab bar item, we will reveal any
         // scroll hidden bottom navigation bar
-        ref.read(scrollHiddenBottomBarPod.notifier).state = false;
+        hide(false);
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    hide = FlexScaffold.of(context).scrollHideBottomBar;
   }
 
   @override
@@ -103,7 +108,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen>
             onTap: (int index) {
               // If we tapped on a tab bar item, we will reveal any
               // scroll hidden bottom navigation bar
-              ref.read(scrollHiddenBottomBarPod.notifier).state = false;
+              // ref.read(scrollHiddenBottomBarPod.notifier).state = false;
+              FlexScaffold.of(context).scrollHideBottomBar(false);
               _controller.index = index;
               // if (index == 0) context.goNamed(AppRoutes.tabsGuideLabel);
               // if (index == 1) context.goNamed(AppRoutes.tabsAppbarLabel);

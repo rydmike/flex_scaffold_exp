@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/const/app_images.dart';
 import '../../../app/const/app_insets.dart';
-import '../../../core/utils/hide_bottom_on_scroll.dart';
 import '../../../core/utils/link_text_span.dart';
 import '../../../core/views/widgets/app/animated_hide.dart';
 import '../../../core/views/widgets/app/headers/page_header.dart';
@@ -16,6 +15,7 @@ import '../../../navigation/constants/app_routes.dart';
 import '../../../navigation/constants/destinations.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
+import '../../../settings/controllers/pods_flexfold.dart';
 import '../../controllers/pods_theme.dart';
 import '../widgets/compute_dark_theme_switch.dart';
 import '../widgets/copy_to_custom.dart';
@@ -45,7 +45,9 @@ class ThemePage extends ConsumerStatefulWidget {
 
 class _ThemeScreenState extends ConsumerState<ThemePage>
     with AutomaticKeepAliveClientMixin {
-  late ScrollController scrollController;
+  late final ScrollController scrollController;
+  late bool useHide;
+  late ValueChanged<bool> hide;
 
   @override
   void initState() {
@@ -54,9 +56,16 @@ class _ThemeScreenState extends ConsumerState<ThemePage>
         ScrollController(keepScrollOffset: true, initialScrollOffset: 0);
     scrollController.addListener(
       () {
-        hideBottomOnScroll(ref, scrollController);
+        FlexScaffold.hideBottomBarOnScroll(scrollController, hide, useHide);
       },
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    useHide = ref.watch(hideBottomBarOnScrollPod);
+    hide = FlexScaffold.of(context).scrollHideBottomBar;
   }
 
   @override

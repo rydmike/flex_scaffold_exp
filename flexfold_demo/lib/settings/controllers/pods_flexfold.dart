@@ -96,10 +96,11 @@ final StateProvider<bool> hideBottomBarOnScrollPod =
 }, name: KeyStore.hideBottomBarOnScroll);
 
 // This state is modified by scroll listeners, not persisted
-final StateProvider<bool> scrollHiddenBottomBarPod =
-    StateProvider<bool>((StateProviderRef<bool> ref) {
-  return false;
-});
+
+// final StateProvider<bool> scrollHiddenBottomBarPod =
+//     StateProvider<bool>((StateProviderRef<bool> ref) {
+//   return false;
+// });
 
 final StateProvider<bool> showBottomBarWhenMenuInDrawerPod =
     StateProvider<bool>((StateProviderRef<bool> ref) {

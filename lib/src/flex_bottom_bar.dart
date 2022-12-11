@@ -4,81 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'flex_destination.dart';
-import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
 import 'flexfold_theme.dart';
-
-/// Bottom navigation bar used by Flexfold in situations where it should use a
-/// bottom navigation bar.
-///
-/// Currently the bottom navigation bar can be Material or Cupertino style, or
-/// adaptive, which will use Cupertino on iOs and MacOS and Material on other
-/// platforms.
-@immutable
-class FlexBottomBar extends StatelessWidget {
-  /// Default constructor.
-  const FlexBottomBar({
-    super.key,
-    this.bottomBarType = FlexfoldBottomBarType.adaptive,
-    required this.destinations,
-    required this.selectedIndex,
-    required this.onDestinationSelected,
-  })  : assert(destinations.length >= 2,
-            'There should be at least 2 destinations'),
-        assert(
-            0 <= selectedIndex && selectedIndex < destinations.length,
-            'Selected index must equal or greater than 0, but less than '
-            'the lengths of destinations.');
-
-  /// The type of bottom navigation bar to use.
-  ///
-  /// Default to [FlexfoldBottomBarType.adaptive], which shows a
-  /// [CupertinoTabBar] navigation bar on iOs and MacOS and a
-  /// [BottomNavigationBar] on all other platforms.
-  final FlexfoldBottomBarType bottomBarType;
-
-  /// Defines the appearance of the button items that are arrayed within the
-  /// drawer, rail, menu and bottom bar.
-  ///
-  /// The value must be a list of two or more [FlexDestination] values.
-  final List<FlexDestination> destinations;
-
-  /// The index into [destinations] for the current selected
-  /// [FlexDestination].
-  final int selectedIndex;
-
-  /// Called when one of the [destinations] is selected.
-  ///
-  /// The stateful widget that creates the Flexfold navigation needs to keep
-  /// track of the index of the selected [FlexDestination] and call
-  /// `setState` to rebuild the menu, drawer, rail or bottom bar
-  /// with the new [selectedIndex].
-  final ValueChanged<int> onDestinationSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    if (bottomBarType == FlexfoldBottomBarType.cupertino) {
-      return CupertinoBottomBar(
-        destinations: destinations,
-        selectedIndex: selectedIndex,
-        onDestinationSelected: onDestinationSelected,
-      );
-    }
-    if (bottomBarType == FlexfoldBottomBarType.material3) {
-      return MaterialYouBottomBar(
-        destinations: destinations,
-        selectedIndex: selectedIndex,
-        onDestinationSelected: onDestinationSelected,
-      );
-    } else {
-      return MaterialBottomBar(
-        destinations: destinations,
-        selectedIndex: selectedIndex,
-        onDestinationSelected: onDestinationSelected,
-      );
-    }
-  }
-}
 
 /// The Material style bottom navigation bar used by Flexfold.
 ///
@@ -86,9 +13,9 @@ class FlexBottomBar extends StatelessWidget {
 /// goes a bit beyond the the standard because it has opacity and blur
 /// properties as well as top border property. The Material bottom navigation
 /// bar can thus style wise be made to imitate a CupertinoBottomBar.
-class MaterialBottomBar extends StatefulWidget {
+class Material2BottomBar extends StatefulWidget {
   /// Default constructor.
-  const MaterialBottomBar({
+  const Material2BottomBar({
     super.key,
     required this.destinations,
     required this.selectedIndex,
@@ -117,10 +44,10 @@ class MaterialBottomBar extends StatefulWidget {
   final ValueChanged<int> onDestinationSelected;
 
   @override
-  State<MaterialBottomBar> createState() => _MaterialBottomBarState();
+  State<Material2BottomBar> createState() => _Material2BottomBarState();
 }
 
-class _MaterialBottomBarState extends State<MaterialBottomBar> {
+class _Material2BottomBarState extends State<Material2BottomBar> {
   late int _selectedIndex;
 
   @override
@@ -130,7 +57,7 @@ class _MaterialBottomBarState extends State<MaterialBottomBar> {
   }
 
   @override
-  void didUpdateWidget(MaterialBottomBar oldWidget) {
+  void didUpdateWidget(Material2BottomBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.selectedIndex != oldWidget.selectedIndex) {
       _selectedIndex = widget.selectedIndex;
@@ -272,9 +199,9 @@ class _MaterialBottomBarState extends State<MaterialBottomBar> {
 /// goes a bit beyond the the standard because it has opacity and blur
 /// properties as well as top border property. The Material bottom navigation
 /// bar can thus style wise be made to imitate a CupertinoBottomBar.
-class MaterialYouBottomBar extends StatefulWidget {
+class Material3BottomBar extends StatefulWidget {
   /// Default constructor.
-  const MaterialYouBottomBar({
+  const Material3BottomBar({
     super.key,
     required this.destinations,
     required this.selectedIndex,
@@ -303,66 +230,11 @@ class MaterialYouBottomBar extends StatefulWidget {
   final ValueChanged<int> onDestinationSelected;
 
   @override
-  State<MaterialYouBottomBar> createState() => _MaterialYouBottomBarState();
+  State<Material3BottomBar> createState() => _Material3BottomBarState();
 }
 
-class _MaterialYouBottomBarState extends State<MaterialYouBottomBar> {
+class _Material3BottomBarState extends State<Material3BottomBar> {
   late int _selectedIndex;
-
-  // /// Any widget in this list will have access to a
-  // /// [NavigationBarDestinationInfo] inherited widget.
-  // late final List<Widget> _destinations;
-  //
-  // void _buildDestinations() {
-  //   // NavigationBar needed
-  //   final ThemeData theme = Theme.of(context);
-  //   final ColorScheme colorScheme = theme.colorScheme;
-  //   final Animation<double> animation =
-  //       NavigationBarDestinationInfo.of(context).selectedAnimation;
-  //
-  //   _destinations = <Widget>[
-  //     for (FlexfoldDestination item in widget.destinations)
-  //       NavigationBarDestinationBuilder(
-  //         label: item.label,
-  //         buildIcon: (BuildContext context) {
-  //           final Widget selectedIconWidget = item.selectedIcon;
-  //           final Widget unselectedIconWidget = item.icon;
-  //
-  //           return Stack(
-  //             alignment: Alignment.center,
-  //             children: <Widget>[
-  //               NavigationBarIndicator(animation: animation),
-  //               StatusTransitionWidgetBuilder(
-  //                 animation: animation,
-  //                 builder: (BuildContext context, Widget? child) {
-  //                   return (animation.status == AnimationStatus.forward ||
-  //                           animation.status == AnimationStatus.completed)
-  //                       ? selectedIconWidget
-  //                       : unselectedIconWidget;
-  //                 },
-  //               ),
-  //             ],
-  //           );
-  //         },
-  //         buildLabel: (BuildContext context) {
-  //           return Padding(
-  //             padding: const EdgeInsets.only(top: 4),
-  //             child: ClampTextScaleFactor(
-  //               // Don't scale labels of destinations, instead,
-  //               // tooltip text will upscale.
-  //               upperLimit: 1,
-  //               child: Text(
-  //                 item.label,
-  //                 style: theme.textTheme.overline?.copyWith(
-  //                   color: colorScheme.onSurface,
-  //                 ),
-  //               ),
-  //             ),
-  //           );
-  //         },
-  //       )
-  //   ];
-  // }
 
   @override
   void initState() {
@@ -371,7 +243,7 @@ class _MaterialYouBottomBarState extends State<MaterialYouBottomBar> {
   }
 
   @override
-  void didUpdateWidget(MaterialYouBottomBar oldWidget) {
+  void didUpdateWidget(Material3BottomBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.selectedIndex != oldWidget.selectedIndex) {
       _selectedIndex = widget.selectedIndex;
@@ -609,7 +481,6 @@ class _CupertinoBottomBarState extends State<CupertinoBottomBar> {
             icon: item.icon,
             activeIcon: item.selectedIcon,
             label: item.label,
-            // title: Text(item.label),
           ),
       ],
       currentIndex: widget.selectedIndex,

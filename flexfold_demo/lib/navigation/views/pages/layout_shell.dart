@@ -219,13 +219,6 @@ class LayoutShell extends ConsumerWidget {
                 .setDestination(backDestination);
             // Navigate to Info screen
             context.go(route.destination.route);
-            // TODO(rydmike): Remove old Nav1 navigation.
-            // The old navigation with my custom Nav1 nested navigator.
-            // await
-            // route.navKeyFlexfold.currentState!.pushReplacementNamed(
-            //   route.currentDestination.route,
-            //   arguments: backDestination,
-            // );
           }
           // We go back to the "Home" screen
           else {
@@ -328,9 +321,6 @@ class LayoutShell extends ConsumerWidget {
         // routing, which can vary based on if we navigated from bottom,
         // rail or menu and if we moved forward or backwards in the index.
         onDestination: (FlexDestinationTarget destination) async {
-          // Set scroll hidden bottom bar to false, so that it is displayed
-          // when we get to the new destination.
-          ref.read(scrollHiddenBottomBarPod.notifier).state = false;
           // If destinations prefers pushed route, then do so:
           if (destination.preferPush) {
             if (_kDebugMe) {
@@ -441,21 +431,11 @@ class LayoutShell extends ConsumerWidget {
         hideMenu: ref.watch(hideMenuPod),
         onHideMenu: (bool isHidden) {
           ref.read(hideMenuPod.notifier).state = isHidden;
-          // If the menu is hidden, we make sure the bottom bar is not
-          // scroll hidden when menu hides, this might happen if the
-          // bottom bar was using always show it and it had been scroll
-          // hidden, then when the menu is hidden, the bottom bar would not
-          // show up until we scroll the page, therefore we set the
-          // scroll control state to not be in scroll hide state.
-          if (isHidden) {
-            ref.read(scrollHiddenBottomBarPod.notifier).state = false;
-          }
         },
         cycleViaDrawer: ref.watch(cycleViaDrawerPod),
         preferRail: ref.watch(preferRailPod),
         onPreferRail: (bool value) =>
             ref.read(preferRailPod.notifier).state = value,
-        //
         // Combined sidebar menu and end drawer properties and its controls.
         // The sidebar only appears if a destination has specified that it
         // has a sidebar, even in those cases, if you do not
@@ -515,7 +495,8 @@ class LayoutShell extends ConsumerWidget {
         sidebarBelongsToBody: ref.watch(sidebarBelongsToBodyPod),
         //
         // Bottom navigation bar controls
-        scrollHiddenBottomBar: ref.watch(scrollHiddenBottomBarPod),
+        // scrollHiddenBottomBar: ref.watch(scrollHiddenBottomBarPod),
+        //
         hideBottomBar: ref.watch(hideBottomBarPod),
         showBottomBarWhenMenuInDrawer:
             ref.watch(showBottomBarWhenMenuInDrawerPod),

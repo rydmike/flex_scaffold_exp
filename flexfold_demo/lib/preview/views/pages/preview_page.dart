@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/const/app_images.dart';
 import '../../../app/const/app_insets.dart';
-import '../../../core/utils/hide_bottom_on_scroll.dart';
 import '../../../core/utils/link_text_span.dart';
 import '../../../core/views/widgets/app/headers/page_header.dart';
 import '../../../core/views/widgets/app/headers/page_intro.dart';
@@ -25,6 +24,7 @@ class PreviewPage extends ConsumerStatefulWidget {
 
 class _PreviewScreenState extends ConsumerState<PreviewPage> {
   late final ScrollController scrollController;
+  // late ValueChanged<bool> hide;
 
   @override
   void initState() {
@@ -33,11 +33,6 @@ class _PreviewScreenState extends ConsumerState<PreviewPage> {
       keepScrollOffset: true,
       initialScrollOffset: 0,
       debugLabel: 'PreviewScreenScrollController',
-    );
-    scrollController.addListener(
-      () {
-        hideBottomOnScroll(ref, scrollController);
-      },
     );
   }
 

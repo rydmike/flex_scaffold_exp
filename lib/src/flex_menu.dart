@@ -226,6 +226,8 @@ class _FlexMenuState extends State<FlexMenu> {
     final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
 
     assert(debugCheckHasMediaQuery(context), 'A build context is required.');
+    // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
+    //   reference: https://github.com/flutter/flutter/pull/114459
     final MediaQueryData mediaData = MediaQuery.of(context);
     final double topPadding = mediaData.padding.top;
     final double leftPadding = mediaData.padding.left;
@@ -355,7 +357,7 @@ class _FlexMenuState extends State<FlexMenu> {
                 // The Menu bar with menu action button and logo
                 Stack(
                   children: <Widget>[
-                    // We put the appbar in Stack so we can put the scaffold
+                    // We put the appbar in Stack so we can put the Scaffold
                     // background color on a Container behind the AppBar so we
                     // get transparency against the scaffold background color
                     // and not the canvas color.
@@ -376,10 +378,7 @@ class _FlexMenuState extends State<FlexMenu> {
                           : railLeadingFiller,
                       // Insert any existing actions
                       actions: (widget.menuAppBar?.actions != null)
-                          ? <Widget>[
-                              // TODO(rydmike): Is this always safe?
-                              ...widget.menuAppBar!.actions!,
-                            ]
+                          ? <Widget>[...widget.menuAppBar!.actions!]
                           : <Widget>[const SizedBox.shrink()],
                     ),
                   ],
@@ -636,12 +635,11 @@ class _FlexMenuItem extends StatelessWidget {
 
 /// A footer layout class
 ///
-/// This widget is courtesy of Rémi Rousselet found on Stack Overflow
+/// This private widget is courtesy of Rémi Rousselet found on Stack Overflow
 /// https://stackoverflow.com/questions/54027270/how-to-create-a-scroll-view-with-fixed-footer-with-flutter?noredirect=1&lq=1
 /// Modified it to use Widgets instead of Containers that was used in the
-/// example, which was a bit limiting for no reason at all as far as I could
-/// see. Keeping it local to this file as it is not used or needed anywhere
-/// else,  but it is good generally useful widget too.
+/// example. Keeping it local to this file as it is not used or needed anywhere
+/// else, but it is good generally useful widget too.
 class _FooterLayout extends StatelessWidget {
   const _FooterLayout({
     required this.body,
@@ -654,6 +652,8 @@ class _FooterLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomMultiChildLayout(
+      // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
+      //   reference: https://github.com/flutter/flutter/pull/114459
       delegate: _FooterLayoutDelegate(MediaQuery.of(context).viewInsets),
       children: <Widget>[
         LayoutId(

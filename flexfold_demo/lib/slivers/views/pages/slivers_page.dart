@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/const/app_images.dart';
 import '../../../app/const/app_insets.dart';
 import '../../../core/utils/breakpoint.dart';
-import '../../../core/utils/hide_bottom_on_scroll.dart';
 import '../../../core/utils/random_color.dart';
 import '../../../core/views/widgets/app/headers/page_header.dart';
 import '../../../core/views/widgets/app/headers/page_intro.dart';
@@ -32,7 +31,9 @@ class SliversPage extends ConsumerStatefulWidget {
 }
 
 class _SliversScreenState extends ConsumerState<SliversPage> {
-  late ScrollController scrollController;
+  late final ScrollController scrollController;
+  late bool useHide;
+  late ValueChanged<bool> hide;
 
   // Image holder
   final int maxTiles = 500;
@@ -73,9 +74,16 @@ class _SliversScreenState extends ConsumerState<SliversPage> {
         ScrollController(keepScrollOffset: true, initialScrollOffset: 0);
     scrollController.addListener(
       () {
-        hideBottomOnScroll(ref, scrollController);
+        FlexScaffold.hideBottomBarOnScroll(scrollController, hide, useHide);
       },
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    useHide = ref.watch(hideBottomBarOnScrollPod);
+    hide = FlexScaffold.of(context).scrollHideBottomBar;
   }
 
   @override

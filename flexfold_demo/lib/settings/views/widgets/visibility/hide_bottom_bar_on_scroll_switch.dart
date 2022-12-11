@@ -1,3 +1,4 @@
+import 'package:flexfold/flexfold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,7 +25,8 @@ class HideBottomBarOnScrollSwitch extends ConsumerWidget {
         // scrollHideBottomBarPod to false, so bottom bar shows up
         // again if it was scroll hidden on this screen.
         if (!isHidden) {
-          ref.read(scrollHiddenBottomBarPod.notifier).state = false;
+          // ref.read(scrollHiddenBottomBarPod.notifier).state = false;
+          FlexScaffold.of(context).scrollHideBottomBar(false);
         }
       },
       tooltipEnabled: ref.watch(useTooltipsPod),
