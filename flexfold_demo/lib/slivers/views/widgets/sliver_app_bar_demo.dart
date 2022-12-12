@@ -84,22 +84,21 @@ class SliverAppBarDemo extends ConsumerWidget {
     // always just uses the theme dividerColor, so that is all we have to get.
     final Color bottomBorderColor = theme.dividerColor;
 
-    // We also need to create the leading action button if the scaffold
-    // has a drawer and do same for the end drawer if it has an end drawer.
-    // If we do not do this, we will not be able to open the menu and sidebar
-    // again from a destination that uses a custom sliver app bar,
-    // or a persistent custom header.
-    final ScaffoldState? scaffold = Scaffold.maybeOf(context);
-    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
-    // final bool hasDrawer = scaffold?.hasDrawer ?? false;
-    // final bool hasEndDrawer = scaffold?.hasEndDrawer ?? false;
-
     // Needed for the height of the flexible space, we need to pass it to
     // gradient container to know how high to make it to fill the AppBar.
     final double height = const Size.fromHeight(kToolbarHeight).height +
         MediaQuery.of(context).padding.top;
 
-    // Leading widget, including open drawer action and effective tooltip
+    // We also need to create the leading action button if the FlexScaffold
+    // menu is in a Drawer and do same for the end Drawer actions if
+    // FlexScaffold sidebar is in an end drawer.
+    // If we do not do this, we will not be able to open the menu and sidebar
+    // again from a destination that uses a custom sliver app bar,
+    // or a persistent custom header.
+    // The FlexScaffoldState contains proper status info for it and inserting
+    // the FlexMenuButton and FlexSidebarButton is simple.
+    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
+    // Leading widget, includes open drawer action and effective tooltip
     Widget? leading;
     if (flexScaffold.isMenuInDrawer) {
       leading = FlexMenuButton(
@@ -112,39 +111,14 @@ class SliverAppBarDemo extends ConsumerWidget {
         child: leading,
       );
     }
-
-    // Actions widget, including open end drawer action and effective tooltip.
+    // TODO(rydmike): Only shows after resize. Works if inherited always notify.
+    // Actions widget, includes open end drawer action and effective tooltip.
     Widget? actions = const SizedBox.shrink();
     if (flexScaffold.isSidebarInEndDrawer) {
       actions = FlexSidebarButton(
         onPressed: () {},
       );
     }
-
-    // // Effective tooltip for the sidebar
-    // final String? effectiveSidebarTooltip = ref.watch(useTooltipsPod)
-    //     ? AppTooltips.openSidebar
-    //     // TODO(rydmike): Maybe put these back somehow
-    //     // ??
-    //     //     MaterialLocalizations.of(context).showMenuTooltip
-    //     : null;
-    //
-    // // Actions widget, including open end drawer action and effective tooltip.
-    // // NOTE: This does no recreate the feature to not toggle via the drawer,
-    // // doing so is currently not possible in the SliverAppBar that is not
-    // // managed by Flexfold.
-    // Widget actions = const SizedBox.shrink();
-    // if (hasEndDrawer) {
-    //   actions = IconButton(
-    //     icon: ref.watch(useCustomMenuIconsPod)
-    //         ? AppIcons.sidebarIcon
-    //         : kFlexfoldSidebarIcon,
-    //     onPressed: () {
-    //       Scaffold.of(context).openEndDrawer();
-    //     },
-    //     tooltip: effectiveSidebarTooltip,
-    //   );
-    // }
 
     // TODO(rydmike): Maybe make a SilverAppBar helper for the release as well?
     return SliverAppBar(
@@ -195,7 +169,7 @@ class SliverAppBarDemo extends ConsumerWidget {
                 SvgAssetImageSwitcher(
                   assetNames: AppImages.route[Routes.slivers]!.toList(),
                   showDuration: const Duration(milliseconds: 3500),
-                  color: Theme.of(context).colorScheme.primary,
+                  color: theme.colorScheme.primary,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(20),
                   fit: BoxFit.fitHeight,

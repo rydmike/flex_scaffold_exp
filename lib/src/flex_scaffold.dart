@@ -53,11 +53,12 @@ class FlexScaffold extends StatefulWidget {
     this.menuControlEnabled = true,
     this.sidebarControlEnabled = true,
     //
-    // Menu content properties, other than the destinations.
+    // Menu icons.
     this.menuIcon,
     this.menuIconExpand,
     this.menuIconCollapse,
     this.menuIconExpandHidden,
+    // Menu content properties, other than the destinations.
     this.menuAppBar,
     this.menuLeading,
     this.menuTrailing,
@@ -70,11 +71,12 @@ class FlexScaffold extends StatefulWidget {
     this.preferRail = false,
     this.onPreferRail,
     //
-    // Sidebar and end drawer properties and its callback.
+    // Sidebar icons.
     this.sidebarIcon,
     this.sidebarIconExpand,
     this.sidebarIconExpandHidden,
     this.sidebarIconCollapse,
+    // Sidebar and end drawer properties and its callback.
     this.sidebarAppBar,
     this.sidebar,
     this.hideSidebar = false,
