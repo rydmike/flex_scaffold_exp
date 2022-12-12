@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../navigation/constants/routes.dart';
-import '../widgets/tab_app_bar.dart';
+import 'tab_app_bar.dart';
 import 'tab_guide.dart';
 import 'tab_images.dart';
 import 'tab_modal.dart';

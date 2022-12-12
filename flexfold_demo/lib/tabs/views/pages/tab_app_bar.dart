@@ -68,7 +68,7 @@ class _TabAppBarState extends ConsumerState<TabAppBar>
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
     final Widget icon = destination.selectedIcon;
-    final Widget heading = Text(destination.label);
+    final String heading = destination.label;
 
     return PageBody(
       // key: ValueKey<String>('${destination.route}${AppRoutes.tabsAppbar}'),

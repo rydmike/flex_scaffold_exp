@@ -3,9 +3,7 @@ import 'package:flexfold/flexfold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../app/const/app_icons.dart';
 import '../../../app/const/app_images.dart';
-import '../../../app/const/app_tooltips.dart';
 import '../../../core/views/widgets/app/svg/svg_asset_image_switcher.dart';
 import '../../../navigation/constants/routes.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
@@ -94,7 +92,7 @@ class SliverAppBarDemo extends ConsumerWidget {
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
     final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
     // final bool hasDrawer = scaffold?.hasDrawer ?? false;
-    final bool hasEndDrawer = scaffold?.hasEndDrawer ?? false;
+    // final bool hasEndDrawer = scaffold?.hasEndDrawer ?? false;
 
     // Needed for the height of the flexible space, we need to pass it to
     // gradient container to know how high to make it to fill the AppBar.
@@ -115,30 +113,38 @@ class SliverAppBarDemo extends ConsumerWidget {
       );
     }
 
-    // Effective tooltip for the sidebar
-    final String? effectiveSidebarTooltip = ref.watch(useTooltipsPod)
-        ? AppTooltips.openSidebar
-        // TODO(rydmike): Maybe put these back somehow
-        // ??
-        //     MaterialLocalizations.of(context).showMenuTooltip
-        : null;
-
     // Actions widget, including open end drawer action and effective tooltip.
-    // NOTE: This does no recreate the feature to not toggle via the drawer,
-    // doing so is currently not possible in the SliverAppBar that is not
-    // managed by Flexfold.
-    Widget actions = const SizedBox.shrink();
-    if (hasEndDrawer) {
-      actions = IconButton(
-        icon: ref.watch(useCustomMenuIconsPod)
-            ? AppIcons.sidebarIcon
-            : kFlexfoldSidebarIcon,
-        onPressed: () {
-          Scaffold.of(context).openEndDrawer();
-        },
-        tooltip: effectiveSidebarTooltip,
+    Widget? actions = const SizedBox.shrink();
+    if (flexScaffold.isSidebarInEndDrawer) {
+      actions = FlexSidebarButton(
+        onPressed: () {},
       );
     }
+
+    // // Effective tooltip for the sidebar
+    // final String? effectiveSidebarTooltip = ref.watch(useTooltipsPod)
+    //     ? AppTooltips.openSidebar
+    //     // TODO(rydmike): Maybe put these back somehow
+    //     // ??
+    //     //     MaterialLocalizations.of(context).showMenuTooltip
+    //     : null;
+    //
+    // // Actions widget, including open end drawer action and effective tooltip.
+    // // NOTE: This does no recreate the feature to not toggle via the drawer,
+    // // doing so is currently not possible in the SliverAppBar that is not
+    // // managed by Flexfold.
+    // Widget actions = const SizedBox.shrink();
+    // if (hasEndDrawer) {
+    //   actions = IconButton(
+    //     icon: ref.watch(useCustomMenuIconsPod)
+    //         ? AppIcons.sidebarIcon
+    //         : kFlexfoldSidebarIcon,
+    //     onPressed: () {
+    //       Scaffold.of(context).openEndDrawer();
+    //     },
+    //     tooltip: effectiveSidebarTooltip,
+    //   );
+    // }
 
     // TODO(rydmike): Maybe make a SilverAppBar helper for the release as well?
     return SliverAppBar(

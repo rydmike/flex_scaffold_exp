@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'flex_app_bar.dart';
 import 'flex_scaffold.dart';
-import 'flex_scaffold_constants.dart';
 import 'flex_sidebar_button.dart';
 import 'flexfold_theme.dart';
 
@@ -12,45 +11,12 @@ class FlexSidebar extends StatefulWidget {
   /// Default constructor
   const FlexSidebar({
     super.key,
-    this.sidebarIcon,
-    this.sidebarIconExpand,
-    this.sidebarIconExpandHidden,
-    this.sidebarIconCollapse,
     this.sidebarToggleEnabled = true,
     required this.sidebarAppBar,
     this.sidebarBelongsToBody = true,
     this.hasAppBar = true,
     this.child,
   });
-
-  /// A Widget used to open the sidebar menu, typically an [Icon] is used.
-  ///
-  /// The same icon will also be used on the sidebar menu when the sidebar is
-  /// hidden in an end drawer. If no icon is provided it defaults to an
-  /// Icon with value [kFlexfoldSidebarIcon].
-  final Widget? sidebarIcon;
-
-  /// A Widget used to expand the end drawer to a sidebar, typically a [Icon]
-  /// widget is used.
-  ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldSidebarIconExpand].
-  final Widget? sidebarIconExpand;
-
-  /// A widget used to expand the sidebar menu it is hidden but may be
-  /// expanded based on screen width and breakpoints.
-  /// Typically an [Icon] widget is used.
-  ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldMenuIconExpandHidden].
-  final Widget? sidebarIconExpandHidden;
-
-  /// A Widget used to collapse the sidebar, typically an [Icon]
-  /// widget is used.
-  ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldSidebarIconCollapse].
-  final Widget? sidebarIconCollapse;
 
   /// The menu mode can be manually toggled by the user when true.
   ///
@@ -196,6 +162,7 @@ class _FlexSidebarState extends State<FlexSidebar> {
         duration: theme.sidebarAnimationDuration!,
         curve: theme.sidebarAnimationCurve!,
         width: width,
+        // TODO(rydmike): New size animation where we can clamp curve.
         // If you use an animation curve with negative overshoot there will
         // be a: "BoxConstraint has negative minimum width" error.
         // I tired clamping
@@ -305,26 +272,19 @@ class _FlexSidebarState extends State<FlexSidebar> {
           // used feature, but we can allow it.
           automaticallyImplyLeading: false,
           // Add the leading widget if there was one
-
-          // TODO(rydmike): Is this safe, check null setup.
           leading: sidebarAppBar.leading,
           actions: <Widget>[
             // Insert any pre-existing actions
-            ...widget.sidebarAppBar?.actions ??
-                <Widget>[const SizedBox.shrink()],
             // In order to not get a default show end drawer button in the
             // appbar for the sidebar, when it is shown as a drawer, we need
             // insert an invisible widget into the actions list in case it is
             // empty, because if it is totally empty the framework will create
             // a default action button to show the menu, we do not want that.
-            const SizedBox.shrink(), // TODO(rydmike): Needed w above fallback?
+            ...widget.sidebarAppBar?.actions ??
+                <Widget>[const SizedBox.shrink()],
             // Then we insert the sidebar menu button last in the actions list
             if (widget.sidebarToggleEnabled)
               FlexSidebarButton(
-                menuIcon: widget.sidebarIcon,
-                menuIconExpand: widget.sidebarIconExpand,
-                menuIconExpandHidden: widget.sidebarIconExpandHidden,
-                menuIconCollapse: widget.sidebarIconCollapse,
                 onPressed: () {},
               ),
           ],

@@ -35,7 +35,7 @@ class Routes {
   static const String about = '/about';
   static const String aboutLabel = 'About';
 
-  // Sub routes and labels for the tabs on the tab screen
+  // Sub routes and labels for the tabs on the tab screen.
   static const String tabsGuide = 'guide';
   static const String tabsGuideLabel = 'Guide';
 
@@ -59,7 +59,7 @@ class Routes {
     ),
     FlexDestination(
       label: Routes.infoLabel,
-      heading: Text('Energy'),
+      heading: Text('FlexScaffold'),
       route: Routes.info,
       icon: Icon(AppIcons.info),
       selectedIcon: Icon(AppIcons.infoSelected),

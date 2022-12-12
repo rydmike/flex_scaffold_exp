@@ -16,7 +16,7 @@ import 'flexfold_theme.dart';
 // Set to true to observe debug prints. In release mode this compile time
 // const always evaluate to false, so in theory anything with only an
 // if (_kDebugMe) {} should get tree shaken away totally in a release build.
-const bool _kDebugMe = kDebugMode && false;
+const bool _kDebugMe = kDebugMode && true;
 
 /// A responsive scaffold that animates changes between navigation modes.
 ///
@@ -1072,12 +1072,12 @@ class FlexScaffoldState extends State<FlexScaffold> {
           _isMenuInMenu = _isDesktop && !widget.hideMenu && !widget.preferRail;
           // The sidebar will exist in an end Drawer widget in the widget tree.
           _isSidebarInEndDrawer =
-              (width < flexTheme.breakpointSidebar! || widget.hideSidebar) &&
+              (width < flexTheme.breakpointSidebar! || _hideSidebar) &&
                   widget.destinations[_selectedIndex].hasSidebar &&
                   widget.sidebar != null;
           // The sidebar is shown as a widget after the body.
           _isSidebarInMenu = width >= flexTheme.breakpointSidebar! &&
-              !widget.hideSidebar &&
+              !_hideSidebar &&
               widget.destinations[_selectedIndex].hasSidebar &&
               widget.sidebar != null;
           // The bottom navigation bar is visible.
@@ -1163,11 +1163,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
                           currentScreenWidth: width,
                           backgroundColor: flexTheme.sidebarBackgroundColor,
                           child: FlexSidebar(
-                            sidebarIcon: widget.sidebarIcon,
-                            sidebarIconExpand: widget.sidebarIconExpand,
-                            sidebarIconExpandHidden:
-                                widget.sidebarIconExpandHidden,
-                            sidebarIconCollapse: widget.sidebarIconCollapse,
                             sidebarToggleEnabled: widget.sidebarControlEnabled,
                             // If no sidebar app bar given make a default one.
                             sidebarAppBar:
@@ -1214,11 +1209,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
                             color: flexTheme.sidebarBackgroundColor,
                             elevation: flexTheme.sidebarElevation!,
                             child: FlexSidebar(
-                              sidebarIcon: widget.sidebarIcon,
-                              sidebarIconExpand: widget.sidebarIconExpand,
-                              sidebarIconExpandHidden:
-                                  widget.sidebarIconExpandHidden,
-                              sidebarIconCollapse: widget.sidebarIconCollapse,
                               sidebarToggleEnabled:
                                   widget.sidebarControlEnabled,
                               // If no sidebar app bar given make a default one.
@@ -1252,12 +1242,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
                     color: flexTheme.sidebarBackgroundColor,
                     elevation: flexTheme.sidebarElevation!,
                     child: FlexSidebar(
-                      sidebarIcon: widget.sidebarIcon,
-                      sidebarIconExpand: widget.sidebarIconExpand,
-                      sidebarIconExpandHidden: widget.sidebarIconExpandHidden,
-                      sidebarIconCollapse: widget.sidebarIconCollapse,
                       sidebarToggleEnabled: widget.sidebarControlEnabled,
-                      // If no Sidebar AppBar is provided we make a default one.
+                      // If no Sidebar AppBar is provided we add a default one.
                       sidebarAppBar: widget.sidebarAppBar ?? const FlexAppBar(),
                       sidebarBelongsToBody: widget.sidebarBelongsToBody,
                       hasAppBar: widget.destinations[_selectedIndex].hasAppBar,
@@ -1303,7 +1289,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
               (_isPhone && widget.destinations[index].maybePush) ||
                   widget.destinations[index].alwaysPush;
 
-          // Make tap destination data to return
+          // Make destination data to return that we should go to.
           final GoFlexDestination destination = GoFlexDestination(
             index: _selectedIndex,
             bottomIndex: bottomIndex,
