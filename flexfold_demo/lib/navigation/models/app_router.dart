@@ -17,7 +17,7 @@ import '../../tabs/views/pages/tab_modal.dart';
 import '../../tabs/views/pages/tabs_screen.dart';
 import '../../tabs/views/widgets/tab_app_bar.dart';
 import '../../theme/views/pages/theme_page.dart';
-import '../constants/app_routes.dart';
+import '../constants/routes.dart';
 import '../views/pages/layout_shell.dart';
 import '../views/widgets/directionality_wrapper.dart';
 import '../views/widgets/push_wrapper.dart';
@@ -195,13 +195,13 @@ class AppRouter {
 
   static final GoRouter go = GoRouter(
     debugLogDiagnostics: true,
-    initialLocation: AppRoutes.home,
+    initialLocation: Routes.home,
     navigatorKey: _rootNavigatorKey,
     routes: <RouteBase>[
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
-        path: '${AppRoutes.about}_modal',
-        name: '${AppRoutes.aboutLabel}_modal',
+        path: '${Routes.about}_modal',
+        name: '${Routes.aboutLabel}_modal',
         pageBuilder: (BuildContext context, GoRouterState state) =>
             NoTransitionPage<void>(
           key: state.pageKey,
@@ -210,8 +210,8 @@ class AppRouter {
       ),
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
-        path: '${AppRoutes.preview}_modal',
-        name: '${AppRoutes.previewLabel}_modal',
+        path: '${Routes.preview}_modal',
+        name: '${Routes.previewLabel}_modal',
         pageBuilder: (BuildContext context, GoRouterState state) =>
             NoTransitionPage<void>(
           key: state.pageKey,
@@ -220,8 +220,8 @@ class AppRouter {
       ),
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
-        path: '${AppRoutes.help}_modal',
-        name: '${AppRoutes.helpLabel}_modal',
+        path: '${Routes.help}_modal',
+        name: '${Routes.helpLabel}_modal',
         pageBuilder: (BuildContext context, GoRouterState state) =>
             NoTransitionPage<void>(
           key: state.pageKey,
@@ -237,8 +237,8 @@ class AppRouter {
         },
         routes: <RouteBase>[
           GoRoute(
-            path: AppRoutes.home,
-            name: AppRoutes.homeLabel,
+            path: Routes.home,
+            name: Routes.homeLabel,
             pageBuilder: (BuildContext context, GoRouterState state) {
               return NoTransitionPage<void>(
                 key: state.pageKey,
@@ -247,8 +247,8 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: AppRoutes.info,
-            name: AppRoutes.infoLabel,
+            path: Routes.info,
+            name: Routes.infoLabel,
             pageBuilder: (BuildContext context, GoRouterState state) =>
                 NoTransitionPage<void>(
               key: state.pageKey,
@@ -256,8 +256,8 @@ class AppRouter {
             ),
           ),
           GoRoute(
-            path: AppRoutes.settings,
-            name: AppRoutes.settingsLabel,
+            path: Routes.settings,
+            name: Routes.settingsLabel,
             pageBuilder: (BuildContext context, GoRouterState state) =>
                 NoTransitionPage<void>(
               key: state.pageKey,
@@ -265,8 +265,8 @@ class AppRouter {
             ),
           ),
           GoRoute(
-            path: AppRoutes.theme,
-            name: AppRoutes.themeLabel,
+            path: Routes.theme,
+            name: Routes.themeLabel,
             pageBuilder: (BuildContext context, GoRouterState state) =>
                 NoTransitionPage<void>(
               key: state.pageKey,
@@ -274,8 +274,8 @@ class AppRouter {
             ),
           ),
           GoRoute(
-            path: AppRoutes.tabs,
-            name: AppRoutes.tabsLabel,
+            path: Routes.tabs,
+            name: Routes.tabsLabel,
             pageBuilder: (BuildContext context, GoRouterState state) =>
                 NoTransitionPage<void>(
               key: state.pageKey,
@@ -283,8 +283,8 @@ class AppRouter {
             ),
             routes: <GoRoute>[
               GoRoute(
-                path: AppRoutes.tabsGuide,
-                name: AppRoutes.tabsGuideLabel,
+                path: Routes.tabsGuide,
+                name: Routes.tabsGuideLabel,
                 pageBuilder: (BuildContext context, GoRouterState state) =>
                     NoTransitionPage<void>(
                   key: state.pageKey,
@@ -292,8 +292,8 @@ class AppRouter {
                 ),
               ),
               GoRoute(
-                path: AppRoutes.tabsAppbar,
-                name: AppRoutes.tabsAppbarLabel,
+                path: Routes.tabsAppbar,
+                name: Routes.tabsAppbarLabel,
                 pageBuilder: (BuildContext context, GoRouterState state) =>
                     NoTransitionPage<void>(
                   key: state.pageKey,
@@ -301,8 +301,8 @@ class AppRouter {
                 ),
               ),
               GoRoute(
-                path: AppRoutes.tabsImages,
-                name: AppRoutes.tabsImagesLabel,
+                path: Routes.tabsImages,
+                name: Routes.tabsImagesLabel,
                 pageBuilder: (BuildContext context, GoRouterState state) =>
                     NoTransitionPage<void>(
                   key: state.pageKey,
@@ -310,8 +310,8 @@ class AppRouter {
                 ),
               ),
               GoRoute(
-                path: AppRoutes.tabsModal,
-                name: AppRoutes.tabsModalLabel,
+                path: Routes.tabsModal,
+                name: Routes.tabsModalLabel,
                 pageBuilder: (BuildContext context, GoRouterState state) =>
                     MaterialPage<void>(
                   key: state.pageKey,
@@ -321,8 +321,8 @@ class AppRouter {
             ],
           ),
           GoRoute(
-            path: AppRoutes.slivers,
-            name: AppRoutes.sliversLabel,
+            path: Routes.slivers,
+            name: Routes.sliversLabel,
             pageBuilder: (BuildContext context, GoRouterState state) =>
                 NoTransitionPage<void>(
               key: state.pageKey,
@@ -330,8 +330,8 @@ class AppRouter {
             ),
           ),
           GoRoute(
-            path: AppRoutes.preview,
-            name: AppRoutes.previewLabel,
+            path: Routes.preview,
+            name: Routes.previewLabel,
             pageBuilder: (BuildContext context, GoRouterState state) =>
                 NoTransitionPage<void>(
               key: state.pageKey,
@@ -339,8 +339,8 @@ class AppRouter {
             ),
           ),
           GoRoute(
-            path: AppRoutes.help,
-            name: AppRoutes.helpLabel,
+            path: Routes.help,
+            name: Routes.helpLabel,
             pageBuilder: (BuildContext context, GoRouterState state) =>
                 NoTransitionPage<void>(
               key: state.pageKey,
@@ -348,8 +348,8 @@ class AppRouter {
             ),
           ),
           GoRoute(
-            path: AppRoutes.about,
-            name: AppRoutes.aboutLabel,
+            path: Routes.about,
+            name: Routes.aboutLabel,
             pageBuilder: (BuildContext context, GoRouterState state) =>
                 NoTransitionPage<void>(
               key: state.pageKey,

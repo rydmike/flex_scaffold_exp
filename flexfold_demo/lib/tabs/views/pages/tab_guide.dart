@@ -8,8 +8,7 @@ import '../../../core/utils/link_text_span.dart';
 import '../../../core/views/widgets/app/headers/page_header.dart';
 import '../../../core/views/widgets/app/headers/page_intro.dart';
 import '../../../core/views/widgets/universal/page_body.dart';
-import '../../../navigation/constants/app_routes.dart';
-import '../../../navigation/constants/destinations.dart';
+import '../../../navigation/constants/routes.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
 import '../../../settings/controllers/pods_flexfold.dart';
@@ -69,8 +68,8 @@ class _TabGuideState extends ConsumerState<TabGuide>
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final Widget icon = appDestinations[destination.index].selectedIcon;
-    final String heading = appDestinations[destination.index].label;
+    final Widget icon = destination.selectedIcon;
+    final Widget heading = Text(destination.label);
 
     return PageBody(
       // key: ValueKey<String>('${destination.route}${AppRoutes.tabsGuide}'),
@@ -85,7 +84,7 @@ class _TabGuideState extends ConsumerState<TabGuide>
             padding: const EdgeInsets.symmetric(horizontal: Sizes.l),
             child: PageHeader(
                 icon: icon,
-                heading: Text('$heading ${AppRoutes.tabsGuideLabel}'),
+                heading: Text('$heading ${Routes.tabsGuideLabel}'),
                 destination: destination),
           ),
           const Divider(),
@@ -147,7 +146,7 @@ class _TabGuideState extends ConsumerState<TabGuide>
                 'this screen so we can see how it works with a tab bar view '
                 'as well.',
               ),
-              imageAssets: AppImages.route[AppRoutes.tabs]!.toList(),
+              imageAssets: AppImages.route[Routes.tabs]!.toList(),
             ),
           ),
           SizedBox(height: MediaQuery.of(context).padding.bottom),

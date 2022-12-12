@@ -7,8 +7,7 @@ import '../../../app/const/app_icons.dart';
 import '../../../app/const/app_images.dart';
 import '../../../app/const/app_tooltips.dart';
 import '../../../core/views/widgets/app/svg/svg_asset_image_switcher.dart';
-import '../../../navigation/constants/app_routes.dart';
-import '../../../navigation/constants/destinations.dart';
+import '../../../navigation/constants/routes.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
 import '../../../settings/controllers/pods_flexfold.dart';
@@ -40,7 +39,7 @@ class SliverAppBarDemo extends ConsumerWidget {
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final String title = appDestinations[destination.index].label;
+    final String title = destination.label;
 
     // There is no pre-made sliver app bar in Flexfold (yet), you have to
     // make one yourself. You can make it however you like. In this demo we
@@ -188,7 +187,7 @@ class SliverAppBarDemo extends ConsumerWidget {
                   height: 220,
                 ),
                 SvgAssetImageSwitcher(
-                  assetNames: AppImages.route[AppRoutes.slivers]!.toList(),
+                  assetNames: AppImages.route[Routes.slivers]!.toList(),
                   showDuration: const Duration(milliseconds: 3500),
                   color: Theme.of(context).colorScheme.primary,
                   alignment: Alignment.center,

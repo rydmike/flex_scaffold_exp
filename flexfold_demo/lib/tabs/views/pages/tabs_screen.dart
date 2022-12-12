@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../navigation/constants/app_routes.dart';
+import '../../../navigation/constants/routes.dart';
 import '../widgets/tab_app_bar.dart';
 import 'tab_guide.dart';
 import 'tab_images.dart';
@@ -11,7 +11,7 @@ import 'tab_modal.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
-  static const String route = AppRoutes.tabs;
+  static const String route = Routes.tabs;
 
   @override
   ConsumerState<TabsScreen> createState() => _TabsScreenState();
@@ -100,10 +100,10 @@ class _TabsScreenState extends ConsumerState<TabsScreen>
             // key: const PageStorageKey<String>(route),
             controller: _controller,
             tabs: <Widget>[
-              Tab(text: AppRoutes.tabsGuideLabel.toUpperCase()),
-              Tab(text: AppRoutes.tabsAppbarLabel.toUpperCase()),
-              Tab(text: AppRoutes.tabsImagesLabel.toUpperCase()),
-              Tab(text: AppRoutes.tabsModalLabel.toUpperCase()),
+              Tab(text: Routes.tabsGuideLabel.toUpperCase()),
+              Tab(text: Routes.tabsAppbarLabel.toUpperCase()),
+              Tab(text: Routes.tabsImagesLabel.toUpperCase()),
+              Tab(text: Routes.tabsModalLabel.toUpperCase()),
             ],
             onTap: (int index) {
               // If we tapped on a tab bar item, we will reveal any

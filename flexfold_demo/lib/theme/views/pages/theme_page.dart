@@ -11,8 +11,7 @@ import '../../../core/views/widgets/app/headers/page_intro.dart';
 import '../../../core/views/widgets/app/svg/logo.dart';
 import '../../../core/views/widgets/universal/page_body.dart';
 import '../../../core/views/widgets/universal/theme_showcase.dart';
-import '../../../navigation/constants/app_routes.dart';
-import '../../../navigation/constants/destinations.dart';
+import '../../../navigation/constants/routes.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
 import '../../../settings/controllers/pods_flexfold.dart';
@@ -37,7 +36,7 @@ import '../widgets/tooltip_style_switch.dart';
 
 class ThemePage extends ConsumerStatefulWidget {
   const ThemePage({super.key});
-  static const String route = AppRoutes.theme;
+  static const String route = Routes.theme;
 
   @override
   ConsumerState<ThemePage> createState() => _ThemeScreenState();
@@ -90,8 +89,8 @@ class _ThemeScreenState extends ConsumerState<ThemePage>
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final Widget icon = appDestinations[destination.index].selectedIcon;
-    final Widget heading = Text(appDestinations[destination.index].label);
+    final Widget icon = destination.selectedIcon;
+    final Widget heading = Text(destination.label);
     // See setup_screen.dart [ConfigScreen] for an explanation of these
     // padding values and why they are VERY handy and useful.
     final double topPadding = MediaQuery.of(context).padding.top;

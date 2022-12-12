@@ -7,7 +7,6 @@ import '../../../../core/controllers/app_controllers.dart';
 import '../../../../core/views/widgets/app/if_wrapper.dart';
 import '../../../../core/views/widgets/app/plasma_background.dart';
 import '../../../../core/views/widgets/app/svg/svg_asset_image_switcher.dart';
-import '../../../constants/destinations.dart';
 import '../../../controllers/current_route_provider.dart';
 
 /// A widget used as example content for the Flexfold demo sidebar.
@@ -20,7 +19,7 @@ class Sidebar extends ConsumerWidget {
     // page header to display info on how we navigated to this page.
     final GoFlexDestination destination =
         ref.watch(currentRouteProvider).destination;
-    final String screenName = appDestinations[destination.index].label;
+    final String screenName = destination.label;
 
     final ScrollController controller = ScrollController();
 

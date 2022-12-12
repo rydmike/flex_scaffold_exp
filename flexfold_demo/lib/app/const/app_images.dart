@@ -1,4 +1,4 @@
-import '../../navigation/constants/app_routes.dart';
+import '../../navigation/constants/routes.dart';
 
 /// Image assets used in this application.
 class AppImages {
@@ -151,50 +151,50 @@ class AppImages {
   // for each screen (route). These are used to show and switch between images
   // that relate to the screen in question.
   static const Map<String, List<String>> route = <String, List<String>>{
-    AppRoutes.home: <String>[
+    Routes.home: <String>[
       AppImages.mobileApps,
       AppImages.webDevices,
       AppImages.appInstallation,
     ],
-    AppRoutes.preview: <String>[
+    Routes.preview: <String>[
       AppImages.mobileDevices,
       AppImages.webDevices,
       AppImages.postingPhoto,
       AppImages.fileSync,
     ],
-    AppRoutes.info: <String>[
+    Routes.info: <String>[
       AppImages.mobileWeb,
       AppImages.postOnline,
       AppImages.progressOverview,
     ],
-    AppRoutes.settings: <String>[
+    Routes.settings: <String>[
       AppImages.setPreferences,
       AppImages.inProgress,
       AppImages.prioritize,
       AppImages.progressApp,
     ],
-    AppRoutes.theme: <String>[
+    Routes.theme: <String>[
       AppImages.choice,
       AppImages.activeOptions,
       AppImages.darkMode,
       AppImages.inSync,
     ],
-    AppRoutes.tabs: <String>[
+    Routes.tabs: <String>[
       AppImages.healthyOptions,
       AppImages.modernDesign,
       AppImages.openedTabs,
     ],
-    AppRoutes.slivers: <String>[
+    Routes.slivers: <String>[
       AppImages.postOnline,
       AppImages.mobileFeed,
       AppImages.blocks,
     ],
-    AppRoutes.help: <String>[
+    Routes.help: <String>[
       AppImages.questions,
       AppImages.setupWizard,
       AppImages.productTeardown,
     ],
-    AppRoutes.about: <String>[
+    Routes.about: <String>[
       AppImages.myNotifications,
       AppImages.natureOnScreen,
       AppImages.postingPhoto,

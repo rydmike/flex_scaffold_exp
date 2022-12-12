@@ -11,8 +11,7 @@ import '../../../core/utils/random_color.dart';
 import '../../../core/views/widgets/app/headers/page_header.dart';
 import '../../../core/views/widgets/app/headers/page_intro.dart';
 import '../../../core/views/widgets/app/svg/svg_asset_image_switcher.dart';
-import '../../../navigation/constants/app_routes.dart';
-import '../../../navigation/constants/destinations.dart';
+import '../../../navigation/constants/routes.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
 import '../../../settings/controllers/pods_flexfold.dart';
@@ -85,8 +84,8 @@ class _TabImagesState extends ConsumerState<TabImages>
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final Widget icon = appDestinations[destination.index].selectedIcon;
-    final String heading = appDestinations[destination.index].label;
+    final Widget icon = destination.selectedIcon;
+    final Widget heading = Text(destination.label);
 
     return // PageBody(
         // key: ValueKey<String>('${destination.route}${AppRoutes.tabsImages}'),
@@ -110,7 +109,7 @@ class _TabImagesState extends ConsumerState<TabImages>
                   <Widget>[
                     PageHeader(
                         icon: icon,
-                        heading: Text('$heading ${AppRoutes.tabsImagesLabel}'),
+                        heading: Text('$heading ${Routes.tabsImagesLabel}'),
                         destination: destination),
                     const Divider(),
                     PageIntro(
@@ -142,7 +141,7 @@ class _TabImagesState extends ConsumerState<TabImages>
                         'but this demo stops at $_maxTiles images in the '
                         'grid.\n',
                       ),
-                      imageAssets: AppImages.route[AppRoutes.tabs]!.toList(),
+                      imageAssets: AppImages.route[Routes.tabs]!.toList(),
                     ),
                   ],
                 ),

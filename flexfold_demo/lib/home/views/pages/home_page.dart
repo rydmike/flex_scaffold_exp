@@ -11,14 +11,13 @@ import '../../../core/views/widgets/app/if_wrapper.dart';
 import '../../../core/views/widgets/app/plasma_background.dart';
 import '../../../core/views/widgets/app/svg/svg_asset_image_switcher.dart';
 import '../../../info/views/pages/info_page.dart';
-import '../../../navigation/constants/app_routes.dart';
-import '../../../navigation/constants/destinations.dart';
+import '../../../navigation/constants/routes.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
-  static const String route = AppRoutes.home;
+  static const String route = Routes.home;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,8 +31,8 @@ class HomePage extends ConsumerWidget {
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final Widget icon = appDestinations[destination.index].selectedIcon;
-    final Widget heading = Text(appDestinations[destination.index].label);
+    final Widget icon = destination.selectedIcon;
+    final Widget heading = Text(destination.label);
 
     // See settings_page.dart for an explanation of these
     // padding values and why they are VERY handy and useful.
@@ -176,7 +175,7 @@ class FrontPageImages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SvgAssetImageSwitcher(
-      assetNames: AppImages.route[AppRoutes.home]!.toList(),
+      assetNames: AppImages.route[Routes.home]!.toList(),
       color: Theme.of(context).colorScheme.primary,
       alignment: Alignment.center,
       padding: EdgeInsets.zero,

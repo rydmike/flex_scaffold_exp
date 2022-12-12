@@ -9,8 +9,7 @@ import '../../../app/const/app_tooltips.dart';
 import '../../../core/views/widgets/app/animated_hide.dart';
 import '../../../core/views/widgets/universal/dialogs/platform_alert_dialog.dart';
 import '../../../settings/controllers/pods_flexfold.dart';
-import '../../constants/app_routes.dart';
-import '../../constants/destinations.dart';
+import '../../constants/routes.dart';
 import '../../controllers/current_route_provider.dart';
 // import 'package:routemaster/routemaster.dart';
 
@@ -207,16 +206,18 @@ class LayoutShell extends ConsumerWidget {
             // Set first bottom nav screen, "Info" as back button destination.
             ref
                 .read(currentRouteProvider.notifier)
-                .setDestination(goFirstBottom);
+                .setDestination(Routes.goFirstBottom);
             // Navigate to Info screen, first bottom route
-            context.go(goFirstBottom.route);
+            context.go(Routes.goFirstBottom.route);
           }
           // We go back to the "Home" screen
           else {
             // Update the route with the selected back destination = Home
-            ref.read(currentRouteProvider.notifier).setDestination(goHome);
+            ref
+                .read(currentRouteProvider.notifier)
+                .setDestination(Routes.goHome);
             // Navigate to home screen
-            context.go(goHome.route);
+            context.go(Routes.goHome.route);
           }
           // Current platform
           final TargetPlatform platform = Theme.of(context).platform;
@@ -225,7 +226,7 @@ class LayoutShell extends ConsumerWidget {
           // but not on other platforms. The result should be that we
           // cannot "back" button out accidentally on the web version
           // to a previous Web page and loose the state of the SPA Web app.
-          final bool popOutOfScope = startDestination.route == AppRoutes.home &&
+          final bool popOutOfScope = startDestination.route == Routes.home &&
               (platform == TargetPlatform.iOS ||
                   platform == TargetPlatform.android);
           return popOutOfScope;
@@ -284,7 +285,7 @@ class LayoutShell extends ConsumerWidget {
 
         //
         // Supply the list of main navigation destinations the app has.
-        destinations: appDestinations,
+        destinations: Routes.destinations,
         //
         // Currently selected destination
         selectedIndex: route.destination.index,
@@ -499,7 +500,7 @@ class LayoutShell extends ConsumerWidget {
                   'and where it appears on a phone, tablet and desktop. '
                   'This demo app only has FABs on the Settings and '
                   'Theme screens.\n\nThis is a FAB on the '
-                  '${appDestinations[route.destination.index].label}'
+                  '${route.destination.label}'
                   ' screen.',
               defaultActionText: ' OK ',
             ).show(context, useRootNavigator: true);

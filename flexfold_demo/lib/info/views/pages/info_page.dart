@@ -8,8 +8,7 @@ import '../../../app/const/app_insets.dart';
 import '../../../core/views/widgets/app/headers/page_header.dart';
 import '../../../core/views/widgets/app/headers/page_intro.dart';
 import '../../../core/views/widgets/universal/page_body.dart';
-import '../../../navigation/constants/app_routes.dart';
-import '../../../navigation/constants/destinations.dart';
+import '../../../navigation/constants/routes.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 // import 'package:routemaster/routemaster.dart';
 
@@ -19,7 +18,7 @@ import '../../../settings/views/pages/settings_page.dart';
 
 class InfoPage extends ConsumerStatefulWidget {
   const InfoPage({super.key});
-  static const String route = AppRoutes.info;
+  static const String route = Routes.info;
 
   @override
   ConsumerState<InfoPage> createState() => _InfoScreenState();
@@ -70,8 +69,8 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final Widget icon = appDestinations[destination.index].selectedIcon;
-    final Widget heading = Text(appDestinations[destination.index].label);
+    final Widget icon = destination.selectedIcon;
+    final Widget heading = Text(destination.label);
 
     // See settings_page.dart for an explanation of these
     // padding values and why they are VERY handy and useful.
@@ -140,7 +139,7 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
               'there are some usage hints on other pages in this demo '
               'as well.',
             ),
-            imageAssets: AppImages.route[AppRoutes.info]!.toList(),
+            imageAssets: AppImages.route[Routes.info]!.toList(),
           ),
           const SizedBox(height: 20),
           Center(

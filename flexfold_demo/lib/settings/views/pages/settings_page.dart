@@ -7,8 +7,7 @@ import '../../../app/const/app_insets.dart';
 import '../../../core/views/widgets/app/headers/page_header.dart';
 import '../../../core/views/widgets/app/headers/page_intro.dart';
 import '../../../core/views/widgets/universal/page_body.dart';
-import '../../../navigation/constants/app_routes.dart';
-import '../../../navigation/constants/destinations.dart';
+import '../../../navigation/constants/routes.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
 import '../../controllers/pods_flexfold.dart';
@@ -24,7 +23,7 @@ import '../widgets/width/settings_width.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
-  static const String route = AppRoutes.settings;
+  static const String route = Routes.settings;
 
   @override
   ConsumerState<SettingsPage> createState() => _SettingsScreenState();
@@ -73,8 +72,8 @@ class _SettingsScreenState extends ConsumerState<SettingsPage> {
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final Widget icon = appDestinations[destination.index].selectedIcon;
-    final Widget heading = Text(appDestinations[destination.index].label);
+    final Widget icon = destination.selectedIcon;
+    final Widget heading = Text(destination.label);
 
     // Frequently used text style on this page, so let's store a ref to it.
     final TextStyle headline5 = Theme.of(context).textTheme.headline5!;

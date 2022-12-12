@@ -7,14 +7,13 @@ import '../../../app/const/app_insets.dart';
 import '../../../core/views/widgets/app/headers/page_header.dart';
 import '../../../core/views/widgets/app/headers/page_intro.dart';
 import '../../../core/views/widgets/universal/page_body.dart';
-import '../../../navigation/constants/app_routes.dart';
-import '../../../navigation/constants/destinations.dart';
+import '../../../navigation/constants/routes.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
 
 class HelpPage extends ConsumerStatefulWidget {
   const HelpPage({super.key});
-  static const String route = AppRoutes.help;
+  static const String route = Routes.help;
 
   @override
   ConsumerState<HelpPage> createState() => _HelpScreenState();
@@ -50,8 +49,8 @@ class _HelpScreenState extends ConsumerState<HelpPage> {
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
-    final Widget icon = appDestinations[destination.index].selectedIcon;
-    final Widget heading = Text(appDestinations[destination.index].label);
+    final Widget icon = destination.selectedIcon;
+    final Widget heading = Text(destination.label);
 
     // See settings_page.dart for an explanation of these
     // padding values and why they are VERY handy and useful.
