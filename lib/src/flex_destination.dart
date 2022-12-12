@@ -195,6 +195,47 @@ class FlexDestination {
 
   /// In a rail or menu, draw a divider after the destination
   final bool dividerAfter;
+
+  /// Override the equality operator.
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other.runtimeType != runtimeType) return false;
+    return other is FlexDestination &&
+        other.icon == icon &&
+        other.selectedIcon == selectedIcon &&
+        other.label == label &&
+        other.tooltip == tooltip &&
+        other.heading == heading &&
+        other.route == route &&
+        other.maybePush == maybePush &&
+        other.alwaysPush == alwaysPush &&
+        other.hasSidebar == hasSidebar &&
+        other.hasFloatingActionButton == hasFloatingActionButton &&
+        other.hasAppBar == hasAppBar &&
+        other.inBottomNavigation == inBottomNavigation &&
+        other.dividerBefore == dividerBefore &&
+        other.dividerAfter == dividerAfter;
+  }
+
+  /// Override for hashcode. Using Darts object hash.
+  @override
+  int get hashCode => Object.hash(
+        icon,
+        selectedIcon,
+        label,
+        tooltip,
+        heading,
+        route,
+        maybePush,
+        alwaysPush,
+        hasSidebar,
+        hasFloatingActionButton,
+        hasAppBar,
+        inBottomNavigation,
+        dividerBefore,
+        dividerAfter,
+      );
 }
 
 /// Describes the source of the last navigation action in a FlexScaffold.
