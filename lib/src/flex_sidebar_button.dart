@@ -1,9 +1,10 @@
-// ignore_for_file: comment_references
 import 'package:flutter/material.dart';
 
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
 import 'flexfold_theme.dart';
+
+// ignore_for_file: comment_references
 
 const double _kLeadingWidth = kToolbarHeight;
 
@@ -62,16 +63,20 @@ class FlexSidebarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
-    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
-
     final bool hasEndDrawer = scaffold?.hasEndDrawer ?? false;
     final bool isEndDrawerOpen = scaffold?.isEndDrawerOpen ?? false;
+
+    // This only reads the FlexScaffold state once, it won't update.
+    // We can also use it to access its state modifying methods.
+    final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
+
+    /// Listen to aspect of the FlexScaffold and only rebuild if they change.
+    final bool isSidebarHidden = FlexScaffold.isSidebarHiddenOf(context);
 
     final double width = MediaQuery.of(context).size.width;
 
     final FlexScaffoldThemeData theme = FlexScaffoldTheme.of(context);
     final double breakpointSidebar = theme.breakpointSidebar!;
-
     final bool canLockMenu = width >= breakpointSidebar;
 
     // Set effective expand and collapse icons
@@ -123,7 +128,7 @@ class FlexSidebarButton extends StatelessWidget {
     } else if (hasEndDrawer && isEndDrawerOpen && !canLockMenu) {
       tooltip = theme.sidebarCloseTooltip!;
       effectiveMenuButton = effectiveMenuIcon;
-    } else if (flexScaffold.sidebarIsHidden) {
+    } else if (isSidebarHidden) {
       tooltip = theme.sidebarExpandTooltip!;
       effectiveMenuButton = effectiveMenuIconExpand;
     } else {
@@ -140,18 +145,18 @@ class FlexSidebarButton extends StatelessWidget {
           if (hasEndDrawer &&
               !isEndDrawerOpen &&
               (!canLockMenu || flexScaffold.widget.cycleViaDrawer)) {
-            Scaffold.of(context).openEndDrawer();
+            scaffold!.openEndDrawer();
           } else if (hasEndDrawer && isEndDrawerOpen && !canLockMenu) {
             Navigator.of(context).pop();
-          } else if (flexScaffold.sidebarIsHidden) {
+          } else if (isSidebarHidden) {
             if (hasEndDrawer && isEndDrawerOpen) {
               Navigator.of(context).pop();
-              // TODO(rydmike): Improve this that waits for the menu to close.
+              // TODO(rydmike): Improve this, that waits for the menu to close.
               // This will give the correct time to allow the menu to close,
               // after which we set hidden to false and it will animate open to
               // appropriate lock position. Would be nice if we could (probably
-              // possible somehow?) listen to and know when the Drawer has
-              // closed fully and open the locked menu/rail then, but this
+              // possible somehow?) listen to and know when the end Drawer has
+              // closed fully and open the locked sidebar then, but this
               // works too.
               Future<void>.delayed(kFlexfoldFlutterDrawerDuration, () {
                 flexScaffold.hideSidebar(false);

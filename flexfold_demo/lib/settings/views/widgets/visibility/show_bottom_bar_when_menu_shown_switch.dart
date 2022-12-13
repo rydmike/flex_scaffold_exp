@@ -25,7 +25,7 @@ class ShowBottomBarWhenMenuShownSwitch extends ConsumerWidget {
       onChanged: (bool value) {
         ref.read(showBottomBarWhenMenuShownPod.notifier).state = value;
         // ref.read(scrollHiddenBottomBarPod.notifier).state = false;
-        FlexScaffold.of(context).scrollHideBottomBar(false);
+        FlexScaffold.use(context).scrollHideBottomBar(false);
       },
       tooltipEnabled: ref.watch(useTooltipsPod),
       tooltip: 'Flexfold(showBottomBarWhenMenuShown: '

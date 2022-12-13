@@ -53,7 +53,7 @@ class _SettingsScreenState extends ConsumerState<SettingsPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     useHide = ref.watch(hideBottomBarOnScrollPod);
-    hide = FlexScaffold.of(context).scrollHideBottomBar;
+    hide = FlexScaffold.use(context).scrollHideBottomBar;
   }
 
   @override

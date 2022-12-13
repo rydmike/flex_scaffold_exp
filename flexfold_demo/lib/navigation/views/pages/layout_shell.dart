@@ -402,13 +402,13 @@ class LayoutShell extends ConsumerWidget {
         sidebarControlEnabled: ref.watch(sidebarControlEnabledPod),
         //
         // Menu controls
-        hideMenu: ref.watch(hideMenuPod),
-        onHideMenu: (bool isHidden) {
+        menuHide: ref.watch(hideMenuPod),
+        onMenuHide: (bool isHidden) {
           ref.read(hideMenuPod.notifier).state = isHidden;
         },
         cycleViaDrawer: ref.watch(cycleViaDrawerPod),
-        preferRail: ref.watch(preferRailPod),
-        onPreferRail: (bool value) =>
+        menuPrefersRail: ref.watch(preferRailPod),
+        onMenuPrefersRail: (bool value) =>
             ref.read(preferRailPod.notifier).state = value,
         // Combined sidebar menu and end drawer properties and its controls.
         // The sidebar only appears if a destination has specified that it
@@ -457,9 +457,9 @@ class LayoutShell extends ConsumerWidget {
         // the widths to some extent.
         sidebar: const Sidebar(),
         // Setting to keep the sidebar hidden.
-        hideSidebar: ref.watch(hideSidebarPod),
+        sidebarHide: ref.watch(hideSidebarPod),
         // Callback that changes when sidebar is set to be hidden.
-        onHideSidebar: (bool value) =>
+        onSidebarHide: (bool value) =>
             ref.read(hideSidebarPod.notifier).state = value,
         // Have sidebar as a part of the body or outside it, if false the
         // sidebar will be outside the Flutter Scaffold body like the menu

@@ -22,7 +22,7 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Get to flex scaffold state from inherited widget.
-    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
+    final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
     //
     final CurrentRoute appNav = ref.watch(currentRouteProvider);
     // Get the current destination details, we will use it's info in the page

@@ -64,7 +64,7 @@ class _TabImagesState extends ConsumerState<TabImages>
   void didChangeDependencies() {
     super.didChangeDependencies();
     useHide = ref.watch(hideBottomBarOnScrollPod);
-    hide = FlexScaffold.of(context).scrollHideBottomBar;
+    hide = FlexScaffold.use(context).scrollHideBottomBar;
   }
 
   @override

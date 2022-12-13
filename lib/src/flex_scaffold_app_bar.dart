@@ -40,13 +40,23 @@ class FlexScaffoldAppBar extends StatelessWidget
   Widget build(BuildContext context) {
     // If no FlexfoldAppBar was given we make a default one.
     final FlexAppBar usedAppBar = appBar ?? const FlexAppBar();
-    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
     assert(
         usedAppBar.leading == null,
         'The main AppBar in FlexScaffold cannot have a leading widget '
         'just leave it as null, it will get one assigned automatically. You '
         'can assign it a custom icon widget separately, but its pressed event '
         'handler will be added by FlexScaffold.');
+
+    // This only reads the FlexScaffold state once, it won't update.
+    // We can also use it to access its state modifying methods.
+    final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
+
+    /// Listen to aspect of the FlexScaffold and only rebuild if they change.
+    final bool isMenuInDrawer = FlexScaffold.isMenuInDrawerOf(context);
+    final bool isSidebarInEndDrawer =
+        FlexScaffold.isSidebarInEndDrawerOf(context);
+    final bool isSidebarInMenu = FlexScaffold.isSidebarInMenuOf(context);
+    final bool isSidebarHidden = FlexScaffold.isSidebarHiddenOf(context);
 
     // Convert the main FlexfoldAppBar data object to a real AppBar.
     Widget? title = usedAppBar.title;
@@ -97,8 +107,7 @@ class FlexScaffoldAppBar extends StatelessWidget
     return usedAppBar.toAppBar(
       automaticallyImplyLeading: false,
       // Only add the menu button on the main AppBar, if menu is in a Drawer.
-      leading:
-          flexScaffold.isMenuInDrawer ? FlexMenuButton(onPressed: () {}) : null,
+      leading: isMenuInDrawer ? FlexMenuButton(onPressed: () {}) : null,
       title: title,
       actions: <Widget>[
         // Insert any pre-existing actions AND
@@ -109,10 +118,10 @@ class FlexScaffoldAppBar extends StatelessWidget
         // a default action button to show the menu, we do not want that.
         ...usedAppBar.actions ?? <Widget>[const SizedBox.shrink()],
         // Then insert the sidebar menu button, if so needed in current layout.
-        if (flexScaffold.isSidebarInEndDrawer ||
-            (flexScaffold.isSidebarInMenu &&
-                flexScaffold.widget.sidebarBelongsToBody &&
-                flexScaffold.widget.sidebarControlEnabled))
+        if (isSidebarInEndDrawer ||
+            (isSidebarInMenu &&
+                flexScaffold.widget.sidebarControlEnabled &&
+                (isSidebarHidden || flexScaffold.widget.sidebarBelongsToBody)))
           FlexSidebarButton(onPressed: () {}),
       ],
     );

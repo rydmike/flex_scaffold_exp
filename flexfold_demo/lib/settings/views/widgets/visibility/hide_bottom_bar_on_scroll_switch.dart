@@ -26,7 +26,7 @@ class HideBottomBarOnScrollSwitch extends ConsumerWidget {
         // again if it was scroll hidden on this screen.
         if (!isHidden) {
           // ref.read(scrollHiddenBottomBarPod.notifier).state = false;
-          FlexScaffold.of(context).scrollHideBottomBar(false);
+          FlexScaffold.use(context).scrollHideBottomBar(false);
         }
       },
       tooltipEnabled: ref.watch(useTooltipsPod),

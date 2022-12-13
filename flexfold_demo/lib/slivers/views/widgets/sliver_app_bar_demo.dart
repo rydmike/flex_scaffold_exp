@@ -95,12 +95,17 @@ class SliverAppBarDemo extends ConsumerWidget {
     // If we do not do this, we will not be able to open the menu and sidebar
     // again from a destination that uses a custom sliver app bar,
     // or a persistent custom header.
-    // The FlexScaffoldState contains proper status info for it and inserting
+    // The FlexScaffold contains proper status info for this and inserting
     // the FlexMenuButton and FlexSidebarButton is simple.
-    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
+
+    /// Listen to aspect of the FlexScaffold and only rebuild if they change.
+    final bool isMenuInDrawer = FlexScaffold.isMenuInDrawerOf(context);
+    final bool isSidebarInEndDrawer =
+        FlexScaffold.isSidebarInEndDrawerOf(context);
+
     // Leading widget, includes open drawer action and effective tooltip
     Widget? leading;
-    if (flexScaffold.isMenuInDrawer) {
+    if (isMenuInDrawer) {
       leading = FlexMenuButton(
         onPressed: () {},
       );
@@ -111,10 +116,9 @@ class SliverAppBarDemo extends ConsumerWidget {
         child: leading,
       );
     }
-    // TODO(rydmike): Only shows after resize. Works if inherited always notify.
     // Actions widget, includes open end drawer action and effective tooltip.
     Widget? actions = const SizedBox.shrink();
-    if (flexScaffold.isSidebarInEndDrawer) {
+    if (isSidebarInEndDrawer) {
       actions = FlexSidebarButton(
         onPressed: () {},
       );

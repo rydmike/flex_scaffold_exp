@@ -82,7 +82,7 @@ class _SliversScreenState extends ConsumerState<SliversPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     useHide = ref.watch(hideBottomBarOnScrollPod);
-    hide = FlexScaffold.of(context).scrollHideBottomBar;
+    hide = FlexScaffold.use(context).scrollHideBottomBar;
   }
 
   @override

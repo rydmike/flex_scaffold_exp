@@ -47,7 +47,7 @@ class _TabAppBarState extends ConsumerState<TabAppBar>
   void didChangeDependencies() {
     super.didChangeDependencies();
     useHide = ref.watch(hideBottomBarOnScrollPod);
-    hide = FlexScaffold.of(context).scrollHideBottomBar;
+    hide = FlexScaffold.use(context).scrollHideBottomBar;
   }
 
   @override

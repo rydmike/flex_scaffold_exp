@@ -72,6 +72,10 @@ class FlexMenuButton extends StatelessWidget {
     final bool hasDrawer = scaffold?.hasDrawer ?? false;
     final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
 
+    /// Listen to aspect of the FlexScaffold and only rebuild if they change.
+    final bool menuIsHidden = FlexScaffold.isMenuHiddenOf(context);
+    final bool menuPrefersRail = FlexScaffold.menuPrefersRailOf(context);
+
     final Size size = MediaQuery.of(context).size;
     final double width = size.width;
     final double screenHeight = size.height;
@@ -87,7 +91,9 @@ class FlexMenuButton extends StatelessWidget {
     final bool canLockMenu = (width >= breakpointRail) && !isPhoneLandscape;
     final bool mustBeRail = width < breakpointMenu;
 
-    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
+    // This only reads the FlexScaffold state once, it won't update.
+    // We can also use it to access its state modifying methods.
+    final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
     // Set effective expand and collapse icons
     Widget effectiveMenuIcon =
         menuIcon ?? flexScaffold.widget.menuIcon ?? kFlexfoldMenuIcon;
@@ -137,7 +143,7 @@ class FlexMenuButton extends StatelessWidget {
     } else if (hasDrawer && isDrawerOpen && !canLockMenu) {
       tooltip = flexTheme.menuCloseTooltip!;
       effectiveMenuButton = effectiveMenuIcon;
-    } else if (flexScaffold.menuIsHidden) {
+    } else if (menuIsHidden) {
       tooltip = flexTheme.menuExpandTooltip!;
       effectiveMenuButton = effectiveMenuIconExpand;
     } else {
@@ -157,7 +163,7 @@ class FlexMenuButton extends StatelessWidget {
                 scaffold?.openDrawer();
               } else if (hasDrawer && isDrawerOpen && !canLockMenu) {
                 Navigator.of(context).pop();
-              } else if (flexScaffold.menuIsHidden) {
+              } else if (menuIsHidden) {
                 flexScaffold.setMenuPrefersRail(false);
                 if (hasDrawer && isDrawerOpen) {
                   Navigator.of(context).pop();
@@ -175,7 +181,7 @@ class FlexMenuButton extends StatelessWidget {
                   flexScaffold.hideMenu(false);
                 }
               } else {
-                if (flexScaffold.menuPrefersRail || mustBeRail) {
+                if (menuPrefersRail || mustBeRail) {
                   flexScaffold.hideMenu(true);
                 } else {
                   flexScaffold.setMenuPrefersRail(true);

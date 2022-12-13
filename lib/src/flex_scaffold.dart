@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/foundation.dart' show Diagnosticable, kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -12,6 +12,8 @@ import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
 import 'flex_sidebar.dart';
 import 'flexfold_theme.dart';
+
+// ignore_for_file: comment_references
 
 // Set to true to observe debug prints. In release mode this compile time
 // const always evaluate to false, so in theory anything with only an
@@ -65,11 +67,12 @@ class FlexScaffold extends StatefulWidget {
     this.menuFooter,
     //
     // Menu state properties and its callbacks.
-    this.hideMenu = false,
-    this.onHideMenu,
+    this.menuHide = false,
+    this.onMenuHide,
+    this.menuPrefersRail = false,
+    this.onMenuPrefersRail,
+    //
     this.cycleViaDrawer = true,
-    this.preferRail = false,
-    this.onPreferRail,
     //
     // Sidebar icons.
     this.sidebarIcon,
@@ -79,8 +82,8 @@ class FlexScaffold extends StatefulWidget {
     // Sidebar and end drawer properties and its callback.
     this.sidebarAppBar,
     this.sidebar,
-    this.hideSidebar = false,
-    this.onHideSidebar,
+    this.sidebarHide = false,
+    this.onSidebarHide,
     this.sidebarBelongsToBody = false,
     //
     // Bottom navigation bar properties.
@@ -265,39 +268,42 @@ class FlexScaffold extends StatefulWidget {
   ///
   /// When true, both the rail and menu will be kept hidden in the drawer, even
   /// if the breakpoint for rail or breakpoint for menu have both been exceeded.
-  final bool hideMenu;
+  final bool menuHide;
 
   /// Callback that is called when menu is hidden via its menu button control.
   ///
-  /// This callback together with its sett [hideMenu] can be used if you
+  /// This callback together with its sett [menuHide] can be used if you
   /// want to control hiding and showing the menu from an external control,
   /// like a user controlled [Switch], you can then use this callback to change
   /// the state of such a switch when user has operated hiding/showing the menu
   /// via its menu control button.
-  final ValueChanged<bool>? onHideMenu;
+  final ValueChanged<bool>? onMenuHide;
 
-  /// Cycle via drawer menu when opening a hidden menu.
-  ///
-  /// When the menu may be shown as locked on screen, as a rail or menu, and
-  /// we expand it again, it first cycles via the drawer menu option if true.
-  /// If set to false it skips the cycle via the drawer and expands it directly
-  /// to a rail or side menu, depending on current screen width and if it is
-  /// larger than the breakpoint for menu or not. If screen width is below rail
-  /// breakpoint this setting has no effect, the only way to show the menu is
-  /// as a drawer, so the drawer will be opened.
-  final bool cycleViaDrawer;
-
-  /// Prefer rail menu.
+  /// Prefer rail as size for the menu.
   ///
   /// When the menu is locked on screen and it is shown, it will remain as a
   /// rail even if the menu breakpoint is exceeded and it should be shown as a
-  /// menu based on set breakpoint value.
-  final bool preferRail;
+  /// menu, based on defined breakpoint value for when the rail changes to menu.
+  final bool menuPrefersRail;
 
   /// Callback that is called when prefer rail changes.
   ///
   /// Can be used to control and preferRail, via a toggle Switch externally.
-  final ValueChanged<bool>? onPreferRail;
+  final ValueChanged<bool>? onMenuPrefersRail;
+
+  /// Cycle via Drawer when opening a hidden menu, rail or sidebar.
+  ///
+  /// When the menu or sidebar can be locked on screen, as a rail, menu or
+  /// sidebar, and we expand it again, it first cycles via the Drawer if true.
+  ///
+  /// If set to false it skips the cycle via the drawer and expands it directly
+  /// to a rail, menu or sidebar, depending on current screen width and if it is
+  /// larger than the breakpoint for menu or not. If screen width is below rail
+  /// breakpoint this setting has no effect, the only way to show the menu is
+  /// as a drawer, so the drawer will be opened.
+  ///
+  /// Affects both drawer and sidebar end drawer.
+  final bool cycleViaDrawer;
 
   /// A Widget used to open the sidebar menu, typically an [Icon] is used.
   ///
@@ -341,10 +347,10 @@ class FlexScaffold extends StatefulWidget {
 
   /// Keep sidebar hidden in an end drawer, even when its breakpoint is
   /// exceeded.
-  final bool hideSidebar;
+  final bool sidebarHide;
 
-  /// Callback that is called when [hideSidebar] changes
-  final ValueChanged<bool>? onHideSidebar;
+  /// Callback that is called when [sidebarHide] changes
+  final ValueChanged<bool>? onSidebarHide;
 
   /// When sidebar belongs to the body, it is a vertical end column made in a
   /// row item after the body content.
@@ -459,7 +465,7 @@ class FlexScaffold extends StatefulWidget {
   ///
   /// This method can be expensive (it walks the element tree).
   ///
-  /// Typical usage of the [FlexScaffold.of] function is to call it from
+  /// Typical usage of the [FlexScaffold.use] function is to call it from
   /// within the `build` method of a child of a [FlexScaffold].
   ///
   /// When the [FlexScaffold] is actually created in the same `build` function,
@@ -473,37 +479,35 @@ class FlexScaffold extends StatefulWidget {
   /// widgets. This introduces a new context from which you can obtain the
   /// [FlexScaffold]. In this solution, you would have an outer widget that
   /// creates the [FlexScaffold] populated by instances of your new inner
-  /// widgets, and then in these inner widgets you would use [FlexScaffold.of].
+  /// widgets, and then in these inner widgets you would use [FlexScaffold.use].
   ///
   /// A less elegant but more expedient solution is assign a [GlobalKey] to the
   /// [FlexScaffold], then use the `key.currentState` property to obtain the
-  /// [FlexScaffoldState] rather than using the [FlexScaffold.of] function.
+  /// [FlexScaffoldState] rather than using the [FlexScaffold.use] function.
   ///
   /// If there is no [FlexScaffold] in scope, then this will throw an exception.
-  static FlexScaffoldState of(BuildContext context) {
-    final _InheritedFlexScaffold? result =
-        context.dependOnInheritedWidgetOfExactType<_InheritedFlexScaffold>();
+  static FlexScaffoldState use(BuildContext context, {bool build = false}) {
+    final _InheritedFlexScaffold? result = build
+        ? context.dependOnInheritedWidgetOfExactType<_InheritedFlexScaffold>()
+        : context.findAncestorWidgetOfExactType<_InheritedFlexScaffold>();
     if (result != null) {
       return result.data;
     }
     throw FlutterError.fromParts(<DiagnosticsNode>[
       ErrorSummary(
-        'FlexScaffold.of() called with a context that does not '
+        'FlexScaffold.use() called with a context that does not '
         'contain a FlexScaffold.',
       ),
       ErrorDescription(
         'No FlexScaffoldState ancestor could be found starting from the '
-        'context that was passed to FlexScaffold.of(). '
+        'context that was passed to FlexScaffold.use(). '
         'This usually happens when the context provided is from the same '
         'StatefulWidget as that whose build function actually creates the '
         'FlexScaffold widget being sought.',
       ),
       ErrorHint(
         'There are several ways to avoid this problem. The simplest is to use '
-        'a Builder to get a context that is "under" the FlexScaffold. '
-        'For a similar example of this, please see the '
-        'documentation for Scaffold.of():\n'
-        '  https://api.flutter.dev/flutter/material/Scaffold/of.html',
+        'a Builder to get a context that is "under" the FlexScaffold.',
       ),
       ErrorHint(
         'A more efficient solution is to split your build function into '
@@ -511,10 +515,10 @@ class FlexScaffold extends StatefulWidget {
         'obtain the FlexScaffold. In this solution, you would have an outer '
         'widget that creates the FlexScaffold populated by instances of '
         'your new inner widgets, and then in these inner widgets you would use '
-        'FlexScaffold.of().\n'
+        'FlexScaffold.use().\n'
         'A less elegant but more expedient solution is assign a GlobalKey to '
         'the FlexScaffold, then use the key.currentState property to obtain '
-        'the FlexScaffoldState rather than using the FlexScaffold.of() '
+        'the FlexScaffoldState rather than using the FlexScaffold.use() '
         'function.',
       ),
       context.describeElement('The context used was'),
@@ -525,19 +529,72 @@ class FlexScaffold extends StatefulWidget {
   /// encloses the given context.
   ///
   /// If no instance of this class encloses the given context, will return null.
-  /// To throw an exception instead, use [of] instead of this function.
+  /// To throw an exception instead, use [use] instead of this function.
   ///
   /// This method can be expensive (it walks the element tree).
   ///
   /// See also:
   ///
-  ///  * [of], a similar function to this one that throws if no instance
+  ///  * [use], a similar function to this one that throws if no instance
   ///    encloses the given context.
-  static FlexScaffoldState? maybeOf(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<_InheritedFlexScaffold>()
-        ?.data;
+  static FlexScaffoldState? maybeUse(BuildContext context,
+      {bool build = false}) {
+    return build
+        ? context
+            .dependOnInheritedWidgetOfExactType<_InheritedFlexScaffold>()
+            ?.data
+        : context.findAncestorWidgetOfExactType<_InheritedFlexScaffold>()?.data;
   }
+
+  /// Returns the state data for [FlexScaffold].
+  ///
+  /// Only contains values of the FlexScaffold designed to be available outside
+  /// the internal state.
+  ///
+  /// You seldom need access to all properties, consider using individual "of"
+  /// getters that only rebuild when a given aspect of the FlexScaffold changes.
+
+  // static _FlexScaffoldData of(BuildContext context) {
+  //   return _of(context);
+  // }
+
+  static _FlexScaffoldData _of(BuildContext context,
+      [_FlexScaffoldAspect? aspect]) {
+    return InheritedModel.inheritFrom<_FlexScaffoldModel>(context,
+            aspect: aspect)!
+        .data;
+  }
+
+  /// Returns true if the [FlexScaffold] menu is in the drawer.
+  static bool isMenuInDrawerOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.isMenuInDrawer).isMenuInDrawer;
+
+  /// Returns true if the [FlexScaffold] menu is hidden.
+  ///
+  /// The menu can be hidden either via internal menu toggle, or
+  /// [FlexScaffold.menuHide] can be set to true.
+  static bool isMenuHiddenOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.isMenuHidden).isMenuHidden;
+
+  /// Returns true if the [FlexScaffold] menu prefers to stay as a rail.
+  static bool menuPrefersRailOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.menuPrefersRail).menuPrefersRail;
+
+  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  static bool isSidebarInEndDrawerOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.isSidebarInEndDrawer)
+          .isSidebarInEndDrawer;
+
+  /// Returns true if the [FlexScaffold] sidebar is is a menu sidebar.
+  static bool isSidebarInMenuOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.isSidebarInMenu).isSidebarInMenu;
+
+  /// Returns true if the [FlexScaffold] sidebar is hidden.
+  ///
+  /// The sidebar can be hidden either via internal sidebar toggle, or
+  /// [FlexScaffold.sidebarHide] can be set to true.
+  static bool isSidebarHiddenOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.isSidebarHidden).isSidebarHidden;
 
   /// A static helper function intended to be used as a scroll controller
   /// listener to show and hide the bottom navigation bar in a [FlexScaffold].
@@ -584,19 +641,23 @@ class FlexScaffold extends StatefulWidget {
 /// State for a [FlexScaffold].
 ///
 /// Retrieve a [ScaffoldState] from the current
-/// [BuildContext] using [FlexScaffold.of].
+/// [BuildContext] using [FlexScaffold.use].
 class FlexScaffoldState extends State<FlexScaffold> {
+  // Use an inherited model of key properties to propagate them down the tree.
+  static const _FlexScaffoldData _data = _FlexScaffoldData();
   // State that might be changed via widget
   late int _selectedIndex;
   final IndexTracker _indexMenu = IndexTracker();
   final IndexTracker _indexBottom = IndexTracker();
   late FlexDestination _target;
-  late bool _hideMenu;
-  late bool _hideSidebar;
-  late bool _preferRail;
+  late bool _isMenuHidden;
+  late bool _isSidebarHidden;
+  late bool _menuPrefersRail;
   late bool _isBottomTarget;
   late bool _scrollHiddenBottomBar;
   late List<FlexDestination> _bottomDestinations;
+  double _breakpointSidebar = kFlexfoldBreakpointSidebar;
+  double _width = 600;
 
   // Local state
   late bool _isPhone;
@@ -611,61 +672,65 @@ class FlexScaffoldState extends State<FlexScaffold> {
   late bool _showBottomDestinationsInDrawer;
   late Orientation _currentOrientation;
 
-  /// Returns true if the menu is currently in the Drawer.
-  bool get isMenuInDrawer => _isMenuInDrawer;
-
-  /// Returns true if the menu is currently hidden.
-  bool get menuIsHidden => _hideMenu;
+  // /// Returns true if the menu is currently in the Drawer.
+  // bool get isMenuInDrawer => _isMenuInDrawer;
+  //
+  // /// Returns true if the menu is currently hidden.
+  // bool get menuIsHidden => _isMenuHidden;
 
   /// Set the FlexScaffold menu to be hidden. If set to false, the menu will be
   /// shown as a rail or menu when it should, based on its breakpoints.
   void hideMenu(bool value) {
-    if (value != _hideMenu) {
+    if (value != _isMenuHidden) {
       setState(() {
-        _hideMenu = value;
+        _isMenuHidden = value;
         _scrollHiddenBottomBar = false;
-        widget.onHideMenu?.call(value);
+        widget.onMenuHide?.call(value);
         if (_kDebugMe) {
-          debugPrint('FlexScaffold: menuIsHidden set to $_hideMenu');
+          debugPrint('FlexScaffold: hideMenu set to $_isMenuHidden');
         }
       });
     }
   }
 
-  /// Returns true if the menu is currently preferring to be a rail.
-  ///
-  /// If the menu has been set to be a Rail or breakpoint settings forces the
-  /// the menu to current be a rail, this is true.
-  bool get menuPrefersRail => _preferRail;
+  // /// Returns true if the menu is currently preferring to be a rail.
+  // ///
+  // /// If the menu has been set to be a Rail or breakpoint settings forces the
+  // /// the menu to current be a rail, this is true.
+  // bool get menuPrefersRail => _menuPrefersRail;
 
   /// Set the FlexScaffold menu to prefer rail state.
   void setMenuPrefersRail(bool value) {
     setState(() {
-      _preferRail = value;
-      widget.onPreferRail?.call(value);
+      _menuPrefersRail = value;
+      widget.onMenuPrefersRail?.call(value);
       if (_kDebugMe) {
-        debugPrint('FlexScaffold: menuPrefersRail set to $_preferRail');
+        debugPrint('FlexScaffold: menuPrefersRail set to $_menuPrefersRail');
       }
     });
   }
 
-  /// Returns true if the sidebar is currently in the EndDrawer.
-  bool get isSidebarInEndDrawer => _isSidebarInEndDrawer;
-
-  /// Returns true if the sidebar is currently in the locked menu state.
-  bool get isSidebarInMenu => _isSidebarInMenu;
-
-  /// Returns true if the sidebar is currently hidden.
-  bool get sidebarIsHidden => _hideSidebar;
+  // /// Returns true if the sidebar is currently in the EndDrawer.
+  // bool get isSidebarInEndDrawer => _isSidebarInEndDrawer;
+  //
+  // /// Returns true if the sidebar is currently in the locked menu state.
+  // bool get isSidebarInMenu => _isSidebarInMenu;
+  //
+  // /// Returns true if the sidebar is currently hidden.
+  // bool get isSidebarHidden => _isSidebarHidden;
 
   /// Set the FlexScaffold sidebar to be hidden. If set to false, the sidebar
   /// will be shown when it should automatically, based on its breakpoint.
   void hideSidebar(bool value) {
     setState(() {
-      _hideSidebar = value;
-      widget.onHideSidebar?.call(value);
+      _isSidebarHidden = value;
+      _isSidebarInEndDrawer =
+          (value || _width < _breakpointSidebar || _isSidebarHidden) &&
+              widget.destinations[_selectedIndex].hasSidebar &&
+              widget.sidebar != null;
+      widget.onSidebarHide?.call(value);
       if (_kDebugMe) {
-        debugPrint('FlexScaffold: sidebarIsHidden set to $_hideSidebar');
+        debugPrint('FlexScaffold: sidebarIsHidden set to $_isSidebarHidden');
       }
     });
   }
@@ -852,10 +917,10 @@ class FlexScaffoldState extends State<FlexScaffold> {
     final int? bottomIndex = toBottomIndex(_target);
     _indexBottom.setIndex(bottomIndex);
     _isBottomTarget = bottomIndex != null;
-    _hideMenu = widget.hideMenu;
-    _hideSidebar = widget.hideSidebar;
-    _preferRail = widget.preferRail;
-    _scrollHiddenBottomBar = false; // widget.scrollHiddenBottomBar;
+    _isMenuHidden = widget.menuHide;
+    _isSidebarHidden = widget.sidebarHide;
+    _menuPrefersRail = widget.menuPrefersRail;
+    _scrollHiddenBottomBar = false;
     // TODO(rydmike): Changing orientation with drawer open may break it! Fix?
     // currentOrientation = MediaQuery.of(context).orientation;
   }
@@ -871,14 +936,14 @@ class FlexScaffoldState extends State<FlexScaffold> {
       _indexBottom.setIndex(bottomIndex);
       _isBottomTarget = bottomIndex != null;
     }
-    if (widget.hideMenu != oldWidget.hideMenu) {
-      _hideMenu = widget.hideMenu;
+    if (widget.menuHide != oldWidget.menuHide) {
+      _isMenuHidden = widget.menuHide;
     }
-    if (widget.hideSidebar != oldWidget.hideSidebar) {
-      _hideSidebar = widget.hideSidebar;
+    if (widget.sidebarHide != oldWidget.sidebarHide) {
+      _isSidebarHidden = widget.sidebarHide;
     }
-    if (widget.preferRail != oldWidget.preferRail) {
-      _preferRail = widget.preferRail;
+    if (widget.menuPrefersRail != oldWidget.menuPrefersRail) {
+      _menuPrefersRail = widget.menuPrefersRail;
     }
     if (widget.destinations != oldWidget.destinations) {
       _bottomDestinations = widget.destinations
@@ -1021,242 +1086,253 @@ class FlexScaffoldState extends State<FlexScaffold> {
     );
 
     // Then make an animated FlexfoldTheme of the final effective theme.
-    return _InheritedFlexScaffold(
-      data: this,
-      child: AnimatedFlexfoldTheme(
-        data: effectiveFlexTheme,
-        child: Builder(builder: (BuildContext context) {
-          // We a use builder to ensure we have the fully merged FlexfoldTheme
-          // next up in the Widget tree, that now also has all the default
-          // values. By doing this we do not have to apply any defaults again in
-          // the entire Flexfold widget tree and its descendants. They are now
-          // guaranteed to with 'FlexfoldTheme.of(context)' get a theme
-          // that has been fully merged with provided values in the property
-          // passing and inheritance priority order we defined.
-          //
-          // The only values that may still be null after this merge are:
-          // * FlexfoldTheme.menuBackgroundColor
-          // * FlexfoldTheme.sidebar.BackgroundColor
-          // * FlexfoldTheme.bottomNavigationBarTheme.backgroundColor
-          //
-          // This makes accessing the correct theme result further down the
-          // widget tree easier, since we can always get it like this now:
-          final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
+    return AnimatedFlexfoldTheme(
+      data: effectiveFlexTheme,
+      child: Builder(builder: (BuildContext context) {
+        // We a use builder to ensure we have the fully merged FlexfoldTheme
+        // next up in the Widget tree, that now also has all the default
+        // values. By doing this we do not have to apply any defaults again in
+        // the entire Flexfold widget tree and its descendants. They are now
+        // guaranteed to with 'FlexfoldTheme.of(context)' get a theme
+        // that has been fully merged with provided values in the property
+        // passing and inheritance priority order we defined.
+        //
+        // The only values that may still be null after this merge are:
+        // * FlexfoldTheme.menuBackgroundColor
+        // * FlexfoldTheme.sidebar.BackgroundColor
+        // * FlexfoldTheme.bottomNavigationBarTheme.backgroundColor
+        //
+        // This makes accessing the correct theme result further down the
+        // widget tree easier, since we can always get it like this now:
+        final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
 
-          // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
-          //   reference: https://github.com/flutter/flutter/pull/114459
-          // Get media width, height, and safe area padding
-          assert(debugCheckHasMediaQuery(context),
-              'A valid build context is required for the MediaQuery.');
-          final MediaQueryData mediaData = MediaQuery.of(context);
-          final double leftPadding = mediaData.padding.left;
-          final double rightPadding = mediaData.padding.right;
-          final double startPadding =
-              Directionality.of(context) == TextDirection.ltr
-                  ? leftPadding
-                  : rightPadding;
-          final double width = mediaData.size.width;
-          final double height = mediaData.size.height;
+        // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
+        //   reference: https://github.com/flutter/flutter/pull/114459
+        // Get media width, height, and safe area padding
+        assert(debugCheckHasMediaQuery(context),
+            'A valid build context is required for the MediaQuery.');
+        final MediaQueryData mediaData = MediaQuery.of(context);
+        final double leftPadding = mediaData.padding.left;
+        final double rightPadding = mediaData.padding.right;
+        final double startPadding =
+            Directionality.of(context) == TextDirection.ltr
+                ? leftPadding
+                : rightPadding;
+        _width = mediaData.size.width;
+        final double height = mediaData.size.height;
 
-          // Based on width and breakpoint limit, this is a phone sized layout.
-          _isPhone = width < flexTheme.breakpointRail!;
-          // Based on height and breakpoint, this is a phone landscape layout.
-          _isPhoneLandscape = height < flexTheme.breakpointDrawer!;
-          // Based on width & breakpoint limit, this is a desktop sized layout.
-          _isDesktop =
-              (width >= flexTheme.breakpointMenu!) && !_isPhoneLandscape;
-          // This is only based on that we are not doing phone or desktop size.
-          _isTablet = !_isPhone && !_isDesktop;
+        // Based on width and breakpoint limit, this is a phone sized layout.
+        _isPhone = _width < flexTheme.breakpointRail!;
+        // Based on height and breakpoint, this is a phone landscape layout.
+        _isPhoneLandscape = height < flexTheme.breakpointDrawer!;
+        // Based on width & breakpoint limit, this is a desktop sized layout.
+        _isDesktop =
+            (_width >= flexTheme.breakpointMenu!) && !_isPhoneLandscape;
+        // This is only based on that we are not doing phone or desktop size.
+        _isTablet = !_isPhone && !_isDesktop;
 
-          // The menu will exist as a Drawer widget in the widget tree.
-          _isMenuInDrawer = _isPhone || widget.hideMenu || _isPhoneLandscape;
-          // The menu is shown as a full sized menu before the body.
-          _isMenuInMenu = _isDesktop && !widget.hideMenu && !widget.preferRail;
-          // The sidebar will exist in an end Drawer widget in the widget tree.
-          _isSidebarInEndDrawer =
-              (width < flexTheme.breakpointSidebar! || _hideSidebar) &&
-                  widget.destinations[_selectedIndex].hasSidebar &&
-                  widget.sidebar != null;
-          // The sidebar is shown as a widget after the body.
-          _isSidebarInMenu = width >= flexTheme.breakpointSidebar! &&
-              !_hideSidebar &&
-              widget.destinations[_selectedIndex].hasSidebar &&
-              widget.sidebar != null;
-          // The bottom navigation bar is visible.
-          // Complex logic here, many config options leads to stuff like this.
-          _isBottomBarVisible = !(widget.hideBottomBar ||
-                  _scrollHiddenBottomBar) &&
-              (_isPhone ||
-                  widget.showBottomBarWhenMenuShown ||
-                  (widget.showBottomBarWhenMenuInDrawer && _isMenuInDrawer));
-          // The bottom destinations are to be shown and included in the drawer.
-          // Again complex logic, caused by many options and possibilities
-          _showBottomDestinationsInDrawer = widget.bottomDestinationsInDrawer ||
-              !_isBottomTarget ||
-              widget.hideBottomBar ||
-              (!_isPhone &&
-                  (!widget.showBottomBarWhenMenuInDrawer &&
-                      !widget.showBottomBarWhenMenuShown));
-          // Set location of floating action button (FAB) depending on media
-          // size, use default locations if null.
-          final FloatingActionButtonLocation effectiveFabLocation = _isPhone
-              // FAB on phone size
-              ? widget.floatingActionButtonLocationPhone ??
-                  // Default uses end float location, the official standard.
-                  FloatingActionButtonLocation.endFloat
-              : _isDesktop
-                  ? widget.floatingActionButtonLocationDesktop ??
-                      // Material default position would be startTop at desktop
-                      // size, or possibly also endTop, but the FAB gets in the
-                      // way in those locations sometimes so we use centerFloat
-                      // as default.
-                      FloatingActionButtonLocation.centerFloat
-                  // It is tablet then ...
-                  : widget.floatingActionButtonLocationTablet ??
-                      // Default should be start top, but that is in the way so
-                      // we use startFloat, it works well with rail navigation.
-                      FloatingActionButtonLocation.startFloat;
-          //
-          // Build the actual FlexScaffold content
-          return Row(
-            children: <Widget>[
+        // The menu will exist as a Drawer widget in the widget tree.
+        _isMenuInDrawer = _isPhone || widget.menuHide || _isPhoneLandscape;
+        // The menu is shown as a full sized menu before the body.
+        _isMenuInMenu =
+            _isDesktop && !widget.menuHide && !widget.menuPrefersRail;
+        // The sidebar will exist in an end Drawer widget in the widget tree.
+        _isSidebarInEndDrawer =
+            (_width < flexTheme.breakpointSidebar! || _isSidebarHidden) &&
+                widget.destinations[_selectedIndex].hasSidebar &&
+                widget.sidebar != null;
+        // The sidebar is shown as a widget after the body.
+        _breakpointSidebar = flexTheme.breakpointSidebar!;
+        _isSidebarInMenu = _width >= _breakpointSidebar &&
+            !_isSidebarHidden &&
+            widget.destinations[_selectedIndex].hasSidebar &&
+            widget.sidebar != null;
+        // The bottom navigation bar is visible.
+        // Complex logic here, many config options leads to stuff like this.
+        _isBottomBarVisible =
+            !(widget.hideBottomBar || _scrollHiddenBottomBar) &&
+                (_isPhone ||
+                    widget.showBottomBarWhenMenuShown ||
+                    (widget.showBottomBarWhenMenuInDrawer && _isMenuInDrawer));
+        // The bottom destinations are to be shown and included in the drawer.
+        // Again complex logic, caused by many options and possibilities
+        _showBottomDestinationsInDrawer = widget.bottomDestinationsInDrawer ||
+            !_isBottomTarget ||
+            widget.hideBottomBar ||
+            (!_isPhone &&
+                (!widget.showBottomBarWhenMenuInDrawer &&
+                    !widget.showBottomBarWhenMenuShown));
+        // Set location of floating action button (FAB) depending on media
+        // size, use default locations if null.
+        final FloatingActionButtonLocation effectiveFabLocation = _isPhone
+            // FAB on phone size
+            ? widget.floatingActionButtonLocationPhone ??
+                // Default uses end float location, the official standard.
+                FloatingActionButtonLocation.endFloat
+            : _isDesktop
+                ? widget.floatingActionButtonLocationDesktop ??
+                    // Material default position would be startTop at desktop
+                    // size, or possibly also endTop, but the FAB gets in the
+                    // way in those locations sometimes so we use centerFloat
+                    // as default.
+                    FloatingActionButtonLocation.centerFloat
+                // It is tablet then ...
+                : widget.floatingActionButtonLocationTablet ??
+                    // Default should be start top, but that is in the way so
+                    // we use startFloat, it works well with rail navigation.
+                    FloatingActionButtonLocation.startFloat;
+        //
+        // Build the actual FlexScaffold content
+        return _InheritedFlexScaffold(
+          data: this,
+          child: _FlexScaffoldModel(
+            data: _data.copyWith(
+              isMenuInDrawer: _isMenuInDrawer,
+              isMenuHidden: _isMenuHidden,
+              menuPrefersRail: _menuPrefersRail,
               //
-              // Main menu, when the menu is shown as a fixed menu
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxWidth: flexTheme.menuWidth! + startPadding),
-                child: Material(
-                  color: flexTheme.menuBackgroundColor,
-                  elevation: flexTheme.menuElevation!,
-                  child: _buildMenu(context),
-                ),
-              ),
-              //
-              // Main part is an Expanded that contains a standard Scaffold.
-              Expanded(
-                child: Scaffold(
-                  key: widget.key,
-                  //
-                  extendBody: widget.extendBody,
-                  extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
-                  //
-                  // Add AppBar with leading and actions buttons, but only
-                  // if the destination has an app bar.
-                  appBar: widget.destinations[_selectedIndex].hasAppBar
-                      ? FlexScaffoldAppBar(appBar: widget.appBar)
-                      : null,
-                  //
-                  // The menu when used as a drawer.
-                  drawer: _isMenuInDrawer
-                      ? FlexDrawer(
-                          elevation: flexTheme.drawerElevation!,
-                          drawerWidth: flexTheme.drawerWidth! + startPadding,
-                          currentScreenWidth: width,
-                          backgroundColor: flexTheme.menuBackgroundColor,
-                          child: _buildMenu(context),
-                        )
-                      : null,
-                  //
-                  // The end drawer, ie tools menu when used as an end drawer.
-                  endDrawer: _isSidebarInEndDrawer
-                      ? FlexDrawer(
-                          elevation: flexTheme.endDrawerElevation!,
-                          drawerWidth: flexTheme.endDrawerWidth!,
-                          currentScreenWidth: width,
-                          backgroundColor: flexTheme.sidebarBackgroundColor,
-                          child: FlexSidebar(
-                            sidebarToggleEnabled: widget.sidebarControlEnabled,
-                            // If no sidebar app bar given make a default one.
-                            sidebarAppBar:
-                                widget.sidebarAppBar ?? const FlexAppBar(),
-                            sidebarBelongsToBody: widget.sidebarBelongsToBody,
-                            hasAppBar:
-                                widget.destinations[_selectedIndex].hasAppBar,
-                            child: widget.sidebar,
-                          ),
-                        )
-                      : null,
-                  //
-                  // The bottom navigation bar
-                  bottomNavigationBar: _FlexScaffoldBottomBar(
-                    isBottomTarget: _isBottomTarget,
-                    isBottomBarVisible: _isBottomBarVisible,
-                    customNavBar: widget.customBottomNavigator,
+              isSidebarInEndDrawer: _isSidebarInEndDrawer,
+              isSidebarInMenu: _isSidebarInMenu,
+              isSidebarHidden: _isSidebarHidden,
+            ),
+            child: Row(
+              children: <Widget>[
+                //
+                // Main menu, when the menu is shown as a fixed menu
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: flexTheme.menuWidth! + startPadding,
                   ),
-                  //
-                  // Floating action button in its effective location.
-                  floatingActionButton: widget
-                          .destinations[_selectedIndex].hasFloatingActionButton
-                      ? widget.floatingActionButton
-                      : null,
-                  floatingActionButtonLocation: effectiveFabLocation,
-                  //
-                  // Build the actual content in a Row.
-                  body: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child: widget.body ?? Container(),
-                      ),
-                      //
-                      // The Sidebar when shown as a fixed item and it belongs
-                      // to the body. Material default sidebar layout.
-                      if (widget.destinations[_selectedIndex].hasSidebar &&
-                          widget.sidebar != null &&
-                          widget.sidebarBelongsToBody)
-                        ConstrainedBox(
-                          constraints:
-                              BoxConstraints(maxWidth: flexTheme.sidebarWidth!),
-                          child: Material(
-                            color: flexTheme.sidebarBackgroundColor,
-                            elevation: flexTheme.sidebarElevation!,
+                  child: Material(
+                    color: flexTheme.menuBackgroundColor,
+                    elevation: flexTheme.menuElevation!,
+                    child: _buildMenu(context),
+                  ),
+                ),
+                //
+                // Main part is an Expanded that contains a standard Scaffold.
+                Expanded(
+                  child: Scaffold(
+                    key: widget.key,
+                    //
+                    extendBody: widget.extendBody,
+                    extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+                    //
+                    // Add AppBar with leading and actions buttons, but only
+                    // if the destination has an app bar.
+                    appBar: widget.destinations[_selectedIndex].hasAppBar
+                        ? FlexScaffoldAppBar(appBar: widget.appBar)
+                        : null,
+                    //
+                    // The menu when used as a drawer.
+                    drawer: _isMenuInDrawer
+                        ? FlexDrawer(
+                            elevation: flexTheme.drawerElevation!,
+                            drawerWidth: flexTheme.drawerWidth! + startPadding,
+                            currentScreenWidth: _width,
+                            backgroundColor: flexTheme.menuBackgroundColor,
+                            child: _buildMenu(context),
+                          )
+                        : null,
+                    //
+                    // The end drawer, ie tools menu when used as an end drawer.
+                    endDrawer: _isSidebarInEndDrawer
+                        ? FlexDrawer(
+                            elevation: flexTheme.endDrawerElevation!,
+                            drawerWidth: flexTheme.endDrawerWidth!,
+                            currentScreenWidth: _width,
+                            backgroundColor: flexTheme.sidebarBackgroundColor,
                             child: FlexSidebar(
-                              sidebarToggleEnabled:
-                                  widget.sidebarControlEnabled,
-                              // If no sidebar app bar given make a default one.
-                              sidebarAppBar:
-                                  widget.sidebarAppBar ?? const FlexAppBar(),
-                              sidebarBelongsToBody: widget.sidebarBelongsToBody,
+                              // If no sidebar AppBar given make a default one.
+                              sidebarAppBar: widget.sidebarAppBar,
                               hasAppBar:
                                   widget.destinations[_selectedIndex].hasAppBar,
                               child: widget.sidebar,
                             ),
-                          ),
+                          )
+                        : null,
+                    //
+                    // The bottom navigation bar
+                    bottomNavigationBar: _FlexScaffoldBottomBar(
+                      isBottomTarget: _isBottomTarget,
+                      isBottomBarVisible: _isBottomBarVisible,
+                      customNavBar: widget.customBottomNavigator,
+                    ),
+                    //
+                    // Floating action button in its effective location.
+                    floatingActionButton: widget.destinations[_selectedIndex]
+                            .hasFloatingActionButton
+                        ? widget.floatingActionButton
+                        : null,
+                    floatingActionButtonLocation: effectiveFabLocation,
+                    //
+                    // Build the actual content in a Row.
+                    body: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: widget.body ?? Container(),
                         ),
-                    ],
-                  ),
-                ),
-              ),
-              // Sidebar may also be in the Row. This happens when it is shown
-              // as a fixed sidebar on the screen and it does not "belong to the
-              // body", then it is on the same level as the menu. The default
-              // Material design is one that it is a part of the body, but this
-              // works better if we also show a bottom navigation bar together
-              // with the sidebar and it works better with the built-in
-              // FAB locations.
-              if (widget.destinations[_selectedIndex].hasSidebar &&
-                  widget.sidebar != null &&
-                  !widget.sidebarBelongsToBody)
-                ConstrainedBox(
-                  constraints:
-                      BoxConstraints(maxWidth: flexTheme.sidebarWidth!),
-                  child: Material(
-                    color: flexTheme.sidebarBackgroundColor,
-                    elevation: flexTheme.sidebarElevation!,
-                    child: FlexSidebar(
-                      sidebarToggleEnabled: widget.sidebarControlEnabled,
-                      // If no Sidebar AppBar is provided we add a default one.
-                      sidebarAppBar: widget.sidebarAppBar ?? const FlexAppBar(),
-                      sidebarBelongsToBody: widget.sidebarBelongsToBody,
-                      hasAppBar: widget.destinations[_selectedIndex].hasAppBar,
-                      child: widget.sidebar,
+                        //
+                        // The Sidebar when shown as a fixed item and it belongs
+                        // to the body. Material default sidebar layout.
+                        if (widget.destinations[_selectedIndex].hasSidebar &&
+                            widget.sidebar != null &&
+                            widget.sidebarBelongsToBody)
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                                maxWidth: flexTheme.sidebarWidth!),
+                            child: Material(
+                              color: flexTheme.sidebarBackgroundColor,
+                              elevation: flexTheme.sidebarElevation!,
+                              child: FlexSidebar(
+                                // sidebarToggleEnabled:
+                                //     widget.sidebarControlEnabled,
+                                // If no sidebar AppBar given make a default one.
+                                sidebarAppBar: widget.sidebarAppBar,
+                                // sidebarBelongsToBody: widget.sidebarBelongsToBody,
+                                hasAppBar: widget
+                                    .destinations[_selectedIndex].hasAppBar,
+                                child: widget.sidebar,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 ),
-            ],
-          );
-        }),
-      ),
+                // Sidebar may also be in the Row. This happens when it is shown
+                // as a fixed sidebar on the screen and it does not "belong to the
+                // body", then it is on the same level as the menu. The default
+                // Material design is one that it is a part of the body, but this
+                // works better if we also show a bottom navigation bar together
+                // with the sidebar and it works better with the built-in
+                // FAB locations.
+                if (widget.destinations[_selectedIndex].hasSidebar &&
+                    widget.sidebar != null &&
+                    !widget.sidebarBelongsToBody)
+                  ConstrainedBox(
+                    constraints:
+                        BoxConstraints(maxWidth: flexTheme.sidebarWidth!),
+                    child: Material(
+                      color: flexTheme.sidebarBackgroundColor,
+                      elevation: flexTheme.sidebarElevation!,
+                      child: FlexSidebar(
+                        // sidebarToggleEnabled: widget.sidebarControlEnabled,
+                        // If no Sidebar AppBar is provided we add a default one.
+                        sidebarAppBar: widget.sidebarAppBar,
+                        // sidebarBelongsToBody: widget.sidebarBelongsToBody,
+                        hasAppBar:
+                            widget.destinations[_selectedIndex].hasAppBar,
+                        child: widget.sidebar,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 
@@ -1318,26 +1394,26 @@ class FlexScaffoldState extends State<FlexScaffold> {
       menuLeading: widget.menuLeading,
       menuTrailing: widget.menuTrailing,
       menuFooter: widget.menuFooter,
-      hideMenu: widget.hideMenu,
+      hideMenu: widget.menuHide,
       onHideMenu: (bool value) {
         setState(() {
-          _hideMenu = value;
-          if (widget.onHideMenu != null) widget.onHideMenu?.call(_hideMenu);
+          _isMenuHidden = value;
+          if (widget.onMenuHide != null) widget.onMenuHide?.call(_isMenuHidden);
           if (_kDebugMe) {
-            debugPrint('Flexfold() onHideMenu: $_hideMenu');
+            debugPrint('Flexfold() onHideMenu: $_isMenuHidden');
           }
         });
       },
       cycleViaDrawer: widget.cycleViaDrawer,
-      preferRail: widget.preferRail,
+      preferRail: widget.menuPrefersRail,
       onPreferRail: (bool value) {
         setState(() {
-          _preferRail = value;
-          if (widget.onPreferRail != null) {
-            widget.onPreferRail?.call(_preferRail);
+          _menuPrefersRail = value;
+          if (widget.onMenuPrefersRail != null) {
+            widget.onMenuPrefersRail?.call(_menuPrefersRail);
           }
           if (_kDebugMe) {
-            debugPrint('Flexfold() onPreferRail: $_preferRail');
+            debugPrint('Flexfold() onPreferRail: $_menuPrefersRail');
           }
         });
       },
@@ -1359,7 +1435,7 @@ enum _FlexScaffoldAspect {
   isMenuInDrawer,
 
   /// Specifies the aspect corresponding to [FlexScaffoldState.menuIsHidden].
-  menuIsHidden,
+  isMenuHidden,
 
   /// Specifies the aspect corresponding to [FlexScaffoldState.menuPrefersRail].
   menuPrefersRail,
@@ -1371,8 +1447,8 @@ enum _FlexScaffoldAspect {
   /// Specifies the aspect corresponding to [FlexScaffoldState.isSidebarInMenu].
   isSidebarInMenu,
 
-  /// Specifies the aspect corresponding to [FlexScaffoldState.sidebarIsHidden].
-  sidebarIsHidden,
+  /// Specifies the aspect corresponding to [FlexScaffoldState.isSidebarHidden].
+  isSidebarHidden,
 
   /// Specifies the aspect corresponding to
   /// [FlexScaffoldState.currentImpliedTitle].
@@ -1397,20 +1473,161 @@ enum _FlexScaffoldAspect {
   bottomDestinations,
 }
 
+/// Defines
+///
+/// The definitions are used
+@immutable
+class _FlexScaffoldData with Diagnosticable {
+  const _FlexScaffoldData({
+    this.isMenuInDrawer = false,
+    this.isMenuHidden = false,
+    this.menuPrefersRail = false,
+    //
+    this.isSidebarInEndDrawer = false,
+    this.isSidebarInMenu = false,
+    this.isSidebarHidden = false,
+  });
+
+  final bool isMenuInDrawer;
+  final bool isMenuHidden;
+  final bool menuPrefersRail;
+  //
+  final bool isSidebarInEndDrawer;
+  final bool isSidebarInMenu;
+  final bool isSidebarHidden;
+
+  /// Copy the object with one or more provided properties changed.
+  _FlexScaffoldData copyWith({
+    bool? isMenuInDrawer,
+    bool? isMenuHidden,
+    bool? menuPrefersRail,
+    //
+    bool? isSidebarInEndDrawer,
+    bool? isSidebarInMenu,
+    bool? isSidebarHidden,
+  }) {
+    return _FlexScaffoldData(
+      isMenuInDrawer: isMenuInDrawer ?? this.isMenuInDrawer,
+      isMenuHidden: isMenuHidden ?? this.isMenuHidden,
+      menuPrefersRail: menuPrefersRail ?? this.menuPrefersRail,
+      //
+      isSidebarInEndDrawer: isSidebarInEndDrawer ?? this.isSidebarInEndDrawer,
+      isSidebarInMenu: isSidebarInMenu ?? this.isSidebarInMenu,
+      isSidebarHidden: isSidebarHidden ?? this.isSidebarHidden,
+    );
+  }
+
+  /// Override the equality operator.
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other.runtimeType != runtimeType) return false;
+    return other is _FlexScaffoldData &&
+        other.isMenuInDrawer == isMenuInDrawer &&
+        other.isMenuHidden == isMenuHidden &&
+        other.menuPrefersRail == menuPrefersRail &&
+        //
+        other.isSidebarInEndDrawer == isSidebarInEndDrawer &&
+        other.isSidebarInMenu == isSidebarInMenu &&
+        other.isSidebarHidden == isSidebarHidden;
+  }
+
+  /// Override for hashcode. Using Darts object hash.
+  @override
+  int get hashCode => Object.hash(
+        isMenuInDrawer,
+        isMenuHidden,
+        menuPrefersRail,
+        //
+        isSidebarInEndDrawer,
+        isSidebarInMenu,
+        isSidebarHidden,
+      );
+
+  /// Flutter debug properties override, includes toString.
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<bool>('isMenuInDrawer', isMenuInDrawer));
+    properties.add(DiagnosticsProperty<bool>('menuIsHidden', isMenuHidden));
+    properties
+        .add(DiagnosticsProperty<bool>('menuPrefersRail', menuPrefersRail));
+    //
+    properties.add(DiagnosticsProperty<bool>(
+        'isSidebarInEndDrawer', isSidebarInEndDrawer));
+    properties
+        .add(DiagnosticsProperty<bool>('isSidebarInMenu', isSidebarInMenu));
+    properties
+        .add(DiagnosticsProperty<bool>('isSidebarHidden', isSidebarHidden));
+  }
+}
+
+/// FlexScaffold implementation of InheritedModel.
+///
+/// Used for to find the current FlexScaffold in the widget tree. This is useful
+/// when reading FlexScaffold properties and using it methods from anywhere
+/// in your app.
+class _FlexScaffoldModel extends InheritedModel<_FlexScaffoldAspect> {
+  /// You must pass through a child and your state.
+  const _FlexScaffoldModel({
+    required this.data,
+    required super.child,
+  });
+
+  /// The FlexScaffoldStateData we need access to and only rebuild by aspect.
+  final _FlexScaffoldData data;
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<_FlexScaffoldData>('data', data));
+  }
+
+  @override
+  bool updateShouldNotify(_FlexScaffoldModel oldWidget) {
+    // return false;
+    final bool result = data != oldWidget.data;
+    debugPrint('_InheritedFlexScaffoldModel: updateShouldNotify: $result');
+    debugPrint('oldWidget.data.menuIsHidden: ${oldWidget.data.isMenuHidden}');
+    debugPrint('          data.menuIsHidden: ${data.isMenuHidden}');
+    return result;
+  }
+
+  @override
+  bool updateShouldNotifyDependent(
+      _FlexScaffoldModel oldWidget, Set<Object> dependencies) {
+    final bool result = (data.isMenuInDrawer != oldWidget.data.isMenuInDrawer &&
+            dependencies.contains(_FlexScaffoldAspect.isMenuInDrawer)) ||
+        (data.isMenuHidden != oldWidget.data.isMenuHidden &&
+            dependencies.contains(_FlexScaffoldAspect.isMenuHidden)) ||
+        (data.menuPrefersRail != oldWidget.data.menuPrefersRail &&
+            dependencies.contains(_FlexScaffoldAspect.menuPrefersRail)) ||
+        (data.isSidebarInEndDrawer != oldWidget.data.isSidebarInEndDrawer &&
+            dependencies.contains(_FlexScaffoldAspect.isSidebarInEndDrawer)) ||
+        (data.isSidebarInMenu != oldWidget.data.isSidebarInMenu &&
+            dependencies.contains(_FlexScaffoldAspect.isSidebarInMenu)) ||
+        (data.isSidebarHidden != oldWidget.data.isSidebarHidden &&
+            dependencies.contains(_FlexScaffoldAspect.isSidebarHidden));
+    debugPrint('_InheritedFlexScaffoldModel: '
+        'updateShouldNotifyDependent: $result');
+    return result;
+  }
+}
+
 /// FlexScaffold implementation of InheritedWidget.
 ///
 /// Used for to find the current FlexScaffold in the widget tree. This is useful
 /// when reading FlexScaffold properties and using it methods from anywhere
 /// in your app.
 class _InheritedFlexScaffold extends InheritedWidget {
-  /// Data is the entire FlexScaffoldState.
-  final FlexScaffoldState data;
-
   /// You must pass through a child and your state.
   const _InheritedFlexScaffold({
     required this.data,
     required super.child,
   });
+
+  /// Data is the entire FlexScaffoldState.
+  final FlexScaffoldState data;
 
   /// We only notify [FlexScaffoldState] descendants of changes that needs to
   /// be used and tracked by its own sub widgets and custom widget usage.
@@ -1418,51 +1635,65 @@ class _InheritedFlexScaffold extends InheritedWidget {
   /// If some additional properties needs change notification raise issue/PR.
   @override
   bool updateShouldNotify(_InheritedFlexScaffold oldWidget) {
-    if (oldWidget.data.isMenuInDrawer != data.isMenuInDrawer ||
-        oldWidget.data.menuIsHidden != data.menuIsHidden ||
-        oldWidget.data.menuPrefersRail != data.menuPrefersRail ||
-        //
-        oldWidget.data.isSidebarInEndDrawer != data.isSidebarInEndDrawer ||
-        oldWidget.data.isSidebarInMenu != data.isSidebarInMenu ||
-        oldWidget.data.sidebarIsHidden != data.sidebarIsHidden ||
-        //
+    debugPrint('oldWidget.data.widget.sidebarControlEnabled: '
+        '${oldWidget.data.widget.sidebarControlEnabled}');
+    debugPrint('          data.widget.sidebarControlEnabled: '
+        '${data.widget.sidebarControlEnabled}');
+    // debugPrint('oldWidget.data.menuIsHidden: ${oldWidget.data.menuIsHidden}');
+    // debugPrint('          data.menuIsHidden: ${data.menuIsHidden}');
+    if (
+
+        // oldWidget.data.isMenuInDrawer != data.isMenuInDrawer ||
+        //     oldWidget.data.menuIsHidden != data.menuIsHidden ||
+        //     oldWidget.data.menuPrefersRail != data.menuPrefersRail ||
+        //     //
+        //     oldWidget.data.isSidebarInEndDrawer != data.isSidebarInEndDrawer ||
+        //     oldWidget.data.isSidebarInMenu != data.isSidebarInMenu ||
+        //     oldWidget.data.isSidebarHidden != data.isSidebarHidden ||
+        //     //
         oldWidget.data.currentImpliedTitle != data.currentImpliedTitle ||
-        //
-        // oldWidget.data.isBottomTarget != data.isBottomTarget ||
-        // oldWidget.data.isBottomBarVisible != data.isBottomBarVisible ||
-        oldWidget.data.isBottomBarScrollHidden !=
-            data.isBottomBarScrollHidden ||
-        //
-        oldWidget.data.indexBottom != data.indexBottom ||
-        oldWidget.data.bottomDestinations != data.bottomDestinations ||
-        //
-        oldWidget.data.widget.destinations != data.widget.destinations ||
-        //
-        oldWidget.data.widget.menuIcon != data.widget.menuIcon ||
-        oldWidget.data.widget.menuIconExpand != data.widget.menuIconExpand ||
-        oldWidget.data.widget.menuIconExpandHidden !=
-            data.widget.menuIconExpandHidden ||
-        oldWidget.data.widget.menuIconCollapse !=
-            data.widget.menuIconCollapse ||
-        //
-        oldWidget.data.widget.sidebarIcon != data.widget.sidebarIcon ||
-        oldWidget.data.widget.sidebarIconExpand !=
-            data.widget.sidebarIconExpand ||
-        oldWidget.data.widget.sidebarIconExpandHidden !=
-            data.widget.sidebarIconExpandHidden ||
-        oldWidget.data.widget.sidebarIconCollapse !=
-            data.widget.sidebarIconCollapse ||
-        //
-        oldWidget.data.widget.cycleViaDrawer != data.widget.cycleViaDrawer ||
-        oldWidget.data.widget.sidebarBelongsToBody !=
-            data.widget.sidebarBelongsToBody ||
-        //
-        oldWidget.data.widget.menuControlEnabled !=
-            data.widget.menuControlEnabled ||
-        oldWidget.data.widget.sidebarControlEnabled !=
-            data.widget.sidebarControlEnabled) {
+            //
+            // oldWidget.data.isBottomTarget != data.isBottomTarget ||
+            // oldWidget.data.isBottomBarVisible != data.isBottomBarVisible ||
+            oldWidget.data.isBottomBarScrollHidden !=
+                data.isBottomBarScrollHidden ||
+            //
+            oldWidget.data.indexBottom != data.indexBottom ||
+            oldWidget.data.bottomDestinations != data.bottomDestinations ||
+            //
+            oldWidget.data.widget.destinations != data.widget.destinations ||
+            //
+            oldWidget.data.widget.menuIcon != data.widget.menuIcon ||
+            oldWidget.data.widget.menuIconExpand !=
+                data.widget.menuIconExpand ||
+            oldWidget.data.widget.menuIconExpandHidden !=
+                data.widget.menuIconExpandHidden ||
+            oldWidget.data.widget.menuIconCollapse !=
+                data.widget.menuIconCollapse ||
+            //
+            oldWidget.data.widget.sidebarHide != data.widget.sidebarHide ||
+            //
+            oldWidget.data.widget.sidebarIcon != data.widget.sidebarIcon ||
+            oldWidget.data.widget.sidebarIconExpand !=
+                data.widget.sidebarIconExpand ||
+            oldWidget.data.widget.sidebarIconExpandHidden !=
+                data.widget.sidebarIconExpandHidden ||
+            oldWidget.data.widget.sidebarIconCollapse !=
+                data.widget.sidebarIconCollapse ||
+            //
+            oldWidget.data.widget.cycleViaDrawer !=
+                data.widget.cycleViaDrawer ||
+            oldWidget.data.widget.sidebarBelongsToBody !=
+                data.widget.sidebarBelongsToBody ||
+            //
+            oldWidget.data.widget.menuControlEnabled !=
+                data.widget.menuControlEnabled ||
+            oldWidget.data.widget.sidebarControlEnabled !=
+                data.widget.sidebarControlEnabled) {
+      debugPrint('_InheritedFlexScaffold updateShouldNotify: TRUE');
       return true;
     }
+    debugPrint('_InheritedFlexScaffold updateShouldNotify: FALSE');
     return false;
   }
 }
@@ -1522,7 +1753,7 @@ class _FlexScaffoldBottomBar extends StatelessWidget {
                     kFlexfoldNavigationBarHeight)
                 : kFlexfoldCupertinoTabBarHeight;
 
-    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
+    final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
 
     // If we are not at a destination that is defined to be a bottom target,
     // we are not inserting a bottom nav bar in the widget tree all

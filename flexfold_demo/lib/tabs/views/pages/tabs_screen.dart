@@ -42,7 +42,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    hide = FlexScaffold.of(context).scrollHideBottomBar;
+    hide = FlexScaffold.use(context).scrollHideBottomBar;
   }
 
   @override
@@ -109,7 +109,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen>
               // If we tapped on a tab bar item, we will reveal any
               // scroll hidden bottom navigation bar
               // ref.read(scrollHiddenBottomBarPod.notifier).state = false;
-              FlexScaffold.of(context).scrollHideBottomBar(false);
+              FlexScaffold.use(context).scrollHideBottomBar(false);
               _controller.index = index;
               // if (index == 0) context.goNamed(AppRoutes.tabsGuideLabel);
               // if (index == 1) context.goNamed(AppRoutes.tabsAppbarLabel);

@@ -48,7 +48,7 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     useHide = ref.watch(hideBottomBarOnScrollPod);
-    hide = FlexScaffold.of(context).scrollHideBottomBar;
+    hide = FlexScaffold.use(context).scrollHideBottomBar;
   }
 
   @override
@@ -60,7 +60,7 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
   @override
   Widget build(BuildContext context) {
     // Get to flex scaffold state from inherited widget.
-    final FlexScaffoldState flexScaffold = FlexScaffold.of(context);
+    final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
     //
     final CurrentRoute appNav = ref.watch(currentRouteProvider);
     // Get the current destination details, we will use it's info in the
@@ -165,7 +165,7 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
                     .setDestination(newDestination);
                 // Make sure our bottom navigation bar is not hidden.
                 // ref.read(scrollHiddenBottomBarPod.notifier).state = false;
-                FlexScaffold.of(context).scrollHideBottomBar(false);
+                FlexScaffold.use(context).scrollHideBottomBar(false);
                 // Actually navigate to the target route.
                 context.go(newDestination.route);
               },
