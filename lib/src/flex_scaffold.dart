@@ -49,32 +49,25 @@ class FlexScaffold extends StatefulWidget {
     required this.selectedIndex,
     required this.onDestination,
     // Default to using first module.
+    // TODO(rydmike): Implement modules.
     this.activeModule = 0,
-    //
-    // Enable menu and sidebar toggle.
+    // Menu control and content properties, other than the destinations.
+    required this.menu,
     this.menuControlEnabled = true,
-    this.sidebarControlEnabled = true,
-    //
-    // Menu icons.
     this.menuIcon,
     this.menuIconExpand,
     this.menuIconCollapse,
     this.menuIconExpandHidden,
-    // Menu content properties, other than the destinations.
-    this.menuAppBar,
-    this.menuLeading,
-    this.menuTrailing,
-    this.menuFooter,
-    //
     // Menu state properties and its callbacks.
     this.menuHide = false,
     this.onMenuHide,
     this.menuPrefersRail = false,
     this.onMenuPrefersRail,
-    //
+    // Behaviour for menu and sidebar.
     this.cycleViaDrawer = true,
     //
     // Sidebar icons.
+    this.sidebarControlEnabled = true,
     this.sidebarIcon,
     this.sidebarIconExpand,
     this.sidebarIconExpandHidden,
@@ -177,6 +170,21 @@ class FlexScaffold extends StatefulWidget {
   /// The active module number, defaults to 0.
   final int activeModule;
 
+  /// The widget used by [FlexScaffold] to show the content used in the
+  /// rail, side menu and drawer.
+  ///
+  /// Typically a [FlexMenu].
+  ///
+  /// It can have an AppBar, leading, trailer and footer widget.
+  ///
+  /// By default it builds its own menu items from [FlexScaffold.destinations],
+  /// but it is possible to provide a custom menu as well. You might not need to
+  /// as the [FlexMenu] default menu is pretty configurable.
+  ///
+  /// If you make a custom rail/menu or use a package for one you can use the
+  /// Flutter [NavigationRail] example as a guide for how to implement it.
+  final Widget menu;
+
   /// The menu mode can be manually controlled by the user when true.
   ///
   /// If set to false, then the menu can only be opened when it is a drawer,
@@ -190,80 +198,95 @@ class FlexScaffold extends StatefulWidget {
   /// prefer on a large canvas.
   final bool menuControlEnabled;
 
-  /// The sidebar menu mode can be manually controlled by the user when true.
+  /// A Widget used on the menu button when the menu is operated as a Drawer.
   ///
-  /// If set to false, then the menu can only be opened when it is a drawer,
-  /// it cannot be toggled between rail/menu and drawer manually when the
-  /// breakpoint constraints would otherwise allow that. This means the user
-  /// cannot hide the side menu or the rail, when rail or side navigation mode
-  /// is triggered. You can still control it via the API, there just is no
-  /// user control over.
+  /// Typically an [Icon] widget is used with the hamburger menu icon.
   ///
-  /// Defaults to true so users can toggle the menu and rail visibility as they
-  /// prefer on a large canvas.
-  final bool sidebarControlEnabled;
-
-  /// A Widget used to open the menu, typically an [Icon] widget is used.
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, it defaults to a widget
+  /// with value [kFlexfoldMenuIcon], the hamburger icon.
   ///
-  /// The same icon will also be used on the AppBar when the menu or rail is
-  /// hidden in a drawer. If no icon is provided it defaults to a widget with
-  /// value [kFlexfoldMenuIcon].
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
   final Widget? menuIcon;
 
-  /// A widget used to expand the drawer to a menu from an opened drawer,
-  /// typically an [Icon] widget is used.
+  /// A widget used on an opened drawer menu button when operating it will
+  /// change it to a side menu.
   ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldMenuIconExpand].
-  final Widget? menuIconExpand;
-
-  /// A widget used to expand the drawer to a menu when the rail/menu is
-  /// hidden but may be expanded based on screen width and breakpoints.
   /// Typically an [Icon] widget is used.
   ///
-  /// If no icon is provided it defaults to a widget with value
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
+  /// defined, it defaults to a widget with value [kFlexfoldMenuIconExpand].
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
+  final Widget? menuIconExpand;
+
+  /// A widget used on the menu button when operating it will expand the
+  /// menu to a rail or to a side menu.
+  ///
+  /// Typically an [Icon] widget is used.
+  ///
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
+  /// defined, it defaults to a widget with value
   /// [kFlexfoldMenuIconExpandHidden].
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
   final Widget? menuIconExpandHidden;
 
-  /// A widget used to expand the drawer to a menu, typically an [Icon]
-  /// widget is used.
+  /// A widget used on the menu button when it is shown as a menu or rail,
+  /// and operating it will collapse it to its next state, from menu to rail to
+  /// hidden.
   ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldMenuIconCollapse].
+  /// Typically an [Icon] widget is used.
+  ///
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
+  /// defined, it defaults to a widget with value [kFlexfoldMenuIconCollapse].
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
   final Widget? menuIconCollapse;
 
-  /// An [AppBar] for the menu when used on the drawer, rail and side menu.
-  ///
-  /// The menu has an AppBar on top of it too. It always gets an automatic
-  /// leading button to show and collapse it. You can also create actions for
-  /// the menu app bar, but beware that there is not a lot of space and
-  /// actions are not reachable in rail mode. There is also not so much
-  /// space in the title, but you can fit a small brand/logo/app text on it.
-  final FlexAppBar? menuAppBar;
-
-  /// A widget that appears below the menu AppBar but above the menu items.
-  ///
-  /// It is placed at the top of the menu, but after the menu bar and above the
-  /// [destinations].
-  /// This could be an action button like a [FloatingActionButton], but may
-  /// also be a non-button, such as a user profile image, bigger company logo,
-  /// etc. It needs to fit and look good both in rail and side menu mode.
-  ///
-  /// The default value is null.
-  final Widget? menuLeading;
-
-  /// Trailing menu widget that is placed below the last [FlexDestination].
-  ///
-  /// It needs to fit and look good both in rail and side menu mode.
-  /// The default value is null.
-  final Widget? menuTrailing;
-
-  /// A widget that appears at the bottom of the menu. This widget is glued
-  /// to the bottom, like the the menu app bar it does not scroll.
-  ///
-  /// The menu footer needs to fit and look good both in rail and side menu
-  /// mode.
-  final Widget? menuFooter;
+  // /// An [AppBar] for the menu when used on the drawer, rail and side menu.
+  // ///
+  // /// The menu has an AppBar on top of it too. It always gets an automatic
+  // /// leading button to show and collapse it. You can also create actions for
+  // /// the menu app bar, but beware that there is not a lot of space and
+  // /// actions are not reachable in rail mode. There is also not so much
+  // /// space in the title, but you can fit a small brand/logo/app text on it.
+  // final FlexAppBar? menuAppBar;
+  //
+  // /// A widget that appears below the menu AppBar but above the menu items.
+  // ///
+  // /// It is placed at the top of the menu, but after the menu bar and above the
+  // /// [destinations].
+  // /// This could be an action button like a [FloatingActionButton], but may
+  // /// also be a non-button, such as a user profile image, bigger company logo,
+  // /// etc. It needs to fit and look good both in rail and side menu mode.
+  // ///
+  // /// The default value is null.
+  // final Widget? menuLeading;
+  //
+  // /// Trailing menu widget that is placed below the last [FlexDestination].
+  // ///
+  // /// It needs to fit and look good both in rail and side menu mode.
+  // /// The default value is null.
+  // final Widget? menuTrailing;
+  //
+  // /// A widget that appears at the bottom of the menu. This widget is glued
+  // /// to the bottom, like the the menu app bar it does not scroll.
+  // ///
+  // /// The menu footer needs to fit and look good both in rail and side menu
+  // /// mode.
+  // final Widget? menuFooter;
 
   /// Keep main menu hidden in a drawer, even when its breakpoints are exceeded.
   ///
@@ -306,33 +329,75 @@ class FlexScaffold extends StatefulWidget {
   /// Affects both drawer and sidebar end drawer.
   final bool cycleViaDrawer;
 
-  /// A Widget used to open the sidebar menu, typically an [Icon] is used.
+  /// The sidebar menu mode can be manually controlled by the user when true.
   ///
-  /// The same icon will also be used on the sidebar menu when the sidebar is
-  /// hidden in an end drawer. If no icon is provided it defaults to an
-  /// Icon with value [kFlexfoldSidebarIcon].
+  /// If set to false, then the menu can only be opened when it is a drawer,
+  /// it cannot be toggled between rail/menu and drawer manually when the
+  /// breakpoint constraints would otherwise allow that. This means the user
+  /// cannot hide the side menu or the rail, when rail or side navigation mode
+  /// is triggered. You can still control it via the API, there just is no
+  /// user control over.
+  ///
+  /// Defaults to true so users can toggle the menu and rail visibility as they
+  /// prefer on a large canvas.
+  final bool sidebarControlEnabled;
+
+  /// A Widget used on the sidebar button when the sidebar is operated as an
+  /// end Drawer.
+  ///
+  /// Typically an [Icon] widget is used with the hamburger menu icon.
+  ///
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, it defaults to a widget
+  /// with value [kFlexfoldSidebarIcon], the hamburger icon.
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
   final Widget? sidebarIcon;
 
-  /// A Widget used to expand the end drawer to a sidebar, typically a [Icon]
-  /// widget is used.
+  /// A widget used on an opened end drawer sidebar button when operating it
+  /// will change it to a fixed sidebar.
   ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldSidebarIconExpand].
-  final Widget? sidebarIconExpand;
-
-  /// A widget used to expand the sidebar menu it is hidden but may be
-  /// expanded based on screen width and breakpoints.
   /// Typically an [Icon] widget is used.
   ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldMenuIconExpandHidden].
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
+  /// defined, it defaults to a widget with value [kFlexfoldSidebarIconExpand].
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
+  final Widget? sidebarIconExpand;
+
+  /// A widget used on the sidebar button when operating it will expand the
+  /// hidden sidebar to a fixed side menu.
+  ///
+  /// Typically an [Icon] widget is used.
+  ///
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
+  /// defined, it defaults to a widget with value
+  /// [kFlexfoldSidebarIconExpandHidden].
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
   final Widget? sidebarIconExpandHidden;
 
-  /// A Widget used to collapse the sidebar, typically an [Icon]
-  /// widget is used.
+  /// A widget used on the sidebar button when it is shown as a fixed sidebar,
+  /// and operating it will collapse it to its hidden state.
   ///
-  /// If no icon is provided it defaults to a widget with value
+  /// Typically an [Icon] widget is used.
+  ///
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
+  /// defined, it defaults to a widget with value
   /// [kFlexfoldSidebarIconCollapse].
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
   final Widget? sidebarIconCollapse;
 
   /// The appbar for the end drawer and sidebar.
@@ -648,6 +713,15 @@ class FlexScaffold extends StatefulWidget {
       _of(context, _FlexScaffoldAspect.isBottomBarVisible).isBottomBarVisible;
 
   /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  static int selectedIndexOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.selectedIndex).selectedIndex;
+
+  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  static bool showBottomDestinationsInDrawerOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.showBottomDestinationsInDrawer)
+          .showBottomDestinationsInDrawer;
+
+  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
   static GoFlexDestination selectedDestinationOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.selectedDestination).selectedDestination;
 
@@ -799,16 +873,60 @@ class FlexScaffoldState extends State<FlexScaffold> {
     });
   }
 
-  /// Navigate to selected bottom bar index.
-  void navigateToBottomIndex(int index) {
+  /// Set menu/rail selected index to given index value on current
+  /// [FlexScaffoldState].
+  ///
+  /// Triggers call to [FlexScaffold.onDestination] with new destination info.
+  void setSelectedIndex(int index) {
+    // If we just clicked the current index we don't do anything
+    if (index == widget.selectedIndex) return;
+    setState(() {
+      // After moving to a new destination, ensure that the bottom
+      // navigation bar is never scroll hidden.
+      _scrollHiddenBottomBar = false;
+      _target = widget.destinations[index];
+      _selectedIndex = index;
+      _indexMenu.setIndex(index);
+      final int? bottomIndex = toBottomIndex(_target);
+      _indexBottom.setIndex(bottomIndex);
+      _isBottomTarget = bottomIndex != null;
+      FlexNavigation source = FlexNavigation.rail;
+      if (_isMenuInDrawer) source = FlexNavigation.drawer;
+      if (_isMenuInMenu) source = FlexNavigation.menu;
+      final bool preferPush =
+          (_isPhone && widget.destinations[index].maybePush) ||
+              widget.destinations[index].alwaysPush;
+      // Make destination data to return in onDestination call.
+      final GoFlexDestination destination = GoFlexDestination(
+        index: _selectedIndex,
+        bottomIndex: bottomIndex,
+        route: widget.destinations[index].route,
+        icon: widget.destinations[index].icon,
+        selectedIcon: widget.destinations[index].selectedIcon,
+        label: widget.destinations[index].label,
+        source: source,
+        reverse: _indexMenu.reverse,
+        preferPush: preferPush,
+      );
+      widget.onDestination(destination);
+      if (_kDebugMe) {
+        debugPrint('FlexScaffold: navigate to bottom $_target');
+      }
+      if (preferPush) _assumePushed();
+    });
+  }
+
+  /// Set bottom index to given index value on current [FlexScaffoldState].
+  ///
+  /// Triggers call to [FlexScaffold.onDestination] with new destination info.
+  void setBottomIndex(int index) {
     // If we click the current index we don't do anything
     if (index == _indexBottom.index) return;
     setState(
       () {
-        // Ensure that after moving to a new destination, that
-        // the bottom navigation bar is never scrollHidden.
+        // After moving to a new destination, ensure that the bottom
+        // navigation bar is never scroll hidden.
         _scrollHiddenBottomBar = false;
-
         _target = bottomDestinations[index];
         _indexBottom.setIndex(index);
         _selectedIndex = toMenuIndex(_target);
@@ -1242,6 +1360,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
               isBottomTarget: _isBottomTarget,
               isBottomBarVisible: _isBottomBarVisible,
               //
+              selectedIndex: widget.selectedIndex,
+              showBottomDestinationsInDrawer: _showBottomDestinationsInDrawer,
+              //
               // TODO(rydmike): Add destination features
               selectedDestination: const GoFlexDestination(),
               onDestination: const GoFlexDestination(),
@@ -1257,7 +1378,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
                   child: Material(
                     color: flexTheme.menuBackgroundColor,
                     elevation: flexTheme.menuElevation!,
-                    child: _buildMenu(context),
+                    child: widget.menu,
                   ),
                 ),
                 //
@@ -1282,7 +1403,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
                             backgroundColor: flexTheme.menuBackgroundColor,
                             elevation: flexTheme.drawerElevation,
                             width: flexTheme.drawerWidth! + startPadding,
-                            child: _buildMenu(context),
+                            child: widget.menu,
                           )
                         : null,
                     //
@@ -1386,173 +1507,18 @@ class FlexScaffoldState extends State<FlexScaffold> {
 // Build the widgets for the Flexfold scaffold
 // ****************************************************************************
 
-  Widget _buildMenu(BuildContext context) {
-    return FlexMenu(
-      destinations: widget.destinations,
-      selectedIndex: widget.selectedIndex,
-      onDestinationSelected: (int index) {
-        // If we just clicked the current index we don't do anything
-        if (index == widget.selectedIndex) return;
-
-        setState(() {
-          // After moving to a new destination, bottom bar is not scroll hidden.
-          _scrollHiddenBottomBar = false;
-
-          _selectedIndex = index;
-          _indexMenu.setIndex(index);
-          _target = widget.destinations[index];
-          final int? bottomIndex = toBottomIndex(_target);
-          _indexBottom.setIndex(bottomIndex);
-          _isBottomTarget = bottomIndex != null;
-
-          FlexNavigation source = FlexNavigation.rail;
-          if (_isMenuInDrawer) source = FlexNavigation.drawer;
-          if (_isMenuInMenu) source = FlexNavigation.menu;
-
-          final bool preferPush =
-              (_isPhone && widget.destinations[index].maybePush) ||
-                  widget.destinations[index].alwaysPush;
-
-          // Make destination data to return that we should go to.
-          final GoFlexDestination destination = GoFlexDestination(
-            index: _selectedIndex,
-            bottomIndex: bottomIndex,
-            route: widget.destinations[index].route,
-            icon: widget.destinations[index].icon,
-            selectedIcon: widget.destinations[index].selectedIcon,
-            label: widget.destinations[index].label,
-            source: source,
-            reverse: _indexMenu.reverse,
-            preferPush: preferPush,
-          );
-          widget.onDestination(destination);
-          if (preferPush) _assumePushed();
-        });
-      },
-      menuIcon: widget.menuIcon,
-      menuIconExpand: widget.menuIconExpand,
-      menuIconExpandHidden: widget.menuIconExpandHidden,
-      menuIconCollapse: widget.menuIconCollapse,
-      menuAppBar: widget.menuAppBar,
-      menuLeading: widget.menuLeading,
-      menuTrailing: widget.menuTrailing,
-      menuFooter: widget.menuFooter,
-      hideMenu: widget.menuHide,
-      onHideMenu: (bool value) {
-        setState(() {
-          _isMenuHidden = value;
-          if (widget.onMenuHide != null) widget.onMenuHide?.call(_isMenuHidden);
-          if (_kDebugMe) {
-            debugPrint('Flexfold() onHideMenu: $_isMenuHidden');
-          }
-        });
-      },
-      cycleViaDrawer: widget.cycleViaDrawer,
-      preferRail: widget.menuPrefersRail,
-      onPreferRail: (bool value) {
-        setState(() {
-          _menuPrefersRail = value;
-          if (widget.onMenuPrefersRail != null) {
-            widget.onMenuPrefersRail?.call(_menuPrefersRail);
-          }
-          if (_kDebugMe) {
-            debugPrint('Flexfold() onPreferRail: $_menuPrefersRail');
-          }
-        });
-      },
-      showBottomDestinationsInDrawer: _showBottomDestinationsInDrawer,
-    );
-  }
+  // Widget _buildMenu(BuildContext context) {
+  //   return FlexMenu(
+  //     // destinations: widget.destinations,
+  //     // selectedIndex: widget.selectedIndex,
+  //     menuAppBar: widget.menuAppBar,
+  //     menuLeading: widget.menuLeading,
+  //     menuTrailing: widget.menuTrailing,
+  //     menuFooter: widget.menuFooter,
+  //     // showBottomDestinationsInDrawer: _showBottomDestinationsInDrawer,
+  //   );
+  // }
 }
-
-// /// A widget used by the [FlexScaffold] to show its side menu or rail.
-// class FlexScaffoldMenu extends StatelessWidget {
-//
-//   /// Used to create a menu for a [FlexScaffold]
-//   const FlexScaffoldMenu({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return FlexMenu(
-//       destinations: widget.destinations,
-//       selectedIndex: widget.selectedIndex,
-//       onDestinationSelected: (int index) {
-//         // If we just clicked the current index we don't do anything
-//         if (index == widget.selectedIndex) return;
-//
-//         setState(() {
-//           // After moving to a new destination, bottom bar is not scroll hidden.
-//           _scrollHiddenBottomBar = false;
-//
-//           _selectedIndex = index;
-//           _indexMenu.setIndex(index);
-//           _target = widget.destinations[index];
-//           final int? bottomIndex = toBottomIndex(_target);
-//           _indexBottom.setIndex(bottomIndex);
-//           _isBottomTarget = bottomIndex != null;
-//
-//           FlexNavigation source = FlexNavigation.rail;
-//           if (_isMenuInDrawer) source = FlexNavigation.drawer;
-//           if (_isMenuInMenu) source = FlexNavigation.menu;
-//
-//           final bool preferPush =
-//               (_isPhone && widget.destinations[index].maybePush) ||
-//                   widget.destinations[index].alwaysPush;
-//
-//           // Make destination data to return that we should go to.
-//           final GoFlexDestination destination = GoFlexDestination(
-//             index: _selectedIndex,
-//             bottomIndex: bottomIndex,
-//             route: widget.destinations[index].route,
-//             icon: widget.destinations[index].icon,
-//             selectedIcon: widget.destinations[index].selectedIcon,
-//             label: widget.destinations[index].label,
-//             source: source,
-//             reverse: _indexMenu.reverse,
-//             preferPush: preferPush,
-//           );
-//           widget.onDestination(destination);
-//           if (preferPush) _assumePushed();
-//         });
-//       },
-//       menuToggleEnabled: widget.menuControlEnabled,
-//       menuIcon: widget.menuIcon,
-//       menuIconExpand: widget.menuIconExpand,
-//       menuIconExpandHidden: widget.menuIconExpandHidden,
-//       menuIconCollapse: widget.menuIconCollapse,
-//       // We have to have a menu app bar, we make a default one so that
-//       // if nothing is provided so we get a functional menu with control button.
-//       menuAppBar: widget.menuAppBar ?? const FlexAppBar(),
-//       menuLeading: widget.menuLeading,
-//       menuTrailing: widget.menuTrailing,
-//       menuFooter: widget.menuFooter,
-//       hideMenu: widget.menuHide,
-//       onHideMenu: (bool value) {
-//         setState(() {
-//           _isMenuHidden = value;
-//           if (widget.onMenuHide != null) widget.onMenuHide?.call(_isMenuHidden);
-//           if (_kDebugMe) {
-//             debugPrint('Flexfold() onHideMenu: $_isMenuHidden');
-//           }
-//         });
-//       },
-//       cycleViaDrawer: widget.cycleViaDrawer,
-//       preferRail: widget.menuPrefersRail,
-//       onPreferRail: (bool value) {
-//         setState(() {
-//           _menuPrefersRail = value;
-//           if (widget.onMenuPrefersRail != null) {
-//             widget.onMenuPrefersRail?.call(_menuPrefersRail);
-//           }
-//           if (_kDebugMe) {
-//             debugPrint('Flexfold() onPreferRail: $_menuPrefersRail');
-//           }
-//         });
-//       },
-//       showBottomDestinationsInDrawer: _showBottomDestinationsInDrawer,
-//     );
-//   }
-// }
 
 /// Specifies a part of [FlexScaffoldState] to depend on.
 ///
@@ -1610,19 +1576,20 @@ enum _FlexScaffoldAspect {
   isBottomBarVisible,
 
   /// Specifies the aspect corresponding to
+  /// [_FlexScaffoldData.selectedIndex].
+  selectedIndex,
+
+  /// Specifies the aspect corresponding to
+  /// [_FlexScaffoldData.showBottomDestinationsInDrawer].
+  showBottomDestinationsInDrawer,
+
+  /// Specifies the aspect corresponding to
   /// [_FlexScaffoldData.selectedDestination].
   selectedDestination,
 
   /// Specifies the aspect corresponding to
   /// [_FlexScaffoldData.onDestination].
   onDestination,
-
-  /// Specifies the aspect corresponding to [_FlexScaffoldData.indexBottom].
-  indexBottom,
-
-  /// Specifies the aspect corresponding to
-  /// [_FlexScaffoldData.bottomDestinations].
-  bottomDestinations,
 }
 
 /// Defines [FlexScaffold] stateful data that we want to be able to uses
@@ -1648,6 +1615,9 @@ class _FlexScaffoldData with Diagnosticable {
     this.isBottomTarget = true,
     this.isBottomBarVisible = false,
     //
+    this.selectedIndex = 0,
+    this.showBottomDestinationsInDrawer = false,
+    //
     this.selectedDestination = const GoFlexDestination(),
     this.onDestination = const GoFlexDestination(),
   });
@@ -1666,6 +1636,9 @@ class _FlexScaffoldData with Diagnosticable {
   //
   final bool menuBelongsToBody;
   final bool sidebarBelongsToBody;
+  //
+  final int selectedIndex;
+  final bool showBottomDestinationsInDrawer;
   //
   final bool isBottomTarget;
   final bool isBottomBarVisible;
@@ -1693,6 +1666,9 @@ class _FlexScaffoldData with Diagnosticable {
     bool? isBottomTarget,
     bool? isBottomBarVisible,
     //
+    int? selectedIndex,
+    bool? showBottomDestinationsInDrawer,
+    //
     GoFlexDestination? selectedDestination,
     GoFlexDestination? onDestination,
   }) {
@@ -1715,6 +1691,10 @@ class _FlexScaffoldData with Diagnosticable {
       //
       isBottomTarget: isBottomTarget ?? this.isBottomTarget,
       isBottomBarVisible: isBottomBarVisible ?? this.isBottomBarVisible,
+      //
+      selectedIndex: selectedIndex ?? this.selectedIndex,
+      showBottomDestinationsInDrawer:
+          showBottomDestinationsInDrawer ?? this.showBottomDestinationsInDrawer,
       //
       selectedDestination: selectedDestination ?? this.selectedDestination,
       onDestination: onDestination ?? this.onDestination,
@@ -1745,6 +1725,10 @@ class _FlexScaffoldData with Diagnosticable {
         other.isBottomTarget == isBottomTarget &&
         other.isBottomBarVisible == isBottomBarVisible &&
         //
+        other.selectedIndex == selectedIndex &&
+        other.showBottomDestinationsInDrawer ==
+            showBottomDestinationsInDrawer &&
+        //
         other.selectedDestination == selectedDestination &&
         other.onDestination == onDestination;
   }
@@ -1769,6 +1753,9 @@ class _FlexScaffoldData with Diagnosticable {
         //
         isBottomTarget,
         isBottomBarVisible,
+        //
+        selectedIndex,
+        showBottomDestinationsInDrawer,
         //
         selectedDestination,
         onDestination,
@@ -1801,10 +1788,13 @@ class _FlexScaffoldData with Diagnosticable {
     properties.add(DiagnosticsProperty<bool>(
         'sidebarBelongsToBody', sidebarBelongsToBody));
     //
-    //
     properties.add(DiagnosticsProperty<bool>('isBottomTarget', isBottomTarget));
     properties.add(
         DiagnosticsProperty<bool>('isBottomBarVisible', isBottomBarVisible));
+    //
+    properties.add(DiagnosticsProperty<int>('selectedIndex', selectedIndex));
+    properties.add(DiagnosticsProperty<bool>(
+        'showBottomDestinationsInDrawer', showBottomDestinationsInDrawer));
     //
     properties.add(DiagnosticsProperty<GoFlexDestination>(
         'selectedDestination', selectedDestination));

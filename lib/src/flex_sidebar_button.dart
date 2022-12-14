@@ -16,48 +16,81 @@ class FlexSidebarButton extends StatelessWidget {
   /// Default constructor.
   const FlexSidebarButton({
     super.key,
-    this.menuIcon,
-    this.menuIconExpand,
-    this.menuIconExpandHidden,
-    this.menuIconCollapse,
+    this.icon,
+    this.iconExpand,
+    this.iconExpandHidden,
+    this.iconCollapse,
     required this.onPressed,
   });
 
-  // TODO(rydmike): Fix and update icon doc comments.
-
-  /// A Widget used to open the menu, typically an [Icon] widget is used.
+  /// A Widget used on the sidebar button when the sidebar is operated as an
+  /// end Drawer.
   ///
-  /// The same icon will also be used on the AppBar when the menu or rail is
-  /// hidden in a drawer. If no icon is provided it defaults to a widget with
-  /// value [kFlexfoldSidebarIcon].
-  final Widget? menuIcon;
-
-  /// A widget used to expand the drawer to a menu from an opened drawer,
-  /// typically an [Icon] widget is used.
+  /// Typically an [Icon] widget is used with the hamburger menu icon.
   ///
-  /// If no icon is provided for [menuIcon] it defaults to a widget with value
-  /// [kFlexfoldMenuIconExpand] otherwise toe
-  final Widget? menuIconExpand;
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, it defaults to a widget
+  /// with value [kFlexfoldSidebarIcon], the hamburger icon.
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
+  final Widget? icon;
 
-  /// A widget used to expand the drawer to a menu when the rail/menu is
-  /// hidden but may be expanded based on screen width and breakpoints.
+  /// A widget used on an opened end drawer sidebar button when operating it
+  /// will change it to a fixed sidebar.
+  ///
   /// Typically an [Icon] widget is used.
   ///
-  /// If no icon is provided for [menuIcon] it defaults to a widget with value
-  /// [kFlexfoldMenuIconExpandHidden].
-  final Widget? menuIconExpandHidden;
-
-  /// A widget used to expand the drawer to a menu, typically an [Icon]
-  /// widget is used.
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [icon] was not
+  /// defined, it defaults to a widget with value [kFlexfoldSidebarIconExpand].
   ///
-  /// If no icon is provided for [menuIcon] it defaults to a widget with value
-  /// [kFlexfoldMenuIconCollapse].
-  final Widget? menuIconCollapse;
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
+  final Widget? iconExpand;
 
-  /// The callback that is called when the button is tapped or otherwise
+  /// A widget used on the sidebar button when operating it will expand the
+  /// hidden sidebar to a fixed side menu.
+  ///
+  /// Typically an [Icon] widget is used.
+  ///
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [icon] was not
+  /// defined, it defaults to a widget with value
+  /// [kFlexfoldSidebarIconExpandHidden].
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
+  final Widget? iconExpandHidden;
+
+  /// A widget used on the sidebar button when it is shown as a fixed sidebar,
+  /// and operating it will collapse it to its hidden state.
+  ///
+  /// Typically an [Icon] widget is used.
+  ///
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [icon] was not
+  /// defined, it defaults to a widget with value
+  /// [kFlexfoldSidebarIconCollapse].
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
+  final Widget? iconCollapse;
+
+  /// The callback that is called when the sidebar button is tapped or otherwise
   /// activated.
   ///
   /// If this is set to null, the button will be disabled.
+  ///
+  /// This button has all logic built-in to do what it needs to operate
+  /// the drawer/menu/rail in [FlexScaffold], as defined by its properties
+  /// and theme. Typically you would only use this callback to disable the
+  /// button, but if needed you can do some custom actions too. Normally that
+  /// is however not needed.
   final VoidCallback? onPressed;
 
   @override
@@ -81,25 +114,24 @@ class FlexSidebarButton extends StatelessWidget {
 
     // Set effective expand and collapse icons
     Widget effectiveMenuIcon =
-        menuIcon ?? flexScaffold.widget.sidebarIcon ?? kFlexfoldSidebarIcon;
-    Widget effectiveMenuIconExpand = menuIconExpand ??
+        icon ?? flexScaffold.widget.sidebarIcon ?? kFlexfoldSidebarIcon;
+    Widget effectiveMenuIconExpand = iconExpand ??
         flexScaffold.widget.sidebarIconExpand ??
-        menuIcon ??
+        icon ??
         kFlexfoldSidebarIconExpand;
-    Widget effectiveMenuIconExpandHidden = menuIconExpandHidden ??
+    Widget effectiveMenuIconExpandHidden = iconExpandHidden ??
         flexScaffold.widget.sidebarIconExpandHidden ??
-        menuIcon ??
+        icon ??
         kFlexfoldSidebarIconExpandHidden;
-    Widget effectiveMenuIconCollapse = menuIconCollapse ??
+    Widget effectiveMenuIconCollapse = iconCollapse ??
         flexScaffold.widget.sidebarIconCollapse ??
-        menuIcon ??
+        icon ??
         kFlexfoldSidebarIconCollapse;
     // If directionality is RTL we rotate the icons 180 degrees, if directional
     // icons were used in a LTR design, the result should be fairly OK of this,
     // unless the APP was really designed with a RTL mindset, then we should
     // actually rotate them in LTR mode. Do we need an enum to toggle be able
     // to toggle this?
-    // TODO(rydmike): Consider LTR rotate setting if icons selected for RTL
     if (Directionality.of(context) == TextDirection.rtl) {
       effectiveMenuIcon = RotatedBox(quarterTurns: 2, child: effectiveMenuIcon);
       effectiveMenuIconExpand =

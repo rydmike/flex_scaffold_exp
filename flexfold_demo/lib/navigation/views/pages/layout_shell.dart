@@ -6,18 +6,12 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/const/app_icons.dart';
 import '../../../app/const/app_tooltips.dart';
-import '../../../core/views/widgets/app/animated_hide.dart';
 import '../../../core/views/widgets/universal/dialogs/platform_alert_dialog.dart';
 import '../../../settings/controllers/pods_flexfold.dart';
 import '../../constants/routes.dart';
 import '../../controllers/current_route_provider.dart';
-// import 'package:routemaster/routemaster.dart';
-
 import '../../models/app_navigation_state.dart';
-import '../widgets/menu/footer_copyright.dart';
-import '../widgets/menu/leading_user_profile.dart';
-import '../widgets/menu/menu_logo.dart';
-import '../widgets/menu/trailing_theme_toggle.dart';
+import '../widgets/menu/demo_flex_menu.dart';
 import '../widgets/sidebar/sidebar.dart';
 
 const bool _kDebugMe = kDebugMode && true;
@@ -337,34 +331,7 @@ class LayoutShell extends ConsumerWidget {
             context.go(destination.route);
           }
         },
-        //
-        // The app bar for the menu, we make it styled too, but you don't
-        // have to.You might often at least want to provide a logo or
-        // app name as title for the menu app bar.
-        menuAppBar: FlexAppBar.styled(
-          context,
-          // You can add your app logo or brand here.
-          title: const MenuLogo(),
-          gradient: false, // ref.watch(gradientAppBarPod).state,
-          opacity: 1,
-          // ref.watch(transparentAppBarPod).state
-          // ? ref.watch(appBarOpacityPod).state
-          // : 1.0,
-          blurred: false, // ref.watch(blurAppBarPod).state,
-          hasBorderOnSurface: ref.watch(appBarBorderOnSurfacePod),
-          hasBorder: ref.watch(appBarBorderPod),
-          // Reverse the gradient compared to main app bar, it looks cool.
-          // reverseGradient: true,
-          // A little trick, use the rail width and as menu bar's leading
-          // widget width, then if you change width, icons remain aligned.
-          leadingWidth: ref.watch(railWidthPod),
-          // TODO(rydmike): Experimental AppBar feature, keep or not?
-          // floatAppBar: ref.watch(appBarFloatPod),
-          // floatPadding: const EdgeInsetsDirectional.fromSTEB(3, 0, 0, 0),
-          // // Elevation and scrim
-          // elevation: ref.watch(appBarFloatPod) ? 2 : 0,
-          scrim: ref.watch(appBarScrimPod),
-        ),
+
         //
         // The menu icon used for the menu, drawer and rail toggle button.
         menuIcon: ref.watch(useCustomMenuIconsPod) ? AppIcons.menuIcon : null,
@@ -375,28 +342,7 @@ class LayoutShell extends ConsumerWidget {
             : null,
         menuIconCollapse:
             ref.watch(useCustomMenuIconsPod) ? AppIcons.menuIconCollapse : null,
-        //
-        // This is a widget that appears before your menu destinations.
-        // Animated cross fade is used to remove it smoothly when its
-        // presence is toggled on/off in the demo.
-        menuLeading: AnimatedSwitchShowHide(
-          show: ref.watch(showMenuLeadingPod),
-          child: const LeadingUserProfile(),
-        ),
-        // This is a widget that appears after your menu destinations.
-        menuTrailing: AnimatedSwitchShowHide(
-          show: ref.watch(showMenuTrailingPod),
-          child: const TrailingThemeToggle(),
-        ),
-        // This is a widget that appears at the bottom of your menu, as
-        // a footer, it sticks to the bottom and does not scroll.
-        // Using another way to hide/show the footer when toggled on/off,
-        // this version just looked better here at the bottom.
-        menuFooter: AnimatedFadeShowHide(
-          show: ref.watch(showMenuFooterPod),
-          child: const FooterCopyright(),
-        ),
-        //
+        menu: const DemoFlexMenu(),
         // If menu and sidebar toggles are enabled, user has manual control.
         menuControlEnabled: ref.watch(menuControlEnabledPod),
         sidebarControlEnabled: ref.watch(sidebarControlEnabledPod),

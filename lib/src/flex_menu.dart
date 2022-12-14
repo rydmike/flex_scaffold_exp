@@ -10,123 +10,47 @@ import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
 import 'flex_scaffold_theme.dart';
 
-/// Flexfold internal widget that manages the animated showing and hiding of
-/// the menu and rail, plus building and managing its menu content.
+/// The widget used by [FlexScaffold] to show the content used in the
+/// rail, side menu and drawer.
+///
+/// It can have an AppBar, leading, trailer and footer widget.
+///
+/// By default it builds its own menu items from [FlexScaffold.destinations],
+/// but it is possible to provide a custom menu as well. You might not need to
+/// as the [FlexMenu] default menu is pretty configurable.
+///
+/// If you make a custom rail/menu or use a package for one you can use the
+/// Flutter [NavigationRail] example as a guide for how to implement it.
 class FlexMenu extends StatefulWidget {
   /// Default constructor
   const FlexMenu({
     super.key,
-    // Destination properties for the menu, rail and bottom navbar
-    required this.destinations,
-    required this.selectedIndex,
-    required this.onDestinationSelected,
-    //
-    // this.menuToggleEnabled = true,
-    //
-    // Menu content properties
-    this.menuIcon,
-    this.menuIconExpand,
-    this.menuIconExpandHidden,
-    this.menuIconCollapse,
-    //
-    this.menuAppBar,
-    this.menuLeading,
-    this.menuTrailing,
-    this.menuFooter,
-    //
-    // Menu state properties and callbacks
-    this.hideMenu = false,
-    required this.onHideMenu,
-    this.cycleViaDrawer = true,
-    this.preferRail = false,
-    required this.onPreferRail,
-    //
-    this.showBottomDestinationsInDrawer = true,
-    //
-  }) : assert(
-            destinations.length >= 2, 'There must be at least 2 destinations.');
+    this.appBar,
+    this.leading,
+    this.trailing,
+    this.footer,
+  });
 
-  /// Defines the appearance of the button items that are arrayed within the
-  /// drawer, rail, menu and bottom bar.
+  /// An [AppBar] for the menu when used on the drawer, rail and side menu.
   ///
-  /// The value must be a list of two or more [FlexDestination] values.
-  final List<FlexDestination> destinations;
+  /// The menu has an AppBar on top of it too. It always gets an automatic
+  /// leading button to show and collapse it. You can also create actions for
+  /// the menu app bar, but beware that there is not a lot of space and
+  /// actions are not reachable in rail mode. There is also not so much
+  /// space in the title, but you can fit a small brand/logo/app text on it.
+  final FlexAppBar? appBar;
 
-  /// The index into [destinations] for the current selected
-  /// [FlexDestination].
-  final int selectedIndex;
-
-  /// Called when one of the [destinations] is selected.
-  ///
-  /// The stateful widget that creates the navigation rail needs to keep
-  /// track of the index of the selected [FlexDestination] and call
-  /// `setState` to rebuild the menu, drawer, rail or bottom bar
-  /// with the new [selectedIndex].
-  final ValueChanged<int> onDestinationSelected;
-
-  // /// The menu mode can be manually toggled by the user when true.
-  // ///
-  // /// If set to false, then the menu can only be opened when it is a drawer,
-  // /// it cannot be toggled between rail/menu and drawer manually when the
-  // /// breakpoint constraints would otherwise allow that. This means the user
-  // /// cannot hide the side menu or the rail, when rail or side navigation mode
-  // /// is triggered. You can still control it via the API, there just is no
-  // /// user control over.
-  // ///
-  // /// Defaults to true so users can toggle the menu and rail visibility as they
-  // /// prefer on a large canvas.
-  // final bool menuToggleEnabled;
-
-  /// A Widget used to open the menu, typically an [Icon] widget is used.
-  ///
-  /// The same icon will also be used on the AppBar when the menu or rail is
-  /// hidden in a drawer. If no icon is provided it defaults to a widget with
-  /// value [kFlexfoldMenuIcon].
-  final Widget? menuIcon;
-
-  /// A widget used to expand the drawer to a menu from an opened drawer,
-  /// typically an [Icon] widget is used.
-  ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldMenuIconExpand].
-  final Widget? menuIconExpand;
-
-  /// A widget used to expand the drawer to a menu when the rail/menu is
-  /// hidden but may be expanded based on screen width and breakpoints.
-  /// Typically an [Icon] widget is used.
-  ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldMenuIconExpandHidden].
-  final Widget? menuIconExpandHidden;
-
-  /// A widget used to expand the drawer to a menu, typically an [Icon]
-  /// widget is used.
-  ///
-  /// If no icon is provided it defaults to a widget with value
-  /// [kFlexfoldMenuIconCollapse].
-  final Widget? menuIconCollapse;
-
-  /// Appbar for the menu, which is in the drawer, rail and side menu.
-  ///
-  /// The menu has an appbar on top of it too. It always gets an automatic
-  /// leading button to control its appearance and hiding it. You can even
-  /// create actions for it, but beware that there is not a lot of space and it
-  /// would not be available in rail mode. There is also not so much
-  /// space in the title, but you can fit a small brand/logo there.
-  final FlexAppBar? menuAppBar;
-
-  /// A widget that appears below the menubar but above the menu items.
+  /// A widget that appears below the menu AppBar but above the menu items.
   ///
   /// It is placed at the top of the menu, but after the menu bar, above the
-  /// [destinations].
-  /// This could be an action button like a [FloatingActionButton], but may
-  /// also be a non-button, such as a user profile image button, company logo,
-  /// etc. It needs to fit and look good both in rail and side menu mode. Use a
-  /// layout builder to make an adaptive leading widget that fits both sizes
-  /// if so required.
+  /// destinations. This could be an action button like a
+  /// [FloatingActionButton], but may also other widgets like a user profile
+  /// image button, company logo, etc. It needs to fit and look good both in
+  /// rail and side menu mode. Use a layout builder to make an adaptive
+  /// leading widget that fits both sizes if so required.
   ///
   /// The default value is null.
-  final Widget? menuLeading;
+  final Widget? leading;
 
   /// Trailing menu widget is placed below the last [FlexDestination].
   ///
@@ -135,98 +59,30 @@ class FlexMenu extends StatefulWidget {
   /// The trailing widget in the menu that is placed below the destinations.
   ///
   /// The default value is null.
-  final Widget? menuTrailing;
+  final Widget? trailing;
 
-  /// A widget that appears at the bottom of the menu. This widget is glued
-  /// to the bottom and does not scroll, like the menubar.
+  /// A widget that appears at the bottom of the menu.
+  ///
+  /// This widget is glued to the bottom and does not scroll.
   ///
   /// The menu footer needs to fit and look good both in rail and side menu
-  /// mode. Use a layout builder to make an adaptive trailing widget that
+  /// mode. Use a layout builder to make an adaptive footer widget that
   /// fits both sizes.
-  final Widget? menuFooter;
-
-  /// Keep main menu hidden in a drawer, even when its breakpoints are exceeded.
-  final bool hideMenu;
-
-  /// Callback that is called when hide menu changes.
-  final ValueChanged<bool> onHideMenu;
-
-  /// Cycle via drawer menu when opening a hidden menu.
-  ///
-  /// When the menu may be shown as locked on screen, as a rail or menu, and
-  /// we expand it again, it first cycles via the drawer menu option if true.
-  /// If set to false it skips the cycle via the drawer and expands it directly
-  /// to a rail or side menu, depending on current screen width and if it is
-  /// larger than the breakpoint for menu or not. If screen width is below rail
-  /// breakpoint this setting has no effect, the only way to show the menu is
-  /// as a drawer, so the drawer will be opened.
-  final bool cycleViaDrawer;
-
-  /// Prefer a rail menu when it is shown even if menu breakpoint is exceeded.
-  final bool preferRail;
-
-  /// Callback that is called when prefer rail changes.
-  final ValueChanged<bool> onPreferRail;
-
-  /// Set to true by [FlexScaffold] constructing the menu, when the bottom
-  /// navigation bar destinations should also be included in the drawer.
-  ///
-  /// Becomes true when the [FlexScaffold.bottomDestinationsInDrawer] property
-  /// is true AND current destination selection is not a bottom destination.
-  final bool showBottomDestinationsInDrawer;
+  final Widget? footer;
 
   @override
   State<FlexMenu> createState() => _FlexMenuState();
 }
 
 class _FlexMenuState extends State<FlexMenu> {
-  // Local state
-  late int selectedIndex;
-  late double width;
-  late bool hideMenu;
-  late bool preferRail;
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize local state controls
-    selectedIndex = widget.selectedIndex;
-    width = 0.0;
-    hideMenu = widget.hideMenu;
-    preferRail = widget.preferRail;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(FlexMenu oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.selectedIndex != widget.selectedIndex) {
-      selectedIndex = widget.selectedIndex;
-    }
-    if (oldWidget.hideMenu != widget.hideMenu) {
-      hideMenu = widget.hideMenu;
-    }
-    if (oldWidget.preferRail != widget.preferRail) {
-      preferRail = widget.preferRail;
-    }
-  }
+  double width = 0;
 
   @override
   Widget build(BuildContext context) {
-    //
-    // Get all the effective FlexfoldThemeData
-    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
-
-    // Get all the theme based behavior properties
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
     final bool hasDrawer = scaffold?.hasDrawer ?? false;
     final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
 
-    assert(debugCheckHasMediaQuery(context), 'A build context is required.');
     // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
     //   reference: https://github.com/flutter/flutter/pull/114459
     final MediaQueryData mediaData = MediaQuery.of(context);
@@ -236,21 +92,25 @@ class _FlexMenuState extends State<FlexMenu> {
     final double startPadding = Directionality.of(context) == TextDirection.ltr
         ? leftPadding
         : rightPadding;
-
     final double screenWidth = mediaData.size.width;
     final double screenHeight = mediaData.size.height;
+
+    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
     final double breakpointRail = flexTheme.breakpointRail!;
     final double breakpointMenu = flexTheme.breakpointMenu!;
     final double breakpointDrawer = flexTheme.breakpointDrawer!;
-
     final double railWidth = flexTheme.railWidth!;
     final double menuWidth = flexTheme.menuWidth!;
+
+    /// Depend on aspects of the FlexScaffold and only rebuild if they change.
+    final bool menuIsHidden = FlexScaffold.isMenuHiddenOf(context);
+    final bool menuPrefersRail = FlexScaffold.menuPrefersRailOf(context);
 
     // Based on height and breakpoint, we are making a phone landscape layout.
     final bool isPhoneLandscape = screenHeight < breakpointDrawer;
     // True if the menu should be used as a drawer.
     final bool stayInDrawer =
-        hideMenu || (screenWidth < breakpointRail) || isPhoneLandscape;
+        menuIsHidden || (screenWidth < breakpointRail) || isPhoneLandscape;
     // True if the menu is currently shown as a Drawer
     final bool isDrawer = stayInDrawer && hasDrawer && isDrawerOpen;
 
@@ -267,7 +127,7 @@ class _FlexMenuState extends State<FlexMenu> {
     } else {
       if (stayInDrawer) {
         width = 0.0;
-      } else if (screenWidth < breakpointMenu || widget.preferRail) {
+      } else if (screenWidth < breakpointMenu || menuPrefersRail) {
         width = railWidth + startPadding;
       } else {
         width = menuWidth + startPadding;
@@ -300,14 +160,26 @@ class _FlexMenuState extends State<FlexMenu> {
   ) {
     /// Depend on aspects of the FlexScaffold and only rebuild if they change.
     final bool menuControlEnabled = FlexScaffold.menuControlEnabledOf(context);
+    final bool showBottomDestinationsInDrawer =
+        FlexScaffold.showBottomDestinationsInDrawerOf(context);
 
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
     final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
+
+    // Reads the FlexScaffold state once, will not update if dependants change.
+    // Use it to access FlexScaffold state modifying methods. You may also use
+    // it to read widgets used as FlexScaffold action button icons, as long
+    // as you don't modify them dynamically in the app.
+    final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
+    final List<FlexDestination> destinations = flexScaffold.widget.destinations;
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints size) {
         final ThemeData theme = Theme.of(context);
         final Color scaffoldColor = theme.scaffoldBackgroundColor;
+
+        /// Depend on aspect of the FlexScaffold, only rebuild if it changes.
+        final int selectedIndex = FlexScaffold.selectedIndexOf(context);
 
         // Get FlexfoldThemeData
         final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
@@ -362,6 +234,7 @@ class _FlexMenuState extends State<FlexMenu> {
                 // The Menu bar with menu action button and logo
                 Stack(
                   children: <Widget>[
+                    // TODO(rydmike): Check if this is still needed.
                     // We put the appbar in Stack so we can put the Scaffold
                     // background color on a Container behind the AppBar so we
                     // get transparency against the scaffold background color
@@ -370,20 +243,14 @@ class _FlexMenuState extends State<FlexMenu> {
                       height: kToolbarHeight + topPadding,
                       color: scaffoldColor,
                     ),
-                    widget.menuAppBar!.toAppBar(
+                    widget.appBar!.toAppBar(
                       automaticallyImplyLeading: false,
                       leading: menuControlEnabled || isDrawerOpen
-                          ? FlexMenuButton(
-                              onPressed: () {},
-                              menuIcon: widget.menuIcon,
-                              menuIconExpand: widget.menuIconExpand,
-                              menuIconExpandHidden: widget.menuIconExpandHidden,
-                              menuIconCollapse: widget.menuIconCollapse,
-                            )
+                          ? FlexMenuButton(onPressed: () {})
                           : railLeadingFiller,
                       // Insert any existing actions
-                      actions: (widget.menuAppBar?.actions != null)
-                          ? <Widget>[...widget.menuAppBar!.actions!]
+                      actions: (widget.appBar?.actions != null)
+                          ? <Widget>[...widget.appBar!.actions!]
                           : <Widget>[const SizedBox.shrink()],
                     ),
                   ],
@@ -419,52 +286,45 @@ class _FlexMenuState extends State<FlexMenu> {
                             children: <Widget>[
                               //
                               // Add the leading widget to the menu
-                              widget.menuLeading ?? const SizedBox.shrink(),
+                              widget.leading ?? const SizedBox.shrink(),
                               //
                               // The menu items
-                              for (int i = 0;
-                                  i < widget.destinations.length;
-                                  i++)
-                                if ((widget.destinations[i]
-                                            .inBottomNavigation &&
-                                        widget
-                                            .showBottomDestinationsInDrawer) ||
-                                    !widget
-                                        .destinations[i].inBottomNavigation ||
+                              for (int i = 0; i < destinations.length; i++)
+                                if ((destinations[i].inBottomNavigation &&
+                                        showBottomDestinationsInDrawer) ||
+                                    !destinations[i].inBottomNavigation ||
                                     !isDrawer)
                                   _FlexMenuItem(
-                                    destination: widget.destinations[i],
+                                    destination: destinations[i],
                                     iconTheme: unselectedIconTheme,
                                     selectedIconTheme: selectedIconTheme,
                                     labelTextStyle: unselectedLabelTextStyle,
                                     selectedLabelTextStyle:
                                         selectedLabelTextStyle,
                                     headingTextStyle: headingTextStyle,
-                                    isSelected: widget.selectedIndex == i,
+                                    isSelected: selectedIndex == i,
                                     width: size.maxWidth,
                                     startPadding: startPadding,
-                                    autoFocus: widget.selectedIndex == i,
+                                    autoFocus: selectedIndex == i,
                                     onTap: () {
                                       setState(() {
                                         if (isDrawerOpen) {
                                           Navigator.of(context).pop();
                                         }
-                                        selectedIndex = i;
-                                        widget.onDestinationSelected(
-                                            selectedIndex);
+                                        flexScaffold.setSelectedIndex(i);
                                       });
                                     },
                                   ),
                               //
                               // Add the trailing widget to the menu
-                              widget.menuTrailing ?? const SizedBox.shrink(),
+                              widget.trailing ?? const SizedBox.shrink(),
                             ],
                           ),
                           //
                           // This widget will appear as a fixed footer always
                           // at the bottom of the menu, like the menu's appbar
                           // it does not scroll.
-                          footer: widget.menuFooter ?? const SizedBox.shrink(),
+                          footer: widget.footer ?? const SizedBox.shrink(),
                         )),
                   )),
                 )),
@@ -538,8 +398,8 @@ class _FlexMenuItem extends StatelessWidget {
     // Is menu list direction reversed and starting from the bottom?
     final bool reversed = theme.menuStart == FlexfoldMenuStart.bottom;
 
+    // TODO(rydmike): Future enhancement, custom widget for the divider.
     // Make the divider widget
-    // TODO(rydmike): Future enhancement, Widget for the divider.
     final Widget menuDivider = Divider(
       thickness: 1,
       height: 1,

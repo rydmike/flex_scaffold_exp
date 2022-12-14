@@ -25,7 +25,7 @@ const Color _kMaterialDarkSurface = Color(0xff121212);
 /// When [FlexAppBar] is used in [FlexScaffold] the [automaticallyImplyLeading]
 /// property has no effect. Flexfold determines what is needed when it
 /// comes to the [leading] widget for the [FlexScaffold.appBar] and the
-/// [FlexScaffold.menuAppBar] app bars. It also determines when it needs to
+/// [FlexScaffold.appBar] app bars. It also determines when it needs to
 /// create the last action in [actions] for the [FlexScaffold.sidebarAppBar].
 ///
 /// When [FlexScaffold] has created the properties it needs for the three

@@ -1,6 +1,7 @@
 /// A library for building application with animated responsive scaffold.
 export 'src/flex_app_bar.dart';
 export 'src/flex_destination.dart';
+export 'src/flex_menu.dart';
 export 'src/flex_menu_button.dart';
 export 'src/flex_menu_indicator.dart';
 export 'src/flex_scaffold.dart';

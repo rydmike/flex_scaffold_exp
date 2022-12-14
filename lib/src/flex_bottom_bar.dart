@@ -115,22 +115,19 @@ class FlexBottomBar extends StatelessWidget {
                       CupertinoBottomBar(
                         destinations: flexScaffold.bottomDestinations,
                         selectedIndex: flexScaffold.indexBottom.index,
-                        onDestinationSelected:
-                            flexScaffold.navigateToBottomIndex,
+                        onDestinationSelected: flexScaffold.setBottomIndex,
                       )
                     else if (effectiveType == FlexfoldBottomBarType.material3)
                       Material3BottomBar(
                         destinations: flexScaffold.bottomDestinations,
                         selectedIndex: flexScaffold.indexBottom.index,
-                        onDestinationSelected:
-                            flexScaffold.navigateToBottomIndex,
+                        onDestinationSelected: flexScaffold.setBottomIndex,
                       )
                     else
                       Material2BottomBar(
                         destinations: flexScaffold.bottomDestinations,
                         selectedIndex: flexScaffold.indexBottom.index,
-                        onDestinationSelected:
-                            flexScaffold.navigateToBottomIndex,
+                        onDestinationSelected: flexScaffold.setBottomIndex,
                       )
                   else
                     customNavigationBar!,
