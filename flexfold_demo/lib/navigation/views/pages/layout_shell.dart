@@ -11,7 +11,7 @@ import '../../../settings/controllers/pods_flexfold.dart';
 import '../../constants/routes.dart';
 import '../../controllers/current_route_provider.dart';
 import '../../models/app_navigation_state.dart';
-import '../widgets/menu/demo_flex_menu.dart';
+import '../widgets/menu/menu.dart';
 import '../widgets/sidebar/sidebar.dart';
 
 const bool _kDebugMe = kDebugMode && true;
@@ -331,8 +331,9 @@ class LayoutShell extends ConsumerWidget {
             context.go(destination.route);
           }
         },
-
-        //
+        // Menu properties.
+        menu: const Menu(),
+        menuControlEnabled: ref.watch(menuControlEnabledPod),
         // The menu icon used for the menu, drawer and rail toggle button.
         menuIcon: ref.watch(useCustomMenuIconsPod) ? AppIcons.menuIcon : null,
         menuIconExpand:
@@ -342,10 +343,6 @@ class LayoutShell extends ConsumerWidget {
             : null,
         menuIconCollapse:
             ref.watch(useCustomMenuIconsPod) ? AppIcons.menuIconCollapse : null,
-        menu: const DemoFlexMenu(),
-        // If menu and sidebar toggles are enabled, user has manual control.
-        menuControlEnabled: ref.watch(menuControlEnabledPod),
-        sidebarControlEnabled: ref.watch(sidebarControlEnabledPod),
         //
         // Menu controls
         menuHide: ref.watch(hideMenuPod),
@@ -356,12 +353,11 @@ class LayoutShell extends ConsumerWidget {
         menuPrefersRail: ref.watch(preferRailPod),
         onMenuPrefersRail: (bool value) =>
             ref.read(preferRailPod.notifier).state = value,
-        // Combined sidebar menu and end drawer properties and its controls.
-        // The sidebar only appears if a destination has specified that it
-        // has a sidebar, even in those cases, if you do not
-        // add a sidebar property it will not get one, it can be null too.
-        // :
-        // The icon used for the sidebar toggle button.
+        //
+        // Sidebar properties.
+        sidebar: const Sidebar(),
+        sidebarControlEnabled: ref.watch(sidebarControlEnabledPod),
+        // The icons used for the sidebar toggle button.
         sidebarIcon:
             ref.watch(useCustomMenuIconsPod) ? AppIcons.sidebarIcon : null,
         sidebarIconExpand: ref.watch(useCustomMenuIconsPod)
@@ -373,35 +369,6 @@ class LayoutShell extends ConsumerWidget {
         sidebarIconCollapse: ref.watch(useCustomMenuIconsPod)
             ? AppIcons.sidebarIconCollapse
             : null,
-        //
-        // The appbar for the sidebar. This appbar is only used
-        // when the sidebar is shown in the end drawer or when the sidebar
-        // is
-        // locked on the screen is defined to not be a part of the body.
-        // Here we use Flexfold styled version, for a plain normal style
-        // appbar use FlexfoldAppBar. If not given or null a default one
-        // will be created for destinations that has a sidebar.
-        sidebarAppBar: FlexAppBar.styled(
-          context,
-          title: const Text('Sidebar title'),
-          reverseGradient: true,
-          gradient: ref.watch(appBarGradientPod),
-          opacity: ref.watch(appBarTransparentPod)
-              ? ref.watch(appBarOpacityPod)
-              : 1.0,
-          blurred: false, // ref.watch(blurAppBarPod).state,
-          hasBorderOnSurface: ref.watch(appBarBorderOnSurfacePod),
-          hasBorder: ref.watch(appBarBorderPod),
-          // TODO(rydmike): Experimental AppBar feature, keep or not?
-          // floatAppBar: ref.watch(appBarFloatPod),
-          // floatPadding: const EdgeInsetsDirectional.fromSTEB(0, 0, 3, 0),
-          // elevation: ref.watch(appBarFloatPod) ? 2 : 0,
-          scrim: ref.watch(appBarScrimPod),
-        ),
-        // The actual content of the sidebar. Any Widget will do, but it
-        // needs to fit into the its given narrow space, you can modify the
-        // the widths to some extent.
-        sidebar: const Sidebar(),
         // Setting to keep the sidebar hidden.
         sidebarHide: ref.watch(hideSidebarPod),
         // Callback that changes when sidebar is set to be hidden.

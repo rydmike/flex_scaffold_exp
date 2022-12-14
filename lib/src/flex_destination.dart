@@ -315,6 +315,7 @@ class GoFlexDestination with Diagnosticable {
     this.source = FlexNavigation.rail,
     this.reverse = false,
     this.preferPush = false,
+    this.hasAppBar = true,
   }) : selectedIcon = selectedIcon ?? icon;
 
   /// Menu, rail or drawer index of selected destination.
@@ -392,6 +393,10 @@ class GoFlexDestination with Diagnosticable {
   /// case bottom destinations are always also present in the drawer.
   final bool preferPush;
 
+  /// True if the selected destination is defined to have a none transitioning
+  /// AppBar.
+  final bool hasAppBar;
+
   /// Copy the object with one or more provided properties changed.
   GoFlexDestination copyWith({
     int? index,
@@ -403,6 +408,7 @@ class GoFlexDestination with Diagnosticable {
     FlexNavigation? source,
     bool? reverse,
     bool? preferPush,
+    bool? hasAppBar,
   }) {
     return GoFlexDestination(
       index: index ?? this.index,
@@ -414,6 +420,7 @@ class GoFlexDestination with Diagnosticable {
       source: source ?? this.source,
       reverse: reverse ?? this.reverse,
       preferPush: preferPush ?? this.preferPush,
+      hasAppBar: hasAppBar ?? this.hasAppBar,
     );
   }
 
@@ -431,7 +438,8 @@ class GoFlexDestination with Diagnosticable {
         other.label == label &&
         other.source == source &&
         other.reverse == reverse &&
-        other.preferPush == preferPush;
+        other.preferPush == preferPush &&
+        other.hasAppBar == hasAppBar;
   }
 
   /// Override for hashcode. Using Darts object hash.
@@ -446,6 +454,7 @@ class GoFlexDestination with Diagnosticable {
         source,
         reverse,
         preferPush,
+        hasAppBar,
       );
 
   /// Flutter debug properties override, includes toString.
@@ -461,5 +470,6 @@ class GoFlexDestination with Diagnosticable {
     properties.add(EnumProperty<FlexNavigation>('source', source));
     properties.add(DiagnosticsProperty<bool>('reverse', reverse));
     properties.add(DiagnosticsProperty<bool>('preferPush', preferPush));
+    properties.add(DiagnosticsProperty<bool>('hasAppBar', hasAppBar));
   }
 }

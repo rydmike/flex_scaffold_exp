@@ -5,20 +5,25 @@ import 'flex_scaffold.dart';
 import 'flex_scaffold_theme.dart';
 import 'flex_sidebar_button.dart';
 
-/// FlexScaffold widget that manages the animated showing and hiding of
-/// the sidebar menu.
+/// A sidebar widget used by [FlexScaffold] that manages the animated
+/// showing and hiding of the sidebar menu.
 class FlexSidebar extends StatefulWidget {
   /// Default constructor
   const FlexSidebar({
     super.key,
-    this.sidebarAppBar,
+    this.appBar,
     this.child,
   });
 
-  /// The appbar for the sidebar.
-  final FlexAppBar? sidebarAppBar;
+  /// The AppBar for the end drawer and sidebar.
+  ///
+  /// The side drawer has an appbar in it too. It always gets an automatic
+  /// action button to control its appearance and hiding it. There is no
+  /// automatic leading button action for it, but you can still create one
+  /// manually as well as adding additional actions to it.
+  final FlexAppBar? appBar;
 
-  /// The child widget inside the sidebar.
+  /// The child widget providing the content to the sidebar.
   ///
   /// It is up to the provider of the child to make sure it fits nicely
   /// with in the max width of the sidebar, both when it is used as end drawer
@@ -57,7 +62,7 @@ class _FlexSidebarState extends State<FlexSidebar> {
     if (isInEndDrawer) {
       return _SideBar(
         // hasAppBar: widget.hasAppBar,
-        sidebarAppBar: widget.sidebarAppBar,
+        sidebarAppBar: widget.appBar,
         child: widget.child,
       );
     } else {
@@ -81,7 +86,7 @@ class _FlexSidebarState extends State<FlexSidebar> {
         // The best we can do is probably just to advise not to use curves
         // with negative overshoot.
         child: _SideBar(
-          sidebarAppBar: widget.sidebarAppBar,
+          sidebarAppBar: widget.appBar,
           child: widget.child,
         ),
       );
@@ -130,6 +135,7 @@ class _SideBar extends StatelessWidget {
     /// Depend on aspects of the FlexScaffold and only rebuild if they change.
     final bool sidebarBelongsToBody =
         FlexScaffold.sidebarBelongsToBodyOf(context);
+    final bool hasAppBar = FlexScaffold.onDestinationOf(context).hasAppBar;
 
     return OverflowBox(
       alignment: AlignmentDirectional.topStart,
@@ -150,9 +156,7 @@ class _SideBar extends StatelessWidget {
             //
             // Add SidebarAppBar if in end Drawer mode or Sidebar is a menu
             // and it does not belong to the body.
-            // TODO(rydmike): If before, clean out if simpler works.
-            // if (isEndDrawerOpen || !sidebarBelongsToBody || !hasAppBar)
-            if (isEndDrawerOpen || !sidebarBelongsToBody)
+            if (isEndDrawerOpen || !sidebarBelongsToBody || !hasAppBar)
               _SidebarAppBar(sidebarAppBar: sidebarAppBar)
             // Else sidebar was not in drawer but does belong to the body
             else

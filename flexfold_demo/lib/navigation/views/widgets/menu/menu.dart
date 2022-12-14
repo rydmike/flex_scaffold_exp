@@ -9,8 +9,8 @@ import 'leading_user_profile.dart';
 import 'menu_logo.dart';
 import 'trailing_theme_toggle.dart';
 
-class DemoFlexMenu extends ConsumerWidget {
-  const DemoFlexMenu({super.key});
+class Menu extends ConsumerWidget {
+  const Menu({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
