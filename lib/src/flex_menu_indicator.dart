@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
-import 'flexfold_theme.dart';
+import 'flex_scaffold_theme.dart';
 
 /// Makes a ShapeBorder based on the [FlexIndicatorStyle] enum.
 ///

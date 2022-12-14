@@ -897,7 +897,7 @@ class FlexAppBar {
         'true when title is null!');
 
     final ThemeData theme = Theme.of(context);
-    final AppBarTheme appBarTheme = AppBarTheme.of(context);
+    final AppBarTheme appBarTheme = theme.appBarTheme;
     final Color appBarColor =
         backgroundColor ?? appBarTheme.backgroundColor ?? theme.primaryColor;
 
@@ -932,15 +932,18 @@ class FlexAppBar {
     final Color bottomBorderColor =
         borderColor ?? theme.dividerTheme.color ?? theme.dividerColor;
 
+    // TODO(rydmike): Replace with MediaQuery aspects when it lands.
+    final MediaQueryData media = MediaQuery.of(context);
+
     // Needed for the height of the flexible space, we need to pass it to
     // gradient container to know how high to make it to fill the AppBar.
     final double height = kToolbarHeight +
         (bottom?.preferredSize.height ?? 0.0) +
-        MediaQuery.of(context).padding.top;
+        media.padding.top;
 
     // Get current screen size that we will show on the screen's app bar, if
     // [showScreenSize] is true.
-    final Size size = MediaQuery.of(context).size;
+    final Size size = media.size;
 
     // Effective center title logic is from the Flutter app bar source, so we
     // can get same logic also for the styled app bar when screen size is shown.
@@ -1122,14 +1125,14 @@ class FlexAppBar {
     );
   }
 
-  // TODO(rydmike): Make a toSliverAppBar() method.
+  // TODO(rydmike): Make a toSliverAppBar() method for release.
   /// Return an actual [SliverAppBar] widget from the [FlexAppBar] data object.
   ///
   /// Any pre-existing property values in the [FlexAppBar] object can
   /// be overridden before creating the [AppBar]. Flexfold uses this to adjust
   /// leading and actions widget's functionality before it constructs its
   /// actual app bars.
-  SliverAppBar toSliverAppBar({
+  SliverAppBar _toSliverAppBar({
     Key? key,
     Widget? leading,
     bool? automaticallyImplyLeading,

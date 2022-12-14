@@ -8,7 +8,7 @@ import 'flex_menu_button.dart';
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
-import 'flexfold_theme.dart';
+import 'flex_scaffold_theme.dart';
 
 /// Flexfold internal widget that manages the animated showing and hiding of
 /// the menu and rail, plus building and managing its menu content.

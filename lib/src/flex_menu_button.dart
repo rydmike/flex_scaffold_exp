@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
-import 'flexfold_theme.dart';
+import 'flex_scaffold_theme.dart';
 
 /// The menu button for the FlexScaffold menu, rail and drawer operation.
 ///
 /// The button holds the logic for managing toggling the state of the menu
-/// between hidden, rail and side menu.
+/// between hidden, rail and side menu and drawer.
 ///
-/// I uses an IconButton under the hood, looks up proper behavior from
-/// FlexScaffold.of(context) that must exist in the widget tree above this
-/// context. The icons can be customized, but if not, it uses those provided
-/// to the [FlexScaffold], or falls back to default icons.
+/// It uses an IconButton under the hood, looks up proper behavior from
+/// [FlexScaffold]'s inherited widget and model that must exist in the widget
+/// tree above this context.
+///
+/// The icons can be customized directly in the button, but if not, it uses
+/// those provided to the [FlexScaffold], or falls back to default icons.
 class FlexMenuButton extends StatelessWidget {
   /// Default constructor
   const FlexMenuButton({
@@ -24,8 +26,6 @@ class FlexMenuButton extends StatelessWidget {
     required this.onPressed,
   });
 
-  // TODO(rydmike): Fix and update icon doc comments.
-
   /// A Widget used on the button when the menu is operated as a Drawer.
   ///
   /// Typically an [Icon] widget is used with the hamburger menu icon.
@@ -33,37 +33,47 @@ class FlexMenuButton extends StatelessWidget {
   /// The same icon will also be used on the AppBar when the menu or rail is
   /// hidden in a drawer.
   ///
-  /// If no icon is provided and there was none given to it in a parent
-  /// [FlexScaffold] it defaults to a widget with value [kFlexfoldMenuIcon].
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, it defaults to a widget
+  /// with value [kFlexfoldMenuIcon], the hamburger icon.
   final Widget? menuIcon;
 
   /// A widget used to expand the drawer to a menu from an opened drawer,
   /// typically an [Icon] widget is used.
   ///
-  /// If no icon is provided and there was none given to it in a [FlexScaffold]
-  /// higher up in the widget tree and if [menuIcon] was not defined. it
-  /// defaults to a widget with value [kFlexfoldMenuIconExpand].
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
+  /// defined, it defaults to a widget with value [kFlexfoldMenuIconExpand].
   final Widget? menuIconExpand;
 
   /// A widget used to expand the drawer to a menu when the rail/menu is
   /// hidden but may be expanded based on screen width and breakpoints.
   /// Typically an [Icon] widget is used.
   ///
-  /// If no icon is provided and there was none give to it in the FlexScaffold
-  /// it defaults to a widget with value [kFlexfoldMenuIconExpandHidden].
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
+  /// defined, it defaults to a widget with value
+  /// [kFlexfoldMenuIconExpandHidden].
   final Widget? menuIconExpandHidden;
 
   /// A widget used to expand the drawer to a menu, typically an [Icon]
   /// widget is used.
   ///
-  /// If no icon is provided and there was none give to it in the FlexScaffold
-  /// it defaults to a widget with value [kFlexfoldMenuIconCollapse].
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
+  /// defined, it defaults to a widget with value [kFlexfoldMenuIconCollapse].
   final Widget? menuIconCollapse;
 
   /// The callback that is called when the button is tapped or otherwise
   /// activated.
   ///
   /// If this is set to null, the button will be disabled.
+  ///
+  /// This button has all logic built-in to do what it needs to operate
+  /// the drawer/menu/rail in [FlexScaffold], as defined by its properties
+  /// and theme. Mainly you would use this callback to disable the button,
+  /// but if needed you can do some custom actions too. Normally that is however
+  /// not needed.
   final VoidCallback? onPressed;
 
   @override
@@ -72,9 +82,10 @@ class FlexMenuButton extends StatelessWidget {
     final bool hasDrawer = scaffold?.hasDrawer ?? false;
     final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
 
-    /// Listen to aspect of the FlexScaffold and only rebuild if they change.
+    /// Depend on aspects of the FlexScaffold and only rebuild if they change.
     final bool menuIsHidden = FlexScaffold.isMenuHiddenOf(context);
     final bool menuPrefersRail = FlexScaffold.menuPrefersRailOf(context);
+    final bool cycleViaDrawer = FlexScaffold.cycleViaDrawerOf(context);
 
     final Size size = MediaQuery.of(context).size;
     final double width = size.width;
@@ -91,8 +102,10 @@ class FlexMenuButton extends StatelessWidget {
     final bool canLockMenu = (width >= breakpointRail) && !isPhoneLandscape;
     final bool mustBeRail = width < breakpointMenu;
 
-    // This only reads the FlexScaffold state once, it won't update.
-    // We can also use it to access its state modifying methods.
+    // Reads the FlexScaffold state once, will not update if dependants change.
+    // Use it to access FlexScaffold state modifying methods. You may also use
+    // it to read widgets used as FlexScaffold action button icons, as long
+    // as you don't modify them dynamically in the app.
     final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
     // Set effective expand and collapse icons
     Widget effectiveMenuIcon =
@@ -130,14 +143,10 @@ class FlexMenuButton extends StatelessWidget {
     // tooltip labels in FlexfoldThemeData if other labels were not specified.
     String tooltip;
     Widget effectiveMenuButton;
-    if (hasDrawer &&
-        !isDrawerOpen &&
-        (!canLockMenu || flexScaffold.widget.cycleViaDrawer)) {
+    if (hasDrawer && !isDrawerOpen && (!canLockMenu || cycleViaDrawer)) {
       tooltip = flexTheme.menuOpenTooltip!;
       effectiveMenuButton = effectiveMenuIcon;
-    } else if (hasDrawer &&
-        !isDrawerOpen &&
-        (canLockMenu || !flexScaffold.widget.cycleViaDrawer)) {
+    } else if (hasDrawer && !isDrawerOpen && (canLockMenu || !cycleViaDrawer)) {
       tooltip = flexTheme.menuExpandHiddenTooltip!;
       effectiveMenuButton = effectiveMenuIconExpandHidden;
     } else if (hasDrawer && isDrawerOpen && !canLockMenu) {
@@ -159,7 +168,7 @@ class FlexMenuButton extends StatelessWidget {
           : () {
               if (hasDrawer &&
                   !isDrawerOpen &&
-                  (!canLockMenu || flexScaffold.widget.cycleViaDrawer)) {
+                  (!canLockMenu || cycleViaDrawer)) {
                 scaffold?.openDrawer();
               } else if (hasDrawer && isDrawerOpen && !canLockMenu) {
                 Navigator.of(context).pop();

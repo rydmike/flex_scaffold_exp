@@ -10,8 +10,8 @@ import 'flex_menu.dart';
 import 'flex_scaffold_app_bar.dart';
 import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
+import 'flex_scaffold_theme.dart';
 import 'flex_sidebar.dart';
-import 'flexfold_theme.dart';
 
 // ignore_for_file: comment_references
 
@@ -468,6 +468,18 @@ class FlexScaffold extends StatefulWidget {
   /// Typical usage of the [FlexScaffold.use] function is to call it from
   /// within the `build` method of a child of a [FlexScaffold].
   ///
+  /// The [FlexScaffold.use] will only read and use the current
+  /// [FlexScaffoldState], give you access to its state methods and
+  /// [StatefulWidget] properties. Changes to widget properties will
+  /// no trigger rebuilds, but if needed you can get access to them.
+  /// The [FlexScaffold.use] is primarily intended to be used to get
+  /// access to methods on the state of the inherited [FlexScaffoldState].
+  /// To listen to properties in the in [FlexScaffold]'s [StatefulWidget]
+  /// and rebuild as they change individually, use the [FlexScaffold.aspectOf]
+  /// of properties, like e.g. [FlexScaffold.isMenuHiddenOf].
+  /// Such properties and the [FlexScaffoldState]
+  ///
+  ///
   /// When the [FlexScaffold] is actually created in the same `build` function,
   /// the `context` argument to the `build` function can't be used to find the
   /// [FlexScaffold] (since it's "above" the widget being returned in the widget
@@ -596,6 +608,36 @@ class FlexScaffold extends StatefulWidget {
   static bool isSidebarHiddenOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.isSidebarHidden).isSidebarHidden;
 
+  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  static bool menuControlEnabledOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.menuControlEnabled).menuControlEnabled;
+
+  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  static bool sidebarControlEnabledOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.sidebarControlEnabled)
+          .sidebarControlEnabled;
+
+  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  static bool cycleViaDrawerOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.cycleViaDrawer).cycleViaDrawer;
+
+  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  static bool menuBelongsToBodyOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.menuBelongsToBody).menuBelongsToBody;
+
+  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  static bool sidebarBelongsToBodyOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.sidebarBelongsToBody)
+          .sidebarBelongsToBody;
+
+  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  static GoFlexDestination selectedDestinationOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.selectedDestination).selectedDestination;
+
+  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  static GoFlexDestination onDestinationOf(BuildContext context) =>
+      _of(context, _FlexScaffoldAspect.onDestination).onDestination;
+
   /// A static helper function intended to be used as a scroll controller
   /// listener to show and hide the bottom navigation bar in a [FlexScaffold].
   ///
@@ -693,12 +735,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
     }
   }
 
-  // /// Returns true if the menu is currently preferring to be a rail.
-  // ///
-  // /// If the menu has been set to be a Rail or breakpoint settings forces the
-  // /// the menu to current be a rail, this is true.
-  // bool get menuPrefersRail => _menuPrefersRail;
-
   /// Set the FlexScaffold menu to prefer rail state.
   void setMenuPrefersRail(bool value) {
     setState(() {
@@ -709,15 +745,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
       }
     });
   }
-
-  // /// Returns true if the sidebar is currently in the EndDrawer.
-  // bool get isSidebarInEndDrawer => _isSidebarInEndDrawer;
-  //
-  // /// Returns true if the sidebar is currently in the locked menu state.
-  // bool get isSidebarInMenu => _isSidebarInMenu;
-  //
-  // /// Returns true if the sidebar is currently hidden.
-  // bool get isSidebarHidden => _isSidebarHidden;
 
   /// Set the FlexScaffold sidebar to be hidden. If set to false, the sidebar
   /// will be shown when it should automatically, based on its breakpoint.
@@ -738,13 +765,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
   /// Returns the implied AppBar string title for current destination
   String get currentImpliedTitle =>
       widget.destinations[widget.selectedIndex].label;
-
-  /// Returns true if the currently selected destination is a bottom
-  /// navigation target.
-  // bool get isBottomTarget => _isBottomTarget;
-
-  /// Returns true if a bottom navigator is visible.
-  // bool get isBottomBarVisible => _isBottomBarVisible;
 
   /// Returns all bottom navigation destinations for the current module.
   List<FlexDestination> get bottomDestinations => _bottomDestinations;
@@ -1194,6 +1214,17 @@ class FlexScaffoldState extends State<FlexScaffold> {
               isSidebarInEndDrawer: _isSidebarInEndDrawer,
               isSidebarInMenu: _isSidebarInMenu,
               isSidebarHidden: _isSidebarHidden,
+              //
+              menuControlEnabled: widget.menuControlEnabled,
+              sidebarControlEnabled: widget.sidebarControlEnabled,
+              cycleViaDrawer: widget.cycleViaDrawer,
+              //
+              menuBelongsToBody: false, // TODO(rydmike): Add feature
+              sidebarBelongsToBody: widget.sidebarBelongsToBody,
+              //
+              // TODO(rydmike): Add destination features
+              selectedDestination: const GoFlexDestination(),
+              onDestination: const GoFlexDestination(),
             ),
             child: Row(
               children: <Widget>[
@@ -1253,7 +1284,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
                         : null,
                     //
                     // The bottom navigation bar
-                    bottomNavigationBar: _FlexScaffoldBottomBar(
+                    bottomNavigationBar: FlexBottomBar(
                       isBottomTarget: _isBottomTarget,
                       isBottomBarVisible: _isBottomBarVisible,
                       customNavBar: widget.customBottomNavigator,
@@ -1431,51 +1462,62 @@ class FlexScaffoldState extends State<FlexScaffold> {
 /// be notified when the [MediaQueryData.size] changes. Specifying an aspect avoids
 /// unnecessary rebuilds.
 enum _FlexScaffoldAspect {
-  /// Specifies the aspect corresponding to [FlexScaffoldState.isMenuInDrawer].
+  /// Specifies the aspect corresponding to [_FlexScaffoldData.isMenuInDrawer].
   isMenuInDrawer,
 
-  /// Specifies the aspect corresponding to [FlexScaffoldState.menuIsHidden].
+  /// Specifies the aspect corresponding to [_FlexScaffoldData.menuIsHidden].
   isMenuHidden,
 
-  /// Specifies the aspect corresponding to [FlexScaffoldState.menuPrefersRail].
+  /// Specifies the aspect corresponding to [_FlexScaffoldData.menuPrefersRail].
   menuPrefersRail,
 
   /// Specifies the aspect corresponding to
-  /// [FlexScaffoldState.isSidebarInEndDrawer].
+  /// [_FlexScaffoldData.isSidebarInEndDrawer].
   isSidebarInEndDrawer,
 
-  /// Specifies the aspect corresponding to [FlexScaffoldState.isSidebarInMenu].
+  /// Specifies the aspect corresponding to [_FlexScaffoldData.isSidebarInMenu].
   isSidebarInMenu,
 
-  /// Specifies the aspect corresponding to [FlexScaffoldState.isSidebarHidden].
+  /// Specifies the aspect corresponding to [_FlexScaffoldData.isSidebarHidden].
   isSidebarHidden,
 
   /// Specifies the aspect corresponding to
-  /// [FlexScaffoldState.currentImpliedTitle].
-  currentImpliedTitle,
+  /// [_FlexScaffoldData.menuControlEnabled].
+  menuControlEnabled,
 
-  /// Specifies the aspect corresponding to [FlexScaffoldState.isBottomTarget].
-  isBottomTarget,
-
-  /// Specifies the aspect corresponding to
-  /// [FlexScaffoldState.isBottomBarVisible].
-  isBottomBarVisible,
+  /// Specifies the aspect corresponding to [_FlexScaffoldData.sidebarControlEnabled].
+  sidebarControlEnabled,
 
   /// Specifies the aspect corresponding to
-  /// [FlexScaffoldState.isBottomBarScrollHidden].
-  isBottomBarScrollHidden,
+  /// [_FlexScaffoldData.cycleViaDrawer].
+  cycleViaDrawer,
 
-  /// Specifies the aspect corresponding to [FlexScaffoldState.indexBottom].
+  /// Specifies the aspect corresponding to
+  /// [_FlexScaffoldData.menuBelongsToBody].
+  menuBelongsToBody,
+
+  /// Specifies the aspect corresponding to
+  /// [_FlexScaffoldData.sidebarBelongsToBody].
+  sidebarBelongsToBody,
+
+  /// Specifies the aspect corresponding to
+  /// [_FlexScaffoldData.selectedDestination].
+  selectedDestination,
+
+  /// Specifies the aspect corresponding to
+  /// [_FlexScaffoldData.onDestination].
+  onDestination,
+
+  /// Specifies the aspect corresponding to [_FlexScaffoldData.indexBottom].
   indexBottom,
 
   /// Specifies the aspect corresponding to
-  /// [FlexScaffoldState.bottomDestinations].
+  /// [_FlexScaffoldData.bottomDestinations].
   bottomDestinations,
 }
 
-/// Defines
-///
-/// The definitions are used
+/// Defines [FlexScaffold] stateful data that we want to be able to uses
+/// and rebuild to from individual propery aspects of an Inherited model.
 @immutable
 class _FlexScaffoldData with Diagnosticable {
   const _FlexScaffoldData({
@@ -1486,6 +1528,16 @@ class _FlexScaffoldData with Diagnosticable {
     this.isSidebarInEndDrawer = false,
     this.isSidebarInMenu = false,
     this.isSidebarHidden = false,
+    //
+    this.menuControlEnabled = true,
+    this.sidebarControlEnabled = true,
+    this.cycleViaDrawer = false,
+    //
+    this.menuBelongsToBody = false,
+    this.sidebarBelongsToBody = false,
+    //
+    this.selectedDestination = const GoFlexDestination(),
+    this.onDestination = const GoFlexDestination(),
   });
 
   final bool isMenuInDrawer;
@@ -1495,6 +1547,16 @@ class _FlexScaffoldData with Diagnosticable {
   final bool isSidebarInEndDrawer;
   final bool isSidebarInMenu;
   final bool isSidebarHidden;
+  //
+  final bool menuControlEnabled;
+  final bool sidebarControlEnabled;
+  final bool cycleViaDrawer;
+  //
+  final bool menuBelongsToBody;
+  final bool sidebarBelongsToBody;
+  //
+  final GoFlexDestination selectedDestination;
+  final GoFlexDestination onDestination;
 
   /// Copy the object with one or more provided properties changed.
   _FlexScaffoldData copyWith({
@@ -1505,6 +1567,16 @@ class _FlexScaffoldData with Diagnosticable {
     bool? isSidebarInEndDrawer,
     bool? isSidebarInMenu,
     bool? isSidebarHidden,
+    //
+    bool? menuControlEnabled,
+    bool? sidebarControlEnabled,
+    bool? cycleViaDrawer,
+    //
+    bool? menuBelongsToBody,
+    bool? sidebarBelongsToBody,
+    //
+    GoFlexDestination? selectedDestination,
+    GoFlexDestination? onDestination,
   }) {
     return _FlexScaffoldData(
       isMenuInDrawer: isMenuInDrawer ?? this.isMenuInDrawer,
@@ -1514,6 +1586,17 @@ class _FlexScaffoldData with Diagnosticable {
       isSidebarInEndDrawer: isSidebarInEndDrawer ?? this.isSidebarInEndDrawer,
       isSidebarInMenu: isSidebarInMenu ?? this.isSidebarInMenu,
       isSidebarHidden: isSidebarHidden ?? this.isSidebarHidden,
+      //
+      menuControlEnabled: menuControlEnabled ?? this.menuControlEnabled,
+      sidebarControlEnabled:
+          sidebarControlEnabled ?? this.sidebarControlEnabled,
+      cycleViaDrawer: cycleViaDrawer ?? this.cycleViaDrawer,
+      //
+      menuBelongsToBody: menuBelongsToBody ?? this.menuBelongsToBody,
+      sidebarBelongsToBody: sidebarBelongsToBody ?? this.sidebarBelongsToBody,
+      //
+      selectedDestination: selectedDestination ?? this.selectedDestination,
+      onDestination: onDestination ?? this.onDestination,
     );
   }
 
@@ -1529,7 +1612,17 @@ class _FlexScaffoldData with Diagnosticable {
         //
         other.isSidebarInEndDrawer == isSidebarInEndDrawer &&
         other.isSidebarInMenu == isSidebarInMenu &&
-        other.isSidebarHidden == isSidebarHidden;
+        other.isSidebarHidden == isSidebarHidden &&
+        //
+        other.menuControlEnabled == menuControlEnabled &&
+        other.sidebarControlEnabled == sidebarControlEnabled &&
+        other.cycleViaDrawer == cycleViaDrawer &&
+        //
+        other.menuBelongsToBody == menuBelongsToBody &&
+        other.sidebarBelongsToBody == sidebarBelongsToBody &&
+        //
+        other.selectedDestination == selectedDestination &&
+        other.onDestination == onDestination;
   }
 
   /// Override for hashcode. Using Darts object hash.
@@ -1542,6 +1635,16 @@ class _FlexScaffoldData with Diagnosticable {
         isSidebarInEndDrawer,
         isSidebarInMenu,
         isSidebarHidden,
+        //
+        menuControlEnabled,
+        sidebarControlEnabled,
+        cycleViaDrawer,
+        //
+        menuBelongsToBody,
+        sidebarBelongsToBody,
+        //
+        selectedDestination,
+        onDestination,
       );
 
   /// Flutter debug properties override, includes toString.
@@ -1559,6 +1662,22 @@ class _FlexScaffoldData with Diagnosticable {
         .add(DiagnosticsProperty<bool>('isSidebarInMenu', isSidebarInMenu));
     properties
         .add(DiagnosticsProperty<bool>('isSidebarHidden', isSidebarHidden));
+    //
+    properties.add(
+        DiagnosticsProperty<bool>('menuControlEnabled', menuControlEnabled));
+    properties.add(DiagnosticsProperty<bool>(
+        'sidebarControlEnabled', sidebarControlEnabled));
+    properties.add(DiagnosticsProperty<bool>('cycleViaDrawer', cycleViaDrawer));
+    //
+    properties
+        .add(DiagnosticsProperty<bool>('menuBelongsToBody', menuBelongsToBody));
+    properties.add(DiagnosticsProperty<bool>(
+        'sidebarBelongsToBody', sidebarBelongsToBody));
+    //
+    properties.add(DiagnosticsProperty<GoFlexDestination>(
+        'selectedDestination', selectedDestination));
+    properties.add(
+        DiagnosticsProperty<GoFlexDestination>('onDestination', onDestination));
   }
 }
 
@@ -1587,9 +1706,11 @@ class _FlexScaffoldModel extends InheritedModel<_FlexScaffoldAspect> {
   bool updateShouldNotify(_FlexScaffoldModel oldWidget) {
     // return false;
     final bool result = data != oldWidget.data;
-    debugPrint('_InheritedFlexScaffoldModel: updateShouldNotify: $result');
-    debugPrint('oldWidget.data.menuIsHidden: ${oldWidget.data.isMenuHidden}');
-    debugPrint('          data.menuIsHidden: ${data.isMenuHidden}');
+    if (_kDebugMe) {
+      debugPrint('_InheritedFlexScaffoldModel: updateShouldNotify: $result');
+      debugPrint('oldWidget.data.menuIsHidden: ${oldWidget.data.isMenuHidden}');
+      debugPrint('          data.menuIsHidden: ${data.isMenuHidden}');
+    }
     return result;
   }
 
@@ -1602,14 +1723,34 @@ class _FlexScaffoldModel extends InheritedModel<_FlexScaffoldAspect> {
             dependencies.contains(_FlexScaffoldAspect.isMenuHidden)) ||
         (data.menuPrefersRail != oldWidget.data.menuPrefersRail &&
             dependencies.contains(_FlexScaffoldAspect.menuPrefersRail)) ||
+        //
         (data.isSidebarInEndDrawer != oldWidget.data.isSidebarInEndDrawer &&
             dependencies.contains(_FlexScaffoldAspect.isSidebarInEndDrawer)) ||
         (data.isSidebarInMenu != oldWidget.data.isSidebarInMenu &&
             dependencies.contains(_FlexScaffoldAspect.isSidebarInMenu)) ||
         (data.isSidebarHidden != oldWidget.data.isSidebarHidden &&
-            dependencies.contains(_FlexScaffoldAspect.isSidebarHidden));
-    debugPrint('_InheritedFlexScaffoldModel: '
-        'updateShouldNotifyDependent: $result');
+            dependencies.contains(_FlexScaffoldAspect.isSidebarHidden)) ||
+        //
+        (data.menuControlEnabled != oldWidget.data.menuControlEnabled &&
+            dependencies.contains(_FlexScaffoldAspect.menuControlEnabled)) ||
+        (data.sidebarControlEnabled != oldWidget.data.sidebarControlEnabled &&
+            dependencies.contains(_FlexScaffoldAspect.sidebarControlEnabled)) ||
+        (data.cycleViaDrawer != oldWidget.data.cycleViaDrawer &&
+            dependencies.contains(_FlexScaffoldAspect.cycleViaDrawer)) ||
+        //
+        (data.menuBelongsToBody != oldWidget.data.menuBelongsToBody &&
+            dependencies.contains(_FlexScaffoldAspect.menuBelongsToBody)) ||
+        (data.sidebarBelongsToBody != oldWidget.data.sidebarBelongsToBody &&
+            dependencies.contains(_FlexScaffoldAspect.sidebarBelongsToBody)) ||
+        //
+        (data.selectedDestination != oldWidget.data.selectedDestination &&
+            dependencies.contains(_FlexScaffoldAspect.selectedDestination)) ||
+        (data.onDestination != oldWidget.data.onDestination &&
+            dependencies.contains(_FlexScaffoldAspect.onDestination));
+    if (_kDebugMe) {
+      debugPrint('_InheritedFlexScaffoldModel: '
+          'updateShouldNotifyDependent: $result');
+    }
     return result;
   }
 }
@@ -1671,7 +1812,7 @@ class _InheritedFlexScaffold extends InheritedWidget {
             oldWidget.data.widget.menuIconCollapse !=
                 data.widget.menuIconCollapse ||
             //
-            oldWidget.data.widget.sidebarHide != data.widget.sidebarHide ||
+            // oldWidget.data.widget.sidebarHide != data.widget.sidebarHide ||
             //
             oldWidget.data.widget.sidebarIcon != data.widget.sidebarIcon ||
             oldWidget.data.widget.sidebarIconExpand !=
@@ -1695,114 +1836,5 @@ class _InheritedFlexScaffold extends InheritedWidget {
     }
     debugPrint('_InheritedFlexScaffold updateShouldNotify: FALSE');
     return false;
-  }
-}
-
-/// A bottom bar wrapper used by [FlexScaffold] to use and operate the
-/// default built-in and custom bottom navigation options in Flutter.
-///
-/// It can also use custom navigation bars and pre-made packages, by passing
-/// it in using appropriate FlexScaffold features in its destinations, index and
-/// on change callbacks.
-///
-/// See the example for how to use FlexScaffold with a few custom bottom
-/// navigation bar packages.
-class _FlexScaffoldBottomBar extends StatelessWidget {
-  /// Default constructor for [_FlexScaffoldBottomBar].
-  const _FlexScaffoldBottomBar({
-    required this.isBottomTarget,
-    required this.isBottomBarVisible,
-    this.customNavBar,
-  });
-
-  final bool isBottomTarget;
-  final bool isBottomBarVisible;
-  final Widget? customNavBar;
-
-  @override
-  Widget build(BuildContext context) {
-    // Current platform and useMaterial3?
-    final ThemeData theme = Theme.of(context);
-    final TargetPlatform platform = theme.platform;
-    final bool useMaterial3 = theme.useMaterial3;
-
-    // Get the custom Flexfold theme, closest inherited one.
-    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
-    // Resolve the effective bottom bar type
-    FlexfoldBottomBarType effectiveType =
-        flexTheme.bottomBarType ?? FlexfoldBottomBarType.adaptive;
-    if (effectiveType == FlexfoldBottomBarType.adaptive) {
-      if (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS) {
-        effectiveType = FlexfoldBottomBarType.cupertino;
-      } else {
-        effectiveType = useMaterial3
-            ? FlexfoldBottomBarType.material3
-            : FlexfoldBottomBarType.material2;
-      }
-    }
-    if (_kDebugMe) {
-      debugPrint('FlexScaffoldBottomBar: effectiveType = $effectiveType');
-    }
-    // The height of the bottom nav bars may differ, we need
-    // to get the correct height for the effective bottom nav bar.
-    final double effectiveToolBarHeight =
-        effectiveType == FlexfoldBottomBarType.material2
-            ? kBottomNavigationBarHeight
-            : effectiveType == FlexfoldBottomBarType.material3
-                ? (NavigationBarTheme.of(context).height ??
-                    kFlexfoldNavigationBarHeight)
-                : kFlexfoldCupertinoTabBarHeight;
-
-    final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
-
-    // If we are not at a destination that is defined to be a bottom target,
-    // we are not inserting a bottom nav bar in the widget tree all
-    return isBottomTarget
-        // This setup with an animated size, with a wrap inside the AnimatedSize
-        // that contains the used bottom navigation bar looks like the bottom
-        // bar slides down and away when you do that in a Wrap that goe to zero
-        // height.
-        //
-        // The effective height in the type of bottom bar also animate between
-        // the different sizes the bottom bar has, so when the type is changed
-        // if they have different sizes, which Material and Cupertino does, the
-        // toggle between them is animated.
-        // It is just cool bonus effect of this setup.
-        ? AnimatedSize(
-            duration: flexTheme.bottomBarAnimationDuration!,
-            curve: flexTheme.bottomBarAnimationCurve!,
-            child: SizedBox(
-              height: isBottomBarVisible ? effectiveToolBarHeight : 0.0,
-              child: Wrap(
-                children: <Widget>[
-                  if (customNavBar == null)
-                    if (effectiveType == FlexfoldBottomBarType.cupertino)
-                      CupertinoBottomBar(
-                        destinations: flexScaffold.bottomDestinations,
-                        selectedIndex: flexScaffold.indexBottom.index,
-                        onDestinationSelected:
-                            flexScaffold.navigateToBottomIndex,
-                      )
-                    else if (effectiveType == FlexfoldBottomBarType.material3)
-                      Material3BottomBar(
-                        destinations: flexScaffold.bottomDestinations,
-                        selectedIndex: flexScaffold.indexBottom.index,
-                        onDestinationSelected:
-                            flexScaffold.navigateToBottomIndex,
-                      )
-                    else
-                      Material2BottomBar(
-                        destinations: flexScaffold.bottomDestinations,
-                        selectedIndex: flexScaffold.indexBottom.index,
-                        onDestinationSelected:
-                            flexScaffold.navigateToBottomIndex,
-                      )
-                  else
-                    customNavBar!,
-                ],
-              ),
-            ),
-          )
-        : const SizedBox.shrink();
   }
 }

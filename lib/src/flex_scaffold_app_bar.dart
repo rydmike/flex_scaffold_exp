@@ -6,11 +6,11 @@ import 'flex_scaffold.dart';
 import 'flex_sidebar_button.dart';
 
 /// An AppBar widget for the FlexScaffold used when the shell layout
-/// creates AppBar's not part of the navigation transition.
+/// uses an AppBar that is not part of the navigation transition.
 ///
 /// This AppBar contains all the built in logic used by [FlexScaffold] to
-/// operate it AppBar with potential sidebar and menu buttons that appears in
-/// it different states.
+/// operate its AppBar with potential sidebar and menu buttons that appears in
+/// its different states.
 ///
 /// It requires that a [FlexScaffold] exists higher up in the widget tree.
 ///
@@ -47,16 +47,22 @@ class FlexScaffoldAppBar extends StatelessWidget
         'can assign it a custom icon widget separately, but its pressed event '
         'handler will be added by FlexScaffold.');
 
-    // This only reads the FlexScaffold state once, it won't update.
-    // We can also use it to access its state modifying methods.
+    // Reads the FlexScaffold state once, will not update if dependants change.
+    // Use it to access FlexScaffold state modifying methods. You may also use
+    // it to read widgets used as FlexScaffold action button icons, as long
+    // as you don't modify them dynamically in the app.
     final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
 
-    /// Listen to aspect of the FlexScaffold and only rebuild if they change.
+    /// Depend on aspects of the FlexScaffold and only rebuild if they change.
     final bool isMenuInDrawer = FlexScaffold.isMenuInDrawerOf(context);
     final bool isSidebarInEndDrawer =
         FlexScaffold.isSidebarInEndDrawerOf(context);
     final bool isSidebarInMenu = FlexScaffold.isSidebarInMenuOf(context);
     final bool isSidebarHidden = FlexScaffold.isSidebarHiddenOf(context);
+    final bool sidebarControlEnabled =
+        FlexScaffold.sidebarControlEnabledOf(context);
+    final bool sidebarBelongsToBody =
+        FlexScaffold.sidebarBelongsToBodyOf(context);
 
     // Convert the main FlexfoldAppBar data object to a real AppBar.
     Widget? title = usedAppBar.title;
@@ -120,8 +126,8 @@ class FlexScaffoldAppBar extends StatelessWidget
         // Then insert the sidebar menu button, if so needed in current layout.
         if (isSidebarInEndDrawer ||
             (isSidebarInMenu &&
-                flexScaffold.widget.sidebarControlEnabled &&
-                (isSidebarHidden || flexScaffold.widget.sidebarBelongsToBody)))
+                sidebarControlEnabled &&
+                (isSidebarHidden || sidebarBelongsToBody)))
           FlexSidebarButton(onPressed: () {}),
       ],
     );
