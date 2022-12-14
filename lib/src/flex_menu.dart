@@ -21,13 +21,14 @@ class FlexMenu extends StatefulWidget {
     required this.selectedIndex,
     required this.onDestinationSelected,
     //
-    this.menuToggleEnabled = true,
+    // this.menuToggleEnabled = true,
     //
     // Menu content properties
     this.menuIcon,
     this.menuIconExpand,
     this.menuIconExpandHidden,
     this.menuIconCollapse,
+    //
     this.menuAppBar,
     this.menuLeading,
     this.menuTrailing,
@@ -63,18 +64,18 @@ class FlexMenu extends StatefulWidget {
   /// with the new [selectedIndex].
   final ValueChanged<int> onDestinationSelected;
 
-  /// The menu mode can be manually toggled by the user when true.
-  ///
-  /// If set to false, then the menu can only be opened when it is a drawer,
-  /// it cannot be toggled between rail/menu and drawer manually when the
-  /// breakpoint constraints would otherwise allow that. This means the user
-  /// cannot hide the side menu or the rail, when rail or side navigation mode
-  /// is triggered. You can still control it via the API, there just is no
-  /// user control over.
-  ///
-  /// Defaults to true so users can toggle the menu and rail visibility as they
-  /// prefer on a large canvas.
-  final bool menuToggleEnabled;
+  // /// The menu mode can be manually toggled by the user when true.
+  // ///
+  // /// If set to false, then the menu can only be opened when it is a drawer,
+  // /// it cannot be toggled between rail/menu and drawer manually when the
+  // /// breakpoint constraints would otherwise allow that. This means the user
+  // /// cannot hide the side menu or the rail, when rail or side navigation mode
+  // /// is triggered. You can still control it via the API, there just is no
+  // /// user control over.
+  // ///
+  // /// Defaults to true so users can toggle the menu and rail visibility as they
+  // /// prefer on a large canvas.
+  // final bool menuToggleEnabled;
 
   /// A Widget used to open the menu, typically an [Icon] widget is used.
   ///
@@ -297,6 +298,12 @@ class _FlexMenuState extends State<FlexMenu> {
     double startPadding,
     double topPadding,
   ) {
+    /// Depend on aspects of the FlexScaffold and only rebuild if they change.
+    final bool menuControlEnabled = FlexScaffold.menuControlEnabledOf(context);
+
+    final ScaffoldState? scaffold = Scaffold.maybeOf(context);
+    final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
+
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints size) {
         final ThemeData theme = Theme.of(context);
@@ -365,7 +372,7 @@ class _FlexMenuState extends State<FlexMenu> {
                     ),
                     widget.menuAppBar!.toAppBar(
                       automaticallyImplyLeading: false,
-                      leading: widget.menuToggleEnabled
+                      leading: menuControlEnabled || isDrawerOpen
                           ? FlexMenuButton(
                               onPressed: () {},
                               menuIcon: widget.menuIcon,

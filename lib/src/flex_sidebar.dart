@@ -12,23 +12,11 @@ class FlexSidebar extends StatefulWidget {
   const FlexSidebar({
     super.key,
     this.sidebarAppBar,
-    this.hasAppBar = true,
     this.child,
   });
 
   /// The appbar for the sidebar.
   final FlexAppBar? sidebarAppBar;
-
-  /// This is false if the current destination has no app bar;
-  ///
-  /// When the active destination has no main app bar, this flag is passed in as
-  /// false. It allows us to in such a case add an app bar to the side bar
-  /// also when it is used as a fixed menu, normally when the the menu is a
-  /// part of the scaffold body and there is an app bar for the body, there
-  /// is no app bar on the side bar, because it would be a duplicate. However,
-  /// if the main body has no app bar at all, not needed ot it is provided via
-  /// a sliver, then the sidebar should have its own little app bar.
-  final bool hasAppBar;
 
   /// The child widget inside the sidebar.
   ///
@@ -45,25 +33,6 @@ class FlexSidebar extends StatefulWidget {
 
 class _FlexSidebarState extends State<FlexSidebar> {
   double width = 0;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   width = 0.0;
-  // }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void didUpdateWidget(FlexSidebar oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   // if (oldWidget.hideSidebar != widget.hideSidebar) {
-  //   //   hideSidebar = widget.hideSidebar;
-  //   // }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +56,7 @@ class _FlexSidebarState extends State<FlexSidebar> {
 
     if (isInEndDrawer) {
       return _SideBar(
-        hasAppBar: widget.hasAppBar,
+        // hasAppBar: widget.hasAppBar,
         sidebarAppBar: widget.sidebarAppBar,
         child: widget.child,
       );
@@ -112,7 +81,6 @@ class _FlexSidebarState extends State<FlexSidebar> {
         // The best we can do is probably just to advise not to use curves
         // with negative overshoot.
         child: _SideBar(
-          hasAppBar: widget.hasAppBar,
           sidebarAppBar: widget.sidebarAppBar,
           child: widget.child,
         ),
@@ -123,12 +91,9 @@ class _FlexSidebarState extends State<FlexSidebar> {
 
 class _SideBar extends StatelessWidget {
   const _SideBar({
-    required this.hasAppBar,
     this.sidebarAppBar,
     this.child,
   });
-
-  final bool hasAppBar;
 
   /// The appbar for the sideBar.
   final FlexAppBar? sidebarAppBar;
@@ -166,12 +131,6 @@ class _SideBar extends StatelessWidget {
     final bool sidebarBelongsToBody =
         FlexScaffold.sidebarBelongsToBodyOf(context);
 
-    // Reads the FlexScaffold state once, will not update if dependants change.
-    // Use it to access FlexScaffold state modifying methods. You may also use
-    // it to read widgets used as FlexScaffold action button icons, as long
-    // as you don't modify them dynamically in the app.
-    // final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
-
     return OverflowBox(
       alignment: AlignmentDirectional.topStart,
       minWidth: 0,
@@ -189,9 +148,11 @@ class _SideBar extends StatelessWidget {
             //
             // The sidebar AppBar on top in a column
             //
-            // Build a SidebarAppBar if in Drawer mode or Sidebar is a menu
+            // Add SidebarAppBar if in end Drawer mode or Sidebar is a menu
             // and it does not belong to the body.
-            if (isEndDrawerOpen || !sidebarBelongsToBody || !hasAppBar)
+            // TODO(rydmike): If before, clean out if simpler works.
+            // if (isEndDrawerOpen || !sidebarBelongsToBody || !hasAppBar)
+            if (isEndDrawerOpen || !sidebarBelongsToBody)
               _SidebarAppBar(sidebarAppBar: sidebarAppBar)
             // Else sidebar was not in drawer but does belong to the body
             else
@@ -236,8 +197,11 @@ class _SidebarAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // If no FlexfoldAppBar was given we make a default one
+    // If no FlexfoldAppBar was given, we make a default one, we need it
+    // for the control button, even if nothing else is used.
     final FlexAppBar flexAppBar = sidebarAppBar ?? const FlexAppBar();
+
+    // TODO(rydmike): Use aspect when it lands in stable.
     final double topPadding = MediaQuery.of(context).padding.top;
     final ThemeData theme = Theme.of(context);
     final Color scaffoldColor = theme.scaffoldBackgroundColor;
@@ -246,11 +210,15 @@ class _SidebarAppBar extends StatelessWidget {
     final bool sidebarControlEnabled =
         FlexScaffold.sidebarControlEnabledOf(context);
 
+    final ScaffoldState? scaffold = Scaffold.maybeOf(context);
+    final bool isEndDrawerOpen = scaffold?.isEndDrawerOpen ?? false;
+
     return Stack(
       children: <Widget>[
         // We put the appbar in a Stack so we can put the scaffold background
         // color on a Container behind the AppBar so we get transparency against
         // the scaffold background color and not the canvas color.
+        // TODO(rydmike): With new Drawer bg color, do I still need this?
         Container(
           height: kToolbarHeight + topPadding,
           color: scaffoldColor,
@@ -266,14 +234,15 @@ class _SidebarAppBar extends StatelessWidget {
           leading: flexAppBar.leading,
           actions: <Widget>[
             // Insert any pre-existing actions
-            // In order to not get a default show end drawer button in the
+            // In order to not get a default end drawer button in the
             // appbar for the sidebar, when it is shown as a drawer, we need
             // insert an invisible widget into the actions list in case it is
             // empty, because if it is totally empty the framework will create
             // a default action button to show the menu, we do not want that.
             ...flexAppBar.actions ?? <Widget>[const SizedBox.shrink()],
             // Then we insert the sidebar menu button last in the actions list
-            if (sidebarControlEnabled) FlexSidebarButton(onPressed: () {}),
+            if (sidebarControlEnabled || isEndDrawerOpen)
+              FlexSidebarButton(onPressed: () {}),
           ],
         ),
       ],

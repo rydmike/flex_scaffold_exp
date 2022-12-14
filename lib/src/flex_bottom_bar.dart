@@ -28,14 +28,20 @@ class FlexBottomBar extends StatelessWidget {
   /// Default constructor for [FlexBottomBar].
   const FlexBottomBar({
     super.key,
-    required this.isBottomTarget,
-    required this.isBottomBarVisible,
-    this.customNavBar,
+    this.customNavigationBar,
+    this.customNavigationBarHeight,
   });
 
-  final bool isBottomTarget;
-  final bool isBottomBarVisible;
-  final Widget? customNavBar;
+  /// Optional custom bottom navigation.
+  ///
+  /// Used to provide custom made or package based bottom navigation bar.
+  final Widget? customNavigationBar;
+
+  /// The height of the custom navigation bar.
+  ///
+  /// If not provided it assumed to be same height as Material 2 bottom
+  /// navigation bar height, which is [kBottomNavigationBarHeight].
+  final double? customNavigationBarHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -61,17 +67,28 @@ class FlexBottomBar extends StatelessWidget {
     if (_kDebugMe) {
       debugPrint('FlexScaffoldBottomBar: effectiveType = $effectiveType');
     }
+    final bool useCustomBar = effectiveType == FlexfoldBottomBarType.custom &&
+        customNavigationBar != null;
     // The height of the bottom nav bars may differ, we need
     // to get the correct height for the effective bottom nav bar.
-    final double effectiveToolBarHeight =
-        effectiveType == FlexfoldBottomBarType.material2
+    final double effectiveToolBarHeight = useCustomBar
+        ? customNavigationBarHeight ?? kBottomNavigationBarHeight
+        : effectiveType == FlexfoldBottomBarType.material2
             ? kBottomNavigationBarHeight
             : effectiveType == FlexfoldBottomBarType.material3
                 ? (NavigationBarTheme.of(context).height ??
                     kFlexfoldNavigationBarHeight)
                 : kFlexfoldCupertinoTabBarHeight;
 
+    // Reads the FlexScaffold state once, will not update if dependants change.
+    // Use it to access FlexScaffold state modifying methods. You may also use
+    // it to read widgets used as FlexScaffold action button icons, as long
+    // as you don't modify them dynamically in the app.
     final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
+
+    /// Depend on aspects of the FlexScaffold and only rebuild if they change.
+    final bool isBottomTarget = FlexScaffold.isBottomTargetOf(context);
+    final bool isBottomBarVisible = FlexScaffold.isBottomBarVisibleOf(context);
 
     // If we are not at a destination that is defined to be a bottom target,
     // we are not inserting a bottom nav bar in the widget tree all
@@ -93,7 +110,7 @@ class FlexBottomBar extends StatelessWidget {
               height: isBottomBarVisible ? effectiveToolBarHeight : 0.0,
               child: Wrap(
                 children: <Widget>[
-                  if (customNavBar == null)
+                  if (customNavigationBar == null)
                     if (effectiveType == FlexfoldBottomBarType.cupertino)
                       CupertinoBottomBar(
                         destinations: flexScaffold.bottomDestinations,
@@ -116,7 +133,7 @@ class FlexBottomBar extends StatelessWidget {
                             flexScaffold.navigateToBottomIndex,
                       )
                   else
-                    customNavBar!,
+                    customNavigationBar!,
                 ],
               ),
             ),

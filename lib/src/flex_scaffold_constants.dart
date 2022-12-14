@@ -57,6 +57,11 @@ enum FlexfoldBottomBarType {
   /// The choice of Material bottom navigation style depends on if
   /// [ThemeData.useMaterial3], if true, [material3] is used, else [material2].
   adaptive,
+
+  /// Use a custom bottom navigation bar.
+  ///
+  /// If used, you have to provide a [FlexScaffold.customNavigationBar].
+  custom,
 }
 
 /// Enum used to set if menu items starts from the top or the bottom.

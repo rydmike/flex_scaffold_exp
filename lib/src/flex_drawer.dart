@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'flex_scaffold_constants.dart';
 
+// ignore_for_file: comment_references
+
 // Set the _kDebugMe flag to true to observe debug prints in this file.
 //
 // In release mode this compile time constant always evaluate to false,
@@ -11,47 +13,74 @@ import 'flex_scaffold_constants.dart';
 // by the Dart AOT compiler.
 const bool _kDebugMe = kDebugMode && true;
 
-/// A stateful wrapper for a [Drawer] that holds a width value in its local
-/// state and pops away any open drawer if the parent changes the width.
+/// A stateful wrapper for a [Drawer] used by [FlexScaffold].
+///
+/// The [FlexDrawer] keeps the screen width value in its local state and
+/// pops away any open drawer if the screen width changes.
 class FlexDrawer extends StatefulWidget {
-  /// Default const constructor.
+  /// Creates a Material Design drawer used by the [FlexScaffold].
+  ///
+  /// Typically used in the [FlexScaffold.drawer] ot [FlexScaffold.drawer]
+  /// property. It is a stateful wrapper for a [Drawer] that hold screen
+  /// width value in its local state and pops away any open drawer if the
+  /// screen width changes.
+  ///
+  /// The [elevation] must be non-negative.
   const FlexDrawer({
     super.key,
     required this.currentScreenWidth,
-    this.elevation = 16.0,
-    this.drawerWidth = kFlexfoldDrawerWidth,
-    this.semanticLabel,
     this.backgroundColor,
+    this.elevation,
+    this.shape,
+    this.width,
+    this.semanticLabel,
     this.child,
-  })  : assert(elevation >= 0.0, 'Elevation must be >= 0'),
+  })  : assert(elevation == null || elevation >= 0.0,
+            'Elevation must be >= 0 or null'),
         assert(
-            drawerWidth >= kFlexfoldMenuWidthMin &&
-                drawerWidth <= kFlexfoldMenuWidthMax,
+            width == null ||
+                width >= kFlexfoldMenuWidthMin &&
+                    width <= kFlexfoldMenuWidthMax,
             'The drawer width must be >= $kFlexfoldMenuWidthMin and '
-            '<= $kFlexfoldMenuWidthMax');
+            '<= $kFlexfoldMenuWidthMax or null');
 
   /// The width of the screen or canvas that the app is running on.
   ///
   /// The currentScreenWidth property can can be obtained with
-  /// Theme.of(context).size.width obtained in the parent's build method
+  /// MediaQuery.of(context).size.width obtained in the parent's build method
   /// or via constraints.maxWidth from a Layout builder. If the
   /// currentScreenWidth changes during the the lifecycle of the FlexfoldDrawer
-  /// any open drawer is closed.
+  /// any open drawer is closed automatically.
+  ///
+  /// This behaviour is needed to ensure that there is no open drawer that
+  /// would be removed when the [FlexScaffold] removes the drawer from the
+  /// widget tree when it is resized to a size where drawer content will be
+  /// shown in a side rail or side menu.
   final double currentScreenWidth;
+
+  /// Background color of the Drawer
+  final Color? backgroundColor;
 
   /// Material elevation of the Drawer.
   ///
-  /// Controls the size of the shadow below the drawer. Defaults to 16, the
-  /// correct material elevation for drawers. The value is always non-negative.
-  final double elevation;
+  /// Controls the size of the shadow below the drawer.
+  ///
+  /// Default depends on if Material2 or 3 is used.
+  final double? elevation;
+
+  /// The shape of the drawer.
+  ///
+  /// Defines the drawer's [Material.shape].
+  ///
+  /// If this is null, then [DrawerThemeData.shape] is used. If that
+  /// is also null, then it falls back to [Material]'s default.
+  final ShapeBorder? shape;
 
   /// The width of the Flexfold drawer when opened as a drawer.
   ///
-  /// The standard material drawer always opens as 304dp wide. Flexfold drawer
-  /// can have a defined width when opened. If value is wider than current
-  /// canvas/screen it will fill the width of the screen.
-  /// Default value is 304dp like a standard Drawer.
-  final double drawerWidth;
+  /// If this is null, then [DrawerThemeData.width] is used. If that is also
+  /// null, then it falls back to the Material spec's default (304.0).
+  final double? width;
 
   /// The semantic label of the dialog used by accessibility frameworks to
   /// announce screen transitions when the drawer is opened and closed.
@@ -60,10 +89,7 @@ class FlexDrawer extends StatefulWidget {
   /// [MaterialLocalizations.drawerLabel].
   final String? semanticLabel;
 
-  /// Background color of the Drawer
-  final Color? backgroundColor;
-
-  /// The widget below this widget in the tree.
+  /// The widget to display in the Drawer.
   final Widget? child;
 
   @override
@@ -82,7 +108,7 @@ class _FlexDrawerState extends State<FlexDrawer> {
   @override
   void didUpdateWidget(FlexDrawer oldWidget) {
     if (widget.currentScreenWidth != oldWidget.currentScreenWidth) {
-      // TODO(rydmike): Need to better solution for the Drawer removal handling.
+      // TODO(rydmike): Need a better solution for the Drawer removal handling.
       // If the screen WIDTH is being resized we need to close any open
       // drawer because keeping one open will be problematic when/if the width
       // changes beyond the breakpoint where the Drawer will be removed from the
@@ -101,7 +127,7 @@ class _FlexDrawerState extends State<FlexDrawer> {
       // This happens because in one quick swoop we manage to both pass the
       // breakpoint when drawer is removed from the tree and do the first
       // detected width change. This is not a very common or even very likely
-      // scenario, but possible.
+      // scenario, but possible, and quite easy to do if you know about it.
       shouldCloseDrawer = true;
     }
     super.didUpdateWidget(oldWidget);
@@ -122,8 +148,8 @@ class _FlexDrawerState extends State<FlexDrawer> {
       // and was inserted to remove it, but when we come here it is no longer
       // present. This is an attempt to prevent this edge case.
       if (isDrawerOpen || isEndDrawerOpen) {
+        if (_kDebugMe) debugPrint('onAfterBuild(): Open drawer popped!');
         Navigator.of(context).pop();
-        if (_kDebugMe) debugPrint('onAfterBuild(): Open drawer got popped!');
       }
     });
   }
@@ -142,15 +168,20 @@ class _FlexDrawerState extends State<FlexDrawer> {
           .addPostFrameCallback((_) => onAfterBuild(context));
     }
 
-    return SizedBox(
-      width: widget.drawerWidth,
-      child: Drawer(
-        elevation: widget.elevation,
-        child: Material(
-          color: widget.backgroundColor,
-          child: widget.child,
-        ),
-      ),
+    return Drawer(
+      key: widget.key,
+      backgroundColor: widget.backgroundColor,
+      elevation: widget.elevation,
+      shape: widget.shape,
+      width: widget.width,
+      semanticLabel: widget.semanticLabel,
+      child: widget.child,
+      // TODO(rydmike): Removed this Material, before there was no bg color
+      //   in Drawer, but it might not be needed anymore now, test it!
+      // child: Material(
+      //   color: widget.backgroundColor,
+      //   child: widget.child,
+      // ),
     );
   }
 }
