@@ -10,6 +10,9 @@ import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
 import 'flex_scaffold_theme.dart';
 
+// TODO(rydmike): Add built-in support for NavigationRail.
+// TODO(rydmike): Consider having the icons a part of this widget?
+
 /// The widget used by [FlexScaffold] to show the content used in the
 /// rail, side menu and drawer.
 ///
@@ -29,6 +32,11 @@ class FlexMenu extends StatefulWidget {
     this.leading,
     this.trailing,
     this.footer,
+    //
+    this.menuIcon,
+    this.menuIconExpand,
+    this.menuIconCollapse,
+    this.menuIconExpandHidden,
   });
 
   /// An [AppBar] for the menu when used on the drawer, rail and side menu.
@@ -69,6 +77,63 @@ class FlexMenu extends StatefulWidget {
   /// mode. Use a layout builder to make an adaptive footer widget that
   /// fits both sizes.
   final Widget? footer;
+
+  /// A Widget used on the menu button when the menu is operated as a Drawer.
+  ///
+  /// Typically an [Icon] widget is used with the hamburger menu icon.
+  ///
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, it defaults to a widget
+  /// with value [kFlexfoldMenuIcon], the hamburger icon.
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
+  final Widget? menuIcon;
+
+  /// A widget used on an opened drawer menu button when operating it will
+  /// change it to a side menu.
+  ///
+  /// Typically an [Icon] widget is used.
+  ///
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
+  /// defined, it defaults to a widget with value [kFlexfoldMenuIconExpand].
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
+  final Widget? menuIconExpand;
+
+  /// A widget used on the menu button when operating it will expand the
+  /// menu to a rail or to a side menu.
+  ///
+  /// Typically an [Icon] widget is used.
+  ///
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
+  /// defined, it defaults to a widget with value
+  /// [kFlexfoldMenuIconExpandHidden].
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
+  final Widget? menuIconExpandHidden;
+
+  /// A widget used on the menu button when it is shown as a menu or rail,
+  /// and operating it will collapse it to its next state, from menu to rail to
+  /// hidden.
+  ///
+  /// Typically an [Icon] widget is used.
+  ///
+  /// If no icon is provided and there was none given to same named property in
+  /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
+  /// defined, it defaults to a widget with value [kFlexfoldMenuIconCollapse].
+  ///
+  /// If you use icons with arrow directions, use icons with direction
+  /// applicable for LTR. If the used locale direction is RTL, the icon
+  /// will be rotated 180 degrees to work on reversed directionality.
+  final Widget? menuIconCollapse;
 
   @override
   State<FlexMenu> createState() => _FlexMenuState();

@@ -19,6 +19,48 @@ import 'flex_scaffold_theme.dart';
 // if (_kDebugMe) {} should get tree shaken away totally in a release build.
 const bool _kDebugMe = kDebugMode && true;
 
+// TODO(rydmike): Review existing implementations.
+// - Add a controller that contain menu of the control properties?
+// - Or keep as is?
+// - See controller in eg.
+//   * https://pub.dev/packages/sidebarx
+//   * https://pub.dev/packages/scroll_bottom_navigation_bar scroll controller.
+//
+// Examples of sidebars/menus:
+// - https://pub.dev/packages/sidebarx 212 like
+// - https://pub.dev/packages/side_navigation 78 likes
+// - https://pub.dev/packages/easy_sidemenu 178 likes
+// - https://pub.dev/packages/flutter_side_menu 12 likes
+// - https://pub.dev/packages/navigation_drawer_menu 23 likes (findlay)
+// -
+//
+// Examples of adaptive scaffold:
+// - by Flutter https://pub.dev/packages/flutter_adaptive_scaffold 120 likes
+// - by material.io https://pub.dev/packages/adaptive_navigation 96 likes
+// - https://pub.dev/packages/flutter_admin_scaffold 124 likes
+// - Rody's thing no-NS https://pub.dev/packages/responsive_scaffold 172 likes
+// - https://pub.dev/packages/auto_scaffold
+// - https://pub.dev/packages/adaptive_scaffold 10 likes
+// - https://pub.dev/packages/scaffold_responsive 15 likes
+//
+// - https://pub.dev/packages/master_detail_scaffold 18 likes
+// - by material.io https://pub.dev/packages/adaptive_components 56 like
+//
+// Example of bottom navigation bars:
+// - Flutter favorite: https://pub.dev/packages/convex_bottom_bar 2037 likes
+// - https://pub.dev/packages/persistent_bottom_nav_bar 1580 likes
+// - https://pub.dev/packages/curved_navigation_bar. Nice 1542 likes
+// - https://pub.dev/packages/bottom_navy_bar 1068 likes
+// - https://pub.dev/packages/google_nav_bar design Salomon, 969 likes (nice)
+// - https://pub.dev/packages/animated_bottom_navigation_bar 728 likes
+// - https://pub.dev/packages/salomon_bottom_bar by Luke Pighetti 626 likes
+// - https://pub.dev/packages/custom_navigation_bar 407 likes
+// - https://pub.dev/packages/flutter_snake_navigationbar 495 likes
+// - https://pub.dev/packages/dot_navigation_bar floating, not bottom? 237 likes
+// - https://pub.dev/packages/fancy_bottom_navigation 221 likes
+// - https://pub.dev/packages/scroll_bottom_navigation_bar 133 like
+// - https://pub.dev/packages/responsive_navigation_bar 28 likes
+
 /// A responsive scaffold that animates changes between navigation modes.
 ///
 /// Responsive behaviors:
@@ -490,6 +532,8 @@ class FlexScaffold extends StatefulWidget {
   /// The content widget for the Flexfold scaffold screen.
   final Widget? body;
 
+  // TODO(rydmike): Remove the build flag when sure it is not needed.
+
   /// Finds the [FlexScaffoldState] from the closest instance of this class that
   /// encloses the given context.
   ///
@@ -570,6 +614,8 @@ class FlexScaffold extends StatefulWidget {
     ]);
   }
 
+  // TODO(rydmike): Remove function, probably not needed at all.
+
   /// Finds the [FlexScaffoldState] from the closest instance of this class that
   /// encloses the given context.
   ///
@@ -591,26 +637,14 @@ class FlexScaffold extends StatefulWidget {
         : context.findAncestorWidgetOfExactType<_InheritedFlexScaffold>()?.data;
   }
 
-  /// Returns the state data for [FlexScaffold].
-  ///
-  /// Only contains values of the FlexScaffold designed to be available outside
-  /// the internal state.
-  ///
-  /// You seldom need access to all properties, consider using individual "of"
-  /// getters that only rebuild when a given aspect of the FlexScaffold changes.
-
-  // static _FlexScaffoldData of(BuildContext context) {
-  //   return _of(context);
-  // }
-
+  // TODO(rydmike): Add throw error like on [use] function above.
+  /// A helper to make it easier to create model property aspectOf dependents.
   static _FlexScaffoldData _of(BuildContext context,
       [_FlexScaffoldAspect? aspect]) {
     return InheritedModel.inheritFrom<_FlexScaffoldModel>(context,
             aspect: aspect)!
         .data;
   }
-
-  // TODO(rydmike): Review all doc comments of aspectOf below.
 
   /// Returns true if the [FlexScaffold] menu is in the drawer.
   static bool isMenuInDrawerOf(BuildContext context) =>
@@ -643,50 +677,71 @@ class FlexScaffold extends StatefulWidget {
   static bool isSidebarHiddenOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.isSidebarHidden).isSidebarHidden;
 
-  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  /// Returns true if the [FlexScaffold] menu manual control is enabled.
   static bool menuControlEnabledOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.menuControlEnabled).menuControlEnabled;
 
-  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  /// Returns true if the [FlexScaffold] sidebar manual control is enabled.
   static bool sidebarControlEnabledOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.sidebarControlEnabled)
           .sidebarControlEnabled;
 
-  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  /// Returns true if the [FlexScaffold] menu and sidebar ar set to cycle
+  /// via a drawer before expanding back to fixed menu or sidebar.
+  ///
+  /// When it is false, the menu and sidebar do not show up as a Drawer or
+  /// end Drawer if the breakpoints for being a menu or sidebar have been
+  /// exceeded.
   static bool cycleViaDrawerOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.cycleViaDrawer).cycleViaDrawer;
 
-  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  /// Returns true if the [FlexScaffold] menu is rendered as a part
+  /// of the underlying scaffold.
+  ///
+  /// If false the menu is a row and with the underlying Scaffold on the side.
   static bool menuBelongsToBodyOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.menuBelongsToBody).menuBelongsToBody;
 
-  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  /// Returns true if the [FlexScaffold] sidebar is rendered as a part
+  /// of the underlying scaffold.
+  ///
+  /// If false the menu is a row and with the underlying Scaffold on the side.
   static bool sidebarBelongsToBodyOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.sidebarBelongsToBody)
           .sidebarBelongsToBody;
 
-  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  // TODO(rydmike): Consider using selectedDestinationOf or onDestinationOf?
+  /// Returns true if the [FlexScaffold] currently selected item is a bottom
+  /// navigation target.
   static bool isBottomTargetOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.isBottomTarget).isBottomTarget;
 
-  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  /// Returns true if the [FlexScaffold] bottom navigation bar is visisble.
   static bool isBottomBarVisibleOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.isBottomBarVisible).isBottomBarVisible;
 
-  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  /// Returns the [FlexScaffold]'s currently selected index.
   static int selectedIndexOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.selectedIndex).selectedIndex;
 
-  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  /// Returns true if the [FlexScaffold] is currently showing its bottom
+  /// navigation destinations in the drawer.
   static bool showBottomDestinationsInDrawerOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.showBottomDestinationsInDrawer)
           .showBottomDestinationsInDrawer;
 
-  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  /// Returns the currently selected [GoFlexDestination] definition of the
+  /// [FlexScaffold], as defined by [FlexScaffoldState.widget] and
+  /// [selectedIndex].
   static GoFlexDestination selectedDestinationOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.selectedDestination).selectedDestination;
 
-  /// Returns true if the [FlexScaffold] sidebar is in the end drawer.
+  /// Returns the latest [GoFlexDestination] definition used in the
+  /// [FlexScaffold.onDestinationOf] callback.
+  ///
+  /// This is different from the [selectedDestinationOf] as it is the selection
+  /// before it has been fed back into the [FlexScaffold] via
+  /// [FlexScaffold.selectedIndex].
   static GoFlexDestination onDestinationOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.onDestination).onDestination;
 
@@ -1476,10 +1531,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
 ///
 /// [FlexScaffoldState] contains a large number of related properties.
 /// Widgets frequently depend on only a few of these attributes. For example, a
-/// widget that needs to
-/// rebuild when the [MediaQueryData.textScaleFactor] changes does not need to
-/// be notified when the [MediaQueryData.size] changes. Specifying an aspect avoids
-/// unnecessary rebuilds.
+/// widget that needs to rebuild when the [FlexScaffoldState] and its internal
+/// [isMenuInDrawer] changes does not need to be notified when the
+/// [isBottomTarget] changes. Specifying an aspect avoids unnecessary rebuilds.
 enum _FlexScaffoldAspect {
   /// Specifies the aspect corresponding to [_FlexScaffoldData.isMenuInDrawer].
   isMenuInDrawer,
@@ -1504,7 +1558,8 @@ enum _FlexScaffoldAspect {
   /// [_FlexScaffoldData.menuControlEnabled].
   menuControlEnabled,
 
-  /// Specifies the aspect corresponding to [_FlexScaffoldData.sidebarControlEnabled].
+  /// Specifies the aspect corresponding to
+  /// [_FlexScaffoldData.sidebarControlEnabled].
   sidebarControlEnabled,
 
   /// Specifies the aspect corresponding to
