@@ -7,6 +7,7 @@ import '../../core/controllers/app_controllers.dart';
 import '../../store/hive_store.dart';
 import '../../store/key_store.dart';
 import '../models/app_theme.dart';
+import 'flex_scaffold_theme_provider.dart';
 
 // This file contains StateProviders that control settings used to control the
 // application theme demonstrated in this example.
@@ -70,6 +71,7 @@ final StateProvider<ThemeData> lightThemeProvider =
     platform: ref.watch(platformProvider),
     typography: Typography.material2021(platform: ref.watch(platformProvider)),
     subThemesData: const FlexSubThemesData(),
+    extensions: <ThemeExtension<dynamic>>{ref.watch(flexScaffoldThemeProvider)},
   );
 });
 
@@ -105,6 +107,7 @@ final StateProvider<ThemeData> darkThemeProvider =
     platform: ref.watch(platformProvider),
     typography: Typography.material2021(platform: ref.watch(platformProvider)),
     subThemesData: const FlexSubThemesData(),
+    extensions: <ThemeExtension<dynamic>>{ref.watch(flexScaffoldThemeProvider)},
   );
 });
 

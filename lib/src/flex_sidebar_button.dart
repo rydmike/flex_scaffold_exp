@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
-import 'flex_scaffold_theme.dart';
+import 'flex_theme_extension.dart';
 
 // ignore_for_file: comment_references
 
@@ -108,8 +108,11 @@ class FlexSidebarButton extends StatelessWidget {
 
     final double width = MediaQuery.of(context).size.width;
 
-    final FlexScaffoldThemeData theme = FlexScaffoldTheme.of(context);
-    final double breakpointSidebar = theme.breakpointSidebar!;
+    final FlexTheme flexTheme =
+        Theme.of(context).extension<FlexTheme>()?.withDefaults(context) ??
+            const FlexTheme().withDefaults(context);
+
+    final double breakpointSidebar = flexTheme.breakpointSidebar!;
     final bool canLockMenu = width >= breakpointSidebar;
 
     // Set effective expand and collapse icons
@@ -150,21 +153,21 @@ class FlexSidebarButton extends StatelessWidget {
     if (hasEndDrawer &&
         !isEndDrawerOpen &&
         (!canLockMenu || flexScaffold.widget.cycleViaDrawer)) {
-      tooltip = theme.sidebarOpenTooltip!;
+      tooltip = flexTheme.sidebarOpenTooltip!;
       effectiveMenuButton = effectiveMenuIcon;
     } else if (hasEndDrawer &&
         !isEndDrawerOpen &&
         (canLockMenu || !flexScaffold.widget.cycleViaDrawer)) {
-      tooltip = theme.sidebarExpandHiddenTooltip!;
+      tooltip = flexTheme.sidebarExpandHiddenTooltip!;
       effectiveMenuButton = effectiveMenuIconExpandHidden;
     } else if (hasEndDrawer && isEndDrawerOpen && !canLockMenu) {
-      tooltip = theme.sidebarCloseTooltip!;
+      tooltip = flexTheme.sidebarCloseTooltip!;
       effectiveMenuButton = effectiveMenuIcon;
     } else if (isSidebarHidden) {
-      tooltip = theme.sidebarExpandTooltip!;
+      tooltip = flexTheme.sidebarExpandTooltip!;
       effectiveMenuButton = effectiveMenuIconExpand;
     } else {
-      tooltip = theme.sidebarCollapseTooltip!;
+      tooltip = flexTheme.sidebarCollapseTooltip!;
       effectiveMenuButton = effectiveMenuIconCollapse;
     }
 
@@ -172,7 +175,7 @@ class FlexSidebarButton extends StatelessWidget {
       constraints: const BoxConstraints.tightFor(width: _kLeadingWidth),
       child: IconButton(
         icon: effectiveMenuButton,
-        tooltip: theme.useTooltips! ? tooltip : null,
+        tooltip: flexTheme.useTooltips! ? tooltip : null,
         onPressed: () {
           if (hasEndDrawer &&
               !isEndDrawerOpen &&

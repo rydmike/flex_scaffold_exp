@@ -8,7 +8,7 @@ import 'flex_menu_button.dart';
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
-import 'flex_scaffold_theme.dart';
+import 'flex_theme_extension.dart';
 
 // TODO(rydmike): Add built-in support for NavigationRail.
 // TODO(rydmike): Consider having the icons a part of this widget?
@@ -160,7 +160,14 @@ class _FlexMenuState extends State<FlexMenu> {
     final double screenWidth = mediaData.size.width;
     final double screenHeight = mediaData.size.height;
 
-    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
+    final ThemeData theme = Theme.of(context);
+    // Get effective FlexTheme:
+    //  1. If one exist in Theme, use it, fill undefined props with default
+    //  2. If no FlexTheme in Theme, fallback to one with all default values.
+    final FlexTheme flexTheme =
+        theme.extension<FlexTheme>()?.withDefaults(context) ??
+            const FlexTheme().withDefaults(context);
+
     final double breakpointRail = flexTheme.breakpointRail!;
     final double breakpointMenu = flexTheme.breakpointMenu!;
     final double breakpointDrawer = flexTheme.breakpointDrawer!;
@@ -246,8 +253,9 @@ class _FlexMenuState extends State<FlexMenu> {
         /// Depend on aspect of the FlexScaffold, only rebuild if it changes.
         final int selectedIndex = FlexScaffold.selectedIndexOf(context);
 
-        // Get FlexfoldThemeData
-        final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
+        final FlexTheme flexTheme =
+            theme.extension<FlexTheme>()?.withDefaults(context) ??
+                const FlexTheme().withDefaults(context);
         // Get effective icon and text themes
         final IconThemeData unselectedIconTheme = flexTheme.iconTheme!;
         final IconThemeData selectedIconTheme = flexTheme.selectedIconTheme!;
@@ -430,15 +438,17 @@ class _FlexMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlexScaffoldThemeData theme = FlexScaffoldTheme.of(context);
+    final FlexTheme flexTheme =
+        Theme.of(context).extension<FlexTheme>()?.withDefaults(context) ??
+            const FlexTheme().withDefaults(context);
 
     // Get effective menu and rail width
-    final double railWidth = theme.railWidth!;
-    final double menuWidth = theme.menuWidth! + startPadding;
+    final double railWidth = flexTheme.railWidth!;
+    final double menuWidth = flexTheme.menuWidth! + startPadding;
 
     final bool showToolTip =
         ((width < railWidth + 5) || destination.tooltip != null) &&
-            theme.useTooltips!;
+            flexTheme.useTooltips!;
 
     final Widget themedIcon = IconTheme(
       data: isSelected ? selectedIconTheme ?? iconTheme : iconTheme,
@@ -458,10 +468,10 @@ class _FlexMenuItem extends StatelessWidget {
     );
 
     // Get the border color for borders
-    final Color borderColor = theme.borderColor!;
+    final Color borderColor = flexTheme.borderColor!;
 
     // Is menu list direction reversed and starting from the bottom?
-    final bool reversed = theme.menuStart == FlexfoldMenuStart.bottom;
+    final bool reversed = flexTheme.menuStart == FlexfoldMenuStart.bottom;
 
     // TODO(rydmike): Future enhancement, custom widget for the divider.
     // Make the divider widget
@@ -486,7 +496,8 @@ class _FlexMenuItem extends StatelessWidget {
     );
 
     if (width <
-        theme.menuHighlightMargins!.start + theme.menuHighlightMargins!.end) {
+        flexTheme.menuHighlightMargins!.start +
+            flexTheme.menuHighlightMargins!.end) {
       return const SizedBox.shrink();
     } else {
       return Column(
@@ -500,18 +511,18 @@ class _FlexMenuItem extends StatelessWidget {
           if (destination.heading != null && !reversed) heading,
           // Add the item details.
           Padding(
-            padding: theme.menuHighlightMargins!,
+            padding: flexTheme.menuHighlightMargins!,
             child: Material(
               clipBehavior: Clip.antiAlias,
               shape: isSelected
-                  ? theme.menuSelectedShape
-                  : theme.menuHighlightShape,
+                  ? flexTheme.menuSelectedShape
+                  : flexTheme.menuHighlightShape,
               // If the item is selected we will draw it with grey background
               // but using different style for dark and light theme.
               color: isSelected
                   // This selection highlight is the same alpha blend as the
                   // one used as default in ChipThemeData for a selected chip.
-                  ? theme.menuHighlightColor
+                  ? flexTheme.menuHighlightColor
                   : Colors.transparent,
               child: MaybeTooltip(
                 condition: showToolTip,
@@ -520,10 +531,10 @@ class _FlexMenuItem extends StatelessWidget {
                   autofocus: autoFocus,
                   onTap: onTap,
                   child: SizedBox(
-                    height: theme.menuHighlightHeight,
+                    height: flexTheme.menuHighlightHeight,
                     width: width -
-                        theme.menuHighlightMargins!.start -
-                        theme.menuHighlightMargins!.end,
+                        flexTheme.menuHighlightMargins!.start -
+                        flexTheme.menuHighlightMargins!.end,
                     child: OverflowBox(
                       alignment: AlignmentDirectional.topStart,
                       minWidth: 0,
@@ -534,11 +545,12 @@ class _FlexMenuItem extends StatelessWidget {
                           ConstrainedBox(
                             constraints: BoxConstraints.tightFor(
                               width: railWidth -
-                                  theme.menuHighlightMargins!.start * 2,
+                                  flexTheme.menuHighlightMargins!.start * 2,
                             ),
                             child: themedIcon,
                           ),
-                          SizedBox(width: theme.menuHighlightMargins!.start),
+                          SizedBox(
+                              width: flexTheme.menuHighlightMargins!.start),
                           if (width < railWidth + 10)
                             const SizedBox.shrink()
                           else
