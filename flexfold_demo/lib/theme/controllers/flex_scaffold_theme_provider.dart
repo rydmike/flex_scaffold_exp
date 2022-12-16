@@ -23,7 +23,7 @@ final Provider<FlexTheme> flexScaffoldThemeProvider = Provider<FlexTheme>(
       // borderColor: Theme.of(context).primaryColor,
       height: ref.watch(menuHighlightHeightPod),
       borderRadius: ref.watch(menuHighlightHeightPod) / 6,
-      directionality: directionality,
+      // directionality: directionality,
     );
     // The style of the item that is hovered on web and desktop.
     final FlexMenuIndicator menuHover = FlexMenuIndicator(
@@ -31,7 +31,7 @@ final Provider<FlexTheme> flexScaffoldThemeProvider = Provider<FlexTheme>(
       borderColor: Colors.transparent,
       height: ref.watch(menuHighlightHeightPod),
       borderRadius: ref.watch(menuHighlightHeightPod) / 6,
-      directionality: directionality,
+      // directionality: directionality,
     );
 
     return FlexTheme(

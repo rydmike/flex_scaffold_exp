@@ -34,7 +34,6 @@ class FlexMenuIndicator {
     this.menuHighlightMarginBottom,
     this.startBarWidth = 5.0,
     this.endBarWidth = 6.0,
-    required this.directionality,
   })  : assert(borderRadius >= 0, 'The border radius must be >= 0.'),
         assert(height >= 0, 'The height must be >= 0.'),
         assert(startBarWidth >= 0, 'The startBarWidth must be >= 0.'),
@@ -145,17 +144,6 @@ class FlexMenuIndicator {
   /// End bar width.
   final double endBarWidth;
 
-  /// Directionality for current text direction.
-  ///
-  /// Only used to resolve the circular side direction for the end stadium style
-  /// from BorderRadiusDirectional to normal BorderRadius that is used by
-  /// the ShapeBorder RoundedRectangleBorder.
-  ///
-  /// If this is not done, the Shape theme animation throws an exception.
-  /// The Directionality will still be resolved correctly later, but the theme
-  /// cannot animate the shape change.
-  final TextDirection directionality;
-
   late double _start;
   late double _end;
   late double _top;
@@ -190,13 +178,13 @@ class FlexMenuIndicator {
         return RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius));
       case FlexIndicatorStyle.stadium:
-        return const StadiumBorder();
+        return RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(height / 2));
       case FlexIndicatorStyle.endStadium:
-        // TODO(rydmike): How to deal with this without resolve? Resolve later?
         return RoundedRectangleBorder(
           borderRadius: BorderRadiusDirectional.horizontal(
             end: Radius.circular(height / 2.0),
-          ).resolve(directionality),
+          ),
         );
       case FlexIndicatorStyle.startBar:
         return BorderDirectional(
