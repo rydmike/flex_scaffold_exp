@@ -212,28 +212,27 @@ final StateProvider<double> menuHighlightHeightPod =
           KeyStore.defaults[KeyStore.menuHighlightHeight]! as double) as double;
 }, name: KeyStore.menuHighlightHeight);
 
-final StateProvider<FlexfoldMenuStart> menuStartPod =
-    StateProvider<FlexfoldMenuStart>((StateProviderRef<FlexfoldMenuStart> ref) {
+final StateProvider<FlexMenuStart> menuStartPod =
+    StateProvider<FlexMenuStart>((StateProviderRef<FlexMenuStart> ref) {
   return hiveStore.get(KeyStore.menuStart,
-      defaultValue: KeyStore.defaults[KeyStore.menuStart]!
-          as FlexfoldMenuStart) as FlexfoldMenuStart;
+          defaultValue: KeyStore.defaults[KeyStore.menuStart]! as FlexMenuStart)
+      as FlexMenuStart;
 }, name: KeyStore.menuStart);
 
-final StateProvider<FlexfoldMenuSide> menuSidePod =
-    StateProvider<FlexfoldMenuSide>((StateProviderRef<FlexfoldMenuSide> ref) {
+final StateProvider<FlexMenuSide> menuSidePod =
+    StateProvider<FlexMenuSide>((StateProviderRef<FlexMenuSide> ref) {
   return hiveStore.get(KeyStore.menuSide,
-      defaultValue: KeyStore.defaults[KeyStore.menuSide]!
-          as FlexfoldMenuSide) as FlexfoldMenuSide;
+          defaultValue: KeyStore.defaults[KeyStore.menuSide]! as FlexMenuSide)
+      as FlexMenuSide;
 }, name: KeyStore.menuSide);
 
 // State providers used to control bottom navigation bar.
 
-final StateProvider<FlexfoldBottomBarType> bottomBarTypePod =
-    StateProvider<FlexfoldBottomBarType>(
-        (StateProviderRef<FlexfoldBottomBarType> ref) {
+final StateProvider<FlexBottomType> bottomBarTypePod =
+    StateProvider<FlexBottomType>((StateProviderRef<FlexBottomType> ref) {
   return hiveStore.get(KeyStore.bottomBarType,
       defaultValue: KeyStore.defaults[KeyStore.bottomBarType]!
-          as FlexfoldBottomBarType) as FlexfoldBottomBarType;
+          as FlexBottomType) as FlexBottomType;
 }, name: KeyStore.bottomBarType);
 
 final StateProvider<bool> bottomBarIsTransparentPod =

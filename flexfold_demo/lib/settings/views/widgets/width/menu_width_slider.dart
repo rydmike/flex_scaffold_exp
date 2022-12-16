@@ -16,15 +16,14 @@ class MenuWidthSlider extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text('Default width is '
-              '${kFlexfoldMenuWidth.toStringAsFixed(0)} dp.'),
+              '${kFlexMenuWidth.toStringAsFixed(0)} dp.'),
           MaybeTooltip(
             condition: ref.read(useTooltipsPod),
             tooltip: 'Flexfold(menuWidth: ${ref.watch(menuWidthPod).floor()})',
             child: Slider(
-              min: kFlexfoldMenuWidthMin,
-              max: kFlexfoldMenuWidthMax,
-              divisions:
-                  (kFlexfoldMenuWidthMax - kFlexfoldMenuWidthMin).floor(),
+              min: kFlexMenuWidthMin,
+              max: kFlexMenuWidthMax,
+              divisions: (kFlexMenuWidthMax - kFlexMenuWidthMin).floor(),
               label: ref.watch(menuWidthPod).floor().toString(),
               value: ref.watch(menuWidthPod),
               onChanged: (double value) {

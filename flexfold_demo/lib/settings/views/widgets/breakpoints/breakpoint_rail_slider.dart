@@ -16,17 +16,16 @@ class BreakpointRailSlider extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text('Default breakpoint API value is '
-              '${kFlexfoldBreakpointRail.toStringAsFixed(0)} dp.'),
+              '${kFlexBreakpointRail.toStringAsFixed(0)} dp.'),
           MaybeTooltip(
             condition: ref.watch(useTooltipsPod),
             tooltip: 'FlexfoldThemeData(breakpointRail: '
                 '${ref.watch(breakpointRailPod).floor()})',
             child: Slider(
-              min: kFlexfoldBreakpointRailMin,
-              max: kFlexfoldBreakpointRailMax,
+              min: kFlexBreakpointRailMin,
+              max: kFlexBreakpointRailMax,
               divisions:
-                  (kFlexfoldBreakpointRailMax - kFlexfoldBreakpointRailMin)
-                      .floor(),
+                  (kFlexBreakpointRailMax - kFlexBreakpointRailMin).floor(),
               label: ref.watch(breakpointRailPod).floor().toString(),
               value: ref.watch(breakpointRailPod),
               onChanged: (double value) {

@@ -10,18 +10,18 @@ class BottomBarTypeSwitch extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // treeDepthInfo(context, 'BottomBarTypeSwitch');
-    final FlexfoldBottomBarType type = ref.watch(bottomBarTypePod);
+    final FlexBottomType type = ref.watch(bottomBarTypePod);
     final List<bool> isSelected = <bool>[
-      type == FlexfoldBottomBarType.material2,
-      type == FlexfoldBottomBarType.material3,
-      type == FlexfoldBottomBarType.cupertino,
-      type == FlexfoldBottomBarType.adaptive,
+      type == FlexBottomType.material2,
+      type == FlexBottomType.material3,
+      type == FlexBottomType.cupertino,
+      type == FlexBottomType.adaptive,
     ];
     return ToggleButtons(
       isSelected: isSelected,
       onPressed: (int newIndex) {
         ref.read(bottomBarTypePod.notifier).state =
-            FlexfoldBottomBarType.values[newIndex];
+            FlexBottomType.values[newIndex];
       },
       children: const <Widget>[
         Padding(

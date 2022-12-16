@@ -167,15 +167,15 @@ class FlexfoldHighlightTypeAdapter extends TypeAdapter<FlexIndicatorStyle> {
 }
 
 // A Hive data type adapter for enum FlexfoldMenuStart.
-class FlexfoldMenuStartAdapter extends TypeAdapter<FlexfoldMenuStart> {
+class FlexfoldMenuStartAdapter extends TypeAdapter<FlexMenuStart> {
   @override
-  FlexfoldMenuStart read(BinaryReader reader) {
+  FlexMenuStart read(BinaryReader reader) {
     final int index = reader.readInt();
-    return FlexfoldMenuStart.values[index];
+    return FlexMenuStart.values[index];
   }
 
   @override
-  void write(BinaryWriter writer, FlexfoldMenuStart obj) {
+  void write(BinaryWriter writer, FlexMenuStart obj) {
     writer.writeInt(obj.index);
   }
 
@@ -184,15 +184,15 @@ class FlexfoldMenuStartAdapter extends TypeAdapter<FlexfoldMenuStart> {
 }
 
 // A Hive data type adapter for enum FlexfoldMenuSide.
-class FlexfoldMenuSideAdapter extends TypeAdapter<FlexfoldMenuSide> {
+class FlexfoldMenuSideAdapter extends TypeAdapter<FlexMenuSide> {
   @override
-  FlexfoldMenuSide read(BinaryReader reader) {
+  FlexMenuSide read(BinaryReader reader) {
     final int index = reader.readInt();
-    return FlexfoldMenuSide.values[index];
+    return FlexMenuSide.values[index];
   }
 
   @override
-  void write(BinaryWriter writer, FlexfoldMenuSide obj) {
+  void write(BinaryWriter writer, FlexMenuSide obj) {
     writer.writeInt(obj.index);
   }
 
@@ -201,15 +201,15 @@ class FlexfoldMenuSideAdapter extends TypeAdapter<FlexfoldMenuSide> {
 }
 
 // A Hive data type adapter for enum FlexfoldBottomBarType.
-class FlexfoldBottomBarTypeAdapter extends TypeAdapter<FlexfoldBottomBarType> {
+class FlexfoldBottomBarTypeAdapter extends TypeAdapter<FlexBottomType> {
   @override
-  FlexfoldBottomBarType read(BinaryReader reader) {
+  FlexBottomType read(BinaryReader reader) {
     final int index = reader.readInt();
-    return FlexfoldBottomBarType.values[index];
+    return FlexBottomType.values[index];
   }
 
   @override
-  void write(BinaryWriter writer, FlexfoldBottomBarType obj) {
+  void write(BinaryWriter writer, FlexBottomType obj) {
     writer.writeInt(obj.index);
   }
 

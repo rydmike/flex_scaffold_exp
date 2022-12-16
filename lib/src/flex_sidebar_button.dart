@@ -30,7 +30,7 @@ class FlexSidebarButton extends StatelessWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, it defaults to a widget
-  /// with value [kFlexfoldSidebarIcon], the hamburger icon.
+  /// with value [kFlexSidebarIcon], the hamburger icon.
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -44,7 +44,7 @@ class FlexSidebarButton extends StatelessWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [icon] was not
-  /// defined, it defaults to a widget with value [kFlexfoldSidebarIconExpand].
+  /// defined, it defaults to a widget with value [kFlexSidebarIconExpand].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -59,7 +59,7 @@ class FlexSidebarButton extends StatelessWidget {
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [icon] was not
   /// defined, it defaults to a widget with value
-  /// [kFlexfoldSidebarIconExpandHidden].
+  /// [kFlexSidebarIconExpandHidden].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -74,7 +74,7 @@ class FlexSidebarButton extends StatelessWidget {
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [icon] was not
   /// defined, it defaults to a widget with value
-  /// [kFlexfoldSidebarIconCollapse].
+  /// [kFlexSidebarIconCollapse].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -117,19 +117,19 @@ class FlexSidebarButton extends StatelessWidget {
 
     // Set effective expand and collapse icons
     Widget effectiveMenuIcon =
-        icon ?? flexScaffold.widget.sidebarIcon ?? kFlexfoldSidebarIcon;
+        icon ?? flexScaffold.widget.sidebarIcon ?? kFlexSidebarIcon;
     Widget effectiveMenuIconExpand = iconExpand ??
         flexScaffold.widget.sidebarIconExpand ??
         icon ??
-        kFlexfoldSidebarIconExpand;
+        kFlexSidebarIconExpand;
     Widget effectiveMenuIconExpandHidden = iconExpandHidden ??
         flexScaffold.widget.sidebarIconExpandHidden ??
         icon ??
-        kFlexfoldSidebarIconExpandHidden;
+        kFlexSidebarIconExpandHidden;
     Widget effectiveMenuIconCollapse = iconCollapse ??
         flexScaffold.widget.sidebarIconCollapse ??
         icon ??
-        kFlexfoldSidebarIconCollapse;
+        kFlexSidebarIconCollapse;
     // If directionality is RTL we rotate the icons 180 degrees, if directional
     // icons were used in a LTR design, the result should be fairly OK of this,
     // unless the APP was really designed with a RTL mindset, then we should
@@ -193,7 +193,7 @@ class FlexSidebarButton extends StatelessWidget {
               // possible somehow?) listen to and know when the end Drawer has
               // closed fully and open the locked sidebar then, but this
               // works too.
-              Future<void>.delayed(kFlexfoldFlutterDrawerDuration, () {
+              Future<void>.delayed(kFlexFlutterDrawerDuration, () {
                 flexScaffold.hideSidebar(false);
               });
             } else {

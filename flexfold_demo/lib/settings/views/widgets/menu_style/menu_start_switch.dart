@@ -9,16 +9,15 @@ class MenuStartSwitch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final FlexfoldMenuStart style = ref.watch(menuStartPod);
+    final FlexMenuStart style = ref.watch(menuStartPod);
     final List<bool> isSelected = <bool>[
-      style == FlexfoldMenuStart.top,
-      style == FlexfoldMenuStart.bottom,
+      style == FlexMenuStart.top,
+      style == FlexMenuStart.bottom,
     ];
     return ToggleButtons(
       isSelected: isSelected,
       onPressed: (int newIndex) {
-        ref.read(menuStartPod.notifier).state =
-            FlexfoldMenuStart.values[newIndex];
+        ref.read(menuStartPod.notifier).state = FlexMenuStart.values[newIndex];
       },
       children: const <Widget>[
         Padding(

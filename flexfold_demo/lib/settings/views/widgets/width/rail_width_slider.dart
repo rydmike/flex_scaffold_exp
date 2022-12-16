@@ -16,7 +16,7 @@ class RailWidthSlider extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text('API default value is '
-              '${kFlexfoldRailWidth.toStringAsFixed(0)} dp, '
+              '${kFlexRailWidth.toStringAsFixed(0)} dp, '
               'same as default app bar menu icon width. '
               'In this demo the leading widget on the menu '
               'bar also uses the rail width as its width and this demo '
@@ -26,10 +26,9 @@ class RailWidthSlider extends ConsumerWidget {
             condition: ref.read(useTooltipsPod),
             tooltip: 'Flexfold(railWidth: ${ref.watch(railWidthPod).floor()})',
             child: Slider(
-              min: kFlexfoldRailWidthMin,
-              max: kFlexfoldRailWidthMax,
-              divisions:
-                  (kFlexfoldRailWidthMax - kFlexfoldRailWidthMin).floor(),
+              min: kFlexRailWidthMin,
+              max: kFlexRailWidthMax,
+              divisions: (kFlexRailWidthMax - kFlexRailWidthMin).floor(),
               label: ref.watch(railWidthPod).floor().toString(),
               value: ref.watch(railWidthPod),
               onChanged: (double value) {

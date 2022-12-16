@@ -21,7 +21,6 @@ final Provider<FlexTheme> flexScaffoldThemeProvider = Provider<FlexTheme>(
     final FlexMenuIndicator menuSelected = FlexMenuIndicator(
       highlightType: ref.watch(menuHighlightTypePod),
       // borderColor: Theme.of(context).primaryColor,
-      // highlightColor: Theme.of(context).colorScheme.primary.withAlpha(0x3d),
       height: ref.watch(menuHighlightHeightPod),
       borderRadius: ref.watch(menuHighlightHeightPod) / 6,
       directionality: directionality,
@@ -30,7 +29,6 @@ final Provider<FlexTheme> flexScaffoldThemeProvider = Provider<FlexTheme>(
     final FlexMenuIndicator menuHover = FlexMenuIndicator(
       highlightType: ref.watch(menuHighlightTypePod),
       borderColor: Colors.transparent,
-      highlightColor: Colors.transparent,
       height: ref.watch(menuHighlightHeightPod),
       borderRadius: ref.watch(menuHighlightHeightPod) / 6,
       directionality: directionality,
@@ -78,25 +76,25 @@ final Provider<FlexTheme> flexScaffoldThemeProvider = Provider<FlexTheme>(
       borderOnLightDrawer: false,
       // borderColor: Colors.green[400], // You can control the color too
       // Menu design and layout properties
-      menuHighlightHeight: ref.watch(menuHighlightHeightPod),
-      menuHighlightMargins: menuSelected.margins,
-      menuHighlightShape: menuHover.shape(),
+      menuIndicatorHeight: ref.watch(menuHighlightHeightPod),
+      menuIndicatorMargins: menuSelected.margins,
+      menuShape: menuHover.shape(),
       menuSelectedShape: menuSelected.shape(),
-      menuHighlightColor: menuSelected.highlight,
+      menuSelectedColor: menuSelected.transparentOrNull,
       // Individual animation durations are available, but for this
       // demo they all share the same setting.
       menuAnimationDuration:
           Duration(milliseconds: ref.watch(animationDurationPod)),
       sidebarAnimationDuration:
           Duration(milliseconds: ref.watch(animationDurationPod)),
-      bottomBarAnimationDuration:
+      bottomAnimationDuration:
           Duration(milliseconds: ref.watch(animationDurationPod)),
       //
       // The animation curve for rail/menu, sidebar and bottom bar
       // can be set separately, but this demo uses the same setting for all.
       menuAnimationCurve: ref.watch(flexMenuCurveProvider),
       sidebarAnimationCurve: ref.watch(flexMenuCurveProvider),
-      bottomBarAnimationCurve: ref.watch(flexMenuCurveProvider),
+      bottomAnimationCurve: ref.watch(flexMenuCurveProvider),
       //
       // Bottom navigation bar theme and additional visual properties for
       // the bottom navigation bar.

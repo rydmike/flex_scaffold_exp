@@ -383,10 +383,9 @@ class LayoutShell extends ConsumerWidget {
         // Bottom navigation bar controls
         // scrollHiddenBottomBar: ref.watch(scrollHiddenBottomBarPod),
         //
-        hideBottomBar: ref.watch(hideBottomBarPod),
-        showBottomBarWhenMenuInDrawer:
-            ref.watch(showBottomBarWhenMenuInDrawerPod),
-        showBottomBarWhenMenuShown: ref.watch(showBottomBarWhenMenuShownPod),
+        hideBottom: ref.watch(hideBottomBarPod),
+        showBottomWhenMenuInDrawer: ref.watch(showBottomBarWhenMenuInDrawerPod),
+        showBottomWhenMenuShown: ref.watch(showBottomBarWhenMenuShownPod),
         bottomDestinationsInDrawer: ref.watch(bottomDestinationsInDrawerPod),
         //
         // If you provide a FAB here, it will only appear on a

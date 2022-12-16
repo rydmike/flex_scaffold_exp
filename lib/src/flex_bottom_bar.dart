@@ -54,32 +54,31 @@ class FlexBottomBar extends StatelessWidget {
             const FlexTheme().withDefaults(context);
 
     // Resolve the effective bottom bar type
-    FlexfoldBottomBarType effectiveType =
-        flexTheme.bottomType ?? FlexfoldBottomBarType.adaptive;
-    if (effectiveType == FlexfoldBottomBarType.adaptive) {
+    FlexBottomType effectiveType =
+        flexTheme.bottomType ?? FlexBottomType.adaptive;
+    if (effectiveType == FlexBottomType.adaptive) {
       if (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS) {
-        effectiveType = FlexfoldBottomBarType.cupertino;
+        effectiveType = FlexBottomType.cupertino;
       } else {
-        effectiveType = useMaterial3
-            ? FlexfoldBottomBarType.material3
-            : FlexfoldBottomBarType.material2;
+        effectiveType =
+            useMaterial3 ? FlexBottomType.material3 : FlexBottomType.material2;
       }
     }
     if (_kDebugMe) {
       debugPrint('FlexScaffoldBottomBar: effectiveType = $effectiveType');
     }
-    final bool useCustomBar = effectiveType == FlexfoldBottomBarType.custom &&
-        customNavigationBar != null;
+    final bool useCustomBar =
+        effectiveType == FlexBottomType.custom && customNavigationBar != null;
     // The height of the bottom nav bars may differ, we need
     // to get the correct height for the effective bottom nav bar.
     final double effectiveToolBarHeight = useCustomBar
         ? customNavigationBarHeight ?? kBottomNavigationBarHeight
-        : effectiveType == FlexfoldBottomBarType.material2
+        : effectiveType == FlexBottomType.material2
             ? kBottomNavigationBarHeight
-            : effectiveType == FlexfoldBottomBarType.material3
+            : effectiveType == FlexBottomType.material3
                 ? (NavigationBarTheme.of(context).height ??
-                    kFlexfoldNavigationBarHeight)
-                : kFlexfoldCupertinoTabBarHeight;
+                    kFlexNavigationBarHeight)
+                : kFlexCupertinoTabBarHeight;
 
     // Reads the FlexScaffold state once, will not update if dependants change.
     // Use it to access FlexScaffold state modifying methods. You may also use
@@ -105,20 +104,20 @@ class FlexBottomBar extends StatelessWidget {
         // toggle between them is animated.
         // It is just cool bonus effect of this setup.
         ? AnimatedSize(
-            duration: flexTheme.bottomBarAnimationDuration!,
-            curve: flexTheme.bottomBarAnimationCurve!,
+            duration: flexTheme.bottomAnimationDuration!,
+            curve: flexTheme.bottomAnimationCurve!,
             child: SizedBox(
               height: isBottomBarVisible ? effectiveToolBarHeight : 0.0,
               child: Wrap(
                 children: <Widget>[
                   if (customNavigationBar == null)
-                    if (effectiveType == FlexfoldBottomBarType.cupertino)
+                    if (effectiveType == FlexBottomType.cupertino)
                       CupertinoBottomBar(
                         destinations: flexScaffold.bottomDestinations,
                         selectedIndex: flexScaffold.indexBottom.index,
                         onDestinationSelected: flexScaffold.setBottomIndex,
                       )
-                    else if (effectiveType == FlexfoldBottomBarType.material3)
+                    else if (effectiveType == FlexBottomType.material3)
                       Material3BottomBar(
                         destinations: flexScaffold.bottomDestinations,
                         selectedIndex: flexScaffold.indexBottom.index,

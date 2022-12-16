@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
 
-/// Defines default property values for descendant [FlexScaffold] widgets.
+/// Defines theme property values for descendant [FlexScaffold] widgets.
+///
+/// The theme makes it possible to modify settings and behaviour not directly
+/// configurable via [FlexScaffold]'s direct properties.
 ///
 /// To use this theme you need to insert it into the application [ThemeData] as
 /// an extension:
@@ -14,7 +17,8 @@ import 'flex_scaffold_constants.dart';
 /// ```dart
 ///  theme: ThemeData(
 ///    extensions: <ThemeExtension<dynamic>>{
-///      // Customize properties as needed.
+///      // Customize properties as needed directly in the theme. If you
+///      // use only defaults there is no need to add the theme extension.
 ///      FlexTheme(),
 ///    },
 ///  ),
@@ -87,19 +91,23 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
     this.borderColor,
     //
     // Menu selection and highlight style
-    this.menuHighlightHeight,
-    this.menuHighlightMargins,
+    this.menuShape,
     this.menuSelectedShape,
-    this.menuHighlightShape,
+    this.menuIndicatorHeight,
+    this.menuIndicatorMargins,
+    this.menuSelectedColor,
+    this.menuFocusColor,
+    this.menuHoverColor,
     this.menuHighlightColor,
+    this.menuSplashColor,
     //
     // Animation durations and curves for menus and bottom bar animations
     this.menuAnimationDuration,
     this.menuAnimationCurve,
     this.sidebarAnimationDuration,
     this.sidebarAnimationCurve,
-    this.bottomBarAnimationDuration,
-    this.bottomBarAnimationCurve,
+    this.bottomAnimationDuration,
+    this.bottomAnimationCurve,
     //
     // Bottom navigation bar properties
     this.bottomType,
@@ -143,65 +151,65 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
             'bottomElevation must be null or >= 0.'),
         assert(
             menuWidth == null ||
-                (menuWidth >= kFlexfoldMenuWidthMin &&
-                    menuWidth <= kFlexfoldMenuWidthMax),
+                (menuWidth >= kFlexMenuWidthMin &&
+                    menuWidth <= kFlexMenuWidthMax),
             'The menuWidth must be null OR between '
-            '$kFlexfoldMenuWidthMin and $kFlexfoldMenuWidthMax.'),
+            '$kFlexMenuWidthMin and $kFlexMenuWidthMax.'),
         assert(
             railWidth == null ||
-                (railWidth >= kFlexfoldRailWidthMin &&
-                    railWidth <= kFlexfoldRailWidthMax),
+                (railWidth >= kFlexRailWidthMin &&
+                    railWidth <= kFlexRailWidthMax),
             'The railWidth must be null OR between '
-            '$kFlexfoldRailWidthMin and $kFlexfoldRailWidthMax.'),
+            '$kFlexRailWidthMin and $kFlexRailWidthMax.'),
         assert(
             sidebarWidth == null ||
-                (sidebarWidth >= kFlexfoldSidebarWidthMin &&
-                    sidebarWidth <= kFlexfoldSidebarWidthMax),
+                (sidebarWidth >= kFlexSidebarWidthMin &&
+                    sidebarWidth <= kFlexSidebarWidthMax),
             'The menuWidth must be null OR between '
-            '$kFlexfoldSidebarWidthMin and $kFlexfoldSidebarWidthMax.'),
+            '$kFlexSidebarWidthMin and $kFlexSidebarWidthMax.'),
         assert(
             drawerWidth == null ||
-                (drawerWidth >= kFlexfoldDrawerWidthMin &&
-                    drawerWidth <= kFlexfoldDrawerWidthMax),
+                (drawerWidth >= kFlexDrawerWidthMin &&
+                    drawerWidth <= kFlexDrawerWidthMax),
             'The drawerWidth must be null OR between '
-            '$kFlexfoldDrawerWidthMin and $kFlexfoldDrawerWidthMax.'),
+            '$kFlexDrawerWidthMin and $kFlexDrawerWidthMax.'),
         assert(
             endDrawerWidth == null ||
-                (endDrawerWidth >= kFlexfoldDrawerWidthMin &&
-                    endDrawerWidth <= kFlexfoldDrawerWidthMax),
+                (endDrawerWidth >= kFlexDrawerWidthMin &&
+                    endDrawerWidth <= kFlexDrawerWidthMax),
             'The endDrawerWidth must be null OR between '
-            '$kFlexfoldDrawerWidthMin and $kFlexfoldDrawerWidthMax.'),
+            '$kFlexDrawerWidthMin and $kFlexDrawerWidthMax.'),
         assert(
             breakpointDrawer == null ||
-                (breakpointDrawer >= kFlexfoldBreakpointDrawerMin &&
-                    breakpointDrawer <= kFlexfoldBreakpointDrawerMax),
+                (breakpointDrawer >= kFlexBreakpointDrawerMin &&
+                    breakpointDrawer <= kFlexBreakpointDrawerMax),
             'The breakpointDrawer must be null OR between '
-            '$kFlexfoldMenuWidthMin and $kFlexfoldMenuWidthMax.'),
+            '$kFlexMenuWidthMin and $kFlexMenuWidthMax.'),
         assert(
             breakpointRail == null ||
-                (breakpointRail >= kFlexfoldBreakpointRailMin &&
-                    breakpointRail <= kFlexfoldBreakpointRailMax),
+                (breakpointRail >= kFlexBreakpointRailMin &&
+                    breakpointRail <= kFlexBreakpointRailMax),
             'The breakpointRail must be null OR between '
-            '$kFlexfoldBreakpointDrawerMin and $kFlexfoldBreakpointRailMax.'),
+            '$kFlexBreakpointDrawerMin and $kFlexBreakpointRailMax.'),
         assert(
             breakpointMenu == null ||
-                (breakpointMenu >= kFlexfoldBreakpointMenuMin &&
-                    breakpointMenu <= kFlexfoldBreakpointMenuMax),
+                (breakpointMenu >= kFlexBreakpointMenuMin &&
+                    breakpointMenu <= kFlexBreakpointMenuMax),
             'The breakpointMenu must be null OR between '
-            '$kFlexfoldBreakpointMenuMin and $kFlexfoldBreakpointMenuMax.'),
+            '$kFlexBreakpointMenuMin and $kFlexBreakpointMenuMax.'),
         assert(
             breakpointSidebar == null ||
-                (breakpointSidebar >= kFlexfoldBreakpointSidebarMin &&
-                    breakpointSidebar <= kFlexfoldBreakpointSidebarMax),
+                (breakpointSidebar >= kFlexBreakpointSidebarMin &&
+                    breakpointSidebar <= kFlexBreakpointSidebarMax),
             'The breakpointSidebar must be null OR between '
-            '$kFlexfoldBreakpointSidebarMin and '
-            '$kFlexfoldBreakpointSidebarMax.'),
+            '$kFlexBreakpointSidebarMin and '
+            '$kFlexBreakpointSidebarMax.'),
         assert(
-            menuHighlightHeight == null ||
-                (menuHighlightHeight >= kFlexfoldHighlightHeightMin &&
-                    menuHighlightHeight <= kFlexfoldHighlightHeightMax),
+            menuIndicatorHeight == null ||
+                (menuIndicatorHeight >= kFlexIndicatorHeightMin &&
+                    menuIndicatorHeight <= kFlexIndicatorHeightMax),
             'The menuHighlightHeight must be null OR between '
-            '$kFlexfoldHighlightHeightMin and $kFlexfoldHighlightHeightMax.'),
+            '$kFlexIndicatorHeightMin and $kFlexIndicatorHeightMax.'),
         assert(
             bottomOpacity == null ||
                 (bottomOpacity >= 0.0 && bottomOpacity <= 1.0),
@@ -281,8 +289,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// background.
   ///
   /// The [menuBackgroundColor] value is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuBackgroundColor].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value in [FlexTheme.menuBackgroundColor].
   /// * After this the value will remain null if no value was assigned above,
   ///   however the background color will default to
   ///   ThemeData.colorScheme.background from the Material the menu uses.
@@ -314,7 +321,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// * None null value passed in Flexfold.theme.[menuStart].
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * [menuStart] = menuStart.top, by default if null.
-  final FlexfoldMenuStart? menuStart;
+  final FlexMenuStart? menuStart;
 
   /// Enum used to set if menu should be at the start or end side of the screen.
   ///
@@ -323,7 +330,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// * None null value passed in Flexfold.theme.[menuSide].
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * [menuSide] = MenuSide.start, by default if null.
-  final FlexfoldMenuSide? menuSide;
+  final FlexMenuSide? menuSide;
 
   // TODO(rydmike): This elevation does not work, why not? Works on sidebar.
   // Figure out how to fix the elevation. Most likely it is obscured for some
@@ -376,8 +383,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// The [menuWidth] is determined in the order:
   /// * None null value passed in Flexfold.theme.[menuWidth].
   /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above null, then the default value is [kFlexfoldMenuWidth].
-  /// * The const [kFlexfoldMenuWidth] = 250dp.
+  /// * If all above null, then the default value is [kFlexMenuWidth].
+  /// * The const [kFlexMenuWidth] = 250dp.
   ///
   /// You may want to adjust the menu width if your labels do not fit. Try
   /// to keep labels short as they also need to fit on a bottom navigation bar.
@@ -388,8 +395,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// The [railWidth] is determined in the order:
   /// * None null value passed in Flexfold.theme.[railWidth].
   /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above null, then the default value is [kFlexfoldRailWidth].
-  /// * The [kFlexfoldRailWidth] is set to Flutter SDK constant [kToolbarHeight]
+  /// * If all above null, then the default value is [kFlexRailWidth].
+  /// * The [kFlexRailWidth] is set to Flutter SDK constant [kToolbarHeight]
   ///   which is 56dp.
   ///
   /// There is normally no need to adjust this value. For standard icons used
@@ -402,8 +409,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// The [sidebarWidth] is determined in the order:
   /// * None null value passed in Flexfold.theme.[sidebarWidth].
   /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above null, then the default value is [kFlexfoldDrawerWidth].
-  /// * The const [kFlexfoldDrawerWidth] = 304dp, the width of standard drawer.
+  /// * If all above null, then the default value is [kFlexDrawerWidth].
+  /// * The const [kFlexDrawerWidth] = 304dp, the width of standard drawer.
   ///
   /// You may want to adjust the menu width if your labels do not fit. Try
   /// to keep labels short as they also need to fit on a bottom navigation bar.
@@ -414,8 +421,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// The [drawerWidth] is determined in the order:
   /// * None null value passed in Flexfold.theme.[drawerWidth].
   /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above null, then the default value is [kFlexfoldDrawerWidth].
-  /// * The const [kFlexfoldDrawerWidth] = 304dp, the width of standard drawer.
+  /// * If all above null, then the default value is [kFlexDrawerWidth].
+  /// * The const [kFlexDrawerWidth] = 304dp, the width of standard drawer.
   final double? drawerWidth;
 
   /// Width of the sidebar in an end drawer when it is used as an end drawer.
@@ -423,8 +430,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// The [endDrawerWidth] is determined in the order:
   /// * None null value passed in Flexfold.theme.[endDrawerWidth].
   /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above null, then the default value is [kFlexfoldDrawerWidth].
-  /// * The const [kFlexfoldDrawerWidth] = 304dp, the width of standard drawer.
+  /// * If all above null, then the default value is [kFlexDrawerWidth].
+  /// * The const [kFlexDrawerWidth] = 304dp, the width of standard drawer.
   final double? endDrawerWidth;
 
   /// Screen height breakpoint when the menu/rail is no longer in a drawer.
@@ -439,8 +446,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// The [breakpointDrawer] is determined in the order:
   /// * None null value passed in Flexfold.theme.[breakpointDrawer].
   /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above null, then default value is [kFlexfoldBreakpointDrawer].
-  /// * The const [kFlexfoldBreakpointDrawer] = 550dp.
+  /// * If all above null, then default value is [kFlexBreakpointDrawer].
+  /// * The const [kFlexBreakpointDrawer] = 550dp.
   final double? breakpointDrawer;
 
   /// Screen width breakpoint when rail takes over from bottom bar.
@@ -448,8 +455,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// The [breakpointRail] is determined in the order:
   /// * None null value passed in Flexfold.theme.[breakpointRail].
   /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above null, then default value is [kFlexfoldBreakpointRail].
-  /// * The const [kFlexfoldBreakpointRail] = 600dp.
+  /// * If all above null, then default value is [kFlexBreakpointRail].
+  /// * The const [kFlexBreakpointRail] = 600dp.
   final double? breakpointRail;
 
   /// Screen width breakpoint when side menu takes over from rail.
@@ -457,8 +464,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// The [breakpointMenu] is determined in the order:
   /// * None null value passed in Flexfold.theme.[breakpointMenu].
   /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above null, then default value is [kFlexfoldBreakpointMenu].
-  /// * The const [kFlexfoldBreakpointMenu] = 1024dp.
+  /// * If all above null, then default value is [kFlexBreakpointMenu].
+  /// * The const [kFlexBreakpointMenu] = 1024dp.
   final double? breakpointMenu;
 
   /// Screen width breakpoint when the sidebar remains visible.
@@ -467,8 +474,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// The [breakpointSidebar] is determined in the order:
   /// * None null value passed in Flexfold.theme.[breakpointSidebar].
   /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above null, then default value is [kFlexfoldBreakpointSidebar].
-  /// * The const [kFlexfoldBreakpointSidebar] = 1200dp.
+  /// * If all above null, then default value is [kFlexBreakpointSidebar].
+  /// * The const [kFlexBreakpointSidebar] = 1200dp.
   final double? breakpointSidebar;
 
   /// The menu has an edge border towards the body
@@ -528,26 +535,17 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// the same color on its bottom border too, by default it does.
   final Color? borderColor;
 
-  /// Height of the menu selection highlight indicator.
+  /// The shape of the mouse over highlight on a menu item.
   ///
-  /// The [menuHighlightHeight] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuHighlightHeight].
-  /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above null, then defaults to [kFlexfoldHighlightHeight] = 50dp
-  final double? menuHighlightHeight;
-
-  /// Directional margins for the menu highlight and hover shape.
+  /// The shape is normally the same as on the one uses on [menuSelectedShape]
+  /// but without any borders, if it has borders the borders will also be
+  /// drawn on unselected items!
   ///
-  /// The [menuHighlightMargins] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuHighlightMargins].
+  /// The [menuShape] is determined in the order:
+  /// * None null value passed in Flexfold.theme.[menuShape].
   /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above are null, then it defaults to
-  ///   EdgeInsetsDirectional.fromSTEB(
-  ///      kFlexfoldHighlightMarginStart = 0,
-  ///      kFlexfoldHighlightMarginTop = 2,
-  ///      kFlexfoldHighlightMarginEnd = 0,
-  ///      kFlexfoldHighlightMarginBottom = 2),
-  final EdgeInsetsDirectional? menuHighlightMargins;
+  /// * If all above are null, then it defaults to [menuSelectedShape].
+  final ShapeBorder? menuShape;
 
   /// The shape of the highlight and borders on the selected menu item.
   ///
@@ -558,36 +556,59 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   ///   RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0));
   final ShapeBorder? menuSelectedShape;
 
-  /// The shape of the mouse over highlight on a menu item.
+  /// Height of the menu selection highlight indicator.
   ///
-  /// The shape is normally the same as on the one uses on [menuSelectedShape]
-  /// but without any borders, if it has borders the borders will also be
-  /// drawn on unselected items!
-  ///
-  /// The [menuHighlightShape] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuHighlightShape].
+  /// The [menuIndicatorHeight] is determined in the order:
+  /// * None null value passed in Flexfold.theme.[menuIndicatorHeight].
   /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above are null, then it defaults to [menuSelectedShape].
-  final ShapeBorder? menuHighlightShape;
+  /// * If all above null, then defaults to [kFlexIndicatorHeight] = 50dp
+  final double? menuIndicatorHeight;
+
+  /// Directional margins for the menu highlight and hover shape.
+  ///
+  /// The [menuIndicatorMargins] is determined in the order:
+  /// * None null value in [FlexTheme.menuIndicatorMargins].
+  /// * Defaults to:
+  ///   EdgeInsetsDirectional.fromSTEB(
+  ///      kFlexHighlightMarginStart = 0,
+  ///      kFlexHighlightMarginTop = 2,
+  ///      kFlexHighlightMarginEnd = 0,
+  ///      kFlexHighlightMarginBottom = 2),
+  final EdgeInsetsDirectional? menuIndicatorMargins;
 
   /// The highlight color of the selected menu item.
   ///
-  /// The [menuHighlightColor] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuHighlightColor].
-  /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above are null it defaults to
-  ///   Theme.of(context).colorScheme.primary.withAlpha(0x3d), this is the same
-  ///   alpha blend as the default in ChipThemeData for a selected chip.
-  /// * If above fails and is null, then const Color(0x42888888).
+  /// The [menuSelectedColor] is determined in the order:
+  /// * None null value given to [FlexTheme.menuSelectedColor].
+  /// * Defaults to ambient theme colorScheme.primary.withAlpha(0x3d),
+  ///   this is the same alpha as the default in selected ChipThemeData in M2.
+  final Color? menuSelectedColor;
+
+  /// The color of the ink response when the menu item is focused. If this
+  /// property is null then the focus color of the theme,
+  /// [ThemeData.focusColor], will be used.
+  final Color? menuFocusColor;
+
+  /// The color of a menu item when a pointer is hovering over it. If this
+  /// property is null then the hover color of the theme,
+  /// [ThemeData.hoverColor], will be used.
+  final Color? menuHoverColor;
+
+  /// The highlight color of the ink response when menu is pressed.
+  /// If this property is null then the highlight color of the theme,
+  /// [ThemeData.highlightColor], will be used.
   final Color? menuHighlightColor;
+
+  /// The splash color of the ink response when memnu item is tapped.
+  /// If this property is null then the splash color of the theme,
+  /// [ThemeData.splashColor], will be used.
+  final Color? menuSplashColor;
 
   /// Animation duration for the side menu and rail.
   ///
   /// The [menuAnimationDuration] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuAnimationDuration].
-  /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If all above null, then
-  ///   It defaults to [kFlexfoldMenuAnimationDuration] which is set to 246ms
+  /// * None null value passed in [FlexTheme.menuAnimationDuration].
+  /// * Defaults to [kFlexMenuAnimationDuration] which is set to 246ms
   ///   that match the value for the drawer.
   final Duration? menuAnimationDuration;
 
@@ -597,7 +618,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// * None null value passed in Flexfold.theme.[menuAnimationCurve].
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * If all above null, then
-  ///   It defaults to [kFlexfoldMenuAnimationCurve] which is set to
+  ///   It defaults to [kFlexMenuAnimationCurve] which is set to
   ///   [Curves.easeInOut].
   final Curve? menuAnimationCurve;
 
@@ -607,7 +628,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// * None null value passed in Flexfold.theme.[sidebarAnimationDuration].
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * If all above null, then
-  ///   It defaults to [kFlexfoldSidebarAnimationDuration] which is set to 246ms
+  ///   It defaults to [kFlexSidebarAnimationDuration] which is set to 246ms
   ///   that match the value for the drawer.
   final Duration? sidebarAnimationDuration;
 
@@ -617,39 +638,39 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// * None null value passed in Flexfold.theme.[sidebarAnimationCurve].
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * If all above null, then
-  ///   It defaults to [kFlexfoldSidebarAnimationCurve] which is set to
+  ///   It defaults to [kFlexSidebarAnimationCurve] which is set to
   ///   [Curves.easeInOut].
   final Curve? sidebarAnimationCurve;
 
   /// Animation duration for the bottom navigation bar.
   ///
-  /// The [bottomBarAnimationDuration] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[bottomBarAnimationDuration].
+  /// The [bottomAnimationDuration] is determined in the order:
+  /// * None null value passed in Flexfold.theme.[bottomAnimationDuration].
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * If all above null, then
-  ///   It defaults to [kFlexfoldBottomAnimationDuration] which is set to 246ms
+  ///   It defaults to [kFlexBottomAnimationDuration] which is set to 246ms
   ///   that match the value for the drawer.
-  final Duration? bottomBarAnimationDuration;
+  final Duration? bottomAnimationDuration;
 
   /// Animation curve for the bottom navigation bar.
   ///
-  /// The [bottomBarAnimationCurve] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[bottomBarAnimationCurve].
+  /// The [bottomAnimationCurve] is determined in the order:
+  /// * None null value passed in Flexfold.theme.[bottomAnimationCurve].
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * If all above null, then
-  ///   It defaults to [kFlexfoldBottomAnimationCurve] which is set to
+  ///   It defaults to [kFlexBottomAnimationCurve] which is set to
   ///   [Curves.easeInOut].
-  final Curve? bottomBarAnimationCurve;
+  final Curve? bottomAnimationCurve;
 
   /// The type of bottom navigation bar to use.
   ///
   /// The [bottomType] is determined in the order:
   /// * None null value passed in Flexfold.theme.[bottomType].
   /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * If above null, then it default to [FlexfoldBottomBarType.adaptive],
+  /// * If above null, then it default to [FlexBottomType.adaptive],
   ///   which uses a CupertinoTabBar navigation bar on iOs and MacOS and a
   ///  BottomNavigationBar on all other platforms.
-  final FlexfoldBottomBarType? bottomType;
+  final FlexBottomType? bottomType;
 
   /// Toggle to turn on and off the transparency on bottom navigation bar.
   ///
@@ -929,26 +950,30 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
       borderColor: other.borderColor,
       //
       // Menu selection and highlight style
-      menuHighlightHeight: other.menuHighlightHeight,
-      menuHighlightMargins: other.menuHighlightMargins,
+      menuShape: other.menuShape,
       menuSelectedShape: other.menuSelectedShape,
-      menuHighlightShape: other.menuHighlightShape,
+      menuIndicatorHeight: other.menuIndicatorHeight,
+      menuIndicatorMargins: other.menuIndicatorMargins,
+      menuSelectedColor: other.menuSelectedColor,
+      menuFocusColor: other.menuFocusColor,
+      menuHoverColor: other.menuHoverColor,
       menuHighlightColor: other.menuHighlightColor,
+      menuSplashColor: other.menuSplashColor,
       //
       // Animation durations and curves for menu and bottom bar animations
       menuAnimationDuration: other.menuAnimationDuration,
       menuAnimationCurve: other.menuAnimationCurve,
       sidebarAnimationDuration: other.sidebarAnimationDuration,
       sidebarAnimationCurve: other.sidebarAnimationCurve,
-      bottomBarAnimationDuration: other.bottomBarAnimationDuration,
-      bottomBarAnimationCurve: other.bottomBarAnimationCurve,
+      bottomAnimationDuration: other.bottomAnimationDuration,
+      bottomAnimationCurve: other.bottomAnimationCurve,
       //
       // Bottom navigation bar properties
-      bottomBarType: other.bottomType,
-      bottomBarIsTransparent: other.bottomIsTransparent,
-      bottomBarBlur: other.bottomBlur,
-      bottomBarOpacity: other.bottomOpacity,
-      bottomBarTopBorder: other.bottomTopBorder,
+      bottomType: other.bottomType,
+      bottomIsTransparent: other.bottomIsTransparent,
+      bottomBlur: other.bottomBlur,
+      bottomOpacity: other.bottomOpacity,
+      bottomTopBorder: other.bottomTopBorder,
       //
       // The icon and text styles of the menu, rail and bottom bar.
       iconTheme: other.iconTheme,
@@ -1000,8 +1025,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
           bottomBackgroundColor ?? theme.colorScheme.background,
       //
       // Menu start and side settings
-      menuStart: menuStart ?? FlexfoldMenuStart.top,
-      menuSide: menuSide ?? FlexfoldMenuSide.start,
+      menuStart: menuStart ?? FlexMenuStart.top,
+      menuSide: menuSide ?? FlexMenuSide.start,
       //
       // Elevation properties
       menuElevation: menuElevation ?? 0,
@@ -1011,17 +1036,17 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
       bottomElevation: bottomElevation ?? 0,
       //
       // Width properties
-      menuWidth: menuWidth ?? kFlexfoldMenuWidth,
-      railWidth: railWidth ?? kFlexfoldRailWidth,
-      sidebarWidth: sidebarWidth ?? kFlexfoldSidebarWidth,
-      drawerWidth: drawerWidth ?? kFlexfoldDrawerWidth,
+      menuWidth: menuWidth ?? kFlexMenuWidth,
+      railWidth: railWidth ?? kFlexRailWidth,
+      sidebarWidth: sidebarWidth ?? kFlexSidebarWidth,
+      drawerWidth: drawerWidth ?? kFlexDrawerWidth,
       //
       // Navigation type breakpoints
-      endDrawerWidth: endDrawerWidth ?? kFlexfoldDrawerWidth,
-      breakpointDrawer: breakpointDrawer ?? kFlexfoldBreakpointDrawer,
-      breakpointRail: breakpointRail ?? kFlexfoldBreakpointRail,
-      breakpointMenu: breakpointMenu ?? kFlexfoldBreakpointMenu,
-      breakpointSidebar: breakpointSidebar ?? kFlexfoldBreakpointSidebar,
+      endDrawerWidth: endDrawerWidth ?? kFlexDrawerWidth,
+      breakpointDrawer: breakpointDrawer ?? kFlexBreakpointDrawer,
+      breakpointRail: breakpointRail ?? kFlexBreakpointRail,
+      breakpointMenu: breakpointMenu ?? kFlexBreakpointMenu,
+      breakpointSidebar: breakpointSidebar ?? kFlexBreakpointSidebar,
       //
       // Edge border properties
       borderOnMenu: borderOnMenu ?? true,
@@ -1032,40 +1057,42 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
           borderColor ?? theme.dividerTheme.color ?? theme.dividerColor,
       //
       // Menu selection and highlight style
-      menuHighlightHeight: menuHighlightHeight ?? kFlexfoldHighlightHeight,
-      menuHighlightMargins: menuHighlightMargins ??
-          const EdgeInsetsDirectional.fromSTEB(
-              kFlexfoldHighlightMarginStart,
-              kFlexfoldHighlightMarginTop,
-              kFlexfoldHighlightMarginEnd,
-              kFlexfoldHighlightMarginBottom),
-      menuSelectedShape: menuSelectedShape ??
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-      menuHighlightShape: menuHighlightShape ??
+      menuShape: menuShape ??
           menuSelectedShape ??
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-      menuHighlightColor:
-          menuHighlightColor ?? theme.colorScheme.primary.withAlpha(0x3d),
+      menuSelectedShape: menuSelectedShape ??
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+      menuIndicatorHeight: menuIndicatorHeight ?? kFlexIndicatorHeight,
+      menuIndicatorMargins: menuIndicatorMargins ??
+          const EdgeInsetsDirectional.fromSTEB(
+              kFlexIndicatorMarginStart,
+              kFlexIndicatorMarginTop,
+              kFlexIndicatorMarginEnd,
+              kFlexIndicatorMarginBottom),
+      menuSelectedColor:
+          menuSelectedColor ?? theme.colorScheme.primary.withAlpha(0x3d),
+      // The focus, hover, highlight and splash remain null as default.
+      // The used InkWell will set null values in that case and the theme
+      // defaults for ink effects will be used.
       //
       // Animation durations and curves for menu and bottom bar animations
       menuAnimationDuration:
-          menuAnimationDuration ?? kFlexfoldMenuAnimationDuration,
-      menuAnimationCurve: menuAnimationCurve ?? kFlexfoldMenuAnimationCurve,
+          menuAnimationDuration ?? kFlexMenuAnimationDuration,
+      menuAnimationCurve: menuAnimationCurve ?? kFlexMenuAnimationCurve,
       sidebarAnimationDuration:
-          sidebarAnimationDuration ?? kFlexfoldSidebarAnimationDuration,
+          sidebarAnimationDuration ?? kFlexSidebarAnimationDuration,
       sidebarAnimationCurve:
-          sidebarAnimationCurve ?? kFlexfoldSidebarAnimationCurve,
-      bottomBarAnimationDuration:
-          bottomBarAnimationDuration ?? kFlexfoldBottomAnimationDuration,
-      bottomBarAnimationCurve:
-          bottomBarAnimationCurve ?? kFlexfoldBottomAnimationCurve,
+          sidebarAnimationCurve ?? kFlexSidebarAnimationCurve,
+      bottomAnimationDuration:
+          bottomAnimationDuration ?? kFlexBottomAnimationDuration,
+      bottomAnimationCurve: bottomAnimationCurve ?? kFlexBottomAnimationCurve,
       //
       // Bottom navigation bar properties
-      bottomBarType: bottomType ?? FlexfoldBottomBarType.adaptive,
-      bottomBarIsTransparent: bottomIsTransparent ?? true,
-      bottomBarBlur: bottomBlur ?? true,
-      bottomBarOpacity: bottomOpacity ?? 0.90,
-      bottomBarTopBorder: bottomTopBorder ?? true,
+      bottomType: bottomType ?? FlexBottomType.adaptive,
+      bottomIsTransparent: bottomIsTransparent ?? true,
+      bottomBlur: bottomBlur ?? true,
+      bottomOpacity: bottomOpacity ?? 0.90,
+      bottomTopBorder: bottomTopBorder ?? true,
       //
       // TODO(rydmike): Review default against M2 & M3 for icons and text.
       // The default unselected menu icon styles, provided values from the
@@ -1132,8 +1159,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
     Color? bottomBackgroundColor,
     //
     // Menu start and side settings
-    FlexfoldMenuStart? menuStart,
-    FlexfoldMenuSide? menuSide,
+    FlexMenuStart? menuStart,
+    FlexMenuSide? menuSide,
     //
     // Elevation properties
     double? menuElevation,
@@ -1163,26 +1190,30 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
     Color? borderColor,
     //
     // Menu selection and highlight style
-    double? menuHighlightHeight,
-    EdgeInsetsDirectional? menuHighlightMargins,
+    ShapeBorder? menuShape,
     ShapeBorder? menuSelectedShape,
-    ShapeBorder? menuHighlightShape,
+    double? menuIndicatorHeight,
+    EdgeInsetsDirectional? menuIndicatorMargins,
+    Color? menuSelectedColor,
+    Color? menuFocusColor,
+    Color? menuHoverColor,
     Color? menuHighlightColor,
+    Color? menuSplashColor,
     //
     // Animation durations and curves for menu and bottom bar animations
     Duration? menuAnimationDuration,
     Curve? menuAnimationCurve,
     Duration? sidebarAnimationDuration,
     Curve? sidebarAnimationCurve,
-    Duration? bottomBarAnimationDuration,
-    Curve? bottomBarAnimationCurve,
+    Duration? bottomAnimationDuration,
+    Curve? bottomAnimationCurve,
     //
     // Bottom navigation bar properties
-    FlexfoldBottomBarType? bottomBarType,
-    bool? bottomBarIsTransparent,
-    bool? bottomBarBlur,
-    double? bottomBarOpacity,
-    bool? bottomBarTopBorder,
+    FlexBottomType? bottomType,
+    bool? bottomIsTransparent,
+    bool? bottomBlur,
+    double? bottomOpacity,
+    bool? bottomTopBorder,
     //
     // The icon and text styles of the menu, rail and bottom bar.
     IconThemeData? iconTheme,
@@ -1253,11 +1284,15 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
       borderColor: borderColor ?? this.borderColor,
       //
       // Menu selection and highlight style
-      menuHighlightHeight: menuHighlightHeight ?? this.menuHighlightHeight,
-      menuHighlightMargins: menuHighlightMargins ?? this.menuHighlightMargins,
+      menuShape: menuShape ?? this.menuShape,
       menuSelectedShape: menuSelectedShape ?? this.menuSelectedShape,
-      menuHighlightShape: menuHighlightShape ?? this.menuHighlightShape,
+      menuIndicatorHeight: menuIndicatorHeight ?? this.menuIndicatorHeight,
+      menuIndicatorMargins: menuIndicatorMargins ?? this.menuIndicatorMargins,
+      menuSelectedColor: menuSelectedColor ?? this.menuSelectedColor,
+      menuFocusColor: menuFocusColor ?? this.menuFocusColor,
+      menuHoverColor: menuHoverColor ?? this.menuHoverColor,
       menuHighlightColor: menuHighlightColor ?? this.menuHighlightColor,
+      menuSplashColor: menuSplashColor ?? this.menuSplashColor,
       //
       // Animation durations and curves for menus and bottom bar animations
       menuAnimationDuration:
@@ -1267,17 +1302,16 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
           sidebarAnimationDuration ?? this.sidebarAnimationDuration,
       sidebarAnimationCurve:
           sidebarAnimationCurve ?? this.sidebarAnimationCurve,
-      bottomBarAnimationDuration:
-          bottomBarAnimationDuration ?? this.bottomBarAnimationDuration,
-      bottomBarAnimationCurve:
-          bottomBarAnimationCurve ?? this.bottomBarAnimationCurve,
+      bottomAnimationDuration:
+          bottomAnimationDuration ?? this.bottomAnimationDuration,
+      bottomAnimationCurve: bottomAnimationCurve ?? this.bottomAnimationCurve,
       //
       // Bottom navigation bar properties
-      bottomType: bottomBarType ?? this.bottomType,
-      bottomIsTransparent: bottomBarIsTransparent ?? this.bottomIsTransparent,
-      bottomBlur: bottomBarBlur ?? this.bottomBlur,
-      bottomOpacity: bottomBarOpacity ?? this.bottomOpacity,
-      bottomTopBorder: bottomBarTopBorder ?? this.bottomTopBorder,
+      bottomType: bottomType ?? this.bottomType,
+      bottomIsTransparent: bottomIsTransparent ?? this.bottomIsTransparent,
+      bottomBlur: bottomBlur ?? this.bottomBlur,
+      bottomOpacity: bottomOpacity ?? this.bottomOpacity,
+      bottomTopBorder: bottomTopBorder ?? this.bottomTopBorder,
       //
       // The icon and text styles of the menu, rail and bottom bar.
       iconTheme: iconTheme ?? this.iconTheme,
@@ -1368,16 +1402,20 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
       borderColor: Color.lerp(borderColor, other.borderColor, t),
       //
       // Menu selection and highlight style
-      menuHighlightHeight:
-          lerpDouble(menuHighlightHeight, other.menuHighlightHeight, t),
-      menuHighlightMargins: EdgeInsetsDirectional.lerp(
-          menuHighlightMargins, other.menuHighlightMargins, t),
+      menuShape: ShapeBorder.lerp(menuShape, other.menuShape, t),
       menuSelectedShape:
           ShapeBorder.lerp(menuSelectedShape, other.menuSelectedShape, t),
-      menuHighlightShape:
-          ShapeBorder.lerp(menuHighlightShape, other.menuHighlightShape, t),
+      menuIndicatorHeight:
+          lerpDouble(menuIndicatorHeight, other.menuIndicatorHeight, t),
+      menuIndicatorMargins: EdgeInsetsDirectional.lerp(
+          menuIndicatorMargins, other.menuIndicatorMargins, t),
+      menuSelectedColor:
+          Color.lerp(menuSelectedColor, other.menuSelectedColor, t),
+      menuFocusColor: Color.lerp(menuFocusColor, other.menuFocusColor, t),
+      menuHoverColor: Color.lerp(menuHoverColor, other.menuHoverColor, t),
       menuHighlightColor:
           Color.lerp(menuHighlightColor, other.menuHighlightColor, t),
+      menuSplashColor: Color.lerp(menuSplashColor, other.menuSplashColor, t),
       //
       // Animation durations and curves for menus and bottom bar animations
       menuAnimationDuration:
@@ -1388,11 +1426,10 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
           t < 0.5 ? sidebarAnimationDuration : other.sidebarAnimationDuration,
       sidebarAnimationCurve:
           t < 0.5 ? sidebarAnimationCurve : other.sidebarAnimationCurve,
-      bottomBarAnimationDuration: t < 0.5
-          ? bottomBarAnimationDuration
-          : other.bottomBarAnimationDuration,
-      bottomBarAnimationCurve:
-          t < 0.5 ? bottomBarAnimationCurve : other.bottomBarAnimationCurve,
+      bottomAnimationDuration:
+          t < 0.5 ? bottomAnimationDuration : other.bottomAnimationDuration,
+      bottomAnimationCurve:
+          t < 0.5 ? bottomAnimationCurve : other.bottomAnimationCurve,
       //
       // Bottom navigation bar properties
       bottomType: t < 0.5 ? bottomType : other.bottomType,
@@ -1481,19 +1518,23 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         borderColor,
         //
         // Menu selection and highlight style
-        menuHighlightHeight,
-        menuHighlightMargins,
+        menuShape,
         menuSelectedShape,
-        menuHighlightShape,
+        menuIndicatorHeight,
+        menuIndicatorMargins,
+        menuSelectedColor,
+        menuFocusColor,
+        menuHoverColor,
         menuHighlightColor,
+        menuSplashColor,
         //
         // Animation durations and curves for menus and bottom bar animations
         menuAnimationDuration,
         menuAnimationCurve,
         sidebarAnimationDuration,
         sidebarAnimationCurve,
-        bottomBarAnimationDuration,
-        bottomBarAnimationCurve,
+        bottomAnimationDuration,
+        bottomAnimationCurve,
         //
         // Bottom navigation bar properties
         bottomType,
@@ -1573,19 +1614,23 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         other.borderColor == borderColor &&
         //
         // Menu selection and highlight style
-        other.menuHighlightHeight == menuHighlightHeight &&
-        other.menuHighlightMargins == menuHighlightMargins &&
+        other.menuShape == menuShape &&
         other.menuSelectedShape == menuSelectedShape &&
-        other.menuHighlightShape == menuHighlightShape &&
+        other.menuIndicatorHeight == menuIndicatorHeight &&
+        other.menuIndicatorMargins == menuIndicatorMargins &&
+        other.menuSelectedColor == menuSelectedColor &&
+        other.menuFocusColor == menuFocusColor &&
+        other.menuHoverColor == menuHoverColor &&
         other.menuHighlightColor == menuHighlightColor &&
+        other.menuSplashColor == menuSplashColor &&
         //
         // Animation durations and curves for menus and bottom bar animations
         other.menuAnimationDuration == menuAnimationDuration &&
         other.menuAnimationCurve == menuAnimationCurve &&
         other.sidebarAnimationDuration == sidebarAnimationDuration &&
         other.sidebarAnimationCurve == sidebarAnimationCurve &&
-        other.bottomBarAnimationDuration == bottomBarAnimationDuration &&
-        other.bottomBarAnimationCurve == bottomBarAnimationCurve &&
+        other.bottomAnimationDuration == bottomAnimationDuration &&
+        other.bottomAnimationCurve == bottomAnimationCurve &&
         //
         // Bottom navigation bar properties
         other.bottomType == bottomType &&
@@ -1648,10 +1693,9 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         level: DiagnosticLevel.debug));
     //
     // Menu start and side settings
-    properties.add(DiagnosticsProperty<FlexfoldMenuStart>(
-        'menuStart', menuStart,
+    properties.add(DiagnosticsProperty<FlexMenuStart>('menuStart', menuStart,
         defaultValue: defaultData.menuStart, level: DiagnosticLevel.debug));
-    properties.add(DiagnosticsProperty<FlexfoldMenuSide>('menuSide', menuSide,
+    properties.add(DiagnosticsProperty<FlexMenuSide>('menuSide', menuSide,
         defaultValue: defaultData.menuSide, level: DiagnosticLevel.debug));
     //
     // Elevation properties
@@ -1715,23 +1759,33 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         defaultValue: defaultData.borderColor, level: DiagnosticLevel.debug));
     //
     // Menu selection and highlight style
-    properties.add(DoubleProperty('menuHighlightHeight', menuHighlightHeight,
-        defaultValue: defaultData.menuHighlightHeight,
-        level: DiagnosticLevel.debug));
-    properties.add(DiagnosticsProperty<EdgeInsetsDirectional>(
-        'menuHighlightMargins', menuHighlightMargins,
-        defaultValue: defaultData.menuHighlightMargins,
-        level: DiagnosticLevel.debug));
+    properties.add(DiagnosticsProperty<ShapeBorder>('menuShape', menuShape,
+        defaultValue: defaultData.menuShape, level: DiagnosticLevel.debug));
     properties.add(DiagnosticsProperty<ShapeBorder>(
         'menuSelectedShape', menuSelectedShape,
         defaultValue: defaultData.menuSelectedShape,
         level: DiagnosticLevel.debug));
-    properties.add(DiagnosticsProperty<ShapeBorder>(
-        'menuHighlightShape', menuHighlightShape,
-        defaultValue: defaultData.menuHighlightShape,
+    properties.add(DoubleProperty('menuIndicatorHeight', menuIndicatorHeight,
+        defaultValue: defaultData.menuIndicatorHeight,
+        level: DiagnosticLevel.debug));
+    properties.add(DiagnosticsProperty<EdgeInsetsDirectional>(
+        'menuIndicatorMargins', menuIndicatorMargins,
+        defaultValue: defaultData.menuIndicatorMargins,
+        level: DiagnosticLevel.debug));
+    properties.add(ColorProperty('menuSelectedColor', menuSelectedColor,
+        defaultValue: defaultData.menuSelectedColor,
+        level: DiagnosticLevel.debug));
+    properties.add(ColorProperty('menuFocusColor', menuFocusColor,
+        defaultValue: defaultData.menuFocusColor,
+        level: DiagnosticLevel.debug));
+    properties.add(ColorProperty('menuHoverColor', menuHoverColor,
+        defaultValue: defaultData.menuHoverColor,
         level: DiagnosticLevel.debug));
     properties.add(ColorProperty('menuHighlightColor', menuHighlightColor,
         defaultValue: defaultData.menuHighlightColor,
+        level: DiagnosticLevel.debug));
+    properties.add(ColorProperty('menuSplashColor', menuSplashColor,
+        defaultValue: defaultData.menuSplashColor,
         level: DiagnosticLevel.debug));
     //
     // Animation durations and curves for menus and bottom bar animations
@@ -1752,28 +1806,26 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         defaultValue: defaultData.sidebarAnimationCurve,
         level: DiagnosticLevel.debug));
     properties.add(DiagnosticsProperty<Duration>(
-        'bottomBarAnimationDuration', bottomBarAnimationDuration,
-        defaultValue: defaultData.bottomBarAnimationDuration,
+        'bottomAnimationDuration', bottomAnimationDuration,
+        defaultValue: defaultData.bottomAnimationDuration,
         level: DiagnosticLevel.debug));
     properties.add(DiagnosticsProperty<Curve>(
-        'bottomBarAnimationCurve', bottomBarAnimationCurve,
-        defaultValue: defaultData.bottomBarAnimationCurve,
+        'bottomAnimationCurve', bottomAnimationCurve,
+        defaultValue: defaultData.bottomAnimationCurve,
         level: DiagnosticLevel.debug));
     //
     // Bottom navigation bar properties
-    properties.add(EnumProperty<FlexfoldBottomBarType>(
-        'bottomBarType', bottomType,
+    properties.add(EnumProperty<FlexBottomType>('bottomType', bottomType,
         defaultValue: defaultData.bottomType, level: DiagnosticLevel.debug));
     properties.add(DiagnosticsProperty<bool>(
-        'bottomBarIsTransparent', bottomIsTransparent,
+        'bottomIsTransparent', bottomIsTransparent,
         defaultValue: defaultData.bottomIsTransparent,
         level: DiagnosticLevel.debug));
-    properties.add(DiagnosticsProperty<bool>('bottomBarBlur', bottomBlur,
+    properties.add(DiagnosticsProperty<bool>('bottomBlur', bottomBlur,
         defaultValue: defaultData.bottomBlur, level: DiagnosticLevel.debug));
-    properties.add(DoubleProperty('bottomBarOpacity', bottomOpacity,
+    properties.add(DoubleProperty('bottomOpacity', bottomOpacity,
         defaultValue: defaultData.bottomOpacity, level: DiagnosticLevel.debug));
-    properties.add(DiagnosticsProperty<bool>(
-        'bottomBarHasTopBorder', bottomTopBorder,
+    properties.add(DiagnosticsProperty<bool>('bottomTopBorder', bottomTopBorder,
         defaultValue: defaultData.bottomTopBorder,
         level: DiagnosticLevel.debug));
     //

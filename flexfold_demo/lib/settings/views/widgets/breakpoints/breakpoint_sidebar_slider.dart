@@ -16,16 +16,15 @@ class BreakpointSidebarSlider extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text('Default breakpoint API value is '
-              '${kFlexfoldBreakpointSidebar.toStringAsFixed(0)} dp.'),
+              '${kFlexBreakpointSidebar.toStringAsFixed(0)} dp.'),
           MaybeTooltip(
             condition: ref.watch(useTooltipsPod),
             tooltip: 'FlexfoldThemeData(breakpointSidebar: '
                 '${ref.watch(breakpointSidebarPod).floor()})',
             child: Slider(
-              min: kFlexfoldBreakpointSidebarMin,
-              max: kFlexfoldBreakpointSidebarMax,
-              divisions: (kFlexfoldBreakpointSidebarMax -
-                      kFlexfoldBreakpointSidebarMin)
+              min: kFlexBreakpointSidebarMin,
+              max: kFlexBreakpointSidebarMax,
+              divisions: (kFlexBreakpointSidebarMax - kFlexBreakpointSidebarMin)
                   .floor(),
               label: ref.watch(breakpointSidebarPod).floor().toString(),
               value: ref.watch(breakpointSidebarPod),

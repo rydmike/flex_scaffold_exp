@@ -250,11 +250,11 @@ class KeyStore {
     showMenuFooter: true,
     menuHighlightType: FlexIndicatorStyle.endStadium,
     menuHighlightHeight: 50.0,
-    menuStart: FlexfoldMenuStart.top,
-    menuSide: FlexfoldMenuSide.start,
+    menuStart: FlexMenuStart.top,
+    menuSide: FlexMenuSide.start,
 
     // Bottom bar properties.
-    bottomBarType: FlexfoldBottomBarType.adaptive,
+    bottomBarType: FlexBottomType.adaptive,
     bottomBarIsTransparent: true,
     bottomBarBlur: true,
     bottomBarOpacity: 0.7,
