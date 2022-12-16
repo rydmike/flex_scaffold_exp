@@ -451,7 +451,7 @@ class FlexScaffold extends StatefulWidget {
   /// [BottomNavigationBar] is used to
   /// determine if the [FlexScaffold] use [CupertinoBottomBar],
   ///
-  /// The type is determined by [FlexScaffoldThemeData.bottomBarType], which
+  /// The type is determined by [FlexScaffoldThemeData.bottomType], which
   /// defaults to [FlexfoldBottomBarType.adaptive]. Which will result in
   /// [CupertinoTabBar] on iOS and macOS and other platforms in
   /// [BottomNavigationBar] if [ThemeData.useMaterial3] is false and in
@@ -1307,7 +1307,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
     //     final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
 
     assert(
-        !(flexTheme.bottomBarType == FlexfoldBottomBarType.custom &&
+        !(flexTheme.bottomType == FlexfoldBottomBarType.custom &&
             widget.customBottomNavigator == null),
         'If bottom navigation type is custom, you have to provide a '
         'custom bottom navigator to FlexScaffold.custom.');

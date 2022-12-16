@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 
 import 'flex_destination.dart';
@@ -55,7 +55,7 @@ class FlexBottomBar extends StatelessWidget {
 
     // Resolve the effective bottom bar type
     FlexfoldBottomBarType effectiveType =
-        flexTheme.bottomBarType ?? FlexfoldBottomBarType.adaptive;
+        flexTheme.bottomType ?? FlexfoldBottomBarType.adaptive;
     if (effectiveType == FlexfoldBottomBarType.adaptive) {
       if (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS) {
         effectiveType = FlexfoldBottomBarType.cupertino;
@@ -146,7 +146,7 @@ class FlexBottomBar extends StatelessWidget {
 /// goes a bit beyond the the standard because it has opacity and blur
 /// properties as well as top border property. The Material bottom navigation
 /// bar can thus style wise be made to imitate a CupertinoBottomBar.
-class Material2BottomBar extends StatefulWidget {
+class Material2BottomBar extends StatelessWidget {
   /// Default constructor.
   const Material2BottomBar({
     super.key,
@@ -177,27 +177,6 @@ class Material2BottomBar extends StatefulWidget {
   final ValueChanged<int> onDestinationSelected;
 
   @override
-  State<Material2BottomBar> createState() => _Material2BottomBarState();
-}
-
-class _Material2BottomBarState extends State<Material2BottomBar> {
-  late int _selectedIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedIndex = widget.selectedIndex;
-  }
-
-  @override
-  void didUpdateWidget(Material2BottomBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.selectedIndex != oldWidget.selectedIndex) {
-      _selectedIndex = widget.selectedIndex;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     // Get the inherited FlexfoldTheme
     final FlexTheme flexTheme =
@@ -211,7 +190,7 @@ class _Material2BottomBarState extends State<Material2BottomBar> {
 
     // Get and compute effective background color
     final double opacity =
-        flexTheme.bottomBarIsTransparent! ? flexTheme.bottomBarOpacity! : 1.0;
+        flexTheme.bottomIsTransparent! ? flexTheme.bottomOpacity! : 1.0;
     final Color effectiveBackgroundColor =
         flexTheme.bottomBackgroundColor?.withOpacity(opacity) ??
             scheme.background.withOpacity(opacity);
@@ -220,7 +199,7 @@ class _Material2BottomBarState extends State<Material2BottomBar> {
     final bool isOpaque = effectiveBackgroundColor.alpha == 0xFF;
 
     // Get effective elevation for the bottom navigation bar
-    final double? elevation = useFlexTheme ? flexTheme.menuElevation : null;
+    final double? elevation = useFlexTheme ? flexTheme.bottomElevation : null;
 
     // // Get effective bottom bar type for the bottom navigation bar
     // final BottomNavigationBarType? type =
@@ -263,7 +242,7 @@ class _Material2BottomBarState extends State<Material2BottomBar> {
       // wrap the Decoration with blur backdrop filter, otherwise we leave out
       // the blur filter, as it is a bit costly to render when not needed and
       // there is no transparency its effect cannot be seen.
-      condition: !isOpaque && flexTheme.bottomBarBlur!,
+      condition: !isOpaque && flexTheme.bottomBlur!,
       builder: (BuildContext context, Widget child) {
         return ClipRect(
           child: BackdropFilter(
@@ -276,7 +255,7 @@ class _Material2BottomBarState extends State<Material2BottomBar> {
         // This decoration adds the effective color and top side border
         // to the Material BottomNavigationBar
         decoration: BoxDecoration(
-          border: flexTheme.bottomBarTopBorder!
+          border: flexTheme.bottomTopBorder!
               ? Border(top: BorderSide(color: flexTheme.borderColor!))
               : const Border(),
           color: effectiveBackgroundColor,
@@ -288,7 +267,7 @@ class _Material2BottomBarState extends State<Material2BottomBar> {
           backgroundColor: Colors.transparent,
           //
           items: <BottomNavigationBarItem>[
-            for (FlexDestination item in widget.destinations)
+            for (FlexDestination item in destinations)
               BottomNavigationBarItem(
                 icon: item.icon,
                 activeIcon: item.selectedIcon,
@@ -300,14 +279,8 @@ class _Material2BottomBarState extends State<Material2BottomBar> {
                     : '',
               ),
           ],
-          onTap: (int index) {
-            setState(() {
-              _selectedIndex = index;
-              widget.onDestinationSelected(_selectedIndex);
-            });
-          },
-          currentIndex: widget.selectedIndex,
-
+          onTap: onDestinationSelected,
+          currentIndex: selectedIndex,
           elevation: elevation,
           // type: type,
 
@@ -334,7 +307,7 @@ class _Material2BottomBarState extends State<Material2BottomBar> {
 /// goes a bit beyond the the standard because it has opacity and blur
 /// properties as well as top border property. The Material bottom navigation
 /// bar can thus style wise be made to imitate a CupertinoBottomBar.
-class Material3BottomBar extends StatefulWidget {
+class Material3BottomBar extends StatelessWidget {
   /// Default constructor.
   const Material3BottomBar({
     super.key,
@@ -365,27 +338,6 @@ class Material3BottomBar extends StatefulWidget {
   final ValueChanged<int> onDestinationSelected;
 
   @override
-  State<Material3BottomBar> createState() => _Material3BottomBarState();
-}
-
-class _Material3BottomBarState extends State<Material3BottomBar> {
-  late int _selectedIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedIndex = widget.selectedIndex;
-  }
-
-  @override
-  void didUpdateWidget(Material3BottomBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.selectedIndex != oldWidget.selectedIndex) {
-      _selectedIndex = widget.selectedIndex;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
@@ -396,7 +348,7 @@ class _Material3BottomBarState extends State<Material3BottomBar> {
 
     // Get and compute effective background color
     final double opacity =
-        flexTheme.bottomBarIsTransparent! ? flexTheme.bottomBarOpacity! : 1.0;
+        flexTheme.bottomIsTransparent! ? flexTheme.bottomOpacity! : 1.0;
     final Color effectiveBackgroundColor =
         flexTheme.bottomBackgroundColor?.withOpacity(opacity) ??
             scheme.background.withOpacity(opacity);
@@ -407,7 +359,7 @@ class _Material3BottomBarState extends State<Material3BottomBar> {
     // TODO(rydmike): Review if these should be nullable or have fallback!
 
     // Get effective elevation for the bottom navigation bar
-    final double? elevation = useFlexTheme ? flexTheme.menuElevation : null;
+    final double? elevation = useFlexTheme ? flexTheme.bottomElevation : null;
 
     // Check if FlexScaffold tooltips should be shown.
     final bool useTooltips = flexTheme.useTooltips ?? true;
@@ -447,7 +399,7 @@ class _Material3BottomBarState extends State<Material3BottomBar> {
       // wrap the Decoration with blur backdrop filter, otherwise we leave out
       // the blur filter, as it is a bit costly to render when not needed and
       // there is no transparency its effect cannot be seen.
-      condition: !isOpaque && flexTheme.bottomBarBlur!,
+      condition: !isOpaque && flexTheme.bottomBlur!,
       builder: (BuildContext context, Widget child) {
         return ClipRect(
           child: BackdropFilter(
@@ -460,7 +412,7 @@ class _Material3BottomBarState extends State<Material3BottomBar> {
         // This decoration adds the effective color and top side border
         // to the Material BottomNavigationBar
         decoration: BoxDecoration(
-          border: flexTheme.bottomBarTopBorder!
+          border: flexTheme.bottomTopBorder!
               ? Border(top: BorderSide(color: flexTheme.borderColor!))
               : const Border(),
           color: effectiveBackgroundColor,
@@ -471,16 +423,10 @@ class _Material3BottomBarState extends State<Material3BottomBar> {
           // to be able to support a top side border on it.
           backgroundColor: Colors.transparent,
           elevation: elevation,
-          onDestinationSelected: (int index) {
-            setState(() {
-              _selectedIndex = index;
-              widget.onDestinationSelected(_selectedIndex);
-            });
-          },
-          selectedIndex: widget.selectedIndex,
-          //
+          onDestinationSelected: onDestinationSelected,
+          selectedIndex: selectedIndex,
           destinations: <Widget>[
-            for (FlexDestination item in widget.destinations)
+            for (FlexDestination item in destinations)
               NavigationDestination(
                 label: item.label,
                 icon: Theme(
@@ -514,7 +460,7 @@ class _Material3BottomBarState extends State<Material3BottomBar> {
 /// CupertinoTabBar is limited as it should look and work in very specific way.
 /// It can be made transparent and when it is it always uses blur filter, the
 /// usage of the top side border can also be controlled via the FlexfoldTheme.
-class CupertinoBottomBar extends StatefulWidget {
+class CupertinoBottomBar extends StatelessWidget {
   /// Default constructor.
   const CupertinoBottomBar({
     super.key,
@@ -548,27 +494,6 @@ class CupertinoBottomBar extends StatefulWidget {
   final ValueChanged<int> onDestinationSelected;
 
   @override
-  State<CupertinoBottomBar> createState() => _CupertinoBottomBarState();
-}
-
-class _CupertinoBottomBarState extends State<CupertinoBottomBar> {
-  late int _selectedIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedIndex = widget.selectedIndex;
-  }
-
-  @override
-  void didUpdateWidget(CupertinoBottomBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.selectedIndex != oldWidget.selectedIndex) {
-      _selectedIndex = widget.selectedIndex;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
@@ -577,9 +502,8 @@ class _CupertinoBottomBarState extends State<CupertinoBottomBar> {
             const FlexTheme().withDefaults(context);
 
     // Get and compute effective background color
-    // Get and compute effective background color
     final double opacity =
-        flexTheme.bottomBarIsTransparent! ? flexTheme.bottomBarOpacity! : 1.0;
+        flexTheme.bottomIsTransparent! ? flexTheme.bottomOpacity! : 1.0;
     final Color effectiveBackgroundColor =
         flexTheme.bottomBackgroundColor?.withOpacity(opacity) ??
             scheme.background.withOpacity(opacity);
@@ -590,24 +514,19 @@ class _CupertinoBottomBarState extends State<CupertinoBottomBar> {
     // BottomNavigationBarItem will also follow standard themes.
     return CupertinoTabBar(
       items: <BottomNavigationBarItem>[
-        for (FlexDestination item in widget.destinations)
+        for (FlexDestination item in destinations)
           BottomNavigationBarItem(
             icon: item.icon,
             activeIcon: item.selectedIcon,
             label: item.label,
           ),
       ],
-      currentIndex: widget.selectedIndex,
-      border: flexTheme.bottomBarTopBorder!
+      currentIndex: selectedIndex,
+      border: flexTheme.bottomTopBorder!
           ? Border(top: BorderSide(color: flexTheme.borderColor!))
           : const Border(),
       backgroundColor: effectiveBackgroundColor,
-      onTap: (int index) {
-        setState(() {
-          _selectedIndex = index;
-          widget.onDestinationSelected(_selectedIndex);
-        });
-      },
+      onTap: onDestinationSelected,
     );
   }
 }

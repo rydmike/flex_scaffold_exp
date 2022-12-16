@@ -33,7 +33,7 @@ import 'flex_scaffold_constants.dart';
 /// When null, the [FlexScaffold] will provide its own defaults based on the
 /// overall [Theme]'s [ColorScheme], [DividerTheme], [BottomNavigationBarTheme],
 /// [NavigationBarTheme], [NavigationRailTheme] and [IconTheme] as well as its
-/// own defaultsif they exist, if not it will be based on base
+/// own defaults if they exist, if not it will be based on base
 /// [Theme] property values like textTheme, colorScheme, dividerColor as
 /// well as Flexfold constant values or SDK constants and values matching the
 /// material standards and guidelines.
@@ -64,6 +64,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
     this.sidebarElevation,
     this.drawerElevation,
     this.endDrawerElevation,
+    this.bottomElevation,
     //
     // Width properties
     this.menuWidth,
@@ -101,11 +102,11 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
     this.bottomBarAnimationCurve,
     //
     // Bottom navigation bar properties
-    this.bottomBarType,
-    this.bottomBarIsTransparent,
-    this.bottomBarBlur,
-    this.bottomBarOpacity,
-    this.bottomBarTopBorder,
+    this.bottomType,
+    this.bottomIsTransparent,
+    this.bottomBlur,
+    this.bottomOpacity,
+    this.bottomTopBorder,
     //
     // The icon and text styles of the menu, rail and bottom bar.
     this.iconTheme,
@@ -138,6 +139,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
             'drawerElevation must be null or >= 0.'),
         assert(endDrawerElevation == null || endDrawerElevation >= 0.0,
             'endDrawerElevation must be null or >= 0.'),
+        assert(bottomElevation == null || bottomElevation >= 0.0,
+            'bottomElevation must be null or >= 0.'),
         assert(
             menuWidth == null ||
                 (menuWidth >= kFlexfoldMenuWidthMin &&
@@ -200,8 +203,8 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
             'The menuHighlightHeight must be null OR between '
             '$kFlexfoldHighlightHeightMin and $kFlexfoldHighlightHeightMax.'),
         assert(
-            bottomBarOpacity == null ||
-                (bottomBarOpacity >= 0.0 && bottomBarOpacity <= 1.0),
+            bottomOpacity == null ||
+                (bottomOpacity >= 0.0 && bottomOpacity <= 1.0),
             'The bottomBarOpacity must be null OR between 0 and 1.');
 
   /// Set to true to let [BottomNavigationBarTheme] properties that are defined
@@ -358,6 +361,14 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * [endDrawerElevation] = 16, default for Material end drawer.
   final double? endDrawerElevation;
+
+  /// The z-coordinate to be used for the sidebar end drawer elevation.
+  ///
+  /// The [bottomElevation] value is determined in the order:
+  /// * None null value passed in Flexfold.theme.[bottomElevation].
+  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * [bottomElevation] = 16, default for Material end drawer.
+  final double? bottomElevation;
 
   /// Width of main menu, when it is visible as a fixed side menu in
   /// [FlexScaffold].
@@ -632,21 +643,21 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
 
   /// The type of bottom navigation bar to use.
   ///
-  /// The [bottomBarType] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[bottomBarType].
+  /// The [bottomType] is determined in the order:
+  /// * None null value passed in Flexfold.theme.[bottomType].
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * If above null, then it default to [FlexfoldBottomBarType.adaptive],
   ///   which uses a CupertinoTabBar navigation bar on iOs and MacOS and a
   ///  BottomNavigationBar on all other platforms.
-  final FlexfoldBottomBarType? bottomBarType;
+  final FlexfoldBottomBarType? bottomType;
 
   /// Toggle to turn on and off the transparency on bottom navigation bar.
   ///
-  /// The [bottomBarIsTransparent] is determined in the order:
-  /// * None null value passed in via Flexfold.theme.[bottomBarIsTransparent].
+  /// The [bottomIsTransparent] is determined in the order:
+  /// * None null value passed in via Flexfold.theme.[bottomIsTransparent].
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * Defaults to true if the above are null.
-  final bool? bottomBarIsTransparent;
+  final bool? bottomIsTransparent;
 
   /// When the bottom bar has opacity, apply a blur filter if true.
   ///
@@ -659,32 +670,32 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   /// on and there is opacity < 1 on the bottom navigation bar color. If these
   /// conditions are not met, the filter call is not made.
   ///
-  /// The [bottomBarBlur] setting is determined in the order:
-  /// * None null value passed in via Flexfold.theme.[bottomBarBlur].
+  /// The [bottomBlur] setting is determined in the order:
+  /// * None null value passed in via Flexfold.theme.[bottomBlur].
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * If all above are null, defaults to true.
-  final bool? bottomBarBlur;
+  final bool? bottomBlur;
 
   /// The opacity value on the bottom navigation bar.
   ///
-  /// This opacity value is only applied when [bottomBarIsTransparent] is true.
+  /// This opacity value is only applied when [bottomIsTransparent] is true.
   ///
-  /// The [bottomBarOpacity] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[bottomBarOpacity].
+  /// The [bottomOpacity] is determined in the order:
+  /// * None null value passed in Flexfold.theme.[bottomOpacity].
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * Default to 0.90 if above are null.
-  final double? bottomBarOpacity;
+  final double? bottomOpacity;
 
   /// The bottom navigation bar has a top edge border.
   ///
-  /// The [bottomBarTopBorder] is determined in the order:
-  /// * None null value passed in via Flexfold.theme.[bottomBarTopBorder].
+  /// The [bottomTopBorder] is determined in the order:
+  /// * None null value passed in via Flexfold.theme.[bottomTopBorder].
   /// * None null value of the property in the inherited FlexfoldTheme.
   /// * If the above values are null, it defaults true.
   ///
   /// The color of the top border on bottom bar defaults to divider theme
   /// color, if not otherwise defined by [borderColor].
-  final bool? bottomBarTopBorder;
+  final bool? bottomTopBorder;
 
   /// The theme to merge with the default icon theme for
   /// Flexfold destination icons, when the destination is not selected.
@@ -895,6 +906,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
       sidebarElevation: other.sidebarElevation,
       drawerElevation: other.drawerElevation,
       endDrawerElevation: other.endDrawerElevation,
+      bottomElevation: other.bottomElevation,
       //
       // Width properties
       menuWidth: other.menuWidth,
@@ -932,11 +944,11 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
       bottomBarAnimationCurve: other.bottomBarAnimationCurve,
       //
       // Bottom navigation bar properties
-      bottomBarType: other.bottomBarType,
-      bottomBarIsTransparent: other.bottomBarIsTransparent,
-      bottomBarBlur: other.bottomBarBlur,
-      bottomBarOpacity: other.bottomBarOpacity,
-      bottomBarTopBorder: other.bottomBarTopBorder,
+      bottomBarType: other.bottomType,
+      bottomBarIsTransparent: other.bottomIsTransparent,
+      bottomBarBlur: other.bottomBlur,
+      bottomBarOpacity: other.bottomOpacity,
+      bottomBarTopBorder: other.bottomTopBorder,
       //
       // The icon and text styles of the menu, rail and bottom bar.
       iconTheme: other.iconTheme,
@@ -996,6 +1008,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
       sidebarElevation: sidebarElevation ?? 0,
       drawerElevation: drawerElevation ?? (useMaterial3 ? 1 : 16),
       endDrawerElevation: endDrawerElevation ?? (useMaterial3 ? 1 : 16),
+      bottomElevation: bottomElevation ?? 0,
       //
       // Width properties
       menuWidth: menuWidth ?? kFlexfoldMenuWidth,
@@ -1048,11 +1061,11 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
           bottomBarAnimationCurve ?? kFlexfoldBottomAnimationCurve,
       //
       // Bottom navigation bar properties
-      bottomBarType: bottomBarType ?? FlexfoldBottomBarType.adaptive,
-      bottomBarIsTransparent: bottomBarIsTransparent ?? true,
-      bottomBarBlur: bottomBarBlur ?? true,
-      bottomBarOpacity: bottomBarOpacity ?? 0.90,
-      bottomBarTopBorder: bottomBarTopBorder ?? true,
+      bottomBarType: bottomType ?? FlexfoldBottomBarType.adaptive,
+      bottomBarIsTransparent: bottomIsTransparent ?? true,
+      bottomBarBlur: bottomBlur ?? true,
+      bottomBarOpacity: bottomOpacity ?? 0.90,
+      bottomBarTopBorder: bottomTopBorder ?? true,
       //
       // TODO(rydmike): Review default against M2 & M3 for icons and text.
       // The default unselected menu icon styles, provided values from the
@@ -1127,6 +1140,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
     double? sidebarElevation,
     double? drawerElevation,
     double? endDrawerElevation,
+    double? bottomElevation,
     //
     // Width properties
     double? menuWidth,
@@ -1216,6 +1230,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
       sidebarElevation: sidebarElevation ?? this.sidebarElevation,
       drawerElevation: drawerElevation ?? this.drawerElevation,
       endDrawerElevation: endDrawerElevation ?? this.endDrawerElevation,
+      bottomElevation: bottomElevation ?? this.bottomElevation,
       //
       // Width properties
       menuWidth: menuWidth ?? this.menuWidth,
@@ -1258,12 +1273,11 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
           bottomBarAnimationCurve ?? this.bottomBarAnimationCurve,
       //
       // Bottom navigation bar properties
-      bottomBarType: bottomBarType ?? this.bottomBarType,
-      bottomBarIsTransparent:
-          bottomBarIsTransparent ?? this.bottomBarIsTransparent,
-      bottomBarBlur: bottomBarBlur ?? this.bottomBarBlur,
-      bottomBarOpacity: bottomBarOpacity ?? this.bottomBarOpacity,
-      bottomBarTopBorder: bottomBarTopBorder ?? this.bottomBarTopBorder,
+      bottomType: bottomBarType ?? this.bottomType,
+      bottomIsTransparent: bottomBarIsTransparent ?? this.bottomIsTransparent,
+      bottomBlur: bottomBarBlur ?? this.bottomBlur,
+      bottomOpacity: bottomBarOpacity ?? this.bottomOpacity,
+      bottomTopBorder: bottomBarTopBorder ?? this.bottomTopBorder,
       //
       // The icon and text styles of the menu, rail and bottom bar.
       iconTheme: iconTheme ?? this.iconTheme,
@@ -1328,6 +1342,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
       drawerElevation: lerpDouble(drawerElevation, other.drawerElevation, t),
       endDrawerElevation:
           lerpDouble(endDrawerElevation, other.endDrawerElevation, t),
+      bottomElevation: lerpDouble(bottomElevation, other.bottomElevation, t),
       //
       // Width properties
       menuWidth: lerpDouble(menuWidth, other.menuWidth, t),
@@ -1380,13 +1395,12 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
           t < 0.5 ? bottomBarAnimationCurve : other.bottomBarAnimationCurve,
       //
       // Bottom navigation bar properties
-      bottomBarType: t < 0.5 ? bottomBarType : other.bottomBarType,
-      bottomBarIsTransparent:
-          t < 0.5 ? bottomBarIsTransparent : other.bottomBarIsTransparent,
-      bottomBarBlur: t < 0.5 ? bottomBarBlur : other.bottomBarBlur,
-      bottomBarOpacity: lerpDouble(bottomBarOpacity, other.bottomBarOpacity, t),
-      bottomBarTopBorder:
-          t < 0.5 ? bottomBarTopBorder : other.bottomBarTopBorder,
+      bottomType: t < 0.5 ? bottomType : other.bottomType,
+      bottomIsTransparent:
+          t < 0.5 ? bottomIsTransparent : other.bottomIsTransparent,
+      bottomBlur: t < 0.5 ? bottomBlur : other.bottomBlur,
+      bottomOpacity: lerpDouble(bottomOpacity, other.bottomOpacity, t),
+      bottomTopBorder: t < 0.5 ? bottomTopBorder : other.bottomTopBorder,
       //
       // The icon and text styles of the menu, rail and bottom bar.
       iconTheme: IconThemeData.lerp(iconTheme, other.iconTheme, t),
@@ -1444,6 +1458,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         sidebarElevation,
         drawerElevation,
         endDrawerElevation,
+        bottomElevation,
         //
         // Width properties
         menuWidth,
@@ -1481,11 +1496,11 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         bottomBarAnimationCurve,
         //
         // Bottom navigation bar properties
-        bottomBarType,
-        bottomBarIsTransparent,
-        bottomBarBlur,
-        bottomBarOpacity,
-        bottomBarTopBorder,
+        bottomType,
+        bottomIsTransparent,
+        bottomBlur,
+        bottomOpacity,
+        bottomTopBorder,
         //
         // The icon and text styles of the menu, rail and bottom bar.
         iconTheme,
@@ -1535,6 +1550,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         other.sidebarElevation == sidebarElevation &&
         other.drawerElevation == drawerElevation &&
         other.endDrawerElevation == endDrawerElevation &&
+        other.bottomElevation == bottomElevation &&
         //
         // Width properties
         other.menuWidth == menuWidth &&
@@ -1572,11 +1588,11 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         other.bottomBarAnimationCurve == bottomBarAnimationCurve &&
         //
         // Bottom navigation bar properties
-        other.bottomBarType == bottomBarType &&
-        other.bottomBarIsTransparent == bottomBarIsTransparent &&
-        other.bottomBarBlur == bottomBarBlur &&
-        other.bottomBarOpacity == bottomBarOpacity &&
-        other.bottomBarTopBorder == bottomBarTopBorder &&
+        other.bottomType == bottomType &&
+        other.bottomIsTransparent == bottomIsTransparent &&
+        other.bottomBlur == bottomBlur &&
+        other.bottomOpacity == bottomOpacity &&
+        other.bottomTopBorder == bottomTopBorder &&
         //
         // The icon and text styles of the menu, rail and bottom bar.
         other.iconTheme == iconTheme &&
@@ -1649,6 +1665,9 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         level: DiagnosticLevel.debug));
     properties.add(DoubleProperty('endDrawerElevation', endDrawerElevation,
         defaultValue: defaultData.endDrawerElevation,
+        level: DiagnosticLevel.debug));
+    properties.add(DoubleProperty('bottomElevation', bottomElevation,
+        defaultValue: defaultData.bottomElevation,
         level: DiagnosticLevel.debug));
     //
     // Width properties
@@ -1743,20 +1762,19 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
     //
     // Bottom navigation bar properties
     properties.add(EnumProperty<FlexfoldBottomBarType>(
-        'bottomBarType', bottomBarType,
-        defaultValue: defaultData.bottomBarType, level: DiagnosticLevel.debug));
+        'bottomBarType', bottomType,
+        defaultValue: defaultData.bottomType, level: DiagnosticLevel.debug));
     properties.add(DiagnosticsProperty<bool>(
-        'bottomBarIsTransparent', bottomBarIsTransparent,
-        defaultValue: defaultData.bottomBarIsTransparent,
+        'bottomBarIsTransparent', bottomIsTransparent,
+        defaultValue: defaultData.bottomIsTransparent,
         level: DiagnosticLevel.debug));
-    properties.add(DiagnosticsProperty<bool>('bottomBarBlur', bottomBarBlur,
-        defaultValue: defaultData.bottomBarBlur, level: DiagnosticLevel.debug));
-    properties.add(DoubleProperty('bottomBarOpacity', bottomBarOpacity,
-        defaultValue: defaultData.bottomBarOpacity,
-        level: DiagnosticLevel.debug));
+    properties.add(DiagnosticsProperty<bool>('bottomBarBlur', bottomBlur,
+        defaultValue: defaultData.bottomBlur, level: DiagnosticLevel.debug));
+    properties.add(DoubleProperty('bottomBarOpacity', bottomOpacity,
+        defaultValue: defaultData.bottomOpacity, level: DiagnosticLevel.debug));
     properties.add(DiagnosticsProperty<bool>(
-        'bottomBarHasTopBorder', bottomBarTopBorder,
-        defaultValue: defaultData.bottomBarTopBorder,
+        'bottomBarHasTopBorder', bottomTopBorder,
+        defaultValue: defaultData.bottomTopBorder,
         level: DiagnosticLevel.debug));
     //
     // The icon and text styles of the menu, rail and bottom bar.

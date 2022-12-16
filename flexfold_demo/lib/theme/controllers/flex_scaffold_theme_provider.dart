@@ -100,11 +100,11 @@ final Provider<FlexTheme> flexScaffoldThemeProvider = Provider<FlexTheme>(
       //
       // Bottom navigation bar theme and additional visual properties for
       // the bottom navigation bar.
-      bottomBarType: ref.watch(bottomBarTypePod),
-      bottomBarIsTransparent: ref.watch(bottomBarIsTransparentPod),
-      bottomBarBlur: ref.watch(bottomBarBlurPod),
-      bottomBarOpacity: ref.watch(bottomBarOpacityPod),
-      bottomBarTopBorder: ref.watch(bottomBarTopBorderPod),
+      bottomType: ref.watch(bottomBarTypePod),
+      bottomIsTransparent: ref.watch(bottomBarIsTransparentPod),
+      bottomBlur: ref.watch(bottomBarBlurPod),
+      bottomOpacity: ref.watch(bottomBarOpacityPod),
+      bottomTopBorder: ref.watch(bottomBarTopBorderPod),
       //
       // Tooltip settings
       useTooltips: ref.watch(useTooltipsPod),
