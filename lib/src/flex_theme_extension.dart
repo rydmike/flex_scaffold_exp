@@ -59,8 +59,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
     this.sidebarBackgroundColor,
     this.bottomBackgroundColor,
     //
-    // Menu start and side settings
-    this.menuStart,
+    // Menu side settings
     this.menuSide,
     //
     // Elevation properties
@@ -314,14 +313,6 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
   ///   however the background color will default to
   ///   ThemeData.colorScheme.background from the Material the menu uses.
   final Color? bottomBackgroundColor;
-
-  /// Enum used to set if menu should start at top or bottom of screen.
-  ///
-  /// The [menuStart] value is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuStart].
-  /// * None null value of the property in the inherited FlexfoldTheme.
-  /// * [menuStart] = menuStart.top, by default if null.
-  final FlexMenuStart? menuStart;
 
   /// Enum used to set if menu should be at the start or end side of the screen.
   ///
@@ -918,8 +909,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
       sidebarBackgroundColor: other.sidebarBackgroundColor,
       bottomBackgroundColor: other.bottomBackgroundColor,
       //
-      // Menu start and side settings
-      menuStart: other.menuStart,
+      // Menu side settings
       menuSide: other.menuSide,
       //
       // Elevation properties
@@ -1024,8 +1014,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
       bottomBackgroundColor:
           bottomBackgroundColor ?? theme.colorScheme.background,
       //
-      // Menu start and side settings
-      menuStart: menuStart ?? FlexMenuStart.top,
+      // Menu side settings
       menuSide: menuSide ?? FlexMenuSide.start,
       //
       // Elevation properties
@@ -1158,8 +1147,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
     Color? sidebarBackgroundColor,
     Color? bottomBackgroundColor,
     //
-    // Menu start and side settings
-    FlexMenuStart? menuStart,
+    // Menu side settings
     FlexMenuSide? menuSide,
     //
     // Elevation properties
@@ -1253,7 +1241,6 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
           bottomBackgroundColor ?? this.bottomBackgroundColor,
       //
       // Menu start and side settings
-      menuStart: menuStart ?? this.menuStart,
       menuSide: menuSide ?? this.menuSide,
       //
       // Elevation properties
@@ -1367,7 +1354,6 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
           Color.lerp(bottomBackgroundColor, other.bottomBackgroundColor, t),
       //
       // Menu start and side settings
-      menuStart: t < 0.5 ? menuStart : other.menuStart,
       menuSide: t < 0.5 ? menuSide : other.menuSide,
       //
       // Elevation properties
@@ -1487,7 +1473,6 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         bottomBackgroundColor,
         //
         // Menu start and side settings
-        menuStart,
         menuSide,
         //
         // Elevation properties
@@ -1582,8 +1567,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         other.sidebarBackgroundColor == sidebarBackgroundColor &&
         other.bottomBackgroundColor == bottomBackgroundColor &&
         //
-        // Menu start and side settings
-        other.menuStart == menuStart &&
+        // Menu side settings
         other.menuSide == menuSide &&
         //
         // Elevation properties
@@ -1692,9 +1676,7 @@ class FlexTheme extends ThemeExtension<FlexTheme> with Diagnosticable {
         defaultValue: defaultData.bottomBackgroundColor,
         level: DiagnosticLevel.debug));
     //
-    // Menu start and side settings
-    properties.add(DiagnosticsProperty<FlexMenuStart>('menuStart', menuStart,
-        defaultValue: defaultData.menuStart, level: DiagnosticLevel.debug));
+    // Menu side settings
     properties.add(DiagnosticsProperty<FlexMenuSide>('menuSide', menuSide,
         defaultValue: defaultData.menuSide, level: DiagnosticLevel.debug));
     //

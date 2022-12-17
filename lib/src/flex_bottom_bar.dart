@@ -45,14 +45,12 @@ class FlexBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Current platform and useMaterial3?
     final ThemeData theme = Theme.of(context);
     final TargetPlatform platform = theme.platform;
     final bool useMaterial3 = theme.useMaterial3;
     final FlexTheme flexTheme =
         theme.extension<FlexTheme>()?.withDefaults(context) ??
             const FlexTheme().withDefaults(context);
-
     // Resolve the effective bottom bar type
     FlexBottomType effectiveType =
         flexTheme.bottomType ?? FlexBottomType.adaptive;
@@ -177,13 +175,11 @@ class Material2BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the inherited FlexfoldTheme
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
     final FlexTheme flexTheme =
         Theme.of(context).extension<FlexTheme>()?.withDefaults(context) ??
             const FlexTheme().withDefaults(context);
-    // Get the active color scheme
-    final ColorScheme scheme = Theme.of(context).colorScheme;
-
     final bool useFlexTheme =
         flexTheme.bottomNavigationBarPreferSubTheme ?? false;
 
@@ -200,9 +196,9 @@ class Material2BottomBar extends StatelessWidget {
     // Get effective elevation for the bottom navigation bar
     final double? elevation = useFlexTheme ? flexTheme.bottomElevation : null;
 
-    // // Get effective bottom bar type for the bottom navigation bar
-    // final BottomNavigationBarType? type =
-    //     flexTheme.bottomNavigationBarTheme?.type;
+    // Get effective bottom bar type for the bottom navigation bar
+    final BottomNavigationBarType? type = BottomNavigationBarType.fixed;
+    // flexTheme.bottomNavigationBarTheme?.type;
 
     // Get effective icons themes for the bottom navigation bar
     final IconThemeData? selectedIconTheme =
@@ -260,11 +256,22 @@ class Material2BottomBar extends StatelessWidget {
           color: effectiveBackgroundColor,
         ),
         child: BottomNavigationBar(
-          // The bottom navbar is always fully transparent, the color
+          // The bottom is always fully transparent, the color
           // is added via the box decoration. This was needed in order
           // to be able to support a top side border on it.
           backgroundColor: Colors.transparent,
-          //
+          elevation: elevation,
+          currentIndex: selectedIndex,
+          onTap: onDestinationSelected,
+          // type: type,
+          selectedIconTheme: selectedIconTheme,
+          unselectedIconTheme: unselectedIconTheme,
+          selectedItemColor: selectedItemColor,
+          unselectedItemColor: unselectedItemColor,
+          selectedLabelStyle: selectedLabelStyle,
+          unselectedLabelStyle: unselectedLabelStyle,
+          // showSelectedLabels: showSelectedLabels,
+          // showUnselectedLabels: showUnselectedLabels,
           items: <BottomNavigationBarItem>[
             for (FlexDestination item in destinations)
               BottomNavigationBarItem(
@@ -276,24 +283,9 @@ class Material2BottomBar extends StatelessWidget {
                         item.tooltip != null
                     ? item.tooltip
                     : '',
+                backgroundColor: Colors.transparent,
               ),
           ],
-          onTap: onDestinationSelected,
-          currentIndex: selectedIndex,
-          elevation: elevation,
-          // type: type,
-
-          selectedIconTheme: selectedIconTheme,
-          unselectedIconTheme: unselectedIconTheme,
-
-          selectedItemColor: selectedItemColor,
-          unselectedItemColor: unselectedItemColor,
-
-          selectedLabelStyle: selectedLabelStyle,
-          unselectedLabelStyle: unselectedLabelStyle,
-
-          // showSelectedLabels: showSelectedLabels,
-          // showUnselectedLabels: showUnselectedLabels,
         ),
       ),
     );
@@ -355,8 +347,6 @@ class Material3BottomBar extends StatelessWidget {
     // Check if the result of effectiveBackgroundColor is opaque
     final bool isOpaque = effectiveBackgroundColor.alpha == 0xFF;
 
-    // TODO(rydmike): Review if these should be nullable or have fallback!
-
     // Get effective elevation for the bottom navigation bar
     final double? elevation = useFlexTheme ? flexTheme.bottomElevation : null;
 
@@ -417,13 +407,13 @@ class Material3BottomBar extends StatelessWidget {
           color: effectiveBackgroundColor,
         ),
         child: NavigationBar(
-          // The bottom navbar is always fully transparent, the color
+          // The bottom is always fully transparent, the color
           // is added via the box decoration. This was needed in order
           // to be able to support a top side border on it.
           backgroundColor: Colors.transparent,
           elevation: elevation,
-          onDestinationSelected: onDestinationSelected,
           selectedIndex: selectedIndex,
+          onDestinationSelected: onDestinationSelected,
           destinations: <Widget>[
             for (FlexDestination item in destinations)
               NavigationDestination(

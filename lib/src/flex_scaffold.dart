@@ -10,6 +10,7 @@ import 'flex_menu.dart';
 import 'flex_scaffold_app_bar.dart';
 import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
+import 'flex_target.dart';
 import 'flex_theme_extension.dart';
 
 // ignore_for_file: comment_references
@@ -167,7 +168,7 @@ class FlexScaffold extends StatefulWidget {
   /// track of the index of the selected [FlexDestination] and call
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
-  final ValueChanged<GoFlexDestination> onDestination;
+  final ValueChanged<FlexTarget> onDestination;
 
   // TODO(rydmike): Implement modules!
   //
@@ -712,19 +713,19 @@ class FlexScaffold extends StatefulWidget {
       _of(context, _FlexScaffoldAspect.showBottomDestinationsInDrawer)
           .showBottomDestinationsInDrawer;
 
-  /// Returns the currently selected [GoFlexDestination] definition of the
+  /// Returns the currently selected [FlexTarget] definition of the
   /// [FlexScaffold], as defined by [FlexScaffoldState.widget] and
   /// [selectedIndex].
-  static GoFlexDestination selectedDestinationOf(BuildContext context) =>
+  static FlexTarget selectedDestinationOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.selectedDestination).selectedDestination;
 
-  /// Returns the latest [GoFlexDestination] definition used in the
+  /// Returns the latest [FlexTarget] definition used in the
   /// [FlexScaffold.onDestinationOf] callback.
   ///
   /// This is different from the [selectedDestinationOf] as it is the selection
   /// before it has been fed back into the [FlexScaffold] via
   /// [FlexScaffold.selectedIndex].
-  static GoFlexDestination onDestinationOf(BuildContext context) =>
+  static FlexTarget onDestinationOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.onDestination).onDestination;
 
   /// A static helper function intended to be used as a scroll controller
@@ -802,8 +803,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
   late bool _isBottomBarVisible;
   late bool _showBottomDestinationsInDrawer;
   late Orientation _currentOrientation;
-  GoFlexDestination _onDestination = const GoFlexDestination();
-  GoFlexDestination _selectedDestination = const GoFlexDestination();
+  FlexTarget _onDestination = const FlexTarget();
+  FlexTarget _selectedDestination = const FlexTarget();
 
   /// Set the FlexScaffold menu to be hidden. If set to false, the menu will be
   /// shown as a rail or menu when it should, based on its breakpoints.
@@ -897,7 +898,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
           (_isPhone && widget.destinations[_selectedIndex].maybePush) ||
               widget.destinations[_selectedIndex].alwaysPush;
       // Make destination data to return in onDestination call.
-      final GoFlexDestination destination = GoFlexDestination(
+      final FlexTarget destination = FlexTarget(
         index: _selectedIndex,
         bottomIndex: bottomIndex,
         route: widget.destinations[_selectedIndex].route,
@@ -934,7 +935,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
         _selectedIndex = toMenuIndex(_target);
         _indexMenu.setIndex(_selectedIndex);
         // Make tap destination data to return
-        final GoFlexDestination destination = GoFlexDestination(
+        final FlexTarget destination = FlexTarget(
           index: _selectedIndex,
           bottomIndex: index,
           route: widget.destinations[_selectedIndex].route,
@@ -1023,11 +1024,11 @@ class FlexScaffoldState extends State<FlexScaffold> {
     return widget.destinations[0];
   }
 
-  /// Create a [GoFlexDestination] from a [route], with
+  /// Create a [FlexTarget] from a [route], with
   /// optional values for navigation source and reverse direction.
   ///
   /// The String [route] is required.
-  GoFlexDestination fromRoute(
+  FlexTarget fromRoute(
     String route, {
     FlexNavigation source = FlexNavigation.custom,
     bool reverse = false,
@@ -1036,7 +1037,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
     // Get the destination
     final FlexDestination destination = forRoute(route);
     final int index = toMenuIndex(destination);
-    return GoFlexDestination(
+    return FlexTarget(
       index: index,
       bottomIndex: toBottomIndex(destination),
       route: route,
@@ -1096,7 +1097,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
       final bool preferPush =
           (_isPhone && widget.destinations[_selectedIndex].maybePush) ||
               widget.destinations[_selectedIndex].alwaysPush;
-      _selectedDestination = GoFlexDestination(
+      _selectedDestination = FlexTarget(
         index: _selectedIndex,
         bottomIndex: bottomIndex,
         route: widget.destinations[_selectedIndex].route,
@@ -1454,8 +1455,8 @@ class _FlexScaffoldData with Diagnosticable {
     this.selectedIndex = 0,
     this.showBottomDestinationsInDrawer = false,
     //
-    this.selectedDestination = const GoFlexDestination(),
-    this.onDestination = const GoFlexDestination(),
+    this.selectedDestination = const FlexTarget(),
+    this.onDestination = const FlexTarget(),
   });
 
   final bool isMenuInDrawer;
@@ -1479,8 +1480,8 @@ class _FlexScaffoldData with Diagnosticable {
   final bool isBottomTarget;
   final bool isBottomBarVisible;
   //
-  final GoFlexDestination selectedDestination;
-  final GoFlexDestination onDestination;
+  final FlexTarget selectedDestination;
+  final FlexTarget onDestination;
 
   /// Copy the object with one or more provided properties changed.
   _FlexScaffoldData copyWith({
@@ -1505,8 +1506,8 @@ class _FlexScaffoldData with Diagnosticable {
     int? selectedIndex,
     bool? showBottomDestinationsInDrawer,
     //
-    GoFlexDestination? selectedDestination,
-    GoFlexDestination? onDestination,
+    FlexTarget? selectedDestination,
+    FlexTarget? onDestination,
   }) {
     return _FlexScaffoldData(
       isMenuInDrawer: isMenuInDrawer ?? this.isMenuInDrawer,
@@ -1632,10 +1633,10 @@ class _FlexScaffoldData with Diagnosticable {
     properties.add(DiagnosticsProperty<bool>(
         'showBottomDestinationsInDrawer', showBottomDestinationsInDrawer));
     //
-    properties.add(DiagnosticsProperty<GoFlexDestination>(
+    properties.add(DiagnosticsProperty<FlexTarget>(
         'selectedDestination', selectedDestination));
-    properties.add(
-        DiagnosticsProperty<GoFlexDestination>('onDestination', onDestination));
+    properties
+        .add(DiagnosticsProperty<FlexTarget>('onDestination', onDestination));
   }
 }
 

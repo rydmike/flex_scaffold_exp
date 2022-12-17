@@ -64,15 +64,6 @@ enum FlexBottomType {
   custom,
 }
 
-/// Enum used to set if menu items starts from the top or the bottom.
-enum FlexMenuStart {
-  /// The menu starts from the bottom.
-  top,
-
-  /// The menu starts from the top.
-  bottom,
-}
-
 // TODO(rydmike): This feature is not yet implemented, under consideration.
 /// Enum used to set if menu should be on the start or end side, if left or
 /// right side is start or end, depends on current LTR RTL directionality.

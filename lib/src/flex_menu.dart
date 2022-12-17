@@ -33,6 +33,7 @@ class FlexMenu extends StatefulWidget {
     this.leading,
     this.trailing,
     this.footer,
+    this.alignment = AlignmentDirectional.topStart,
     //
     this.menuIcon,
     this.menuIconExpand,
@@ -52,7 +53,11 @@ class FlexMenu extends StatefulWidget {
   // TODO(rydmike): Fix header document comment.
   /// A widget that appears below the menu AppBar but above the menu items.
   ///
-  /// It is placed at the top of the menu, but after the menu bar, above the
+  /// The header widget is placed at the top of the menu, directly after the
+  /// menu AppBar. It is is always attached to it and does not scroll, and is
+  /// is not affected by the menu content alignment.
+  ///
+  /// , above the
   /// destinations. This could be an action button like a
   /// [FloatingActionButton], but may also other widgets like a user profile
   /// image button, company logo, etc. It needs to fit and look good both in
@@ -92,6 +97,17 @@ class FlexMenu extends StatefulWidget {
   /// mode. Use a layout builder to make an adaptive footer widget that
   /// fits both sizes.
   final Widget? footer;
+
+  /// Alignment if the menu leading, menu items and menu trailing widgets.
+  ///
+  /// Alignment is directional and affected by LTR/RTL of context. The
+  /// menu/rail selection option take up full width ot rail and menu, there
+  /// is typically no difference in layout result between the different
+  /// variants of top, center and bottom. However, the difference between e.g.
+  /// [AlignmentDirectional.topStart], [AlignmentDirectional.topCenter] and
+  /// [AlignmentDirectional.topEnd] may affect your heading, leading, trailing
+  /// and footer placement depending on what their actual contents are.
+  final AlignmentDirectional alignment;
 
   /// A Widget used on the menu button when the menu is operated as a Drawer.
   ///
@@ -209,6 +225,7 @@ class _FlexMenuState extends State<FlexMenu> {
         isDrawer,
         startPadding,
         topPadding,
+        widget.alignment,
       );
       // Else set the width of to use for the Animated Container
     } else {
@@ -233,6 +250,7 @@ class _FlexMenuState extends State<FlexMenu> {
           isDrawer,
           startPadding,
           topPadding,
+          widget.alignment,
         ),
       );
     }
@@ -244,6 +262,7 @@ class _FlexMenuState extends State<FlexMenu> {
     bool isDrawer,
     double startPadding,
     double topPadding,
+    AlignmentDirectional alignment,
   ) {
     /// Depend on aspects of the FlexScaffold and only rebuild if they change.
     final bool canUseMenu = FlexScaffold.menuControlEnabledOf(context);
@@ -300,9 +319,6 @@ class _FlexMenuState extends State<FlexMenu> {
         final Widget? railLeadingFiller =
             size.maxWidth == railWidth ? SizedBox(width: railWidth) : null;
 
-        // Is menu list direction reversed and starting from the bottom?
-        final bool reversed = flexTheme.menuStart == FlexMenuStart.bottom;
-        //
         return OverflowBox(
           alignment: AlignmentDirectional.topStart,
           minWidth: 0,
@@ -374,7 +390,7 @@ class _FlexMenuState extends State<FlexMenu> {
                             Expanded(
                               child: _FooterLayout(
                                 body: Align(
-                                  alignment: Alignment.center,
+                                  alignment: alignment,
                                   child: ListView(
                                     shrinkWrap: true,
                                     padding: EdgeInsets.zero,
@@ -505,9 +521,6 @@ class _FlexMenuItem extends StatelessWidget {
     // Get the border color for borders
     final Color borderColor = flexTheme.borderColor!;
 
-    // Is menu list direction reversed and starting from the bottom?
-    final bool reversed = flexTheme.menuStart == FlexMenuStart.bottom;
-
     // TODO(rydmike): Future enhancement, custom widget for the divider.
     // Make the divider widget
     final Widget menuDivider = Divider(
@@ -538,12 +551,8 @@ class _FlexMenuItem extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          // The destination has dividers, so we add them, adjusting for
-          // reversed order of the menu.
-          if (destination.dividerBefore && !reversed) menuDivider,
-          if (destination.dividerAfter && reversed) menuDivider,
-          // The destination has a header before it, so we add it
-          if (destination.heading != null && !reversed) heading,
+          if (destination.dividerBefore) menuDivider,
+          if (destination.heading != null) heading,
           // Add the item details.
           Padding(
             padding: flexTheme.menuIndicatorMargins!,
@@ -599,12 +608,7 @@ class _FlexMenuItem extends StatelessWidget {
               ),
             ),
           ),
-          // The destination has a header before it, in direction is reversed.
-          if (destination.heading != null && reversed) heading,
-          // The destination has dividers, so we add them, adjusting for
-          // reversed order of the menu.
-          if (destination.dividerBefore && reversed) menuDivider,
-          if (destination.dividerAfter && !reversed) menuDivider,
+          if (destination.dividerAfter) menuDivider,
         ],
       );
     }

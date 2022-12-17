@@ -15,12 +15,12 @@ import '../widgets/sidebar/sidebar.dart';
 
 const bool _kDebugMe = kDebugMode && true;
 
-// The LayoutShell returns a nested navigator and builds the FlexScaffold.
-//
-// In this demo app there is only one FlexScaffold that handles the
-// layout of all the main destinations in the application. The FlexScaffold
-// handles the bottom navigation bar, drawer and end drawer, rail and menu
-// based on its FlexDestination configurations.
+/// The [LayoutShell] returns a nested navigator and builds the [FlexScaffold].
+///
+/// In this demo app there is only one FlexScaffold that handles the
+/// layout of all the main destinations in the application. The [FlexScaffold]
+/// handles the bottom navigation bar, drawer and end drawer, rail and menu
+/// based on its [FlexDestination] configurations.
 class LayoutShell extends ConsumerWidget {
   const LayoutShell({
     super.key,
@@ -28,25 +28,25 @@ class LayoutShell extends ConsumerWidget {
   });
   final Widget body;
 
-  // This Flexfold demo app builds one single Flexfold scaffold
-  // in a stateless widget using a ChangeNotifierProvider that holds
-  // all the config values for the Flexfold and a few more design
-  // and layout parameters. The destination targets do NOT have their
-  // own Flexfold scaffold, only the BODY content area is swapped out
-  // when user navigates to a new page using named routes.
+  // This FlexScaffold demo app builds one single FlexScaffold
+  // in a ConsumerWidget using Riverpod to control and enable configuring
+  // it settings for demonstration purposes.
   //
-  // You can also make a setup that uses a complete own [Flexfold]
+  // Imn this demo the destination targets do NOT have their own FlexScaffold,
+  // only the BODY content area is swapped out when user navigates to a new
+  // page using nested navigation.
+  //
+  // You can also make a setup that uses a complete own FlexScaffold
   // Scaffold for each destination and just rebuilds everything after
   // each navigation. Flutter is fast enough to handle this, but that
   // does not support using page transitions so that only the content
   // of the page animates and not also the menu, appbar, bottom bar and
-  // sidebar. When using Flexfold on desktop and web you may not want
+  // sidebar.
+  //
+  // When using FlexScaffold on desktop and web you may not want
   // have transition effects on static menu parts, but you may want to
   // have a subtle transition on the content part. This setup shows how
-  // you can accomplish this. If you use no page transitions at all on
-  // web and desktop canvas sizes you can also use a simpler none nested
-  // navigator version and give each destination its entire own Flexfold
-  // scaffold.
+  // you can accomplish it.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final CurrentRoute route = ref.watch(currentRouteProvider);
@@ -56,131 +56,18 @@ class LayoutShell extends ConsumerWidget {
       debugPrint('LayoutShell: goRouterPath = $goRouterPath');
     }
 
-    // // We use the Flexfold menu highlight helper class to make
-    // // border shapes and let it adjust margins for the shapes.
-    // // It is possible to make totally custom highlight and hover
-    // // shapes and they don't even have to be the same.
-    // final TextDirection directionality = Directionality.of(context);
-
-    // // The style of the selected highlighted item.
-    // final FlexMenuIndicator menuSelected = FlexMenuIndicator(
-    //   highlightType: ref.watch(menuHighlightTypePod),
-    //   borderColor: Theme.of(context).primaryColor,
-    //   highlightColor: Theme.of(context).colorScheme.primary.withAlpha(0x3d),
-    //   height: ref.watch(menuHighlightHeightPod),
-    //   borderRadius: ref.watch(menuHighlightHeightPod) / 6,
-    //   directionality: directionality,
-    // );
-    // // The style of the item that is hovered on web and desktop.
-    // final FlexMenuIndicator menuHover = FlexMenuIndicator(
-    //   highlightType: ref.watch(menuHighlightTypePod),
-    //   borderColor: Colors.transparent,
-    //   highlightColor: Colors.transparent,
-    //   height: ref.watch(menuHighlightHeightPod),
-    //   borderRadius: ref.watch(menuHighlightHeightPod) / 6,
-    //   directionality: directionality,
-    // );
-    //
-    // // Make a FlexfoldThemeData object that we pass in to Flexfold to
-    // // configure its style and behavior. This demo uses a lot more
-    // // properties than one would typically use or allow users to adjust.
-    // // It is done so in order to demonstrate the features of Flexfold.
-    // final FlexScaffoldThemeData flexfoldTheme = FlexScaffoldThemeData(
-    //   // TODO(rydmike): Uncomment to test background colors via properties.
-    //   // menuBackgroundColor: isLight ? Color(0xFFE9EFEA) : Color(0xFF18231B),
-    //   //     Theme.of(context).backgroundColor, //Colors.pink[100],
-    //   // sidebarBackgroundColor: Colors.yellow[100],
-    //
-    //   // Set if we start from top or bottom of screen
-    //   menuStart: ref.watch(menuStartPod),
-    //   // Set if we have the menu on start or end side of screen
-    //   menuSide: ref.watch(menuSidePod),
-    //
-    //   // Uncomment to see that menuElevation elevation works.
-    //   // TODO(rydmike): This elevation does not work! Figure out why not.
-    //   // Not going to using it in this demo even if it would work because
-    //   // it is ugly (opinionated), but it should of course be a supported
-    //   // feature.
-    //   menuElevation: 0,
-    //   // Uncomment to use sidebarElevation.
-    //   // Not used in this demo because it is not so pretty (opinionated).
-    //   sidebarElevation: 0,
-    //   // We use same width value for the drawer and the menu in this demo,
-    //   // but they can of course be different.
-    //   menuWidth: ref.watch(menuWidthPod),
-    //   drawerWidth: ref.watch(menuWidthPod),
-    //   // Rail width
-    //   railWidth: ref.watch(railWidthPod),
-    //   // We use same width value for end drawer and sidebar in this demo,
-    //   // but they can of course be different.
-    //   sidebarWidth: ref.watch(sidebarWidthPod),
-    //   endDrawerWidth: ref.watch(sidebarWidthPod),
-    //   // Breakpoint settings
-    //   breakpointDrawer: ref.watch(breakpointDrawerPod),
-    //   breakpointRail: ref.watch(breakpointRailPod),
-    //   breakpointMenu: ref.watch(breakpointMenuPod),
-    //   breakpointSidebar: ref.watch(breakpointSidebarPod),
-    //   // Border edge configurations
-    //   borderOnMenu: ref.watch(borderOnMenuPod),
-    //   borderOnSidebar: ref.watch(borderOnMenuPod),
-    //   borderOnDarkDrawer: ref.watch(borderOnDarkDrawerPod),
-    //   borderOnLightDrawer: false,
-    //   // borderColor: Colors.green[400], // You can control the color too
-    //   // Menu design and layout properties
-    //   menuHighlightHeight: ref.watch(menuHighlightHeightPod),
-    //   menuHighlightMargins: menuSelected.margins,
-    //   menuHighlightShape: menuHover.shape(),
-    //   menuSelectedShape: menuSelected.shape(),
-    //   menuHighlightColor: menuSelected.highlight,
-    //   // Individual animation durations are available, but for this
-    //   // demo they all share the same setting.
-    //   menuAnimationDuration:
-    //       Duration(milliseconds: ref.watch(animationDurationPod)),
-    //   sidebarAnimationDuration:
-    //       Duration(milliseconds: ref.watch(animationDurationPod)),
-    //   bottomBarAnimationDuration:
-    //       Duration(milliseconds: ref.watch(animationDurationPod)),
-    //   //
-    //   // The animation curve for rail/menu, sidebar and bottom bar
-    //   // can be set separately, but this demo uses the same setting for all.
-    //   menuAnimationCurve: ref.watch(flexMenuCurveProvider),
-    //   sidebarAnimationCurve: ref.watch(flexMenuCurveProvider),
-    //   bottomBarAnimationCurve: ref.watch(flexMenuCurveProvider),
-    //   //
-    //   // Bottom navigation bar theme and additional visual properties for
-    //   // the bottom navigation bar.
-    //   bottomBarType: ref.watch(bottomBarTypePod),
-    //   bottomBarIsTransparent: ref.watch(bottomBarIsTransparentPod),
-    //   bottomBarBlur: ref.watch(bottomBarBlurPod),
-    //   bottomBarOpacity: ref.watch(bottomBarOpacityPod),
-    //   bottomBarTopBorder: ref.watch(bottomBarTopBorderPod),
-    //   //
-    //   // Tooltip settings
-    //   useTooltips: ref.watch(useTooltipsPod),
-    //   menuOpenTooltip: AppTooltips.openMenu,
-    //   menuCloseTooltip: AppTooltips.closeMenu,
-    //   menuExpandTooltip: AppTooltips.expandMenu,
-    //   menuExpandHiddenTooltip: AppTooltips.expandHiddenMenu,
-    //   menuCollapseTooltip: AppTooltips.collapseMenu,
-    //   sidebarOpenTooltip: AppTooltips.openSidebar,
-    //   sidebarCloseTooltip: AppTooltips.closeSidebar,
-    //   sidebarExpandTooltip: AppTooltips.expandSidebar,
-    //   sidebarExpandHiddenTooltip: AppTooltips.expandHiddenSidebar,
-    //   sidebarCollapseTooltip: AppTooltips.collapseSidebar,
-    // );
-
     return WillPopScope(
-      // If we try to pop the scope, we will do some custom back navigation.
+      // If we try to pop the scope, we will do some custom back navigation:
+      //
       // If on a bottom bar destination and it is not the first one, then
       // back to first one. If on first one, or not on on bottom bar
       // destination, then we go back to "Home". If we were on "Home" and
       // used back on iOS or Android, we pop out of the app, on other
       // platforms, desktop and Web, we remain on home.
-      //
       // TODO(rydmike): Maybe add ask about going "back" out of app on Web?
       onWillPop: () async {
         // Store the start destination.
-        final GoFlexDestination startDestination = route.destination;
+        final FlexTarget startDestination = route.destination;
         // If we can pop, then we pop.
         if (Navigator.of(context).canPop()) {
           if (_kDebugMe) {
@@ -226,27 +113,23 @@ class LayoutShell extends ConsumerWidget {
         }
       },
 
-      // Build the Flexfold scaffold.
+      // Use FlexScaffold as a layout shell for the app.
       //
       // The is example is more complex than needed due to all the customizable
       // settings it demonstrates.
       child: FlexScaffold(
-        //
-        // First we assign the theme and style for the Flexfold that we
-        // defined above. The theme contains the style, size and some less
-        // frequently used settings.
-        // flexfoldTheme: flexfoldTheme,
-
-        // The Flexfold appBar only takes a FlexfoldAppBar() data object.
+        // The FlexScaffold appBar only takes a FlexfoldAppBar() data object.
         // Here we use the styled factory version of it, but the standard
         // version of it would work just fine too, then the only needed
         // property below would be the title. In this demo app we also
         // demonstrate how to use the styled appbar factory.
         appBar: FlexAppBar.styled(
           context,
-          // TODO(rydmike): Add implicit title
-          // We use our destination labels as headings for the app bar
-          // title: Text(appDestinations[route.destination.index].label),
+          // We can use our destination labels as headings for the app bar
+          //   title: Text(Routes.destinations[route.destination.index].label),
+          // However, if we just want the destination label as title for
+          // each destinations AppBar, we can use and automatically implied
+          // title.
           automaticallyImplyTitle: true,
           // centerTitle: false,
           gradient: ref.watch(appBarGradientPod),
@@ -287,7 +170,7 @@ class LayoutShell extends ConsumerWidget {
         // object in a callback that we can use to control how we do
         // routing, which can vary based on if we navigated from bottom,
         // rail or menu and if we moved forward or backwards in the index.
-        onDestination: (GoFlexDestination destination) async {
+        onDestination: (FlexTarget destination) async {
           // If destinations prefers pushed route, then do so:
           if (destination.preferPush) {
             if (_kDebugMe) {
@@ -393,7 +276,7 @@ class LayoutShell extends ConsumerWidget {
         // For this demo the FAB does not do anything else than show a
         // dialog that tells which destination it was pressed in.
         // With a setup that uses a nested navigator as the body
-        // of in the Flexfold, your onPressed function have to use the
+        // of in the FlexScaffold, your onPressed function have to use the
         // destination information to handle different actions for
         // different destinations.
         floatingActionButton: FloatingActionButton(
@@ -453,7 +336,7 @@ class LayoutShell extends ConsumerWidget {
         //   onGenerateRoute: (RouteSettings settings) {
         //     if (_kDebugMe) {
         //       debugPrint(
-        //           'LayoutScreen(): Flexfold Navigator '
+        //           'LayoutScreen(): FlexScaffold Navigator '
         //           '** onGenerateRoute **');
         //       debugPrint(
         //           'LayoutScreen(): settings: '

@@ -40,8 +40,6 @@ final Provider<FlexTheme> flexScaffoldThemeProvider = Provider<FlexTheme>(
       //     Theme.of(context).backgroundColor, //Colors.pink[100],
       // sidebarBackgroundColor: Colors.yellow[100],
 
-      // Set if we start from top or bottom of screen
-      menuStart: ref.watch(menuStartPod),
       // Set if we have the menu on start or end side of screen
       menuSide: ref.watch(menuSidePod),
 

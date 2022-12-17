@@ -27,7 +27,7 @@ class BottomBarTypeSwitch extends ConsumerWidget {
         Padding(
           padding: EdgeInsets.all(6),
           child: Text(
-            'Material',
+            'Material 2',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 11),
             overflow: TextOverflow.fade,
@@ -37,7 +37,7 @@ class BottomBarTypeSwitch extends ConsumerWidget {
         Padding(
           padding: EdgeInsets.all(6),
           child: Text(
-            'Material You',
+            'Material 3',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 11),
             overflow: TextOverflow.fade,

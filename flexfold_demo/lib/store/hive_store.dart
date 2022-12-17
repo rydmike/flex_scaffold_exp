@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 
 import '../core/models/app_animation_curve.dart';
 import '../core/models/app_text_direction.dart';
+import '../core/models/menu_alignment.dart';
 
 // Hive box name, used for the Hive box that stores all settings.
 const String kHiveBox = 'flexfold_demo_store';
@@ -167,15 +168,15 @@ class FlexfoldHighlightTypeAdapter extends TypeAdapter<FlexIndicatorStyle> {
 }
 
 // A Hive data type adapter for enum FlexfoldMenuStart.
-class FlexfoldMenuStartAdapter extends TypeAdapter<FlexMenuStart> {
+class FlexfoldMenuStartAdapter extends TypeAdapter<MenuAlignment> {
   @override
-  FlexMenuStart read(BinaryReader reader) {
+  MenuAlignment read(BinaryReader reader) {
     final int index = reader.readInt();
-    return FlexMenuStart.values[index];
+    return MenuAlignment.values[index];
   }
 
   @override
-  void write(BinaryWriter writer, FlexMenuStart obj) {
+  void write(BinaryWriter writer, MenuAlignment obj) {
     writer.writeInt(obj.index);
   }
 
