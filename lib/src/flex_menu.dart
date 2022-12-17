@@ -352,52 +352,72 @@ class _FlexMenuState extends State<FlexMenu> {
                         // The menu can scroll, but all bounce and glow scroll
                         // effects are removed.
                         behavior: ScrollNoEdgeEffect(),
-                        child: _FooterLayout(
-                          body: ListView(
-                            reverse: reversed,
-                            padding: EdgeInsets.zero,
-                            children: <Widget>[
-                              //
-                              // Add the leading widget to the menu
-                              widget.leading ?? const SizedBox.shrink(),
-                              //
-                              // The menu items
-                              for (int i = 0; i < destinations.length; i++)
-                                if ((destinations[i].inBottomNavigation &&
-                                        showBottomDestinationsInDrawer) ||
-                                    !destinations[i].inBottomNavigation ||
-                                    !isDrawer)
-                                  _FlexMenuItem(
-                                    destination: destinations[i],
-                                    iconTheme: unselectedIconTheme,
-                                    selectedIconTheme: selectedIconTheme,
-                                    labelTextStyle: unselectedLabelTextStyle,
-                                    selectedLabelTextStyle:
-                                        selectedLabelTextStyle,
-                                    headingTextStyle: headingTextStyle,
-                                    isSelected: selectedIndex == i,
-                                    width: size.maxWidth,
-                                    startPadding: startPadding,
-                                    autoFocus: selectedIndex == i,
-                                    onTap: () {
-                                      setState(() {
-                                        if (isDrawerOpen) {
-                                          Navigator.of(context).pop();
-                                        }
-                                        flexScaffold.setSelectedIndex(i);
-                                      });
-                                    },
+                        child: Column(
+                          children: [
+                            widget.leading ?? const SizedBox.shrink(),
+                            Expanded(
+                              child: _FooterLayout(
+                                body: Align(
+                                  alignment: Alignment.center,
+                                  child: ListView(
+                                    shrinkWrap: true,
+                                    reverse: reversed,
+                                    padding: EdgeInsets.zero,
+                                    children: <Widget>[
+                                      //
+                                      // Add the leading widget to the menu
+                                      widget.leading ?? const SizedBox.shrink(),
+                                      //
+                                      // The menu items
+                                      for (int i = 0;
+                                          i < destinations.length;
+                                          i++)
+                                        if ((destinations[i]
+                                                    .inBottomNavigation &&
+                                                showBottomDestinationsInDrawer) ||
+                                            !destinations[i]
+                                                .inBottomNavigation ||
+                                            !isDrawer)
+                                          _FlexMenuItem(
+                                            destination: destinations[i],
+                                            iconTheme: unselectedIconTheme,
+                                            selectedIconTheme:
+                                                selectedIconTheme,
+                                            labelTextStyle:
+                                                unselectedLabelTextStyle,
+                                            selectedLabelTextStyle:
+                                                selectedLabelTextStyle,
+                                            headingTextStyle: headingTextStyle,
+                                            isSelected: selectedIndex == i,
+                                            width: size.maxWidth,
+                                            startPadding: startPadding,
+                                            autoFocus: selectedIndex == i,
+                                            onTap: () {
+                                              setState(() {
+                                                if (isDrawerOpen) {
+                                                  Navigator.of(context).pop();
+                                                }
+                                                flexScaffold
+                                                    .setSelectedIndex(i);
+                                              });
+                                            },
+                                          ),
+                                      //
+                                      // Add the trailing widget to the menu
+                                      widget.trailing ??
+                                          const SizedBox.shrink(),
+                                    ],
                                   ),
-                              //
-                              // Add the trailing widget to the menu
-                              widget.trailing ?? const SizedBox.shrink(),
-                            ],
-                          ),
-                          //
-                          // This widget will appear as a fixed footer always
-                          // at the bottom of the menu, like the menu's appbar
-                          // it does not scroll.
-                          footer: widget.footer ?? const SizedBox.shrink(),
+                                ),
+                                //
+                                // This widget will appear as a fixed footer always
+                                // at the bottom of the menu, like the menu's appbar
+                                // it does not scroll.
+                                footer:
+                                    widget.footer ?? const SizedBox.shrink(),
+                              ),
+                            ),
+                          ],
                         )),
                   )),
                 )),
