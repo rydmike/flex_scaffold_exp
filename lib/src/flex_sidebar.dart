@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'flex_app_bar.dart';
 import 'flex_scaffold.dart';
+import 'flex_scaffold_theme.dart';
 import 'flex_sidebar_button.dart';
-import 'flex_theme_extension.dart';
 
 /// A sidebar widget used by [FlexScaffold] that manages the animated
 /// showing and hiding of the sidebar menu.
@@ -47,9 +47,10 @@ class _FlexSidebarState extends State<FlexSidebar> {
 
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final FlexTheme flexTheme =
-        Theme.of(context).extension<FlexTheme>()?.withDefaults(context) ??
-            const FlexTheme().withDefaults(context);
+    final FlexScaffoldTheme flexTheme = Theme.of(context)
+            .extension<FlexScaffoldTheme>()
+            ?.withDefaults(context) ??
+        const FlexScaffoldTheme().withDefaults(context);
     final double breakpointSidebar = flexTheme.breakpointSidebar!;
     final double sidebarWidth = flexTheme.sidebarWidth!;
 
@@ -124,9 +125,9 @@ class _SideBar extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final bool isDark = theme.brightness == Brightness.dark;
 
-    final FlexTheme flexTheme =
-        theme.extension<FlexTheme>()?.withDefaults(context) ??
-            const FlexTheme().withDefaults(context);
+    final FlexScaffoldTheme flexTheme =
+        theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
+            const FlexScaffoldTheme().withDefaults(context);
 
     final bool borderOnSidebar = flexTheme.borderOnSidebar!;
     final bool borderOnDrawerEdgeInDarkMode = flexTheme.borderOnDarkDrawer!;

@@ -10,8 +10,8 @@ import 'flex_menu.dart';
 import 'flex_scaffold_app_bar.dart';
 import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
+import 'flex_scaffold_theme.dart';
 import 'flex_target.dart';
-import 'flex_theme_extension.dart';
 
 // ignore_for_file: comment_references
 
@@ -1133,9 +1133,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
     // Get effective FlexTheme:
     //  1. If one exist in Theme, use it, fill undefined props with default
     //  2. If no FlexTheme in Theme, fallback to one with all default values.
-    final FlexTheme flexTheme =
-        theme.extension<FlexTheme>()?.withDefaults(context) ??
-            const FlexTheme().withDefaults(context);
+    final FlexScaffoldTheme flexTheme =
+        theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
+            const FlexScaffoldTheme().withDefaults(context);
 
     assert(
         !(flexTheme.bottomType == FlexBottomType.custom &&

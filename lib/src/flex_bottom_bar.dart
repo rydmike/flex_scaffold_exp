@@ -8,7 +8,7 @@ import 'flex_destination.dart';
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
-import 'flex_theme_extension.dart';
+import 'flex_scaffold_theme.dart';
 
 // Set to true to observe debug prints. In release mode this compile time
 // const always evaluate to false, so in theory anything with only an
@@ -48,9 +48,9 @@ class FlexBottomBar extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final TargetPlatform platform = theme.platform;
     final bool useMaterial3 = theme.useMaterial3;
-    final FlexTheme flexTheme =
-        theme.extension<FlexTheme>()?.withDefaults(context) ??
-            const FlexTheme().withDefaults(context);
+    final FlexScaffoldTheme flexTheme =
+        theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
+            const FlexScaffoldTheme().withDefaults(context);
     // Resolve the effective bottom bar type
     FlexBottomType effectiveType =
         flexTheme.bottomType ?? FlexBottomType.adaptive;
@@ -177,9 +177,10 @@ class Material2BottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
-    final FlexTheme flexTheme =
-        Theme.of(context).extension<FlexTheme>()?.withDefaults(context) ??
-            const FlexTheme().withDefaults(context);
+    final FlexScaffoldTheme flexTheme = Theme.of(context)
+            .extension<FlexScaffoldTheme>()
+            ?.withDefaults(context) ??
+        const FlexScaffoldTheme().withDefaults(context);
     final bool useFlexTheme =
         flexTheme.bottomNavigationBarPreferSubTheme ?? false;
 
@@ -332,9 +333,9 @@ class Material3BottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
-    final FlexTheme flexTheme =
-        theme.extension<FlexTheme>()?.withDefaults(context) ??
-            const FlexTheme().withDefaults(context);
+    final FlexScaffoldTheme flexTheme =
+        theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
+            const FlexScaffoldTheme().withDefaults(context);
     final bool useFlexTheme = flexTheme.navigationBarPreferSubTheme ?? false;
 
     // Get and compute effective background color
@@ -486,9 +487,9 @@ class CupertinoBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
-    final FlexTheme flexTheme =
-        theme.extension<FlexTheme>()?.withDefaults(context) ??
-            const FlexTheme().withDefaults(context);
+    final FlexScaffoldTheme flexTheme =
+        theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
+            const FlexScaffoldTheme().withDefaults(context);
 
     // Get and compute effective background color
     final double opacity =

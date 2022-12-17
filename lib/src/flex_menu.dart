@@ -8,7 +8,7 @@ import 'flex_menu_button.dart';
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
-import 'flex_theme_extension.dart';
+import 'flex_scaffold_theme.dart';
 
 // TODO(rydmike): Add built-in support for NavigationRail.
 // TODO(rydmike): Consider having the icons a part of this widget?
@@ -195,9 +195,9 @@ class _FlexMenuState extends State<FlexMenu> {
     // Get effective FlexTheme:
     //  1. If one exist in Theme, use it, fill undefined props with default.
     //  2. If no FlexTheme in Theme, fallback to one with all default values.
-    final FlexTheme flexTheme =
-        theme.extension<FlexTheme>()?.withDefaults(context) ??
-            const FlexTheme().withDefaults(context);
+    final FlexScaffoldTheme flexTheme =
+        theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
+            const FlexScaffoldTheme().withDefaults(context);
 
     final double breakpointRail = flexTheme.breakpointRail!;
     final double breakpointMenu = flexTheme.breakpointMenu!;
@@ -287,9 +287,9 @@ class _FlexMenuState extends State<FlexMenu> {
         /// Depend on aspect of the FlexScaffold, only rebuild if it changes.
         final int selectedIndex = FlexScaffold.selectedIndexOf(context);
 
-        final FlexTheme flexTheme =
-            theme.extension<FlexTheme>()?.withDefaults(context) ??
-                const FlexTheme().withDefaults(context);
+        final FlexScaffoldTheme flexTheme =
+            theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
+                const FlexScaffoldTheme().withDefaults(context);
         // Get effective icon and text themes
         final IconThemeData unselectedIconTheme = flexTheme.iconTheme!;
         final IconThemeData selectedIconTheme = flexTheme.selectedIconTheme!;
@@ -395,11 +395,9 @@ class _FlexMenuState extends State<FlexMenu> {
                                     shrinkWrap: true,
                                     padding: EdgeInsets.zero,
                                     children: <Widget>[
-                                      //
                                       // Add the leading widget to the menu
                                       if (widget.leading != null)
                                         widget.leading!,
-                                      //
                                       // The menu items
                                       for (int i = 0;
                                           i < destinations.length;
@@ -441,10 +439,7 @@ class _FlexMenuState extends State<FlexMenu> {
                                     ],
                                   ),
                                 ),
-                                //
-                                // This widget will appear as a fixed footer always
-                                // at the bottom of the menu, like the menu's appbar
-                                // it does not scroll.
+                                // Add footer widget to menu
                                 footer: widget.footer,
                               ),
                             ),
@@ -489,9 +484,10 @@ class _FlexMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlexTheme flexTheme =
-        Theme.of(context).extension<FlexTheme>()?.withDefaults(context) ??
-            const FlexTheme().withDefaults(context);
+    final FlexScaffoldTheme flexTheme = Theme.of(context)
+            .extension<FlexScaffoldTheme>()
+            ?.withDefaults(context) ??
+        const FlexScaffoldTheme().withDefaults(context);
 
     // Get effective menu and rail width
     final double railWidth = flexTheme.railWidth!;

@@ -30,12 +30,10 @@ class Menu extends ConsumerWidget {
         context,
         // You can add your app logo or brand here.
         title: const MenuLogo(),
-        gradient: false, // ref.watch(gradientAppBarPod).state,
-        opacity: 1,
-        // ref.watch(transparentAppBarPod).state
-        // ? ref.watch(appBarOpacityPod).state
-        // : 1.0,
-        blurred: false, // ref.watch(blurAppBarPod).state,
+        gradient: ref.watch(appBarGradientPod),
+        blurred: ref.watch(appBarBlurPod),
+        opacity:
+            ref.watch(appBarTransparentPod) ? ref.watch(appBarOpacityPod) : 1.0,
         hasBorderOnSurface: ref.watch(appBarBorderOnSurfacePod),
         hasBorder: ref.watch(appBarBorderPod),
         // Reverse the gradient compared to main app bar, it looks cool.

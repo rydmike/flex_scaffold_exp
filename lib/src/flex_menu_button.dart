@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
-import 'flex_theme_extension.dart';
+import 'flex_scaffold_theme.dart';
 
 /// The menu button for the FlexScaffold menu, rail and drawer operation.
 ///
@@ -110,9 +110,10 @@ class FlexMenuButton extends StatelessWidget {
     final double width = size.width;
     final double screenHeight = size.height;
 
-    final FlexTheme flexTheme =
-        Theme.of(context).extension<FlexTheme>()?.withDefaults(context) ??
-            const FlexTheme().withDefaults(context);
+    final FlexScaffoldTheme flexTheme = Theme.of(context)
+            .extension<FlexScaffoldTheme>()
+            ?.withDefaults(context) ??
+        const FlexScaffoldTheme().withDefaults(context);
     final double breakpointDrawer = flexTheme.breakpointDrawer!;
     final double breakpointRail = flexTheme.breakpointRail!;
     final double breakpointMenu = flexTheme.breakpointMenu!;

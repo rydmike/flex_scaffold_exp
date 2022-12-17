@@ -5,9 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/const/app_tooltips.dart';
 import '../../settings/controllers/pods_flexfold.dart';
 
-/// A provider for our used [FlexTheme].
-final Provider<FlexTheme> flexScaffoldThemeProvider = Provider<FlexTheme>(
-  (ProviderRef<FlexTheme> ref) {
+/// A provider for our used [FlexScaffoldTheme].
+final Provider<FlexScaffoldTheme> flexScaffoldThemeProvider =
+    Provider<FlexScaffoldTheme>(
+  (ProviderRef<FlexScaffoldTheme> ref) {
     // TODO(rydmike): Remove the context usage, somehow.
     // We use the Flexfold menu highlight helper class to make
     // border shapes and let it adjust margins for the shapes.
@@ -34,9 +35,12 @@ final Provider<FlexTheme> flexScaffoldThemeProvider = Provider<FlexTheme>(
       // directionality: directionality,
     );
 
-    return FlexTheme(
+    final bool isLight = true;
+
+    return FlexScaffoldTheme(
       // TODO(rydmike): Uncomment to test background colors via properties.
-      // menuBackgroundColor: isLight ? Color(0xFFE9EFEA) : Color(0xFF18231B),
+      menuBackgroundColor: Colors.pink[100],
+      //isLight ? Color(0xFFE9EFEA) : Color(0xFF18231B),
       //     Theme.of(context).backgroundColor, //Colors.pink[100],
       // sidebarBackgroundColor: Colors.yellow[100],
 

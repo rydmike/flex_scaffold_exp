@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
-import 'flex_theme_extension.dart';
+import 'flex_scaffold_theme.dart';
 
 // ignore_for_file: comment_references
 
@@ -108,9 +108,10 @@ class FlexSidebarButton extends StatelessWidget {
 
     final double width = MediaQuery.of(context).size.width;
 
-    final FlexTheme flexTheme =
-        Theme.of(context).extension<FlexTheme>()?.withDefaults(context) ??
-            const FlexTheme().withDefaults(context);
+    final FlexScaffoldTheme flexTheme = Theme.of(context)
+            .extension<FlexScaffoldTheme>()
+            ?.withDefaults(context) ??
+        const FlexScaffoldTheme().withDefaults(context);
 
     final double breakpointSidebar = flexTheme.breakpointSidebar!;
     final bool canLockMenu = width >= breakpointSidebar;

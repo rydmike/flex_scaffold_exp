@@ -228,14 +228,16 @@ const double kFlexCupertinoTabBarHeight = 50;
 ///
 /// The NavigationBar has different height when labels are always hidden or
 /// shown, the defaults are just hard coded in Flutter SDK. We give them
-/// our own FlexScaffold const values so we can tweak them in one place if needed.
+/// our own FlexScaffold const values so we can tweak them in one place if
+/// needed.
 const double kFlexNavigationBarAlwaysHideHeight = 56;
 
 /// FlexScaffold NavigationBar height when labels are always hidden.
 ///
 /// The NavigationBar has different height when labels are always hidden or
 /// shown, the defaults are just hard coded in Flutter SDK. We give them
-/// our own FlexScaffold const values so we can tweak them in one place if needed.
+/// our own FlexScaffold const values so we can tweak them in one place if
+/// needed.
 const double kFlexNavigationBarHeight = 74;
 
 /// The duration for the standard show and hide drawer animation in
