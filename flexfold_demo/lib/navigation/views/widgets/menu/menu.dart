@@ -43,7 +43,16 @@ class Menu extends ConsumerWidget {
         scrim: ref.watch(appBarScrimPod),
       ),
       //
+      // This is a widget that appears after them menu AppBar.
+      // It sticks to the top and does not scroll.
+      // Animated cross fade is used to remove it smoothly when its
+      // presence is toggled on/off in the demo.
+      header: AnimatedSwitchShowHide(
+        show: ref.watch(showMenuLeadingPod),
+        child: const LeadingUserProfile(),
+      ),
       // This is a widget that appears before your menu destinations.
+      // It scrolls with destinations and aligns with the,
       // Animated cross fade is used to remove it smoothly when its
       // presence is toggled on/off in the demo.
       leading: AnimatedSwitchShowHide(

@@ -29,6 +29,7 @@ class FlexMenu extends StatefulWidget {
   const FlexMenu({
     super.key,
     this.appBar,
+    this.header,
     this.leading,
     this.trailing,
     this.footer,
@@ -48,6 +49,20 @@ class FlexMenu extends StatefulWidget {
   /// space in the title, but you can fit a small brand/logo/app text on it.
   final FlexAppBar? appBar;
 
+  // TODO(rydmike): Fix header document comment.
+  /// A widget that appears below the menu AppBar but above the menu items.
+  ///
+  /// It is placed at the top of the menu, but after the menu bar, above the
+  /// destinations. This could be an action button like a
+  /// [FloatingActionButton], but may also other widgets like a user profile
+  /// image button, company logo, etc. It needs to fit and look good both in
+  /// rail and side menu mode. Use a layout builder to make an adaptive
+  /// leading widget that fits both sizes if so required.
+  ///
+  /// The default value is null.
+  final Widget? header;
+
+  // TODO(rydmike): Fix leading document comment.
   /// A widget that appears below the menu AppBar but above the menu items.
   ///
   /// It is placed at the top of the menu, but after the menu bar, above the
@@ -84,7 +99,7 @@ class FlexMenu extends StatefulWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, it defaults to a widget
-  /// with value [kFlexfoldMenuIcon], the hamburger icon.
+  /// with value [kFlexMenuIcon], the hamburger icon.
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -98,7 +113,7 @@ class FlexMenu extends StatefulWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
-  /// defined, it defaults to a widget with value [kFlexfoldMenuIconExpand].
+  /// defined, it defaults to a widget with value [kFlexMenuIconExpand].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -113,7 +128,7 @@ class FlexMenu extends StatefulWidget {
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
   /// defined, it defaults to a widget with value
-  /// [kFlexfoldMenuIconExpandHidden].
+  /// [kFlexMenuIconExpandHidden].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -128,7 +143,7 @@ class FlexMenu extends StatefulWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
-  /// defined, it defaults to a widget with value [kFlexfoldMenuIconCollapse].
+  /// defined, it defaults to a widget with value [kFlexMenuIconCollapse].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -162,7 +177,7 @@ class _FlexMenuState extends State<FlexMenu> {
 
     final ThemeData theme = Theme.of(context);
     // Get effective FlexTheme:
-    //  1. If one exist in Theme, use it, fill undefined props with default
+    //  1. If one exist in Theme, use it, fill undefined props with default.
     //  2. If no FlexTheme in Theme, fallback to one with all default values.
     final FlexTheme flexTheme =
         theme.extension<FlexTheme>()?.withDefaults(context) ??
@@ -208,7 +223,7 @@ class _FlexMenuState extends State<FlexMenu> {
       // the calculated width.
       return AnimatedContainer(
         // TODO(rydmike): Color flashes when changing themeMode. Figure out why!
-        // color: flexTheme.menuBackgroundColor, // Colors.transparent,
+        color: flexTheme.menuBackgroundColor,
         duration: flexTheme.menuAnimationDuration!,
         curve: flexTheme.menuAnimationCurve!,
         width: width,
@@ -231,8 +246,8 @@ class _FlexMenuState extends State<FlexMenu> {
     double topPadding,
   ) {
     /// Depend on aspects of the FlexScaffold and only rebuild if they change.
-    final bool menuControlEnabled = FlexScaffold.menuControlEnabledOf(context);
-    final bool showBottomDestinationsInDrawer =
+    final bool canUseMenu = FlexScaffold.menuControlEnabledOf(context);
+    final bool showBottomItemsInDrawer =
         FlexScaffold.showBottomDestinationsInDrawerOf(context);
 
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
@@ -318,7 +333,7 @@ class _FlexMenuState extends State<FlexMenu> {
                     ),
                     widget.appBar!.toAppBar(
                       automaticallyImplyLeading: false,
-                      leading: menuControlEnabled || isDrawerOpen
+                      leading: canUseMenu || isDrawerOpen
                           ? FlexMenuButton(onPressed: () {})
                           : railLeadingFiller,
                       // Insert any existing actions
@@ -330,6 +345,7 @@ class _FlexMenuState extends State<FlexMenu> {
                 ),
                 //
                 // Build the Menu content with:
+                //  - Heading widget
                 //  - Leading widget
                 //  - Menu items with: Divider, Header, Item, Divider
                 //  - Trailing widget
@@ -353,20 +369,20 @@ class _FlexMenuState extends State<FlexMenu> {
                         // effects are removed.
                         behavior: ScrollNoEdgeEffect(),
                         child: Column(
-                          children: [
-                            widget.leading ?? const SizedBox.shrink(),
+                          children: <Widget>[
+                            if (widget.header != null) widget.header!,
                             Expanded(
                               child: _FooterLayout(
                                 body: Align(
                                   alignment: Alignment.center,
                                   child: ListView(
                                     shrinkWrap: true,
-                                    reverse: reversed,
                                     padding: EdgeInsets.zero,
                                     children: <Widget>[
                                       //
                                       // Add the leading widget to the menu
-                                      widget.leading ?? const SizedBox.shrink(),
+                                      if (widget.leading != null)
+                                        widget.leading!,
                                       //
                                       // The menu items
                                       for (int i = 0;
@@ -374,7 +390,7 @@ class _FlexMenuState extends State<FlexMenu> {
                                           i++)
                                         if ((destinations[i]
                                                     .inBottomNavigation &&
-                                                showBottomDestinationsInDrawer) ||
+                                                showBottomItemsInDrawer) ||
                                             !destinations[i]
                                                 .inBottomNavigation ||
                                             !isDrawer)
@@ -404,8 +420,8 @@ class _FlexMenuState extends State<FlexMenu> {
                                           ),
                                       //
                                       // Add the trailing widget to the menu
-                                      widget.trailing ??
-                                          const SizedBox.shrink(),
+                                      if (widget.leading != null)
+                                        widget.trailing!,
                                     ],
                                   ),
                                 ),
@@ -413,8 +429,7 @@ class _FlexMenuState extends State<FlexMenu> {
                                 // This widget will appear as a fixed footer always
                                 // at the bottom of the menu, like the menu's appbar
                                 // it does not scroll.
-                                footer:
-                                    widget.footer ?? const SizedBox.shrink(),
+                                footer: widget.footer,
                               ),
                             ),
                           ],
@@ -605,12 +620,12 @@ class _FlexMenuItem extends StatelessWidget {
 /// else, but it is good generally useful widget too.
 class _FooterLayout extends StatelessWidget {
   const _FooterLayout({
-    required this.body,
-    required this.footer,
+    this.body,
+    this.footer,
   });
 
-  final Widget body;
-  final Widget footer;
+  final Widget? body;
+  final Widget? footer;
 
   @override
   Widget build(BuildContext context) {
@@ -621,11 +636,11 @@ class _FooterLayout extends StatelessWidget {
       children: <Widget>[
         LayoutId(
           id: _FooterPart.body,
-          child: body,
+          child: body ?? const SizedBox.shrink(),
         ),
         LayoutId(
           id: _FooterPart.footer,
-          child: footer,
+          child: footer ?? const SizedBox.shrink(),
         ),
       ],
     );
