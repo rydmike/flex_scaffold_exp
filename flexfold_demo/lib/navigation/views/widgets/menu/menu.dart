@@ -57,7 +57,7 @@ class Menu extends ConsumerWidget {
       // presence is toggled on/off in the demo.
       leading: AnimatedSwitchShowHide(
         show: ref.watch(showMenuLeadingPod),
-        child: const LeadingUserProfile(),
+        child: const Text('MENU'),
       ),
       // This is a widget that appears after your menu destinations.
       trailing: AnimatedSwitchShowHide(
