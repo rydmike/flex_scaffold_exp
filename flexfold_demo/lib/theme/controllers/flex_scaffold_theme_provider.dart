@@ -39,7 +39,7 @@ final Provider<FlexScaffoldTheme> flexScaffoldThemeProvider =
 
     return FlexScaffoldTheme(
       // TODO(rydmike): Uncomment to test background colors via properties.
-      menuBackgroundColor: Colors.pink[100],
+      // menuBackgroundColor: Colors.pink[100],
       //isLight ? Color(0xFFE9EFEA) : Color(0xFF18231B),
       //     Theme.of(context).backgroundColor, //Colors.pink[100],
       // sidebarBackgroundColor: Colors.yellow[100],

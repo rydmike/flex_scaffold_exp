@@ -17,7 +17,7 @@ class FooterCopyright extends StatelessWidget {
           children: <Widget>[
             ConstrainedBox(
               constraints: const BoxConstraints.tightFor(width: 65),
-              child: Text('© 2021', style: textTheme.caption),
+              child: Text('© 2022', style: textTheme.caption),
             ),
             Text('M.Rydstrom', style: textTheme.caption),
           ],

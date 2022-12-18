@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart' show clampDouble;
 import 'package:flutter/material.dart';
 
 import 'flex_app_bar.dart';
@@ -182,7 +183,7 @@ class _FlexMenuState extends State<FlexMenu> {
     // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
     //   reference: https://github.com/flutter/flutter/pull/114459
     final MediaQueryData mediaData = MediaQuery.of(context);
-    final double topPadding = mediaData.padding.top;
+    // final double topPadding = mediaData.padding.top;
     final double leftPadding = mediaData.padding.left;
     final double rightPadding = mediaData.padding.right;
     final double startPadding = Directionality.of(context) == TextDirection.ltr
@@ -217,17 +218,18 @@ class _FlexMenuState extends State<FlexMenu> {
     // True if the menu is currently shown as a Drawer
     final bool isDrawer = stayInDrawer && hasDrawer && isDrawerOpen;
 
+    final Widget menu = _FlexMenu(
+        appBar: widget.appBar,
+        header: widget.header,
+        leading: widget.leading,
+        trailing: widget.trailing,
+        footer: widget.footer,
+        alignment: widget.alignment);
+
     // Build and return the menu items as they are if they are in the Drawer.
     if (isDrawer) {
-      return _buildMenuItems(
-        context,
-        isDrawerOpen,
-        isDrawer,
-        startPadding,
-        topPadding,
-        widget.alignment,
-      );
-      // Else set the width of to use for the Animated Container
+      return menu;
+      // Else set the width of to use for the TweenAnimationBuilder
     } else {
       if (stayInDrawer) {
         width = 0.0;
@@ -238,39 +240,89 @@ class _FlexMenuState extends State<FlexMenu> {
       }
       // Then build and return the menu items in the animated container width
       // the calculated width.
-      return AnimatedContainer(
-        // TODO(rydmike): Color flashes when changing themeMode. Figure out why!
-        color: flexTheme.menuBackgroundColor,
-        duration: flexTheme.menuAnimationDuration!,
-        curve: flexTheme.menuAnimationCurve!,
-        width: width,
-        child: _buildMenuItems(
-          context,
-          isDrawerOpen,
-          isDrawer,
-          startPadding,
-          topPadding,
-          widget.alignment,
-        ),
-      );
+      return TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0, end: width),
+          duration: flexTheme.menuAnimationDuration!,
+          curve: flexTheme.menuAnimationCurve!,
+          builder: (BuildContext context, double width, Widget? child) {
+            return SizedBox(
+              // With this clamp we can also use overshooting Curves.
+              width: clampDouble(width, 0.0, menuWidth),
+              child: menu,
+            );
+          });
     }
   }
+}
 
-  Widget _buildMenuItems(
-    BuildContext context,
-    bool isDrawerOpen,
-    bool isDrawer,
-    double startPadding,
-    double topPadding,
-    AlignmentDirectional alignment,
-  ) {
+class _FlexMenu extends StatelessWidget {
+  const _FlexMenu({
+    this.appBar,
+    this.header,
+    this.leading,
+    this.trailing,
+    this.footer,
+    required this.alignment,
+  });
+
+  final FlexAppBar? appBar;
+  final Widget? header;
+  final Widget? leading;
+  final Widget? trailing;
+  final Widget? footer;
+  final AlignmentDirectional alignment;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
+    //   reference: https://github.com/flutter/flutter/pull/114459
+    final MediaQueryData mediaData = MediaQuery.of(context);
+    final double topPadding = mediaData.padding.top;
+    final double leftPadding = mediaData.padding.left;
+    final double rightPadding = mediaData.padding.right;
+    final double startPadding = Directionality.of(context) == TextDirection.ltr
+        ? leftPadding
+        : rightPadding;
+
     /// Depend on aspects of the FlexScaffold and only rebuild if they change.
     final bool canUseMenu = FlexScaffold.menuControlEnabledOf(context);
     final bool showBottomItemsInDrawer =
         FlexScaffold.showBottomDestinationsInDrawerOf(context);
 
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
+    final bool hasDrawer = scaffold?.hasDrawer ?? false;
     final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
+
+    final double screenWidth = mediaData.size.width;
+    final double screenHeight = mediaData.size.height;
+
+    final ThemeData theme = Theme.of(context);
+    final Color scaffoldColor = theme.scaffoldBackgroundColor;
+
+    // Get effective FlexTheme:
+    //  1. If one exist in Theme, use it, fill undefined props with default.
+    //  2. If no FlexTheme in Theme, fallback to one with all default values.
+    final FlexScaffoldTheme flexTheme =
+        theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
+            const FlexScaffoldTheme().withDefaults(context);
+
+    final double breakpointRail = flexTheme.breakpointRail!;
+    // final double breakpointMenu = flexTheme.breakpointMenu!;
+    final double breakpointDrawer = flexTheme.breakpointDrawer!;
+    // final double railWidth = flexTheme.railWidth!;
+    // final double menuWidth = flexTheme.menuWidth!;
+
+    /// Depend on aspects of the FlexScaffold and only rebuild if they change.
+    final bool menuIsHidden = FlexScaffold.isMenuHiddenOf(context);
+    // final bool menuPrefersRail = FlexScaffold.menuPrefersRailOf(context);
+
+    // Based on height and breakpoint, we are making a phone landscape layout.
+    final bool isPhoneLandscape = screenHeight < breakpointDrawer;
+    // True if the menu should be used as a drawer.
+    final bool stayInDrawer =
+        menuIsHidden || (screenWidth < breakpointRail) || isPhoneLandscape;
+    // True if the menu is currently shown as a Drawer
+    final bool isDrawer = stayInDrawer && hasDrawer && isDrawerOpen;
 
     // Reads the FlexScaffold state once, will not update if dependants change.
     // Use it to access FlexScaffold state modifying methods. You may also use
@@ -279,46 +331,34 @@ class _FlexMenuState extends State<FlexMenu> {
     final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
     final List<FlexDestination> destinations = flexScaffold.widget.destinations;
 
+    /// Depend on aspect of the FlexScaffold, only rebuild if it changes.
+    final int selectedIndex = FlexScaffold.selectedIndexOf(context);
+
+    // Get effective icon and text themes
+    final IconThemeData unselectedIconTheme = flexTheme.iconTheme!;
+    final IconThemeData selectedIconTheme = flexTheme.selectedIconTheme!;
+    final TextStyle unselectedLabelTextStyle = flexTheme.labelTextStyle!;
+    final TextStyle selectedLabelTextStyle = flexTheme.selectedLabelTextStyle!;
+    final TextStyle headingTextStyle = flexTheme.headingTextStyle!;
+
+    // Determine if we should draw an edge border on the menu
+    final bool borderOnMenu = flexTheme.borderOnMenu!;
+    final bool borderOnDrawerEdgeInDarkMode = flexTheme.borderOnDarkDrawer!;
+    final bool borderOnDrawerEdgeInLightMode = flexTheme.borderOnLightDrawer!;
+    // Draw a border on drawer edge?
+    final bool useDrawerBorderEdge = (theme.brightness == Brightness.dark &&
+            borderOnDrawerEdgeInDarkMode) ||
+        (theme.brightness == Brightness.light && borderOnDrawerEdgeInLightMode);
+    final Color borderColor = flexTheme.borderColor!;
+
+    // Get effective menu and rail width
+    final double railWidth = flexTheme.railWidth! + startPadding;
+    final double menuWidth = flexTheme.menuWidth! + startPadding;
+
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints size) {
-        final ThemeData theme = Theme.of(context);
-        final Color scaffoldColor = theme.scaffoldBackgroundColor;
-
-        /// Depend on aspect of the FlexScaffold, only rebuild if it changes.
-        final int selectedIndex = FlexScaffold.selectedIndexOf(context);
-
-        final FlexScaffoldTheme flexTheme =
-            theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
-                const FlexScaffoldTheme().withDefaults(context);
-        // Get effective icon and text themes
-        final IconThemeData unselectedIconTheme = flexTheme.iconTheme!;
-        final IconThemeData selectedIconTheme = flexTheme.selectedIconTheme!;
-        final TextStyle unselectedLabelTextStyle = flexTheme.labelTextStyle!;
-        final TextStyle selectedLabelTextStyle =
-            flexTheme.selectedLabelTextStyle!;
-        final TextStyle headingTextStyle = flexTheme.headingTextStyle!;
-
-        // Determine if we should draw an edge border on the menu
-        final bool borderOnMenu = flexTheme.borderOnMenu!;
-        final bool borderOnDrawerEdgeInDarkMode = flexTheme.borderOnDarkDrawer!;
-        final bool borderOnDrawerEdgeInLightMode =
-            flexTheme.borderOnLightDrawer!;
-        // Draw a border on drawer edge?
-        final bool useDrawerBorderEdge = (theme.brightness == Brightness.dark &&
-                borderOnDrawerEdgeInDarkMode) ||
-            (theme.brightness == Brightness.light &&
-                borderOnDrawerEdgeInLightMode);
-        final Color borderColor = flexTheme.borderColor!;
-
-        // Get effective menu and rail width
-        final double railWidth = flexTheme.railWidth! + startPadding;
-        final double menuWidth = flexTheme.menuWidth! + startPadding;
-
-        // A filler widget for rail mode used to add empty space equal to the
-        // rail width when we have disabled menu toggle control.
         final Widget? railLeadingFiller =
             size.maxWidth == railWidth ? SizedBox(width: railWidth) : null;
-
         return OverflowBox(
           alignment: AlignmentDirectional.topStart,
           minWidth: 0,
@@ -334,11 +374,9 @@ class _FlexMenuState extends State<FlexMenu> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                //
-                // The Menu bar with menu action button and logo
+                // The Menu AppBar with menu action button and logo
                 Stack(
                   children: <Widget>[
-                    // TODO(rydmike): Check if this is still needed.
                     // We put the appbar in Stack so we can put the Scaffold
                     // background color on a Container behind the AppBar so we
                     // get transparency against the scaffold background color
@@ -347,26 +385,24 @@ class _FlexMenuState extends State<FlexMenu> {
                       height: kToolbarHeight + topPadding,
                       color: scaffoldColor,
                     ),
-                    widget.appBar!.toAppBar(
+                    appBar!.toAppBar(
                       automaticallyImplyLeading: false,
                       leading: canUseMenu || isDrawerOpen
                           ? FlexMenuButton(onPressed: () {})
                           : railLeadingFiller,
                       // Insert any existing actions
-                      actions: (widget.appBar?.actions != null)
-                          ? <Widget>[...widget.appBar!.actions!]
+                      actions: (appBar?.actions != null)
+                          ? <Widget>[...appBar!.actions!]
                           : <Widget>[const SizedBox.shrink()],
                     ),
                   ],
                 ),
-                //
-                // Build the Menu content with:
+                // Menu content with:
                 //  - Heading widget
                 //  - Leading widget
                 //  - Menu items with: Divider, Header, Item, Divider
                 //  - Trailing widget
                 //  - Footer widget
-                //
                 Expanded(
                     child: Container(
                   decoration: BoxDecoration(
@@ -386,7 +422,7 @@ class _FlexMenuState extends State<FlexMenu> {
                         behavior: ScrollNoEdgeEffect(),
                         child: Column(
                           children: <Widget>[
-                            if (widget.header != null) widget.header!,
+                            if (header != null) header!,
                             Expanded(
                               child: _FooterLayout(
                                 body: Align(
@@ -396,8 +432,7 @@ class _FlexMenuState extends State<FlexMenu> {
                                     padding: EdgeInsets.zero,
                                     children: <Widget>[
                                       // Add the leading widget to the menu
-                                      if (widget.leading != null)
-                                        widget.leading!,
+                                      if (leading != null) leading!,
                                       // The menu items
                                       for (int i = 0;
                                           i < destinations.length;
@@ -423,24 +458,21 @@ class _FlexMenuState extends State<FlexMenu> {
                                             startPadding: startPadding,
                                             autoFocus: selectedIndex == i,
                                             onTap: () {
-                                              setState(() {
-                                                if (isDrawerOpen) {
-                                                  Navigator.of(context).pop();
-                                                }
-                                                flexScaffold
-                                                    .setSelectedIndex(i);
-                                              });
+                                              if (isDrawerOpen) {
+                                                Navigator.of(context).pop();
+                                              }
+                                              flexScaffold.setSelectedIndex(i);
                                             },
+                                            flexTheme: flexTheme,
                                           ),
                                       //
                                       // Add the trailing widget to the menu
-                                      if (widget.leading != null)
-                                        widget.trailing!,
+                                      if (trailing != null) trailing!,
                                     ],
                                   ),
                                 ),
                                 // Add footer widget to menu
-                                footer: widget.footer,
+                                footer: footer,
                               ),
                             ),
                           ],
@@ -469,6 +501,7 @@ class _FlexMenuItem extends StatelessWidget {
     required this.width,
     required this.startPadding,
     this.autoFocus = false,
+    required this.flexTheme,
   });
   final FlexDestination destination;
   final bool isSelected;
@@ -481,14 +514,10 @@ class _FlexMenuItem extends StatelessWidget {
   final double width;
   final double startPadding;
   final bool autoFocus;
+  final FlexScaffoldTheme flexTheme;
 
   @override
   Widget build(BuildContext context) {
-    final FlexScaffoldTheme flexTheme = Theme.of(context)
-            .extension<FlexScaffoldTheme>()
-            ?.withDefaults(context) ??
-        const FlexScaffoldTheme().withDefaults(context);
-
     // Get effective menu and rail width
     final double railWidth = flexTheme.railWidth!;
     final double menuWidth = flexTheme.menuWidth! + startPadding;
@@ -611,13 +640,16 @@ class _FlexMenuItem extends StatelessWidget {
   }
 }
 
-/// A footer layout class
+/// Lays out two widgets with one as main body and a footer widget that
+/// always appears at the bottom.
 ///
-/// This private widget is courtesy of Rémi Rousselet found on Stack Overflow
+/// This widget is courtesy of Rémi Rousselet found on Stack Overflow
 /// https://stackoverflow.com/questions/54027270/how-to-create-a-scroll-view-with-fixed-footer-with-flutter?noredirect=1&lq=1
 /// Modified it to use Widgets instead of Containers that was used in the
-/// example. Keeping it local to this file as it is not used or needed anywhere
-/// else, but it is good generally useful widget too.
+/// example and to accept null widgets as input.
+///
+/// Keeping it local to this file as it is not used or needed anywhere
+/// else, but it is a generally useful widget too.
 class _FooterLayout extends StatelessWidget {
   const _FooterLayout({
     this.body,

@@ -1707,6 +1707,13 @@ class _FlexScaffoldModel extends InheritedModel<_FlexScaffoldAspect> {
         (data.isBottomBarVisible != oldWidget.data.isBottomBarVisible &&
             dependencies.contains(_FlexScaffoldAspect.isBottomBarVisible)) ||
         //
+        (data.selectedIndex != oldWidget.data.selectedIndex &&
+            dependencies.contains(_FlexScaffoldAspect.selectedIndex)) ||
+        (data.showBottomDestinationsInDrawer !=
+                oldWidget.data.showBottomDestinationsInDrawer &&
+            dependencies.contains(
+                _FlexScaffoldAspect.showBottomDestinationsInDrawer)) ||
+        //
         (data.selectedDestination != oldWidget.data.selectedDestination &&
             dependencies.contains(_FlexScaffoldAspect.selectedDestination)) ||
         (data.onDestination != oldWidget.data.onDestination &&
