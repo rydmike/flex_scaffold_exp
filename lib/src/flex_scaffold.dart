@@ -11,6 +11,7 @@ import 'flex_scaffold_app_bar.dart';
 import 'flex_scaffold_constants.dart';
 import 'flex_scaffold_helpers.dart';
 import 'flex_scaffold_theme.dart';
+import 'flex_target.dart';
 
 // ignore_for_file: comment_references
 
@@ -79,9 +80,6 @@ class FlexScaffold extends StatefulWidget {
   const FlexScaffold({
     super.key,
     //
-    // The theme of the Flexfold responsive scaffold
-    this.flexfoldTheme,
-    //
     // The main app bar for the body part of the scaffold
     this.appBar,
     //
@@ -120,12 +118,12 @@ class FlexScaffold extends StatefulWidget {
     this.sidebarBelongsToBody = false,
     //
     // Bottom navigation bar properties.
-    this.hideBottomBar = false,
-    this.showBottomBarWhenMenuInDrawer = false,
-    this.showBottomBarWhenMenuShown = false,
+    this.hideBottom = false,
+    this.showBottomWhenMenuInDrawer = false,
+    this.showBottomWhenMenuShown = false,
     this.bottomDestinationsInDrawer = false,
-    this.customBottomNavigator,
-    this.customNavigationBarHeight,
+    this.customBottom,
+    this.customBottomHeight,
     //
     // Floating action button properties.
     this.floatingActionButton,
@@ -137,24 +135,11 @@ class FlexScaffold extends StatefulWidget {
     this.extendBody = true,
     this.extendBodyBehindAppBar = true,
     //
-    // The actual content that will be in the Flexfold scaffold body.
+    // The actual content that will be in the FlexScaffold scaffold body.
     this.body,
     //
   }) : assert(
             destinations.length >= 2, 'There must be at least 2 destinations');
-
-  /// The theme for the [FlexScaffold] scaffold.
-  ///
-  /// The theme contains a large number of style and other properties that
-  /// can be modified modify to customize the look of the [FlexScaffold]
-  /// responsive scaffold. See [FlexScaffoldThemeData] for more details.
-  ///
-  /// Changes to passed in theme's properties are animated. Changes to a
-  /// FlexfoldTheme higher up in the widget tree that Flexfold inherits it theme
-  /// from will also animate the properties in Flexfold that depends on the
-  /// inherited theme data. The passed in theme is merged with any inherited
-  /// theme.
-  final FlexScaffoldThemeData? flexfoldTheme;
 
   /// The appbar for the main scaffold body.
   ///
@@ -183,7 +168,7 @@ class FlexScaffold extends StatefulWidget {
   /// track of the index of the selected [FlexDestination] and call
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
-  final ValueChanged<GoFlexDestination> onDestination;
+  final ValueChanged<FlexTarget> onDestination;
 
   // TODO(rydmike): Implement modules!
   //
@@ -244,7 +229,7 @@ class FlexScaffold extends StatefulWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, it defaults to a widget
-  /// with value [kFlexfoldMenuIcon], the hamburger icon.
+  /// with value [kFlexMenuIcon], the hamburger icon.
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -258,7 +243,7 @@ class FlexScaffold extends StatefulWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
-  /// defined, it defaults to a widget with value [kFlexfoldMenuIconExpand].
+  /// defined, it defaults to a widget with value [kFlexMenuIconExpand].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -273,7 +258,7 @@ class FlexScaffold extends StatefulWidget {
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
   /// defined, it defaults to a widget with value
-  /// [kFlexfoldMenuIconExpandHidden].
+  /// [kFlexMenuIconExpandHidden].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -288,7 +273,7 @@ class FlexScaffold extends StatefulWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
-  /// defined, it defaults to a widget with value [kFlexfoldMenuIconCollapse].
+  /// defined, it defaults to a widget with value [kFlexMenuIconCollapse].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -363,7 +348,7 @@ class FlexScaffold extends StatefulWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, it defaults to a widget
-  /// with value [kFlexfoldSidebarIcon], the hamburger icon.
+  /// with value [kFlexSidebarIcon], the hamburger icon.
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -377,7 +362,7 @@ class FlexScaffold extends StatefulWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
-  /// defined, it defaults to a widget with value [kFlexfoldSidebarIconExpand].
+  /// defined, it defaults to a widget with value [kFlexSidebarIconExpand].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -392,7 +377,7 @@ class FlexScaffold extends StatefulWidget {
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
   /// defined, it defaults to a widget with value
-  /// [kFlexfoldSidebarIconExpandHidden].
+  /// [kFlexSidebarIconExpandHidden].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -407,7 +392,7 @@ class FlexScaffold extends StatefulWidget {
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [menuIcon] was not
   /// defined, it defaults to a widget with value
-  /// [kFlexfoldSidebarIconCollapse].
+  /// [kFlexSidebarIconCollapse].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -433,7 +418,7 @@ class FlexScaffold extends StatefulWidget {
   /// sidebar.
   ///
   /// By default sidebar belongs [sidebarBelongsToBody] = false.
-  /// This is an opinionated Flexfold default, it works better if a
+  /// This is an opinionated FlexScaffold default, it works better if a
   /// bottom navigation bar is used with a sidebar and it also keeps the Flutter
   /// standard FAB locations correctly positioned when the sidebar is visible
   /// as its width is excluded from the positioning when the sidebar is outside
@@ -451,34 +436,36 @@ class FlexScaffold extends StatefulWidget {
   /// [BottomNavigationBar] is used to
   /// determine if the [FlexScaffold] use [CupertinoBottomBar],
   ///
-  /// The type is determined by [FlexScaffoldThemeData.bottomBarType], which
-  /// defaults to [FlexfoldBottomBarType.adaptive]. Which will result in
+  /// The type is determined by [FlexScaffoldThemeData.bottomType], which
+  /// defaults to [FlexBottomType.adaptive]. Which will result in
   /// [CupertinoTabBar] on iOS and macOS and other platforms in
   /// [BottomNavigationBar] if [ThemeData.useMaterial3] is false and in
   /// [NavigationBar] if [ThemeData.useMaterial3] is true.
-  final Widget? customBottomNavigator;
+  final Widget? customBottom;
 
   /// The height of the custom navigation bar.
   ///
   /// If not provided it assumed to be same height as Material 2 bottom
   /// navigation bar height, which is [kBottomNavigationBarHeight].
-  final double? customNavigationBarHeight;
+  final double? customBottomHeight;
 
-  /// Should the bottom bar be displayed or not?
+  /// Should the bottom navigation be displayed or not?
   ///
   /// Defaults to false, if set to true the bottom navigation bar will not be
   /// shown in bottom navigation mode. Navigation will only be possible via the
   /// drawer menu in a phone sized app.
-  final bool hideBottomBar;
+  final bool hideBottom;
 
-  /// Set it to true if bottom bar destinations should be shown as soon as the
+  /// When true, bottom navigation destinations will be shown as soon as the
   /// menu is hidden in the drawer.
   ///
-  /// By default this is false. Normally the bottom navigation bar is not shown
+  /// Normally the bottom navigation bar is not shown
   /// until width is below the breakpoint for showing the bottom navigation
   /// bar. If you set this to true, it will be shown also if the menu and rail
   /// is toggled to be hidden.
-  final bool showBottomBarWhenMenuInDrawer;
+  ///
+  /// Defaults to false.
+  final bool showBottomWhenMenuInDrawer;
 
   /// Set to true if bottom bar should also be shown when the menu is visible.
   ///
@@ -487,7 +474,7 @@ class FlexScaffold extends StatefulWidget {
   /// will however be shown. Use with care, as this can be confusing for users.
   /// It is mainly a toggle to use during testing and development. This feature
   /// can potentially also be used as an accessibility feature.
-  final bool showBottomBarWhenMenuShown;
+  final bool showBottomWhenMenuShown;
 
   /// Set it to true if bottom bar destinations should also be included in the
   /// drawer when the bottom navigation mode is being used.
@@ -501,20 +488,19 @@ class FlexScaffold extends StatefulWidget {
   /// Floating action button widget for the layout.
   final FloatingActionButton? floatingActionButton;
 
-  // TODO(rydmike): Review nullable or non nullable on the next 3.
   /// Location of the floating action button for phone layout
   ///
-  /// Defaults to [FloatingActionButtonLocation.endFloat] if null.
+  /// Defaults to [FloatingActionButtonLocation.endFloat].
   final FloatingActionButtonLocation? floatingActionButtonLocationPhone;
 
   /// Location of the floating action button for tablet layout
   ///
-  /// Defaults to [FloatingActionButtonLocation.centerFloat] if null.
+  /// Defaults to [FloatingActionButtonLocation.centerFloat].
   final FloatingActionButtonLocation? floatingActionButtonLocationTablet;
 
   /// Location of the floating action button for desktop layout
   ///
-  /// Defaults to [FloatingActionButtonLocation.startFloat] if null.
+  /// Defaults to [FloatingActionButtonLocation.startFloat].
   final FloatingActionButtonLocation? floatingActionButtonLocationDesktop;
 
   /// Set to true to extend the body behind bottom bar.
@@ -529,10 +515,8 @@ class FlexScaffold extends StatefulWidget {
 
   /// The body of the scaffold
   ///
-  /// The content widget for the Flexfold scaffold screen.
+  /// The content widget for the FlexScaffold scaffold screen.
   final Widget? body;
-
-  // TODO(rydmike): Remove the build flag when sure it is not needed.
 
   /// Finds the [FlexScaffoldState] from the closest instance of this class that
   /// encloses the given context.
@@ -575,10 +559,9 @@ class FlexScaffold extends StatefulWidget {
   /// [FlexScaffoldState] rather than using the [FlexScaffold.use] function.
   ///
   /// If there is no [FlexScaffold] in scope, then this will throw an exception.
-  static FlexScaffoldState use(BuildContext context, {bool build = false}) {
-    final _InheritedFlexScaffold? result = build
-        ? context.dependOnInheritedWidgetOfExactType<_InheritedFlexScaffold>()
-        : context.findAncestorWidgetOfExactType<_InheritedFlexScaffold>();
+  static FlexScaffoldState use(BuildContext context) {
+    final _InheritedFlexScaffold? result =
+        context.findAncestorWidgetOfExactType<_InheritedFlexScaffold>();
     if (result != null) {
       return result.data;
     }
@@ -615,27 +598,27 @@ class FlexScaffold extends StatefulWidget {
   }
 
   // TODO(rydmike): Remove function, probably not needed at all.
-
-  /// Finds the [FlexScaffoldState] from the closest instance of this class that
-  /// encloses the given context.
-  ///
-  /// If no instance of this class encloses the given context, will return null.
-  /// To throw an exception instead, use [use] instead of this function.
-  ///
-  /// This method can be expensive (it walks the element tree).
-  ///
-  /// See also:
-  ///
-  ///  * [use], a similar function to this one that throws if no instance
-  ///    encloses the given context.
-  static FlexScaffoldState? maybeUse(BuildContext context,
-      {bool build = false}) {
-    return build
-        ? context
-            .dependOnInheritedWidgetOfExactType<_InheritedFlexScaffold>()
-            ?.data
-        : context.findAncestorWidgetOfExactType<_InheritedFlexScaffold>()?.data;
-  }
+  //
+  // /// Finds the [FlexScaffoldState] from the closest instance of this class that
+  // /// encloses the given context.
+  // ///
+  // /// If no instance of this class encloses the given context, will return null.
+  // /// To throw an exception instead, use [use] instead of this function.
+  // ///
+  // /// This method can be expensive (it walks the element tree).
+  // ///
+  // /// See also:
+  // ///
+  // ///  * [use], a similar function to this one that throws if no instance
+  // ///    encloses the given context.
+  // static FlexScaffoldState? maybeUse(BuildContext context,
+  //     {bool build = false}) {
+  //   return build
+  //       ? context
+  //        .dependOnInheritedWidgetOfExactType<_InheritedFlexScaffold>()
+  //        ?.data
+  //  : context.findAncestorWidgetOfExactType<_InheritedFlexScaffold>()?.data;
+  // }
 
   // TODO(rydmike): Add throw error like on [use] function above.
   /// A helper to make it easier to create model property aspectOf dependents.
@@ -716,7 +699,7 @@ class FlexScaffold extends StatefulWidget {
   static bool isBottomTargetOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.isBottomTarget).isBottomTarget;
 
-  /// Returns true if the [FlexScaffold] bottom navigation bar is visisble.
+  /// Returns true if the [FlexScaffold] bottom navigation bar is visible.
   static bool isBottomBarVisibleOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.isBottomBarVisible).isBottomBarVisible;
 
@@ -730,19 +713,19 @@ class FlexScaffold extends StatefulWidget {
       _of(context, _FlexScaffoldAspect.showBottomDestinationsInDrawer)
           .showBottomDestinationsInDrawer;
 
-  /// Returns the currently selected [GoFlexDestination] definition of the
+  /// Returns the currently selected [FlexTarget] definition of the
   /// [FlexScaffold], as defined by [FlexScaffoldState.widget] and
   /// [selectedIndex].
-  static GoFlexDestination selectedDestinationOf(BuildContext context) =>
+  static FlexTarget selectedDestinationOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.selectedDestination).selectedDestination;
 
-  /// Returns the latest [GoFlexDestination] definition used in the
+  /// Returns the latest [FlexTarget] definition used in the
   /// [FlexScaffold.onDestinationOf] callback.
   ///
   /// This is different from the [selectedDestinationOf] as it is the selection
   /// before it has been fed back into the [FlexScaffold] via
   /// [FlexScaffold.selectedIndex].
-  static GoFlexDestination onDestinationOf(BuildContext context) =>
+  static FlexTarget onDestinationOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.onDestination).onDestination;
 
   /// A static helper function intended to be used as a scroll controller
@@ -805,7 +788,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
   late bool _isBottomTarget;
   late bool _scrollHiddenBottomBar;
   late List<FlexDestination> _bottomDestinations;
-  double _breakpointSidebar = kFlexfoldBreakpointSidebar;
+  double _breakpointSidebar = kFlexBreakpointSidebar;
   double _width = 600;
 
   // Local state
@@ -820,8 +803,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
   late bool _isBottomBarVisible;
   late bool _showBottomDestinationsInDrawer;
   late Orientation _currentOrientation;
-  GoFlexDestination _onDestination = const GoFlexDestination();
-  GoFlexDestination _selectedDestination = const GoFlexDestination();
+  FlexTarget _onDestination = const FlexTarget();
+  FlexTarget _selectedDestination = const FlexTarget();
 
   /// Set the FlexScaffold menu to be hidden. If set to false, the menu will be
   /// shown as a rail or menu when it should, based on its breakpoints.
@@ -915,7 +898,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
           (_isPhone && widget.destinations[_selectedIndex].maybePush) ||
               widget.destinations[_selectedIndex].alwaysPush;
       // Make destination data to return in onDestination call.
-      final GoFlexDestination destination = GoFlexDestination(
+      final FlexTarget destination = FlexTarget(
         index: _selectedIndex,
         bottomIndex: bottomIndex,
         route: widget.destinations[_selectedIndex].route,
@@ -952,7 +935,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
         _selectedIndex = toMenuIndex(_target);
         _indexMenu.setIndex(_selectedIndex);
         // Make tap destination data to return
-        final GoFlexDestination destination = GoFlexDestination(
+        final FlexTarget destination = FlexTarget(
           index: _selectedIndex,
           bottomIndex: index,
           route: widget.destinations[_selectedIndex].route,
@@ -1041,11 +1024,11 @@ class FlexScaffoldState extends State<FlexScaffold> {
     return widget.destinations[0];
   }
 
-  /// Create a [GoFlexDestination] from a [route], with
+  /// Create a [FlexTarget] from a [route], with
   /// optional values for navigation source and reverse direction.
   ///
   /// The String [route] is required.
-  GoFlexDestination fromRoute(
+  FlexTarget fromRoute(
     String route, {
     FlexNavigation source = FlexNavigation.custom,
     bool reverse = false,
@@ -1054,7 +1037,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
     // Get the destination
     final FlexDestination destination = forRoute(route);
     final int index = toMenuIndex(destination);
-    return GoFlexDestination(
+    return FlexTarget(
       index: index,
       bottomIndex: toBottomIndex(destination),
       route: route,
@@ -1114,7 +1097,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
       final bool preferPush =
           (_isPhone && widget.destinations[_selectedIndex].maybePush) ||
               widget.destinations[_selectedIndex].alwaysPush;
-      _selectedDestination = GoFlexDestination(
+      _selectedDestination = FlexTarget(
         index: _selectedIndex,
         bottomIndex: bottomIndex,
         route: widget.destinations[_selectedIndex].route,
@@ -1145,384 +1128,231 @@ class FlexScaffoldState extends State<FlexScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    // The passed in theme widget and its BottomNavigationBarThemeData have
-    // highest priority and its properties will be used first when not null.
-    final BottomNavigationBarThemeData? bottomWidget =
-        widget.flexfoldTheme?.bottomNavigationBarTheme;
-    // The closest inherited Flexfold Theme has the 2nd highest prio for
-    // effective theme data.
-    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
-    // Get its bottom navigation bar theme
-    final BottomNavigationBarThemeData? bottomFlex =
-        flexTheme.bottomNavigationBarTheme;
-    // The bottom navigation bar may as a 3rd prio option also get theme data
-    // from an inherited BottomNavigationBarTheme.
-    final BottomNavigationBarThemeData bottomBar =
-        BottomNavigationBarTheme.of(context);
     // Get the main surrounding theme
     final ThemeData theme = Theme.of(context);
-    // As 4th and last option the bottom navigation bar may get theme data
-    // from the bottomNavigationBarTheme property in overall inherited Theme.
-    final BottomNavigationBarThemeData bottomTheme =
-        theme.bottomNavigationBarTheme;
-    // Merge all bottom themes, we use the lowest prio as base, which is the
-    // bottomNavigationBarTheme from Theme.of(context) stored in [bottomTheme].
-    // Then we use any none null property value from highest to lowest priority
-    // from:
-    // 1. widget.theme.bottomNavigationBarTheme stored in bottomWidget
-    // 2. FlexfoldTheme.of(context).bottomNavigationBarTheme in bottomFlex
-    // 3. BottomNavigationBarTheme.of(context) stored in bottomBar
-    // 4. If appropriate, fallbacks from property values in Theme.of(context)
-    // 5. Last some hard coded default fallback values as defined for
-    // FlexfoldTheme. See [FlexfoldTheme] for details on default values.
-    final BottomNavigationBarThemeData effectiveBottomTheme =
-        bottomTheme.copyWith(
-      // IMPORTANT: Bottom nav background in FlexFoldTheme may still be null
-      // after this. Need to check still in flex bottom widgets!
-      backgroundColor: bottomWidget?.backgroundColor ??
-          bottomFlex?.backgroundColor ??
-          bottomBar.backgroundColor,
-      elevation: bottomWidget?.elevation ??
-          bottomFlex?.elevation ??
-          bottomBar.elevation ??
-          0,
-      selectedIconTheme: bottomWidget?.selectedIconTheme ??
-          bottomFlex?.selectedIconTheme ??
-          bottomBar.selectedIconTheme ??
-          IconThemeData(color: theme.colorScheme.primary),
-      unselectedIconTheme: bottomWidget?.unselectedIconTheme ??
-          bottomFlex?.unselectedIconTheme ??
-          bottomBar.unselectedIconTheme,
-      selectedItemColor: bottomWidget?.selectedItemColor ??
-          bottomFlex?.selectedItemColor ??
-          bottomBar.selectedItemColor ??
-          theme.colorScheme.primary,
-      unselectedItemColor: bottomWidget?.unselectedItemColor ??
-          bottomFlex?.unselectedItemColor ??
-          bottomBar.unselectedItemColor,
-      selectedLabelStyle: bottomWidget?.selectedLabelStyle ??
-          bottomFlex?.selectedLabelStyle ??
-          bottomBar.selectedLabelStyle ??
-          theme.primaryTextTheme.bodyText2!
-              .copyWith(color: theme.colorScheme.primary),
-      unselectedLabelStyle: bottomWidget?.unselectedLabelStyle ??
-          bottomFlex?.unselectedLabelStyle ??
-          bottomBar.unselectedLabelStyle,
-      showSelectedLabels: bottomWidget?.showSelectedLabels ??
-          bottomFlex?.showSelectedLabels ??
-          bottomBar.showSelectedLabels ??
-          true,
-      showUnselectedLabels: bottomWidget?.showUnselectedLabels ??
-          bottomFlex?.showUnselectedLabels ??
-          bottomBar.showUnselectedLabels ??
-          true,
-      type: bottomWidget?.type ??
-          bottomFlex?.type ??
-          bottomBar.type ??
-          BottomNavigationBarType.fixed,
-    );
+    // Get effective FlexTheme:
+    //  1. If one exist in Theme, use it, fill undefined props with default
+    //  2. If no FlexTheme in Theme, fallback to one with all default values.
+    final FlexScaffoldTheme flexTheme =
+        theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
+            const FlexScaffoldTheme().withDefaults(context);
 
-    // Get Flexfold default theme data
-    final FlexScaffoldThemeData defaultFlexTheme =
-        const FlexScaffoldThemeData().withDefaults(context);
+    assert(
+        !(flexTheme.bottomType == FlexBottomType.custom &&
+            widget.customBottom == null),
+        'If bottom navigation type is custom, you have to provide a '
+        'custom bottom navigator to FlexScaffold.custom.');
 
-    // Merge the other sub-themes than the Bottom navigation bar with
-    // the default values, first merge the inherited Flexfold sub theme
-    // values and then the sub theme values passed in via widget.theme
-    final TextStyle effectiveUnselectedLabelStyle = defaultFlexTheme
-        .labelTextStyle!
-        .merge(flexTheme.labelTextStyle)
-        .merge(widget.flexfoldTheme!.labelTextStyle);
+    // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
+    //   reference: https://github.com/flutter/flutter/pull/114459
+    // Get media width, height, and safe area padding
+    assert(debugCheckHasMediaQuery(context),
+        'A valid build context is required for the MediaQuery.');
+    final MediaQueryData mediaData = MediaQuery.of(context);
+    final double leftPadding = mediaData.padding.left;
+    final double rightPadding = mediaData.padding.right;
+    final double startPadding = Directionality.of(context) == TextDirection.ltr
+        ? leftPadding
+        : rightPadding;
+    _width = mediaData.size.width;
+    final double height = mediaData.size.height;
 
-    final TextStyle effectiveSelectedLabelStyle = defaultFlexTheme
-        .selectedLabelTextStyle!
-        .merge(flexTheme.selectedLabelTextStyle)
-        .merge(widget.flexfoldTheme!.selectedLabelTextStyle);
+    // Based on width and breakpoint limit, this is a phone sized layout.
+    _isPhone = _width < flexTheme.breakpointRail!;
+    // Based on height and breakpoint, this is a phone landscape layout.
+    _isPhoneLandscape = height < flexTheme.breakpointDrawer!;
+    // Based on width & breakpoint limit, this is a desktop sized layout.
+    _isDesktop = (_width >= flexTheme.breakpointMenu!) && !_isPhoneLandscape;
+    // This is only based on that we are not doing phone or desktop size.
+    _isTablet = !_isPhone && !_isDesktop;
 
-    final IconThemeData effectiveUnselectedIconTheme = defaultFlexTheme
-        .iconTheme!
-        .merge(flexTheme.iconTheme)
-        .merge(widget.flexfoldTheme!.iconTheme);
-
-    final IconThemeData effectiveSelectedIconTheme = defaultFlexTheme
-        .selectedIconTheme!
-        .merge(flexTheme.selectedIconTheme)
-        .merge(widget.flexfoldTheme!.selectedIconTheme);
-
-    final TextStyle effectiveHeadingTextStyle = defaultFlexTheme
-        .headingTextStyle!
-        .merge(flexTheme.headingTextStyle)
-        .merge(widget.flexfoldTheme!.headingTextStyle);
-
-    // Merge the inherited Flexfold theme with the default Flexfold theme.
-    final FlexScaffoldThemeData flexThemeMerged =
-        defaultFlexTheme.merge(flexTheme);
-
-    // Then merge widget passed in theme, with the above merge theme.
-    final FlexScaffoldThemeData fullFlexTheme =
-        flexThemeMerged.merge(widget.flexfoldTheme);
-
-    // Then the fully merged Flexfold theme gets a copy of all the effective
-    // effective sub themes it contains, meaning the bottomNavigationBarTheme
-    // and all effective text styles and icon themes.
-    // This creates a theme that has all the ambient Flexfold theme data
-    // and defaults as fallback, in a single summarized merged theme.
-    final FlexScaffoldThemeData effectiveFlexTheme = fullFlexTheme.copyWith(
-      bottomNavigationBarTheme: effectiveBottomTheme,
-      labelTextStyle: effectiveUnselectedLabelStyle,
-      selectedLabelTextStyle: effectiveSelectedLabelStyle,
-      iconTheme: effectiveUnselectedIconTheme,
-      selectedIconTheme: effectiveSelectedIconTheme,
-      headingTextStyle: effectiveHeadingTextStyle,
-    );
-
-    // Then make an animated FlexfoldTheme of the final effective theme.
-    return AnimatedFlexfoldTheme(
-      data: effectiveFlexTheme,
-      child: Builder(builder: (BuildContext context) {
-        // We a use builder to ensure we have the fully merged FlexfoldTheme
-        // next up in the Widget tree, that now also has all the default
-        // values. By doing this we do not have to apply any defaults again in
-        // the entire Flexfold widget tree and its descendants. They are now
-        // guaranteed to with 'FlexfoldTheme.of(context)' get a theme
-        // that has been fully merged with provided values in the property
-        // passing and inheritance priority order we defined.
-        //
-        // The only values that may still be null after this merge are:
-        // * FlexfoldTheme.menuBackgroundColor
-        // * FlexfoldTheme.sidebar.BackgroundColor
-        // * FlexfoldTheme.bottomNavigationBarTheme.backgroundColor
-        //
-        // This makes accessing the correct theme result further down the
-        // widget tree easier, since we can always get it like this now:
-        final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
-
-        assert(
-            !(flexTheme.bottomBarType == FlexfoldBottomBarType.custom &&
-                widget.customBottomNavigator == null),
-            'If bottom navigation type is custom, you have to provide a '
-            'custom bottom navigator to FlexScaffold.custom.');
-
-        // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
-        //   reference: https://github.com/flutter/flutter/pull/114459
-        // Get media width, height, and safe area padding
-        assert(debugCheckHasMediaQuery(context),
-            'A valid build context is required for the MediaQuery.');
-        final MediaQueryData mediaData = MediaQuery.of(context);
-        final double leftPadding = mediaData.padding.left;
-        final double rightPadding = mediaData.padding.right;
-        final double startPadding =
-            Directionality.of(context) == TextDirection.ltr
-                ? leftPadding
-                : rightPadding;
-        _width = mediaData.size.width;
-        final double height = mediaData.size.height;
-
-        // Based on width and breakpoint limit, this is a phone sized layout.
-        _isPhone = _width < flexTheme.breakpointRail!;
-        // Based on height and breakpoint, this is a phone landscape layout.
-        _isPhoneLandscape = height < flexTheme.breakpointDrawer!;
-        // Based on width & breakpoint limit, this is a desktop sized layout.
-        _isDesktop =
-            (_width >= flexTheme.breakpointMenu!) && !_isPhoneLandscape;
-        // This is only based on that we are not doing phone or desktop size.
-        _isTablet = !_isPhone && !_isDesktop;
-
-        // The menu will exist as a Drawer widget in the widget tree.
-        _isMenuInDrawer = _isPhone || widget.menuHide || _isPhoneLandscape;
-        // The menu is shown as a full sized menu before the body.
-        _isMenuInMenu =
-            _isDesktop && !widget.menuHide && !widget.menuPrefersRail;
-        // The sidebar will exist in an end Drawer widget in the widget tree.
-        _isSidebarInEndDrawer =
-            (_width < flexTheme.breakpointSidebar! || _isSidebarHidden) &&
-                widget.destinations[_selectedIndex].hasSidebar &&
-                widget.sidebar != null;
-        // The sidebar is shown as a widget after the body.
-        _breakpointSidebar = flexTheme.breakpointSidebar!;
-        _isSidebarInMenu = _width >= _breakpointSidebar &&
-            !_isSidebarHidden &&
+    // The menu will exist as a Drawer widget in the widget tree.
+    _isMenuInDrawer = _isPhone || widget.menuHide || _isPhoneLandscape;
+    // The menu is shown as a full sized menu before the body.
+    _isMenuInMenu = _isDesktop && !widget.menuHide && !widget.menuPrefersRail;
+    // The sidebar will exist in an end Drawer widget in the widget tree.
+    _isSidebarInEndDrawer =
+        (_width < flexTheme.breakpointSidebar! || _isSidebarHidden) &&
             widget.destinations[_selectedIndex].hasSidebar &&
             widget.sidebar != null;
-        // The bottom navigation bar is visible.
-        // Complex logic here, many config options leads to stuff like this.
-        _isBottomBarVisible =
-            !(widget.hideBottomBar || _scrollHiddenBottomBar) &&
-                (_isPhone ||
-                    widget.showBottomBarWhenMenuShown ||
-                    (widget.showBottomBarWhenMenuInDrawer && _isMenuInDrawer));
-        // The bottom destinations are to be shown and included in the drawer.
-        // Again complex logic, caused by many options and possibilities
-        _showBottomDestinationsInDrawer = widget.bottomDestinationsInDrawer ||
-            !_isBottomTarget ||
-            widget.hideBottomBar ||
-            (!_isPhone &&
-                (!widget.showBottomBarWhenMenuInDrawer &&
-                    !widget.showBottomBarWhenMenuShown));
-        // Set location of floating action button (FAB) depending on media
-        // size, use default locations if null.
-        final FloatingActionButtonLocation effectiveFabLocation = _isPhone
-            // FAB on phone size
-            ? widget.floatingActionButtonLocationPhone ??
-                // Default uses end float location, the official standard.
-                FloatingActionButtonLocation.endFloat
-            : _isDesktop
-                ? widget.floatingActionButtonLocationDesktop ??
-                    // Material default position would be startTop at desktop
-                    // size, or possibly also endTop, but the FAB gets in the
-                    // way in those locations sometimes so we use centerFloat
-                    // as default.
-                    FloatingActionButtonLocation.centerFloat
-                // It is tablet then ...
-                : widget.floatingActionButtonLocationTablet ??
-                    // Default should be start top, but that is in the way so
-                    // we use startFloat, it works well with rail navigation.
-                    FloatingActionButtonLocation.startFloat;
-        //
-        // Build the actual FlexScaffold content
-        return _InheritedFlexScaffold(
-          data: this,
-          child: _FlexScaffoldModel(
-            data: _data.copyWith(
-              isMenuInDrawer: _isMenuInDrawer,
-              isMenuHidden: _isMenuHidden,
-              menuPrefersRail: _menuPrefersRail,
-              //
-              isSidebarInEndDrawer: _isSidebarInEndDrawer,
-              isSidebarInMenu: _isSidebarInMenu,
-              isSidebarHidden: _isSidebarHidden,
-              //
-              menuControlEnabled: widget.menuControlEnabled,
-              sidebarControlEnabled: widget.sidebarControlEnabled,
-              cycleViaDrawer: widget.cycleViaDrawer,
-              //
-              menuBelongsToBody: false, // TODO(rydmike): Add feature
-              sidebarBelongsToBody: widget.sidebarBelongsToBody,
-              //
-              isBottomTarget: _isBottomTarget,
-              isBottomBarVisible: _isBottomBarVisible,
-              //
-              selectedIndex: widget.selectedIndex,
-              showBottomDestinationsInDrawer: _showBottomDestinationsInDrawer,
-              //
-              selectedDestination: _selectedDestination,
-              onDestination: _onDestination,
+    // The sidebar is shown as a widget after the body.
+    _breakpointSidebar = flexTheme.breakpointSidebar!;
+    _isSidebarInMenu = _width >= _breakpointSidebar &&
+        !_isSidebarHidden &&
+        widget.destinations[_selectedIndex].hasSidebar &&
+        widget.sidebar != null;
+    // The bottom navigation bar is visible.
+    // Complex logic here, many config options leads to stuff like this.
+    _isBottomBarVisible = !(widget.hideBottom || _scrollHiddenBottomBar) &&
+        (_isPhone ||
+            widget.showBottomWhenMenuShown ||
+            (widget.showBottomWhenMenuInDrawer && _isMenuInDrawer));
+    // The bottom destinations are to be shown and included in the drawer.
+    // Again complex logic, caused by many options and possibilities
+    _showBottomDestinationsInDrawer = widget.bottomDestinationsInDrawer ||
+        !_isBottomTarget ||
+        widget.hideBottom ||
+        (!_isPhone &&
+            (!widget.showBottomWhenMenuInDrawer &&
+                !widget.showBottomWhenMenuShown));
+    // Set location of floating action button (FAB) depending on media
+    // size, use default locations if null.
+    final FloatingActionButtonLocation effectiveFabLocation = _isPhone
+        // FAB on phone size
+        ? widget.floatingActionButtonLocationPhone ??
+            // Default uses end float location, the official standard.
+            FloatingActionButtonLocation.endFloat
+        : _isDesktop
+            ? widget.floatingActionButtonLocationDesktop ??
+                // Material default position would be startTop at desktop
+                // size, or possibly also endTop, but the FAB gets in the
+                // way in those locations sometimes so we use centerFloat
+                // as default.
+                FloatingActionButtonLocation.centerFloat
+            // It is tablet then ...
+            : widget.floatingActionButtonLocationTablet ??
+                // Default should be start top, but that is in the way so
+                // we use startFloat, it works well with rail navigation.
+                FloatingActionButtonLocation.startFloat;
+    //
+    // Build the actual FlexScaffold content
+    return _InheritedFlexScaffold(
+      data: this,
+      child: _FlexScaffoldModel(
+        data: _data.copyWith(
+          isMenuInDrawer: _isMenuInDrawer,
+          isMenuHidden: _isMenuHidden,
+          menuPrefersRail: _menuPrefersRail,
+          //
+          isSidebarInEndDrawer: _isSidebarInEndDrawer,
+          isSidebarInMenu: _isSidebarInMenu,
+          isSidebarHidden: _isSidebarHidden,
+          //
+          menuControlEnabled: widget.menuControlEnabled,
+          sidebarControlEnabled: widget.sidebarControlEnabled,
+          cycleViaDrawer: widget.cycleViaDrawer,
+          //
+          menuBelongsToBody: false, // TODO(rydmike): Add feature
+          sidebarBelongsToBody: widget.sidebarBelongsToBody,
+          //
+          isBottomTarget: _isBottomTarget,
+          isBottomBarVisible: _isBottomBarVisible,
+          //
+          selectedIndex: widget.selectedIndex,
+          showBottomDestinationsInDrawer: _showBottomDestinationsInDrawer,
+          //
+          selectedDestination: _selectedDestination,
+          onDestination: _onDestination,
+        ),
+        child: Row(
+          children: <Widget>[
+            //
+            // Main menu, when the menu is shown as a fixed menu
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: flexTheme.menuWidth! + startPadding,
+              ),
+              child: Material(
+                color: flexTheme.menuBackgroundColor,
+                elevation: flexTheme.menuElevation!,
+                child: widget.menu,
+              ),
             ),
-            child: Row(
-              children: <Widget>[
+            //
+            // Main part is an Expanded that contains a standard Scaffold.
+            Expanded(
+              child: Scaffold(
+                key: widget.key,
+                extendBody: widget.extendBody,
+                extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
                 //
-                // Main menu, when the menu is shown as a fixed menu
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: flexTheme.menuWidth! + startPadding,
-                  ),
-                  child: Material(
-                    color: flexTheme.menuBackgroundColor,
-                    elevation: flexTheme.menuElevation!,
-                    child: widget.menu,
-                  ),
+                // Add AppBar with leading and actions buttons, but only
+                // if the destination has an app bar.
+                appBar: widget.destinations[_selectedIndex].hasAppBar
+                    ? FlexScaffoldAppBar(appBar: widget.appBar)
+                    : null,
+                //
+                // The menu when used as a drawer.
+                drawer: _isMenuInDrawer
+                    ? FlexDrawer(
+                        currentScreenWidth: _width,
+                        backgroundColor: flexTheme.menuBackgroundColor,
+                        elevation: flexTheme.drawerElevation,
+                        width: flexTheme.drawerWidth! + startPadding,
+                        child: widget.menu,
+                      )
+                    : null,
+                //
+                // The end drawer, ie tools menu when used as an end drawer.
+                endDrawer: _isSidebarInEndDrawer
+                    ? FlexDrawer(
+                        currentScreenWidth: _width,
+                        backgroundColor: flexTheme.sidebarBackgroundColor,
+                        elevation: flexTheme.endDrawerElevation,
+                        width: flexTheme.endDrawerWidth,
+                        child: widget.sidebar,
+                      )
+                    : null,
+                //
+                // The bottom navigation bar
+                bottomNavigationBar: FlexBottomBar(
+                  customNavigationBar: widget.customBottom,
+                  customNavigationBarHeight: widget.customBottomHeight,
                 ),
                 //
-                // Main part is an Expanded that contains a standard Scaffold.
-                Expanded(
-                  child: Scaffold(
-                    key: widget.key,
-                    //
-                    extendBody: widget.extendBody,
-                    extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
-                    //
-                    // Add AppBar with leading and actions buttons, but only
-                    // if the destination has an app bar.
-                    appBar: widget.destinations[_selectedIndex].hasAppBar
-                        ? FlexScaffoldAppBar(appBar: widget.appBar)
-                        : null,
-                    //
-                    // The menu when used as a drawer.
-                    drawer: _isMenuInDrawer
-                        ? FlexDrawer(
-                            currentScreenWidth: _width,
-                            backgroundColor: flexTheme.menuBackgroundColor,
-                            elevation: flexTheme.drawerElevation,
-                            width: flexTheme.drawerWidth! + startPadding,
-                            child: widget.menu,
-                          )
-                        : null,
-                    //
-                    // The end drawer, ie tools menu when used as an end drawer.
-                    endDrawer: _isSidebarInEndDrawer
-                        ? FlexDrawer(
-                            currentScreenWidth: _width,
-                            backgroundColor: flexTheme.sidebarBackgroundColor,
-                            elevation: flexTheme.endDrawerElevation,
-                            width: flexTheme.endDrawerWidth,
-                            child: widget.sidebar,
-                          )
-                        : null,
-                    //
-                    // The bottom navigation bar
-                    bottomNavigationBar: FlexBottomBar(
-                      customNavigationBar: widget.customBottomNavigator,
-                      customNavigationBarHeight:
-                          widget.customNavigationBarHeight,
-                    ),
-                    //
-                    // Floating action button in its effective location.
-                    floatingActionButton: widget.destinations[_selectedIndex]
-                            .hasFloatingActionButton
+                // Floating action button in its effective location.
+                floatingActionButton:
+                    widget.destinations[_selectedIndex].hasFloatingActionButton
                         ? widget.floatingActionButton
                         : null,
-                    floatingActionButtonLocation: effectiveFabLocation,
-                    //
-                    // Build the actual content in a Row.
-                    body: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Expanded(
-                          child: widget.body ?? Container(),
+                floatingActionButtonLocation: effectiveFabLocation,
+                //
+                // Build the actual content in a Row.
+                body: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: widget.body ?? Container(),
+                    ),
+                    // The Sidebar when shown as a fixed item and it belongs
+                    // to the body. Material default sidebar layout.
+                    if (widget.destinations[_selectedIndex].hasSidebar &&
+                        widget.sidebar != null &&
+                        widget.sidebarBelongsToBody)
+                      ConstrainedBox(
+                        constraints:
+                            BoxConstraints(maxWidth: flexTheme.sidebarWidth!),
+                        child: Material(
+                          color: flexTheme.sidebarBackgroundColor,
+                          elevation: flexTheme.sidebarElevation!,
+                          child: widget.sidebar,
                         ),
-                        //
-                        // The Sidebar when shown as a fixed item and it belongs
-                        // to the body. Material default sidebar layout.
-                        if (widget.destinations[_selectedIndex].hasSidebar &&
-                            widget.sidebar != null &&
-                            widget.sidebarBelongsToBody)
-                          ConstrainedBox(
-                            constraints: BoxConstraints(
-                                maxWidth: flexTheme.sidebarWidth!),
-                            child: Material(
-                              color: flexTheme.sidebarBackgroundColor,
-                              elevation: flexTheme.sidebarElevation!,
-                              child: widget.sidebar,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
+                      ),
+                  ],
                 ),
-                // Sidebar may also be in the Row. This happens when it is shown
-                // as a fixed sidebar on the screen and it does not "belong to the
-                // body", then it is on the same level as the menu. The default
-                // Material design is one that it is a part of the body, but this
-                // works better if we also show a bottom navigation bar together
-                // with the sidebar and it works better with the built-in
-                // FAB locations.
-                if (widget.destinations[_selectedIndex].hasSidebar &&
-                    widget.sidebar != null &&
-                    !widget.sidebarBelongsToBody)
-                  ConstrainedBox(
-                    constraints:
-                        BoxConstraints(maxWidth: flexTheme.sidebarWidth!),
-                    child: Material(
-                      color: flexTheme.sidebarBackgroundColor,
-                      elevation: flexTheme.sidebarElevation!,
-                      child: widget.sidebar,
-                    ),
-                  ),
-              ],
+              ),
             ),
-          ),
-        );
-      }),
+            // Sidebar may also be in the Row. This happens when it is shown
+            // as a fixed sidebar on the screen and it does not "belong to the
+            // body", then it is on the same level as the menu. The default
+            // Material design is one that it is a part of the body, but this
+            // works better if we also show a bottom navigation bar together
+            // with the sidebar and it works better with the built-in
+            // FAB locations.
+            if (widget.destinations[_selectedIndex].hasSidebar &&
+                widget.sidebar != null &&
+                !widget.sidebarBelongsToBody)
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: flexTheme.sidebarWidth!),
+                child: Material(
+                  color: flexTheme.sidebarBackgroundColor,
+                  elevation: flexTheme.sidebarElevation!,
+                  child: widget.sidebar,
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -1625,8 +1455,8 @@ class _FlexScaffoldData with Diagnosticable {
     this.selectedIndex = 0,
     this.showBottomDestinationsInDrawer = false,
     //
-    this.selectedDestination = const GoFlexDestination(),
-    this.onDestination = const GoFlexDestination(),
+    this.selectedDestination = const FlexTarget(),
+    this.onDestination = const FlexTarget(),
   });
 
   final bool isMenuInDrawer;
@@ -1650,8 +1480,8 @@ class _FlexScaffoldData with Diagnosticable {
   final bool isBottomTarget;
   final bool isBottomBarVisible;
   //
-  final GoFlexDestination selectedDestination;
-  final GoFlexDestination onDestination;
+  final FlexTarget selectedDestination;
+  final FlexTarget onDestination;
 
   /// Copy the object with one or more provided properties changed.
   _FlexScaffoldData copyWith({
@@ -1676,8 +1506,8 @@ class _FlexScaffoldData with Diagnosticable {
     int? selectedIndex,
     bool? showBottomDestinationsInDrawer,
     //
-    GoFlexDestination? selectedDestination,
-    GoFlexDestination? onDestination,
+    FlexTarget? selectedDestination,
+    FlexTarget? onDestination,
   }) {
     return _FlexScaffoldData(
       isMenuInDrawer: isMenuInDrawer ?? this.isMenuInDrawer,
@@ -1803,10 +1633,10 @@ class _FlexScaffoldData with Diagnosticable {
     properties.add(DiagnosticsProperty<bool>(
         'showBottomDestinationsInDrawer', showBottomDestinationsInDrawer));
     //
-    properties.add(DiagnosticsProperty<GoFlexDestination>(
+    properties.add(DiagnosticsProperty<FlexTarget>(
         'selectedDestination', selectedDestination));
-    properties.add(
-        DiagnosticsProperty<GoFlexDestination>('onDestination', onDestination));
+    properties
+        .add(DiagnosticsProperty<FlexTarget>('onDestination', onDestination));
   }
 }
 
@@ -1876,6 +1706,13 @@ class _FlexScaffoldModel extends InheritedModel<_FlexScaffoldAspect> {
             dependencies.contains(_FlexScaffoldAspect.isBottomTarget)) ||
         (data.isBottomBarVisible != oldWidget.data.isBottomBarVisible &&
             dependencies.contains(_FlexScaffoldAspect.isBottomBarVisible)) ||
+        //
+        (data.selectedIndex != oldWidget.data.selectedIndex &&
+            dependencies.contains(_FlexScaffoldAspect.selectedIndex)) ||
+        (data.showBottomDestinationsInDrawer !=
+                oldWidget.data.showBottomDestinationsInDrawer &&
+            dependencies.contains(
+                _FlexScaffoldAspect.showBottomDestinationsInDrawer)) ||
         //
         (data.selectedDestination != oldWidget.data.selectedDestination &&
             dependencies.contains(_FlexScaffoldAspect.selectedDestination)) ||

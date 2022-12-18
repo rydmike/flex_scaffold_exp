@@ -24,7 +24,7 @@ class PushWrapper extends ConsumerWidget {
 
     // Get the current modal destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final GoFlexDestination destination = appNav.pushedDestination;
+    final FlexTarget destination = appNav.pushedDestination;
     if (_kDebugMe) {
       debugPrint('PushWrapper: Destination = $destination');
     }

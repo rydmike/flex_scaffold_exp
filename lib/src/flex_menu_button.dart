@@ -32,7 +32,7 @@ class FlexMenuButton extends StatelessWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, it defaults to a widget
-  /// with value [kFlexfoldMenuIcon], the hamburger icon.
+  /// with value [kFlexMenuIcon], the hamburger icon.
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -46,7 +46,7 @@ class FlexMenuButton extends StatelessWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [icon] was not
-  /// defined, it defaults to a widget with value [kFlexfoldMenuIconExpand].
+  /// defined, it defaults to a widget with value [kFlexMenuIconExpand].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -61,7 +61,7 @@ class FlexMenuButton extends StatelessWidget {
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [icon] was not
   /// defined, it defaults to a widget with value
-  /// [kFlexfoldMenuIconExpandHidden].
+  /// [kFlexMenuIconExpandHidden].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -76,7 +76,7 @@ class FlexMenuButton extends StatelessWidget {
   ///
   /// If no icon is provided and there was none given to same named property in
   /// a [FlexScaffold] higher up in the widget tree, and if [icon] was not
-  /// defined, it defaults to a widget with value [kFlexfoldMenuIconCollapse].
+  /// defined, it defaults to a widget with value [kFlexMenuIconCollapse].
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
@@ -110,7 +110,10 @@ class FlexMenuButton extends StatelessWidget {
     final double width = size.width;
     final double screenHeight = size.height;
 
-    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
+    final FlexScaffoldTheme flexTheme = Theme.of(context)
+            .extension<FlexScaffoldTheme>()
+            ?.withDefaults(context) ??
+        const FlexScaffoldTheme().withDefaults(context);
     final double breakpointDrawer = flexTheme.breakpointDrawer!;
     final double breakpointRail = flexTheme.breakpointRail!;
     final double breakpointMenu = flexTheme.breakpointMenu!;
@@ -128,19 +131,19 @@ class FlexMenuButton extends StatelessWidget {
     final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
     // Set effective expand and collapse icons
     Widget effectiveMenuIcon =
-        icon ?? flexScaffold.widget.menuIcon ?? kFlexfoldMenuIcon;
+        icon ?? flexScaffold.widget.menuIcon ?? kFlexMenuIcon;
     Widget effectiveMenuIconExpand = iconExpand ??
         flexScaffold.widget.menuIconExpand ??
         icon ??
-        kFlexfoldMenuIconExpand;
+        kFlexMenuIconExpand;
     Widget effectiveMenuIconExpandHidden = iconExpandHidden ??
         flexScaffold.widget.menuIconExpandHidden ??
         icon ??
-        kFlexfoldMenuIconExpandHidden;
+        kFlexMenuIconExpandHidden;
     Widget effectiveMenuIconCollapse = iconCollapse ??
         flexScaffold.widget.menuIconCollapse ??
         icon ??
-        kFlexfoldMenuIconCollapse;
+        kFlexMenuIconCollapse;
     // If directionality is RTL we rotate the icons 180 degrees, if directional
     // icons were used in a LTR design, the result should be fairly OK of this,
     // unless the APP was really designed with a RTL mindset, then we should
@@ -201,7 +204,7 @@ class FlexMenuButton extends StatelessWidget {
                   // (probably possible somehow) listen to and know when the
                   // Drawer has closed fully and open the locked menu/rail
                   // then, but this works too, but it is a bit of a hack.
-                  Future<void>.delayed(kFlexfoldFlutterDrawerDuration, () {
+                  Future<void>.delayed(kFlexFlutterDrawerDuration, () {
                     flexScaffold.hideMenu(false);
                   });
                 } else {

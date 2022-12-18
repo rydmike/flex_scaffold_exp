@@ -65,7 +65,7 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
     final CurrentRoute appNav = ref.watch(currentRouteProvider);
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final GoFlexDestination destination = appNav.destination;
+    final FlexTarget destination = appNav.destination;
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
@@ -152,7 +152,7 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
                 // In this case we want our navigation to the new screen to
                 // behave the same as if we had tapped on its target from
                 // the rail.
-                final GoFlexDestination newDestination = flexScaffold.fromRoute(
+                final FlexTarget newDestination = flexScaffold.fromRoute(
                   SettingsPage.route,
                   source: FlexNavigation.rail,
                 );

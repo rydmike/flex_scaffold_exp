@@ -92,7 +92,7 @@ const bool _kDebugMe = kDebugMode && false;
 // navigation (forward or reverse) could be used.
 PageRouteBuilder<dynamic> adaptiveTransition(
   Widget screen,
-  GoFlexDestination destination,
+  FlexTarget destination,
   RouteSettings settings,
   // bool fullScreen
 ) {

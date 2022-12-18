@@ -16,18 +16,17 @@ class MenuHighlightHeightSlider extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text('Default value is '
-              '${kFlexfoldHighlightHeight.toStringAsFixed(0)} '
+              '${kFlexIndicatorHeight.toStringAsFixed(0)} '
               'dp.'),
           MaybeTooltip(
             condition: ref.watch(useTooltipsPod),
             tooltip: 'Flexfold(menuHighlightHeight: '
                 '${ref.watch(menuHighlightHeightPod).floor()})',
             child: Slider(
-              min: kFlexfoldHighlightHeightMin,
-              max: kFlexfoldHighlightHeightMax,
+              min: kFlexIndicatorHeightMin,
+              max: kFlexIndicatorHeightMax,
               divisions:
-                  (kFlexfoldHighlightHeightMax - kFlexfoldHighlightHeightMin)
-                      .floor(),
+                  (kFlexIndicatorHeightMax - kFlexIndicatorHeightMin).floor(),
               label: ref.watch(menuHighlightHeightPod).floor().toString(),
               value: ref.watch(menuHighlightHeightPod),
               onChanged: (double value) {

@@ -16,7 +16,7 @@ class BreakpointDrawerSlider extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text('Default breakpoint API value is '
-              '${kFlexfoldBreakpointDrawer.toStringAsFixed(0)} dp\n'
+              '${kFlexBreakpointDrawer.toStringAsFixed(0)} dp\n'
               'If you set this value to 0, you always get a rail on '
               'phones in landscape mode. With the default value it will '
               'be kept as a drawer, but you will still get a rail on '
@@ -26,11 +26,10 @@ class BreakpointDrawerSlider extends ConsumerWidget {
             tooltip: 'FlexfoldThemeData(breakpointDrawer: '
                 '${ref.watch(breakpointDrawerPod).floor()})',
             child: Slider(
-              min: kFlexfoldBreakpointDrawerMin,
-              max: kFlexfoldBreakpointDrawerMax,
+              min: kFlexBreakpointDrawerMin,
+              max: kFlexBreakpointDrawerMax,
               divisions:
-                  (kFlexfoldBreakpointDrawerMax - kFlexfoldBreakpointDrawerMin)
-                      .floor(),
+                  (kFlexBreakpointDrawerMax - kFlexBreakpointDrawerMin).floor(),
               label: ref.watch(breakpointDrawerPod).floor().toString(),
               value: ref.watch(breakpointDrawerPod),
               onChanged: (double value) {

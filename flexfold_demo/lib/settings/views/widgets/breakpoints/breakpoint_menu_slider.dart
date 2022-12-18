@@ -16,17 +16,16 @@ class BreakpointMenuSlider extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text('Default breakpoint API value is '
-              '${kFlexfoldBreakpointMenu.toStringAsFixed(0)} dp.'),
+              '${kFlexBreakpointMenu.toStringAsFixed(0)} dp.'),
           MaybeTooltip(
             condition: ref.watch(useTooltipsPod),
             tooltip: 'FlexfoldThemeData(breakpointMenu: '
                 '${ref.watch(breakpointMenuPod).floor()})',
             child: Slider(
-              min: kFlexfoldBreakpointMenuMin,
-              max: kFlexfoldBreakpointMenuMax,
+              min: kFlexBreakpointMenuMin,
+              max: kFlexBreakpointMenuMax,
               divisions:
-                  (kFlexfoldBreakpointMenuMax - kFlexfoldBreakpointMenuMin)
-                      .floor(),
+                  (kFlexBreakpointMenuMax - kFlexBreakpointMenuMin).floor(),
               label: ref.watch(breakpointMenuPod).floor().toString(),
               value: ref.watch(breakpointMenuPod),
               onChanged: (double value) {

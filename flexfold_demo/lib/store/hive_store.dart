@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 
 import '../core/models/app_animation_curve.dart';
 import '../core/models/app_text_direction.dart';
+import '../core/models/menu_alignment.dart';
 
 // Hive box name, used for the Hive box that stores all settings.
 const String kHiveBox = 'flexfold_demo_store';
@@ -167,15 +168,15 @@ class FlexfoldHighlightTypeAdapter extends TypeAdapter<FlexIndicatorStyle> {
 }
 
 // A Hive data type adapter for enum FlexfoldMenuStart.
-class FlexfoldMenuStartAdapter extends TypeAdapter<FlexfoldMenuStart> {
+class FlexfoldMenuStartAdapter extends TypeAdapter<MenuAlignment> {
   @override
-  FlexfoldMenuStart read(BinaryReader reader) {
+  MenuAlignment read(BinaryReader reader) {
     final int index = reader.readInt();
-    return FlexfoldMenuStart.values[index];
+    return MenuAlignment.values[index];
   }
 
   @override
-  void write(BinaryWriter writer, FlexfoldMenuStart obj) {
+  void write(BinaryWriter writer, MenuAlignment obj) {
     writer.writeInt(obj.index);
   }
 
@@ -184,15 +185,15 @@ class FlexfoldMenuStartAdapter extends TypeAdapter<FlexfoldMenuStart> {
 }
 
 // A Hive data type adapter for enum FlexfoldMenuSide.
-class FlexfoldMenuSideAdapter extends TypeAdapter<FlexfoldMenuSide> {
+class FlexfoldMenuSideAdapter extends TypeAdapter<FlexMenuSide> {
   @override
-  FlexfoldMenuSide read(BinaryReader reader) {
+  FlexMenuSide read(BinaryReader reader) {
     final int index = reader.readInt();
-    return FlexfoldMenuSide.values[index];
+    return FlexMenuSide.values[index];
   }
 
   @override
-  void write(BinaryWriter writer, FlexfoldMenuSide obj) {
+  void write(BinaryWriter writer, FlexMenuSide obj) {
     writer.writeInt(obj.index);
   }
 
@@ -201,15 +202,15 @@ class FlexfoldMenuSideAdapter extends TypeAdapter<FlexfoldMenuSide> {
 }
 
 // A Hive data type adapter for enum FlexfoldBottomBarType.
-class FlexfoldBottomBarTypeAdapter extends TypeAdapter<FlexfoldBottomBarType> {
+class FlexfoldBottomBarTypeAdapter extends TypeAdapter<FlexBottomType> {
   @override
-  FlexfoldBottomBarType read(BinaryReader reader) {
+  FlexBottomType read(BinaryReader reader) {
     final int index = reader.readInt();
-    return FlexfoldBottomBarType.values[index];
+    return FlexBottomType.values[index];
   }
 
   @override
-  void write(BinaryWriter writer, FlexfoldBottomBarType obj) {
+  void write(BinaryWriter writer, FlexBottomType obj) {
     writer.writeInt(obj.index);
   }
 

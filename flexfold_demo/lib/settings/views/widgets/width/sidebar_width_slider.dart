@@ -16,16 +16,15 @@ class SidebarWidthSlider extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text('Default width is '
-              '${kFlexfoldSidebarWidth.toStringAsFixed(0)} dp.'),
+              '${kFlexSidebarWidth.toStringAsFixed(0)} dp.'),
           MaybeTooltip(
             condition: ref.watch(useTooltipsPod),
             tooltip: 'Flexfold(menuWidth: '
                 '${ref.watch(sidebarWidthPod).floor()})',
             child: Slider(
-              min: kFlexfoldSidebarWidthMin,
-              max: kFlexfoldSidebarWidthMax,
-              divisions:
-                  (kFlexfoldSidebarWidthMax - kFlexfoldSidebarWidthMin).floor(),
+              min: kFlexSidebarWidthMin,
+              max: kFlexSidebarWidthMax,
+              divisions: (kFlexSidebarWidthMax - kFlexSidebarWidthMin).floor(),
               label: ref.watch(sidebarWidthPod).floor().toString(),
               value: ref.watch(sidebarWidthPod),
               onChanged: (double value) {

@@ -10,16 +10,15 @@ class MenuSideSwitch extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // treeDepthInfo(context, 'MenuSideSwitch');
-    final FlexfoldMenuSide side = ref.watch(menuSidePod);
+    final FlexMenuSide side = ref.watch(menuSidePod);
     final List<bool> isSelected = <bool>[
-      side == FlexfoldMenuSide.start,
-      side == FlexfoldMenuSide.end,
+      side == FlexMenuSide.start,
+      side == FlexMenuSide.end,
     ];
     return ToggleButtons(
       isSelected: isSelected,
       onPressed: (int newIndex) {
-        ref.read(menuSidePod.notifier).state =
-            FlexfoldMenuSide.values[newIndex];
+        ref.read(menuSidePod.notifier).state = FlexMenuSide.values[newIndex];
       },
       children: const <Widget>[
         Padding(

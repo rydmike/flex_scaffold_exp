@@ -27,7 +27,7 @@ class HomePage extends ConsumerWidget {
     final CurrentRoute appNav = ref.watch(currentRouteProvider);
     // Get the current destination details, we will use it's info in the page
     // header to display where we are and how we navigated to this page.
-    final GoFlexDestination destination = appNav.destination;
+    final FlexTarget destination = appNav.destination;
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.
@@ -76,7 +76,7 @@ class HomePage extends ConsumerWidget {
           // this screen, so we create its destination info from the route.
           // In this case we want our navigation to the new screen to behave
           // the same as if we had tapped on its target from the rail.
-          final GoFlexDestination destination = flexScaffold.fromRoute(
+          final FlexTarget destination = flexScaffold.fromRoute(
             InfoPage.route,
             source: FlexNavigation.rail,
           );

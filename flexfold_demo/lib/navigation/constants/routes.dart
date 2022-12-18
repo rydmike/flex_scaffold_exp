@@ -128,7 +128,7 @@ class Routes {
   ];
 
   // A destination we can use to go home.
-  static const GoFlexDestination goHome = GoFlexDestination(
+  static const FlexTarget goHome = FlexTarget(
     index: 0,
     bottomIndex: null,
     route: Routes.home,
@@ -141,7 +141,7 @@ class Routes {
   );
 
   // A destination we can use to go to first bottom destination.
-  static const GoFlexDestination goFirstBottom = GoFlexDestination(
+  static const FlexTarget goFirstBottom = FlexTarget(
     index: 1,
     bottomIndex: 0,
     route: Routes.info,

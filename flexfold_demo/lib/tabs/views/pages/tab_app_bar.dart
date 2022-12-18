@@ -63,7 +63,7 @@ class _TabAppBarState extends ConsumerState<TabAppBar>
     final CurrentRoute appNav = ref.watch(currentRouteProvider);
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
-    final GoFlexDestination destination = appNav.destination;
+    final FlexTarget destination = appNav.destination;
     // We also use the current destination to find the destination
     // icon and label for the destination, we use them in the page header
     // as well to show the icon and label of the destination on the page.

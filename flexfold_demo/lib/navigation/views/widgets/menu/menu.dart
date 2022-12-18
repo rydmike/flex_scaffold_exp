@@ -2,6 +2,7 @@ import 'package:flexfold/flexfold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/models/menu_alignment.dart';
 import '../../../../core/views/widgets/app/animated_hide.dart';
 import '../../../../settings/controllers/pods_flexfold.dart';
 import 'footer_copyright.dart';
@@ -14,6 +15,13 @@ class Menu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final MenuAlignment menuAlign = ref.watch(menuAlignmentPod);
+
+    final AlignmentDirectional alignment = menuAlign == MenuAlignment.top
+        ? AlignmentDirectional.topStart
+        : menuAlign == MenuAlignment.center
+            ? AlignmentDirectional.centerStart
+            : AlignmentDirectional.bottomStart;
     return FlexMenu(
       // The app bar for the menu, we make it styled too, but you don't
       // have to.You might often at least want to provide a logo or
@@ -22,16 +30,14 @@ class Menu extends ConsumerWidget {
         context,
         // You can add your app logo or brand here.
         title: const MenuLogo(),
-        gradient: false, // ref.watch(gradientAppBarPod).state,
-        opacity: 1,
-        // ref.watch(transparentAppBarPod).state
-        // ? ref.watch(appBarOpacityPod).state
-        // : 1.0,
-        blurred: false, // ref.watch(blurAppBarPod).state,
+        gradient: ref.watch(appBarGradientPod),
+        blurred: ref.watch(appBarBlurPod),
+        opacity:
+            ref.watch(appBarTransparentPod) ? ref.watch(appBarOpacityPod) : 1.0,
         hasBorderOnSurface: ref.watch(appBarBorderOnSurfacePod),
         hasBorder: ref.watch(appBarBorderPod),
         // Reverse the gradient compared to main app bar, it looks cool.
-        // reverseGradient: true,
+        reverseGradient: true,
         // A little trick, use the rail width and as menu bar's leading
         // widget width, then if you change width, icons remain aligned.
         leadingWidth: ref.watch(railWidthPod),
@@ -43,12 +49,24 @@ class Menu extends ConsumerWidget {
         scrim: ref.watch(appBarScrimPod),
       ),
       //
+      // This is a widget that appears after them menu AppBar.
+      // It sticks to the top and does not scroll.
+      // Animated cross fade is used to remove it smoothly when its
+      // presence is toggled on/off in the demo.
+      header: AnimatedSwitchShowHide(
+        show: ref.watch(showMenuHeaderPod),
+        child: const UserProfile(),
+      ),
       // This is a widget that appears before your menu destinations.
+      // It scrolls with destinations and aligns with the,
       // Animated cross fade is used to remove it smoothly when its
       // presence is toggled on/off in the demo.
       leading: AnimatedSwitchShowHide(
         show: ref.watch(showMenuLeadingPod),
-        child: const LeadingUserProfile(),
+        child: const ListTile(
+          leading: Icon(Icons.menu_rounded),
+          title: Text('MENU'),
+        ),
       ),
       // This is a widget that appears after your menu destinations.
       trailing: AnimatedSwitchShowHide(
@@ -63,6 +81,8 @@ class Menu extends ConsumerWidget {
         show: ref.watch(showMenuFooterPod),
         child: const FooterCopyright(),
       ),
+      // Set the alignment of the menu.
+      alignment: alignment,
     );
   }
 }

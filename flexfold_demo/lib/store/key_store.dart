@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../core/models/app_animation_curve.dart';
 import '../core/models/app_text_direction.dart';
+import '../core/models/menu_alignment.dart';
 
 // Constants used as key values for storing, ie persisting all the
 // settings and options used in this Flexfold demo app.
@@ -111,6 +112,7 @@ class KeyStore {
   static const String sidebarWidth = 'sidebarWidth';
 
   // Menu style settings
+  static const String showMenuHeader = 'showMenuHeader';
   static const String showMenuLeading = 'showMenuLeading';
   static const String showMenuTrailing = 'showMenuTrailing';
   static const String showMenuFooter = 'showMenuFooter';
@@ -119,7 +121,7 @@ class KeyStore {
   // Menu selection and highlight style
   static const String menuHighlightHeight = 'menuHighlightHeight';
   // Menu start and side settings
-  static const String menuStart = 'menuStart';
+  static const String menuAlignment = 'menuAlignment';
   static const String menuSide = 'menuSide';
 
   // Edge border properties
@@ -245,16 +247,17 @@ class KeyStore {
     sidebarWidth: 304.0,
 
     // Menu style default values.
+    showMenuHeader: true,
     showMenuLeading: true,
     showMenuTrailing: true,
     showMenuFooter: true,
     menuHighlightType: FlexIndicatorStyle.endStadium,
     menuHighlightHeight: 50.0,
-    menuStart: FlexfoldMenuStart.top,
-    menuSide: FlexfoldMenuSide.start,
+    menuAlignment: MenuAlignment.top,
+    menuSide: FlexMenuSide.start,
 
     // Bottom bar properties.
-    bottomBarType: FlexfoldBottomBarType.adaptive,
+    bottomBarType: FlexBottomType.adaptive,
     bottomBarIsTransparent: true,
     bottomBarBlur: true,
     bottomBarOpacity: 0.7,

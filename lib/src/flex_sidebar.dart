@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show clampDouble;
 import 'package:flutter/material.dart';
 
 import 'flex_app_bar.dart';
@@ -47,7 +48,10 @@ class _FlexSidebarState extends State<FlexSidebar> {
 
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
+    final FlexScaffoldTheme flexTheme = Theme.of(context)
+            .extension<FlexScaffoldTheme>()
+            ?.withDefaults(context) ??
+        const FlexScaffoldTheme().withDefaults(context);
     final double breakpointSidebar = flexTheme.breakpointSidebar!;
     final double sidebarWidth = flexTheme.sidebarWidth!;
 
@@ -61,7 +65,6 @@ class _FlexSidebarState extends State<FlexSidebar> {
 
     if (isInEndDrawer) {
       return _SideBar(
-        // hasAppBar: widget.hasAppBar,
         sidebarAppBar: widget.appBar,
         child: widget.child,
       );
@@ -71,25 +74,20 @@ class _FlexSidebarState extends State<FlexSidebar> {
       } else {
         width = sidebarWidth;
       }
-      return AnimatedContainer(
-        duration: flexTheme.sidebarAnimationDuration!,
-        curve: flexTheme.sidebarAnimationCurve!,
-        width: width,
-        // TODO(rydmike): New size animation where we can clamp curve.
-        // If you use an animation curve with negative overshoot there will
-        // be a: "BoxConstraint has negative minimum width" error.
-        // I tired clamping
-        // this width to avoid it, but it did not help as this width does not
-        // actually animate, that width value is inside the implicit animation
-        // and we cannot really touch it
-        // width: width.clamp(0.0, widget.sidebarWidth).toDouble(),
-        // The best we can do is probably just to advise not to use curves
-        // with negative overshoot.
-        child: _SideBar(
-          sidebarAppBar: widget.appBar,
-          child: widget.child,
-        ),
-      );
+      return TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0, end: width),
+          duration: flexTheme.sidebarAnimationDuration!,
+          curve: flexTheme.sidebarAnimationCurve!,
+          builder: (BuildContext context, double width, Widget? child) {
+            return SizedBox(
+              // With this clamp we can also use overshooting Curves.
+              width: clampDouble(width, 0.0, sidebarWidth),
+              child: _SideBar(
+                sidebarAppBar: widget.appBar,
+                child: widget.child,
+              ),
+            );
+          });
     }
   }
 }
@@ -119,15 +117,19 @@ class _SideBar extends StatelessWidget {
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
     final bool isEndDrawerOpen = scaffold?.isEndDrawerOpen ?? false;
 
-    final FlexScaffoldThemeData flexTheme = FlexScaffoldTheme.of(context);
+    final ThemeData theme = Theme.of(context);
+    final bool isDark = theme.brightness == Brightness.dark;
+
+    final FlexScaffoldTheme flexTheme =
+        theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
+            const FlexScaffoldTheme().withDefaults(context);
+
     final bool borderOnSidebar = flexTheme.borderOnSidebar!;
     final bool borderOnDrawerEdgeInDarkMode = flexTheme.borderOnDarkDrawer!;
     final bool borderOnDrawerEdgeInLightMode = flexTheme.borderOnLightDrawer!;
     final Color borderColor = flexTheme.borderColor!;
     final double sidebarWidth = flexTheme.sidebarWidth!;
 
-    final ThemeData theme = Theme.of(context);
-    final bool isDark = theme.brightness == Brightness.dark;
     // Draw a border on sidebar edge?
     final bool useDrawerBorderEdge = (isDark && borderOnDrawerEdgeInDarkMode) ||
         (!isDark && borderOnDrawerEdgeInLightMode);

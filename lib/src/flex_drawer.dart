@@ -39,10 +39,9 @@ class FlexDrawer extends StatefulWidget {
             'Elevation must be >= 0 or null'),
         assert(
             width == null ||
-                width >= kFlexfoldMenuWidthMin &&
-                    width <= kFlexfoldMenuWidthMax,
-            'The drawer width must be >= $kFlexfoldMenuWidthMin and '
-            '<= $kFlexfoldMenuWidthMax or null');
+                width >= kFlexMenuWidthMin && width <= kFlexMenuWidthMax,
+            'The drawer width must be >= $kFlexMenuWidthMin and '
+            '<= $kFlexMenuWidthMax or null');
 
   /// The width of the screen or canvas that the app is running on.
   ///

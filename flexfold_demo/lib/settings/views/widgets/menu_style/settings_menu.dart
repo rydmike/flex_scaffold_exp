@@ -5,11 +5,12 @@ import '../../../../app/const/app_insets.dart';
 import '../../../../core/views/widgets/app/maybe_card.dart';
 import '../../../../core/views/widgets/app/maybe_tooltip.dart';
 import '../../../controllers/pods_flexfold.dart';
+import 'menu_alignment_switch.dart';
 import 'menu_highlight_height_slider.dart';
 import 'menu_highlight_type_switch.dart';
 import 'menu_side_switch.dart';
-import 'menu_start_switch.dart';
 import 'show_menu_footer_switch.dart';
+import 'show_menu_header_switch.dart';
 import 'show_menu_leading_switch.dart';
 import 'show_menu_trailing_switch.dart';
 
@@ -27,15 +28,16 @@ class SettingsMenu extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          const ShowMenuHeaderSwitch(),
           const ShowMenuLeadingSwitch(),
           const ShowMenuTrailingSwitch(),
           const ShowMenuFooterSwitch(),
           // ToggleButtons control for highlight style selection
           const ListTile(
-            title: Text('Selected destination highlight'),
+            title: Text('Selected item indicator'),
             subtitle: Text(
               'The selection indicator is a ShapeBorder and can be '
-              'fully customized or just use one of these built in options.',
+              'fully customized or use one of these built-in options.',
             ),
           ),
           Padding(
@@ -69,25 +71,23 @@ class SettingsMenu extends ConsumerWidget {
           const ListTile(
             title: Text('Menu start and direction'),
             subtitle: Text(
-              'The menu and rail can also start from the bottom. This '
-              'will also toggle the direction of the items and leading and '
-              'trailing widgets position, but footer will remain at the '
-              'very bottom if used. If you use the start from bottom you '
-              'may need to adjust your destination content to match it.',
+              'The menu and rail can be aligned to start, center and the '
+              'bottom. Heading and footer will remain at the top and '
+              'bottom only leading, menu items and trailing are aligned.',
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: MaybeTooltip(
               condition: ref.watch(useTooltipsPod),
-              tooltip: 'Flexfold(menuStart: ${ref.watch(menuStartPod)})',
+              tooltip: 'Flexfold(menuStart: ${ref.watch(menuAlignmentPod)})',
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: Sizes.l,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const <Widget>[MenuStartSwitch()],
+                  children: const <Widget>[MenuAlignmentSwitch()],
                 ),
               ),
             ),

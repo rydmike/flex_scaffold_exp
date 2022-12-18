@@ -9,14 +9,14 @@ import '../../../../settings/controllers/pods_flexfold.dart';
 //
 // This can also serve as an example on how to make a simple expandable panel
 // using the implicit AnimatedCrossFade widget, a ListTile and ExpandIcon.
-class LeadingUserProfile extends ConsumerStatefulWidget {
-  const LeadingUserProfile({super.key});
+class UserProfile extends ConsumerStatefulWidget {
+  const UserProfile({super.key});
 
   @override
-  ConsumerState<LeadingUserProfile> createState() => _LeadingUserProfileState();
+  ConsumerState<UserProfile> createState() => _LeadingUserProfileState();
 }
 
-class _LeadingUserProfileState extends ConsumerState<LeadingUserProfile> {
+class _LeadingUserProfileState extends ConsumerState<UserProfile> {
   late bool isExpanded;
   @override
   void initState() {
