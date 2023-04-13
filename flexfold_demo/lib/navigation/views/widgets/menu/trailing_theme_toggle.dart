@@ -17,7 +17,7 @@ class TrailingThemeToggle extends ConsumerWidget {
 
     // TODO(rydmike): Check if we should use FlexfoldTheme instead of rail!
     final NavigationRailThemeData railTheme = theme.navigationRailTheme;
-    final TextStyle txtStyle = theme.textTheme.bodyText1!
+    final TextStyle txtStyle = theme.textTheme.bodyLarge!
         .copyWith(color: baseUnselectedColor)
         .merge(railTheme.unselectedLabelTextStyle);
 

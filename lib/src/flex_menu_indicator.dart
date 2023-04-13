@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'flex_scaffold.dart';
 import 'flex_scaffold_constants.dart';
 
+// ignore_for_file: comment_references
+
 /// Makes a ShapeBorder based on the [FlexIndicatorStyle] enum.
 ///
 /// This is a helper class that makes a hover and selected menu item highlight

@@ -212,24 +212,24 @@ class ColorPickerInkWell extends ConsumerWidget {
                   ref.read(dialogRecentColorsPod.notifier).state = colors;
                 },
                 title: Text('Select color',
-                    style: Theme.of(context).textTheme.headline6),
+                    style: Theme.of(context).textTheme.titleLarge),
                 subheading: Text('Select color shade',
-                    style: Theme.of(context).textTheme.bodyText2),
+                    style: Theme.of(context).textTheme.bodyMedium),
                 wheelSubheading: Text('Selected color and its shades',
-                    style: Theme.of(context).textTheme.bodyText2),
+                    style: Theme.of(context).textTheme.bodyMedium),
                 recentColorsSubheading: Text('Recent colors',
-                    style: Theme.of(context).textTheme.bodyText2),
+                    style: Theme.of(context).textTheme.bodyMedium),
                 showMaterialName: true,
                 showColorName: true,
                 showColorCode: true,
                 customColorSwatchesAndNames: customSwatches,
                 colorNameTextStyle: Theme.of(context)
                     .textTheme
-                    .bodyText2!
+                    .bodyMedium!
                     .copyWith(fontWeight: FontWeight.bold),
                 materialNameTextStyle: Theme.of(context)
                     .textTheme
-                    .bodyText2!
+                    .bodyMedium!
                     .copyWith(fontWeight: FontWeight.bold),
                 copyPasteBehavior: const ColorPickerCopyPasteBehavior(
                   longPressMenu: true,

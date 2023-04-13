@@ -43,13 +43,13 @@ class MenuHighlightHeightSlider extends ConsumerWidget {
           children: <Widget>[
             Text(
               'Height',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             Text(
               ref.watch(menuHighlightHeightPod).floor().toString(),
               style: Theme.of(context)
                   .textTheme
-                  .caption!
+                  .bodySmall!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
           ],

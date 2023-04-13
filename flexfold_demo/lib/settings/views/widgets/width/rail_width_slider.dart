@@ -45,13 +45,13 @@ class RailWidthSlider extends ConsumerWidget {
           children: <Widget>[
             Text(
               'Width',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             Text(
               ref.watch(railWidthPod).floor().toString(),
               style: Theme.of(context)
                   .textTheme
-                  .caption!
+                  .bodySmall!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
           ],

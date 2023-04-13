@@ -385,7 +385,7 @@ class ImageWidget extends StatelessWidget {
               item.title,
               softWrap: false,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             Flexible(
               child: SvgAssetImageSwitcher(

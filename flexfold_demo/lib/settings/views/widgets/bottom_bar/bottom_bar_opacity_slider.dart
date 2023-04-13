@@ -38,13 +38,13 @@ class BottomBarOpacitySlider extends ConsumerWidget {
           children: <Widget>[
             Text(
               '%',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             Text(
               (ref.watch(bottomBarOpacityPod) * 100).floor().toString(),
               style: Theme.of(context)
                   .textTheme
-                  .caption!
+                  .bodySmall!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
           ],

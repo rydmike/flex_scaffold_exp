@@ -38,7 +38,7 @@ class SidebarContent extends ConsumerWidget {
           children: <Widget>[
             Text(
               'Sidebar for ${screenName.toLowerCase()}',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
             const Text(
               '\nThe sidebar can be used to hold less used content in an '
@@ -75,7 +75,7 @@ class SidebarContent extends ConsumerWidget {
             const Divider(),
             Text(
               '\nFloating action buttons',
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const Text(
                 '\nFlexfold destinations can also be configured to use FABs. '

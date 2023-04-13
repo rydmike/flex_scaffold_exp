@@ -12,12 +12,12 @@ import '../../../core/views/widgets/app/if_wrapper.dart';
 void showAppAboutDialog(BuildContext context) {
   final ThemeData themeData = Theme.of(context);
   final bool isLight = themeData.brightness == Brightness.light;
-  final TextStyle aboutTextStyle = themeData.textTheme.bodyText1!;
-  final TextStyle redTextStyle = themeData.textTheme.bodyText1!.copyWith(
-      color: Theme.of(context).errorColor, fontWeight: FontWeight.bold);
+  final TextStyle aboutTextStyle = themeData.textTheme.bodyLarge!;
+  final TextStyle redTextStyle = themeData.textTheme.bodyLarge!.copyWith(
+      color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.bold);
 
   final TextStyle linkStyle =
-      themeData.textTheme.bodyText1!.copyWith(color: themeData.primaryColor);
+      themeData.textTheme.bodyLarge!.copyWith(color: themeData.primaryColor);
 
   // The asset image that shows a Flexfold layout, is in grey scale
   // with some ColorFiltered parameters we can try to colorize the grey scale

@@ -40,13 +40,13 @@ class AppBarOpacitySlider extends ConsumerWidget {
           children: <Widget>[
             Text(
               '%',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             Text(
               (ref.watch(appBarOpacityPod) * 100).floor().toString(),
               style: Theme.of(context)
                   .textTheme
-                  .caption!
+                  .bodySmall!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
           ],

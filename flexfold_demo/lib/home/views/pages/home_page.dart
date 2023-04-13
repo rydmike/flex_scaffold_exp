@@ -50,18 +50,18 @@ class HomePage extends ConsumerWidget {
     // dividing things to parts that we place in different places is a
     // quick and simple approach.
     final Widget welcome = Text('Welcome to',
-        style: isSmall ? textTheme.caption : textTheme.headline5);
+        style: isSmall ? textTheme.bodySmall : textTheme.headlineSmall);
     final Widget flexfold = Text('FlexScaffold',
-        style: isSmall ? textTheme.headline5 : textTheme.headline3);
+        style: isSmall ? textTheme.headlineSmall : textTheme.displaySmall);
     final Widget whatIsFlexfold = Text(
       'What is FlexScaffold?',
-      style: isSmall ? textTheme.subtitle1 : textTheme.headline5,
+      style: isSmall ? textTheme.titleMedium : textTheme.headlineSmall,
       textAlign: TextAlign.center,
     );
     final Widget noOneCanBeTold = Text(
       'No one can be told what the FlexScaffold is!\n'
       'Click on the image to experience it...',
-      style: isSmall ? textTheme.caption : textTheme.bodyText1,
+      style: isSmall ? textTheme.bodySmall : textTheme.bodyLarge,
       textAlign: TextAlign.center,
     );
 

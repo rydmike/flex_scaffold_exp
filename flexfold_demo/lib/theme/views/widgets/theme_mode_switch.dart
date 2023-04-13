@@ -20,8 +20,8 @@ class ThemeModeSwitch extends ConsumerWidget {
       title: Row(children: <Widget>[
         const SizedBox(width: Sizes.l),
         Expanded(
-          child:
-              Text('Theme mode', style: Theme.of(context).textTheme.subtitle1),
+          child: Text('Theme mode',
+              style: Theme.of(context).textTheme.titleMedium),
         ),
         if (isDark && width >= 460)
           SizedBox(
@@ -41,7 +41,7 @@ class ThemeModeSwitch extends ConsumerWidget {
       },
       flexSchemeData: ref.watch(currentSchemeProvider),
       // Style the selected theme mode's label
-      selectedLabelStyle: Theme.of(context).textTheme.caption!.copyWith(
+      selectedLabelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
           fontWeight: FontWeight.bold,
           color: Theme.of(context).colorScheme.primary),
     );

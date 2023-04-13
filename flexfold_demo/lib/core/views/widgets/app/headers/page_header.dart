@@ -27,7 +27,7 @@ class PageHeader extends StatelessWidget {
       child: icon,
     );
     final Widget styledLabel = DefaultTextStyle(
-      style: Theme.of(context).textTheme.headline4!,
+      style: Theme.of(context).textTheme.headlineMedium!,
       child: heading,
     );
 
@@ -80,7 +80,7 @@ class SizedText extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: maxWidth,
-      child: Text(text, style: Theme.of(context).textTheme.caption),
+      child: Text(text, style: Theme.of(context).textTheme.bodySmall),
     );
   }
 }

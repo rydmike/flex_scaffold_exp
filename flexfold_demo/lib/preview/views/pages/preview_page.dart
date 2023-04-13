@@ -57,7 +57,7 @@ class _PreviewScreenState extends ConsumerState<PreviewPage> {
     final Widget heading = Text(destination.label);
 
     final ThemeData themeData = Theme.of(context);
-    final TextStyle linkStyle = themeData.textTheme.bodyText1!.copyWith(
+    final TextStyle linkStyle = themeData.textTheme.bodyLarge!.copyWith(
         color: themeData.colorScheme.primary, fontWeight: FontWeight.bold);
 
     // See settings_page.dart for an explanation of these
@@ -182,7 +182,7 @@ class _PreviewScreenState extends ConsumerState<PreviewPage> {
             'The implementation below uses the above fancy in app '
             'image toggle instead to completely disable and remove '
             'the DevicePreview when it is not used.\n',
-            style: themeData.textTheme.bodyText1,
+            style: themeData.textTheme.bodyLarge,
           ),
           const MainDartExample(),
         ],
@@ -246,7 +246,7 @@ class SelectPreview extends StatelessWidget {
                     header,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6!
+                        .titleLarge!
                         .copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.visible,

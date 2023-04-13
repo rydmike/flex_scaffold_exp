@@ -53,8 +53,8 @@ class _LeadingUserProfileState extends ConsumerState<UserProfile> {
               radius: width / 2 - padding,
             ),
             title: Text('Mike Rydstrom',
-                style:
-                    textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w600)),
+                style: textTheme.titleMedium!
+                    .copyWith(fontWeight: FontWeight.w600)),
             subtitle: const Text('Company Inc'),
             trailing: ExpandIcon(
                 isExpanded: isExpanded,
@@ -83,7 +83,7 @@ class _LeadingUserProfileState extends ConsumerState<UserProfile> {
                   // padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: Column(children: <Widget>[
                     const Icon(Icons.person),
-                    Text('Profile', style: textTheme.overline),
+                    Text('Profile', style: textTheme.labelSmall),
                   ])),
               const SizedBox(width: 10),
               TextButton(
@@ -92,7 +92,7 @@ class _LeadingUserProfileState extends ConsumerState<UserProfile> {
                   // padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: Column(children: <Widget>[
                     const Icon(Icons.account_tree),
-                    Text('Organization', style: textTheme.overline),
+                    Text('Organization', style: textTheme.labelSmall),
                   ])),
               const SizedBox(width: 8),
             ],

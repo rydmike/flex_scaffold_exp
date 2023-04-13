@@ -198,7 +198,7 @@ class Material2BottomBar extends StatelessWidget {
     final double? elevation = useFlexTheme ? flexTheme.bottomElevation : null;
 
     // Get effective bottom bar type for the bottom navigation bar
-    final BottomNavigationBarType? type = BottomNavigationBarType.fixed;
+    const BottomNavigationBarType? type = BottomNavigationBarType.fixed;
     // flexTheme.bottomNavigationBarTheme?.type;
 
     // Get effective icons themes for the bottom navigation bar

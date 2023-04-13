@@ -47,6 +47,8 @@ class IndexTracker {
 /// Found this solution here:
 /// https://stackoverflow.com/questions/51119795/how-to-remove-scroll-glow
 class ScrollNoEdgeEffect extends ScrollBehavior {
+  // TODO(rydmike): This method looks old, replace with new way
+  /// Override for buildViewportChrome
   @override
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {

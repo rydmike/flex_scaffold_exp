@@ -3,7 +3,9 @@ description: FlexScaffold is an animated, responsive and adaptive application sc
 version: 0.0.1
 homepage: https://github.com/rydmike/flexfold
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: '>=2.19.0 <4.0.0'
+  flutter: '>=3.7.0'
+
 dependencies:
   flutter:
     sdk: flutter

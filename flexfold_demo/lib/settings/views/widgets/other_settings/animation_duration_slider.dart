@@ -45,13 +45,13 @@ class AnimationDurationSlider extends ConsumerWidget {
           children: <Widget>[
             Text(
               'ms',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             Text(
               ref.watch(animationDurationPod).toString(),
               style: Theme.of(context)
                   .textTheme
-                  .caption!
+                  .bodySmall!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
           ],

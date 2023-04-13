@@ -24,13 +24,13 @@ class DarkLevelSlider extends ConsumerWidget {
           children: <Widget>[
             Text(
               'LEVEL',
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             Text(
               '${ref.watch(darkLevelPod)} %',
               style: Theme.of(context)
                   .textTheme
-                  .caption!
+                  .bodySmall!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
           ],

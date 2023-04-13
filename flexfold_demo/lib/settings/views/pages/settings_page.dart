@@ -76,7 +76,7 @@ class _SettingsScreenState extends ConsumerState<SettingsPage> {
     final Widget heading = Text(destination.label);
 
     // Frequently used text style on this page, so let's store a ref to it.
-    final TextStyle headline5 = Theme.of(context).textTheme.headline5!;
+    final TextStyle headline5 = Theme.of(context).textTheme.headlineSmall!;
 
     // We need to add top and bottom padding back if we are using the
     // [extendBody] property behind bottom navigation bar and also the
@@ -185,7 +185,7 @@ class _SettingsScreenState extends ConsumerState<SettingsPage> {
             padding: const EdgeInsets.symmetric(horizontal: Sizes.l),
             child: Text(
               'Visibility',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           const Padding(

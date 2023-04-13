@@ -74,7 +74,7 @@ class ThemeColors extends ConsumerWidget {
             ? Colors.white
             : Colors.black;
     final Color bottomAppBarColor =
-        theme.bottomAppBarTheme.color ?? theme.bottomAppBarColor;
+        theme.bottomAppBarTheme.color ?? theme.colorScheme.surface;
     final Color onBottomAppBarColor =
         ThemeData.estimateBrightnessForColor(bottomAppBarColor) ==
                 Brightness.dark
@@ -86,7 +86,7 @@ class ThemeColors extends ConsumerWidget {
         ThemeData.estimateBrightnessForColor(indicatorColor) == Brightness.dark
             ? Colors.white
             : Colors.black;
-    final Color errorColor = theme.errorColor;
+    final Color errorColor = theme.colorScheme.error;
 
     return SliverLayoutBuilder(
         builder: (BuildContext context, SliverConstraints constraints) {
@@ -180,18 +180,18 @@ class ThemeColors extends ConsumerWidget {
             // ),
             //
             // toggleableActiveColor color box
-            Material(
-              elevation: 0,
-              color: theme.toggleableActiveColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                  side: BorderSide(color: dividerColor)),
-              child: ColorNameValue(
-                color: theme.toggleableActiveColor,
-                textColor: theme.colorScheme.onSecondary,
-                label: 'toggleable\nActiveColor',
-              ),
-            ),
+            // Material(
+            //   elevation: 0,
+            //   color: theme.toggleableActiveColor,
+            //   shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(4),
+            //       side: BorderSide(color: dividerColor)),
+            //   child: ColorNameValue(
+            //     color: theme.toggleableActiveColor,
+            //     textColor: theme.colorScheme.onSecondary,
+            //     label: 'toggleable\nActiveColor',
+            //   ),
+            // ),
             //
             // cursorColor color box
             Material(
@@ -341,18 +341,18 @@ class ThemeColors extends ConsumerWidget {
             ),
             //
             // Background color box
-            Material(
-              elevation: 0,
-              color: theme.backgroundColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                  side: BorderSide(color: dividerColor)),
-              child: ColorNameValue(
-                color: theme.backgroundColor,
-                textColor: theme.colorScheme.onBackground,
-                label: 'background\nColor',
-              ),
-            ),
+            // Material(
+            //   elevation: 0,
+            //   color: theme.backgroundColor,
+            //   shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(4),
+            //       side: BorderSide(color: dividerColor)),
+            //   child: ColorNameValue(
+            //     color: theme.backgroundColor,
+            //     textColor: theme.colorScheme.onBackground,
+            //     label: 'background\nColor',
+            //   ),
+            // ),
 
             //
             // Canvas color box

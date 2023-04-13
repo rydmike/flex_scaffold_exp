@@ -144,7 +144,7 @@ class _TabAppBarState extends ConsumerState<TabAppBar>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Sizes.l),
             child: Text('Styled app bar settings',
-                style: Theme.of(context).textTheme.headline5),
+                style: Theme.of(context).textTheme.headlineSmall),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: Sizes.l),

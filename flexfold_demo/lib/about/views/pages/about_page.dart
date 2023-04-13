@@ -62,7 +62,7 @@ class _AboutScreenState extends ConsumerState<AboutPage> {
     final Widget heading = Text(destination.label);
 
     final ThemeData themeData = Theme.of(context);
-    final TextStyle linkStyle = themeData.textTheme.bodyText1!.copyWith(
+    final TextStyle linkStyle = themeData.textTheme.bodyLarge!.copyWith(
         color: themeData.colorScheme.primary, fontWeight: FontWeight.bold);
     final double topPadding = MediaQuery.of(context).padding.top;
     final double bottomPadding = MediaQuery.of(context).padding.bottom;
@@ -163,15 +163,15 @@ class _AboutScreenState extends ConsumerState<AboutPage> {
           const SizedBox(height: 20),
           Center(
             child: Text('Version: ${AppStrings.version}\n',
-                style: Theme.of(context).textTheme.subtitle1),
+                style: Theme.of(context).textTheme.titleMedium),
           ),
           Center(
             child: Text('${AppStrings.flutter}\n',
-                style: Theme.of(context).textTheme.subtitle1),
+                style: Theme.of(context).textTheme.titleMedium),
           ),
           Center(
             child: Text('This is a pre-release feature demo!',
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold)),
           ),
@@ -179,13 +179,13 @@ class _AboutScreenState extends ConsumerState<AboutPage> {
             child: Text(
                 'FlexScaffold is not '
                 'yet available on pub.dev',
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold)),
           ),
           Center(
             child: Text('Coming soon...',
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold)),
           ),

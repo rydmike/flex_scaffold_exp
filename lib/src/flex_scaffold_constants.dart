@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+// ignore_for_file: comment_references
+
 /// Constants used as default values by FlexScaffold.
 
 /// Pre-configured selected destination highlight indicator styles for the

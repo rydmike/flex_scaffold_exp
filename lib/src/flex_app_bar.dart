@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'flex_scaffold.dart';
 import 'flex_scaffold_helpers.dart';
 
+// ignore_for_file: comment_references
+
 /// Material dark default surface color
 const Color _kMaterialDarkSurface = Color(0xff121212);
 
@@ -527,7 +529,7 @@ class FlexAppBar {
   ///
   /// If this property is null, then [AppBarTheme.toolbarTextStyle] of
   /// [ThemeData.appBarTheme] is used. If that is also null, the default
-  /// value is a copy of the overall theme's [TextTheme.bodyText2]
+  /// value is a copy of the overall theme's [TextTheme.bodyMedium]
   /// [TextStyle], with color set to the app bar's [foregroundColor].
   ///
   /// See also:
@@ -542,7 +544,7 @@ class FlexAppBar {
   ///
   /// If this property is null, then [AppBarTheme.titleTextStyle] of
   /// [ThemeData.appBarTheme] is used. If that is also null, the default
-  /// value is a copy of the overall theme's [TextTheme.headline6]
+  /// value is a copy of the overall theme's [TextTheme.titleLarge]
   /// [TextStyle], with color set to the app bar's [foregroundColor].
   ///
   /// See also:
@@ -591,7 +593,6 @@ class FlexAppBar {
     /// The context is needed because the [FlexAppBar.styled] needs to know
     /// the theme for its styling, we must pass in current build context.
     BuildContext context, {
-
     // AppBar properties, see AppBar for documentation
     Key? key,
 
@@ -1010,7 +1011,8 @@ class FlexAppBar {
               Expanded(
                 child: Text(
                   ' ${size.width.round()}x${size.height.round()}',
-                  style: theme.textTheme.caption!.copyWith(color: endTextColor),
+                  style:
+                      theme.textTheme.bodySmall!.copyWith(color: endTextColor),
                   textAlign: TextAlign.end,
                 ),
               ),

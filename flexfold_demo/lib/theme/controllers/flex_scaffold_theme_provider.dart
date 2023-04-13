@@ -35,7 +35,7 @@ final Provider<FlexScaffoldTheme> flexScaffoldThemeProvider =
       // directionality: directionality,
     );
 
-    final bool isLight = true;
+    const bool isLight = true;
 
     return FlexScaffoldTheme(
       // TODO(rydmike): Uncomment to test background colors via properties.

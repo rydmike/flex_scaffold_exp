@@ -99,7 +99,7 @@ class _ThemeScreenState extends ConsumerState<ThemePage>
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
     final bool isLight = theme.brightness == Brightness.light;
-    final TextStyle linkStyle = theme.textTheme.bodyText1!
+    final TextStyle linkStyle = theme.textTheme.bodyLarge!
         .copyWith(color: scheme.primary, fontWeight: FontWeight.bold);
 
     return PageBody(
@@ -192,8 +192,10 @@ class _ThemeScreenState extends ConsumerState<ThemePage>
                   const SizedBox(height: Sizes.m),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: Sizes.l),
-                    child:
-                        Text('Theme Options', style: theme.textTheme.headline5),
+                    child: Text(
+                      'Theme Options',
+                      style: theme.textTheme.headlineSmall,
+                    ),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: Sizes.l),
@@ -344,7 +346,8 @@ class _ThemeScreenState extends ConsumerState<ThemePage>
                   const SizedBox(height: Sizes.m),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: Sizes.l),
-                    child: Text('Theme Mode', style: theme.textTheme.headline5),
+                    child: Text('Theme Mode',
+                        style: theme.textTheme.headlineSmall),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: Sizes.l),
@@ -421,7 +424,7 @@ class _ThemeScreenState extends ConsumerState<ThemePage>
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: Sizes.l),
                     child: Text('Choose Color Scheme',
-                        style: theme.textTheme.headline5),
+                        style: theme.textTheme.headlineSmall),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: Sizes.l),
@@ -455,8 +458,8 @@ class _ThemeScreenState extends ConsumerState<ThemePage>
                   const SizedBox(height: Sizes.m),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: Sizes.l),
-                    child:
-                        Text('ColorScheme', style: theme.textTheme.headline5),
+                    child: Text('ColorScheme',
+                        style: theme.textTheme.headlineSmall),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: Sizes.l),
@@ -503,7 +506,8 @@ class _ThemeScreenState extends ConsumerState<ThemePage>
                 const SizedBox(height: Sizes.m),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: Sizes.l),
-                  child: Text('ThemeData', style: theme.textTheme.headline5),
+                  child:
+                      Text('ThemeData', style: theme.textTheme.headlineSmall),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: Sizes.l),
@@ -550,8 +554,8 @@ class _ThemeScreenState extends ConsumerState<ThemePage>
                 const SizedBox(height: Sizes.m),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: Sizes.l),
-                  child:
-                      Text('Theme Showcase', style: theme.textTheme.headline5),
+                  child: Text('Theme Showcase',
+                      style: theme.textTheme.headlineSmall),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: Sizes.l),

@@ -19,11 +19,11 @@ class PageIntro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget styledIntroTop = DefaultTextStyle(
-      style: Theme.of(context).textTheme.bodyText1!,
+      style: Theme.of(context).textTheme.bodyLarge!,
       child: introTop ?? const Text(''),
     );
     final Widget styledIntroBottom = DefaultTextStyle(
-      style: Theme.of(context).textTheme.bodyText1!,
+      style: Theme.of(context).textTheme.bodyLarge!,
       child: introBottom ?? const Text(''),
     );
 

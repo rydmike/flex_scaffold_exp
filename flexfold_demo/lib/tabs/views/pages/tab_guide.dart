@@ -60,7 +60,7 @@ class _TabGuideState extends ConsumerState<TabGuide>
     super.build(context);
     final CurrentRoute appNav = ref.watch(currentRouteProvider);
     final ThemeData themeData = Theme.of(context);
-    final TextStyle linkStyle = themeData.textTheme.bodyText1!.copyWith(
+    final TextStyle linkStyle = themeData.textTheme.bodyLarge!.copyWith(
         color: themeData.colorScheme.primary, fontWeight: FontWeight.bold);
     // Get the current destination details, we will use it's info in the
     // page header to display info on how we navigated to this page.
