@@ -18,8 +18,8 @@ class MenuControlSettings extends StatelessWidget {
 
     return MaybeCard(
       condition: isDesktop,
-      child: Column(
-        children: const <Widget>[
+      child: const Column(
+        children: <Widget>[
           MenuControlEnabledSwitch(),
           SidebarControlEnabledSwitch(),
           Divider(),

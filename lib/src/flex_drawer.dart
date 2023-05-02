@@ -135,19 +135,19 @@ class _FlexDrawerState extends State<FlexDrawer> {
   void onAfterBuild(BuildContext context) {
     setState(() {
       shouldCloseDrawer = false;
+      // Have noticed some rare resize events when the Scaffold has been
+      // removed and popping takes us out of the app, so on this frame we check
+      // once more if there really is a Drawer open still and only then pop.
+      // This post frame callback is only inserted when there was a drawer open,
+      // but via rapid state changes when using eg DevicePreview, it seems
+      // possible to get into a situation where it during the build frame
+      // existed and was inserted to be removed, but when we come here it is
+      // no longer present. This extra check is an attempt to prevent that case.
       final ScaffoldState? scaffold = Scaffold.maybeOf(context);
       final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
       final bool isEndDrawerOpen = scaffold?.isEndDrawerOpen ?? false;
-      // Have noticed some rare resize events when the Scaffold has been
-      // removed and popping takes us out of the app, so on this frame we
-      // check once more if there really is a drawer open and only then pop.
-      // This post frame callback is only inserted when there was a drawer open,
-      // but via rapid state changes when using eg DevicePreview it is seems
-      // possible to get into a situation where it during the post frame existed
-      // and was inserted to remove it, but when we come here it is no longer
-      // present. This is an attempt to prevent this edge case.
       if (isDrawerOpen || isEndDrawerOpen) {
-        if (_kDebugMe) debugPrint('onAfterBuild(): Open drawer popped!');
+        if (_kDebugMe) debugPrint('onAfterBuild(): Open Drawer popped!');
         Navigator.of(context).pop();
       }
     });
@@ -155,7 +155,7 @@ class _FlexDrawerState extends State<FlexDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    // Scaffold already ensures that max one drawer can be open per time, thus
+    // Scaffold already ensures that max one Drawer can be open per time, thus
     // an OR term of if either one is open passed to the onAfterCallback plus
     // ONE pop in the callback, will take care of closing the one that was open.
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);

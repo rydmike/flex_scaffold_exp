@@ -41,13 +41,13 @@ class SettingsBottomBar extends ConsumerWidget {
               condition: ref.watch(useTooltipsPod),
               tooltip: 'FlexfoldThemeData(bottomBarType: '
                   '${ref.watch(bottomBarTypePod)})',
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
+              child: const Padding(
+                padding: EdgeInsets.symmetric(
                   horizontal: Sizes.l,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const <Widget>[BottomBarTypeSwitch()],
+                  children: <Widget>[BottomBarTypeSwitch()],
                 ),
               ),
             ),
@@ -74,8 +74,8 @@ class BottomNavBarOpacityControls extends StatelessWidget {
   const BottomNavBarOpacityControls({super.key});
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const <Widget>[
+    return const Column(
+      children: <Widget>[
         // Frosted glass effect
         BottomBarBlurSwitch(),
         // Slider for bottom bar opacity value in a ListTile.

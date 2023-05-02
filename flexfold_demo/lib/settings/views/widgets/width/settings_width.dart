@@ -17,8 +17,8 @@ class SettingsWidth extends StatelessWidget {
 
     return MaybeCard(
       condition: isDesktop,
-      child: Column(
-        children: const <Widget>[
+      child: const Column(
+        children: <Widget>[
           MenuWidthSlider(),
           RailWidthSlider(),
           SidebarWidthSlider(),

@@ -49,13 +49,13 @@ class SettingsOther extends ConsumerWidget {
                   '${ref.watch(flexMenuCurveProvider)},\n'
                   '  bottomBarAnimationCurve: '
                   '${ref.watch(flexMenuCurveProvider)})',
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
+              child: const Padding(
+                padding: EdgeInsets.symmetric(
                   horizontal: Sizes.l,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const <Widget>[AppAnimationCurveSwitch()],
+                  children: <Widget>[AppAnimationCurveSwitch()],
                 ),
               ),
             ),

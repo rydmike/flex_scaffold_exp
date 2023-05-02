@@ -57,13 +57,13 @@ class SettingsApplication extends ConsumerWidget {
                 condition: ref.watch(useTooltipsPod),
                 tooltip: 'FlexfoldThemeData(bottomBarType: '
                     '${ref.watch(bottomBarTypePod.notifier).state})',
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(
                     horizontal: Sizes.l,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: const <Widget>[AppTextDirectionSwitch()],
+                    children: <Widget>[AppTextDirectionSwitch()],
                   ),
                 ),
               ),

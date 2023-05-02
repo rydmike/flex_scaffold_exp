@@ -198,7 +198,7 @@ class Material2BottomBar extends StatelessWidget {
     final double? elevation = useFlexTheme ? flexTheme.bottomElevation : null;
 
     // Get effective bottom bar type for the bottom navigation bar
-    const BottomNavigationBarType? type = BottomNavigationBarType.fixed;
+    const BottomNavigationBarType type = BottomNavigationBarType.fixed;
     // flexTheme.bottomNavigationBarTheme?.type;
 
     // Get effective icons themes for the bottom navigation bar
@@ -363,10 +363,12 @@ class Material3BottomBar extends StatelessWidget {
     // final IconThemeData? unselectedIconTheme = flexTheme.iconTheme;
     //
     // Get effective item color for the bottom navigation bar
-    final Color? selectedItemColor = flexTheme.selectedIconTheme?.color;
+    final Color? selectedItemColor =
+        useFlexTheme ? flexTheme.selectedIconTheme?.color : null;
 
     // Get effective item color for the bottom navigation bar
-    final Color? unselectedItemColor = flexTheme.iconTheme?.color;
+    final Color? unselectedItemColor =
+        useFlexTheme ? flexTheme.iconTheme?.color : null;
     //
     // // Get effective text styles for the bottom navigation bar
     // final TextStyle? selectedLabelStyle =
@@ -419,18 +421,22 @@ class Material3BottomBar extends StatelessWidget {
             for (FlexDestination item in destinations)
               NavigationDestination(
                 label: item.label,
-                icon: Theme(
-                  data: Theme.of(context).copyWith(
-                    iconTheme: IconThemeData(color: selectedItemColor),
-                  ),
-                  child: item.icon,
-                ),
-                selectedIcon: Theme(
-                  data: Theme.of(context).copyWith(
-                    iconTheme: IconThemeData(color: unselectedItemColor),
-                  ),
-                  child: item.selectedIcon,
-                ),
+                icon:
+                    // Theme(
+                    //   data: Theme.of(context).copyWith(
+                    //     iconTheme: IconThemeData(color: selectedItemColor),
+                    //   ),
+                    //   child:
+                    item.icon,
+                // ),
+                selectedIcon:
+                    // Theme(
+                    //   data: Theme.of(context).copyWith(
+                    //     iconTheme: IconThemeData(color: unselectedItemColor),
+                    //   ),
+                    //   child:
+                    item.selectedIcon,
+                // ),
                 tooltip: useTooltips &&
                         item.tooltip != item.label &&
                         item.tooltip != null

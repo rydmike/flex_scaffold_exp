@@ -34,8 +34,8 @@ class SettingsAppBar extends ConsumerWidget {
           // only when using transparent app bar.
           AnimatedSwitchShowHide(
             show: ref.watch(appBarTransparentPod),
-            child: Column(
-              children: const <Widget>[
+            child: const Column(
+              children: <Widget>[
                 AppBarBlurSwitch(),
                 AppBarOpacitySlider(),
               ],

@@ -54,13 +54,13 @@ class SettingsMenu extends ConsumerWidget {
                   'enum values (${ref.watch(menuHighlightTypePod)}) can '
                   'return the needed property values '
                   'for the example highlight styles in this demo.',
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
+              child: const Padding(
+                padding: EdgeInsets.symmetric(
                   horizontal: Sizes.l,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const <Widget>[MenuHighlightTypeSwitch()],
+                  children: <Widget>[MenuHighlightTypeSwitch()],
                 ),
               ),
             ),
@@ -81,13 +81,13 @@ class SettingsMenu extends ConsumerWidget {
             child: MaybeTooltip(
               condition: ref.watch(useTooltipsPod),
               tooltip: 'Flexfold(menuStart: ${ref.watch(menuAlignmentPod)})',
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
+              child: const Padding(
+                padding: EdgeInsets.symmetric(
                   horizontal: Sizes.l,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const <Widget>[MenuAlignmentSwitch()],
+                  children: <Widget>[MenuAlignmentSwitch()],
                 ),
               ),
             ),
@@ -102,13 +102,13 @@ class SettingsMenu extends ConsumerWidget {
             child: MaybeTooltip(
               condition: ref.watch(useTooltipsPod),
               tooltip: 'Flexfold(menuSide: ${ref.watch(menuSidePod)})',
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
+              child: const Padding(
+                padding: EdgeInsets.symmetric(
                   horizontal: Sizes.l,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const <Widget>[MenuSideSwitch()],
+                  children: <Widget>[MenuSideSwitch()],
                 ),
               ),
             ),

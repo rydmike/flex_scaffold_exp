@@ -17,8 +17,8 @@ class SettingsBreakpoints extends StatelessWidget {
         MediaQuery.of(context).size.width >= Sizes.desktopSize;
     return MaybeCard(
       condition: isDesktop,
-      child: Column(
-        children: const <Widget>[
+      child: const Column(
+        children: <Widget>[
           BreakpointDrawerSlider(),
           BreakpointRailSlider(),
           BreakpointMenuSlider(),

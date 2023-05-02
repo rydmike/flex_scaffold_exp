@@ -253,13 +253,13 @@ class _ThemeScreenState extends ConsumerState<ThemePage>
                       ),
                       const SizedBox(height: Sizes.s),
                       // AppBar style
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
                           horizontal: Sizes.l,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          children: const <Widget>[TabBarStyleSwitch()],
+                          children: <Widget>[TabBarStyleSwitch()],
                         ),
                       ),
                       const SizedBox(height: Sizes.m),
@@ -278,12 +278,11 @@ class _ThemeScreenState extends ConsumerState<ThemePage>
                         ),
                       ),
                       const SizedBox(height: Sizes.s),
-                      Padding(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: Sizes.l),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: Sizes.l),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          children: const <Widget>[
+                          children: <Widget>[
                             SurfaceStyleSwitch(),
                           ],
                         ),
@@ -313,12 +312,11 @@ class _ThemeScreenState extends ConsumerState<ThemePage>
                           'then derived from specified ones.',
                         ),
                       ),
-                      Padding(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: Sizes.l),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: Sizes.l),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          children: const <Widget>[
+                          children: <Widget>[
                             EnabledColorsSwitch(),
                           ],
                         ),

@@ -21,13 +21,13 @@ dependencies:
 
   # Color picker package (by Mike Rydstrom, rydmike.com).
   # https://pub.dev/packages/flex_color_picker
-  flex_color_picker: ^3.2.0
+  flex_color_picker: ^3.2.1
   #flex_color_picker:
   #  path: ../../flex_color_picker
 
   # Color scheme package (by Mike Rydstrom, rydmike.com).
   # https://pub.dev/packages/flex_color_scheme
-  flex_color_scheme: ^7.0.1
+  flex_color_scheme: ^7.0.5
   # flex_color_scheme:
   #  path: ../../flex_color_scheme
 
@@ -46,15 +46,15 @@ dependencies:
 
   # SVG file drawing, used for Undraw Asset Images (by dnfield.dev).
   # https://pub.dev/packages/flutter_svg
-  flutter_svg: ^1.1.6
+  flutter_svg: ^2.0.5
 
   # Easy-to-use URL-based router for Flutter web, mobile and desktop apps.
   # https://pub.dev/packages/go_router (by Chris Sells)
-  go_router: ^5.2.4
+  go_router: ^7.0.0
 
   # Google fonts (by Google material.io).
   # https://pub.dev/packages/google_fonts
-  google_fonts: ^4.0.3
+  google_fonts: ^4.0.4
 
   # Lightweight fast key-value db in pure Dart (by Simon Leier, hivedb.dev).
   # https://pub.dev/packages/hive
@@ -79,6 +79,11 @@ dependencies:
   # Used for launching a WEB URL (by Google flutter.dev).
   # https://pub.dev/packages/url_launcher
   url_launcher: ^6.1.10
+
+
+dependency_overrides:
+  material_color_utilities: ^0.3.0
+
 
 dev_dependencies:
   # Tool for making native launcher icons for Android and iOS

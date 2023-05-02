@@ -48,8 +48,8 @@ class VisibleBottomBarControls extends StatelessWidget {
   const VisibleBottomBarControls({super.key});
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const <Widget>[
+    return const Column(
+      children: <Widget>[
         Divider(),
         HideBottomBarOnScrollSwitch(),
         ShowBottomBarWhenMenuInDrawerSwitch(),
