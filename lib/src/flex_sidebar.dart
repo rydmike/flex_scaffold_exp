@@ -207,8 +207,7 @@ class _SidebarAppBar extends StatelessWidget {
     // for the control button, even if nothing else is used.
     final FlexAppBar flexAppBar = sidebarAppBar ?? const FlexAppBar();
 
-    // TODO(rydmike): Use aspect when it lands in stable.
-    final double topPadding = MediaQuery.of(context).padding.top;
+    final double topPadding = MediaQuery.paddingOf(context).top;
     final ThemeData theme = Theme.of(context);
     final Color scaffoldColor = theme.scaffoldBackgroundColor;
 
