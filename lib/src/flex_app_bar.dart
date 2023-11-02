@@ -933,18 +933,15 @@ class FlexAppBar {
     final Color bottomBorderColor =
         borderColor ?? theme.dividerTheme.color ?? theme.dividerColor;
 
-    // TODO(rydmike): Replace with MediaQuery aspects when it lands.
-    final MediaQueryData media = MediaQuery.of(context);
-
     // Needed for the height of the flexible space, we need to pass it to
     // gradient container to know how high to make it to fill the AppBar.
     final double height = kToolbarHeight +
         (bottom?.preferredSize.height ?? 0.0) +
-        media.padding.top;
+        MediaQuery.paddingOf(context).top;
 
     // Get current screen size that we will show on the screen's app bar, if
     // [showScreenSize] is true.
-    final Size size = media.size;
+    final Size size = MediaQuery.sizeOf(context);
 
     // Effective center title logic is from the Flutter app bar source, so we
     // can get same logic also for the styled app bar when screen size is shown.
