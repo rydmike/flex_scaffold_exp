@@ -1359,7 +1359,7 @@ class FlexAppBarStyling extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double effectiveTopPadding =
-        floatAppBar ? MediaQuery.of(context).padding.top + floatPadding.top : 0;
+        floatAppBar ? MediaQuery.paddingOf(context).top + floatPadding.top : 0;
 
     final ThemeData theme = Theme.of(context);
     final Color effectiveBorderColor =
