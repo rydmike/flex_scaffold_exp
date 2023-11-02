@@ -51,6 +51,7 @@ final StateProvider<ThemeData> lightThemeProvider =
   // We need to use the ColorScheme defined by used FlexColorScheme as input
   // to customized sub-theme's, so we create it first.
   return FlexThemeData.light(
+    useMaterial3: true,
     colors: ref.watch(currentSchemeProvider).light,
     surfaceMode: ref.watch(surfaceStylePod),
     tooltipsMatchBackground: ref.watch(tooltipsMatchBackgroundPod),
@@ -86,6 +87,7 @@ final StateProvider<ThemeData> darkThemeProvider =
   // We need to use the ColorScheme defined by used FlexColorScheme as input
   // to customized sub-theme's, so we create it first.
   return FlexThemeData.dark(
+    useMaterial3: true,
     colors: ref.watch(currentSchemeProvider).dark,
     surfaceMode: ref.watch(surfaceStylePod),
     tooltipsMatchBackground: ref.watch(tooltipsMatchBackgroundPod),

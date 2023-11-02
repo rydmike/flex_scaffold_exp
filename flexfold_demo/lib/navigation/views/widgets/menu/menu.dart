@@ -64,8 +64,8 @@ class Menu extends ConsumerWidget {
       leading: AnimatedSwitchShowHide(
         show: ref.watch(showMenuLeadingPod),
         child: const ListTile(
-          leading: Icon(Icons.menu_rounded),
-          title: Text('MENU'),
+          leading: Icon(Icons.more_horiz),
+          title: Text(' Leading widget'),
         ),
       ),
       // This is a widget that appears after your menu destinations.

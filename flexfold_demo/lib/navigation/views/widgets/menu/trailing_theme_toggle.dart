@@ -53,7 +53,7 @@ class TrailingThemeToggle extends ConsumerWidget {
                     child: MaybeTooltip(
                       tooltip: 'Toggle dark/light theme',
                       condition: ref.watch(useTooltipsPod),
-                      child: Switch.adaptive(
+                      child: Switch(
                         value: isDark,
                         onChanged: (bool value) {
                           if (isDrawerOpen) {

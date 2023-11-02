@@ -749,7 +749,7 @@ class FlexScaffold extends StatefulWidget {
     ValueChanged<bool> hide, [
     bool useHide = true,
   ]) {
-    // If scroll hiding is used we do the hide/show callback, else nop.
+    // If scroll hiding is used we do the hide/show callback, else no op.
     if (useHide) {
       // Reverse direction is scrolling down, we hide it, if not hidden.
       if (scrollController.position.userScrollDirection ==

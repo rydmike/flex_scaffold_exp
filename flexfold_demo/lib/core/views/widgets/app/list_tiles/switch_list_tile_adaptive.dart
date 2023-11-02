@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 // ignore_for_file: comment_references
 
+// TODO(rydmike): This wrapper should be removed. Adaptive not used anymore.
+
 /// A theme following wrapper for [SwitchListTileAdaptive].
 ///
 /// This wrapper sets the active thumb color for the switch in iOS or macOS
@@ -113,34 +115,9 @@ class SwitchListTileAdaptive extends StatelessWidget {
   /// is used.
   final EdgeInsetsGeometry? contentPadding;
 
-  Color? activeThumbColor(BuildContext context) {
-    Color? color;
-    final ThemeData theme = Theme.of(context);
-
-    /// As long as Flutter SDK stable does not included the new M3 switch and
-    /// its theme, we should do this for all platforms. Later when it is in
-    /// stable, we can use this logic only on iOS and macOS and let
-    /// the switch get correct color on other platforms via theme default.
-    //
-    // if (theme.platform == TargetPlatform.iOS ||
-    //     theme.platform == TargetPlatform.macOS) {
-    if (theme.useMaterial3) {
-      color = theme.switchTheme.thumbColor
-              ?.resolve(<MaterialState>{MaterialState.selected}) ??
-          theme.colorScheme.primary;
-    } else {
-      color = theme.switchTheme.thumbColor
-              ?.resolve(<MaterialState>{MaterialState.selected}) ??
-          theme.colorScheme.secondary;
-    }
-    // }
-    return color;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return SwitchListTile.adaptive(
-      activeColor: activeColor ?? activeThumbColor(context),
+    return SwitchListTile(
       value: value,
       onChanged: onChanged,
       title: title,
