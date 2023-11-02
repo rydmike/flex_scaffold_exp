@@ -165,7 +165,7 @@ class FlexMenuIndicator {
   /// is used that should set [FlexTheme.menuSelectedColor] to
   /// [Colors.transparent].
   ///
-  /// If it returns null [FlexTheme.menuSelectedColor] can keep it it null
+  /// If it returns null [FlexTheme.menuSelectedColor] can keep it null
   /// for the theme default color, or assign a custom color.
   Color? get transparentOrNull => _transparentOrNull;
 

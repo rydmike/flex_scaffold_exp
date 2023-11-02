@@ -103,10 +103,11 @@ class FlexSidebarButton extends StatelessWidget {
     // We can also use it to access its state modifying methods.
     final FlexScaffoldState flexScaffold = FlexScaffold.use(context);
 
-    /// Listen to aspect of the FlexScaffold and only rebuild if they change.
+    // Listen to aspect of the FlexScaffold and only rebuild if it changes.
     final bool isSidebarHidden = FlexScaffold.isSidebarHiddenOf(context);
 
-    final double width = MediaQuery.of(context).size.width;
+    // Rebuild if media width changes.
+    final double width = MediaQuery.sizeOf(context).width;
 
     final FlexScaffoldTheme flexTheme = Theme.of(context)
             .extension<FlexScaffoldTheme>()
