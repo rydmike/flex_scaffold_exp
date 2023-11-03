@@ -217,7 +217,7 @@ class FlexScaffold extends StatefulWidget {
   /// breakpoint constraints would otherwise allow that. This means the user
   /// cannot hide the side menu or the rail, when rail or side navigation mode
   /// is triggered. You can still control it via the API, there just is no
-  /// user control over.
+  /// user control enabled.
   ///
   /// Defaults to true so users can toggle the menu and rail visibility as they
   /// prefer on a large canvas.
@@ -288,7 +288,7 @@ class FlexScaffold extends StatefulWidget {
 
   /// Callback that is called when menu is hidden via its menu button control.
   ///
-  /// This callback together with its sett [menuHide] can be used if you
+  /// This callback together with its set [menuHide] can be used if you
   /// want to control hiding and showing the menu from an external control,
   /// like a user controlled [Switch], you can then use this callback to change
   /// the state of such a switch when user has operated hiding/showing the menu
@@ -324,8 +324,7 @@ class FlexScaffold extends StatefulWidget {
   /// The end drawer and sidebar, often used as a tools menu, filters etc.
   ///
   /// Typically a [FlexSidebar], but you can make a custom version of it too.
-  ///
-  /// It can have a FlexAppBar and child widget.
+  /// A [FlexSidebar] can have a [FlexAppBar] and child widget.
   final Widget? sidebar;
 
   /// The sidebar menu mode can be manually controlled by the user when true.
