@@ -19,7 +19,6 @@ class SvgAssetImageSwitcher extends StatefulWidget {
     this.semanticLabel,
     this.alignment = Alignment.topCenter,
     this.fit = BoxFit.contain,
-    this.colorBlendMode = BlendMode.srcIn,
     this.height,
     this.width,
     this.placeholder,
@@ -35,7 +34,6 @@ class SvgAssetImageSwitcher extends StatefulWidget {
   final String? semanticLabel;
   final Alignment alignment;
   final BoxFit fit;
-  final BlendMode colorBlendMode;
   final double? height;
   final double? width;
   final Widget? placeholder;
@@ -85,7 +83,6 @@ class _SvgAssetImageSwitcherState extends State<SvgAssetImageSwitcher> {
       semanticLabel: widget.semanticLabel,
       alignment: widget.alignment,
       fit: widget.fit,
-      colorBlendMode: widget.colorBlendMode,
       height: widget.height,
       width: widget.width,
       placeholder: widget.placeholder,
@@ -102,7 +99,6 @@ class _SvgAssetImageSwitcherState extends State<SvgAssetImageSwitcher> {
       semanticLabel: widget.semanticLabel,
       alignment: widget.alignment,
       fit: widget.fit,
-      colorBlendMode: widget.colorBlendMode,
       height: widget.height,
       width: widget.width,
       placeholder: widget.placeholder,

@@ -41,15 +41,15 @@ dependencies:
 
   # Riverpod, next generation version of Provider (by Remi Rousselet).
   # https://pub.dev/packages/flutter_riverpod:
-  flutter_riverpod: ^2.4.5
+  flutter_riverpod: ^2.4.6
 
   # SVG file drawing, used for Undraw Asset Images (by dnfield.dev).
   # https://pub.dev/packages/flutter_svg
-  flutter_svg: ^2.0.8
+  flutter_svg: ^2.0.9
 
   # Easy-to-use URL-based router for Flutter web, mobile and desktop apps.
   # https://pub.dev/packages/go_router (by Chris Sells)
-  go_router: ^12.0.1
+  go_router: ^12.1.1
 
   # Google fonts (by Google material.io).
   # https://pub.dev/packages/google_fonts

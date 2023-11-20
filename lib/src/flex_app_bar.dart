@@ -893,7 +893,7 @@ class FlexAppBar {
     assert(floatScrim >= 0 && floatScrim <= 255,
         'looseScrim must be >= 0 and <= 255');
     assert(
-        automaticallyImplyTitle == false || title == null,
+        !automaticallyImplyTitle || title == null,
         'With FlexAppBar.style automaticallyImplyTitle can only be '
         'true when title is null!');
 

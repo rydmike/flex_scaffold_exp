@@ -51,7 +51,7 @@ class LayoutShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final CurrentRoute route = ref.watch(currentRouteProvider);
 
-    final String goRouterPath = GoRouter.of(context).location;
+    final String goRouterPath = GoRouterState.of(context).uri.toString();
     if (_kDebugMe) {
       debugPrint('LayoutShell: goRouterPath = $goRouterPath');
     }
@@ -179,7 +179,7 @@ class LayoutShell extends ConsumerWidget {
             ref
                 .read(currentRouteProvider.notifier)
                 .setModalDestination(destination);
-            context.push('${destination.route}_modal');
+            await context.push('${destination.route}_modal');
             // This would be an alternative way to route to the modal
             // screens when we use one. This way does not use the package
             // nav2 router or named routes, it just builds a page route
@@ -198,7 +198,6 @@ class LayoutShell extends ConsumerWidget {
             //     },
             //   ),
             // );
-
           } else {
             // Update the route with the selected destination.
             // This demo app uses the info in the current destination to

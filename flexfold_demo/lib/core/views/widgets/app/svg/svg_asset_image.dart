@@ -21,7 +21,6 @@ class SvgAssetImage extends StatelessWidget {
     this.semanticLabel,
     this.alignment = Alignment.topCenter,
     this.fit = BoxFit.contain,
-    this.colorBlendMode = BlendMode.srcIn,
     this.height,
     this.width,
     this.placeholder,
@@ -34,7 +33,6 @@ class SvgAssetImage extends StatelessWidget {
   final String? semanticLabel;
   final Alignment alignment;
   final BoxFit fit;
-  final BlendMode colorBlendMode;
   final double? height;
   final double? width;
   final Widget? placeholder;
@@ -54,7 +52,7 @@ class SvgAssetImage extends StatelessWidget {
       height: height,
       width: width,
       alignment: alignment,
-      colorBlendMode: colorBlendMode,
+      // colorBlendMode: colorBlendMode,
       fit: fit,
       semanticsLabel: semanticLabel,
     );

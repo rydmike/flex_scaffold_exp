@@ -274,7 +274,7 @@ class Material2BottomBar extends StatelessWidget {
           // showSelectedLabels: showSelectedLabels,
           // showUnselectedLabels: showUnselectedLabels,
           items: <BottomNavigationBarItem>[
-            for (FlexDestination item in destinations)
+            for (final FlexDestination item in destinations)
               BottomNavigationBarItem(
                 icon: item.icon,
                 activeIcon: item.selectedIcon,
@@ -418,7 +418,7 @@ class Material3BottomBar extends StatelessWidget {
           selectedIndex: selectedIndex,
           onDestinationSelected: onDestinationSelected,
           destinations: <Widget>[
-            for (FlexDestination item in destinations)
+            for (final FlexDestination item in destinations)
               NavigationDestination(
                 label: item.label,
                 icon:
@@ -510,7 +510,7 @@ class CupertinoBottomBar extends StatelessWidget {
     // BottomNavigationBarItem will also follow standard themes.
     return CupertinoTabBar(
       items: <BottomNavigationBarItem>[
-        for (FlexDestination item in destinations)
+        for (final FlexDestination item in destinations)
           BottomNavigationBarItem(
             icon: item.icon,
             activeIcon: item.selectedIcon,

@@ -203,7 +203,7 @@ final Provider<List<FlexSchemeData>> schemesProvider =
     // Add all built in FlexColor schemes, we can try them for inspiration.
     // They also get dynamically changed with used colors count and dark
     // via the computed option as well.
-    for (FlexSchemeData data in FlexColor.schemesList)
+    for (final FlexSchemeData data in FlexColor.schemesList)
       FlexSchemeData(
         name: data.name,
         description: data.description,

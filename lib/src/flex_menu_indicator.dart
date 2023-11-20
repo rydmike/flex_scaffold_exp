@@ -49,7 +49,6 @@ class FlexMenuIndicator {
           _bottom = 2.0;
           _transparentOrNull = Colors.transparent;
         }
-        break;
       case FlexIndicatorStyle.row:
         {
           _start = menuHighlightMarginStart ?? 0;
@@ -58,7 +57,6 @@ class FlexMenuIndicator {
           _bottom = menuHighlightMarginBottom ?? 2;
           _transparentOrNull = null;
         }
-        break;
       case FlexIndicatorStyle.box:
         {
           _start = menuHighlightMarginStart ?? 4;
@@ -67,7 +65,6 @@ class FlexMenuIndicator {
           _bottom = menuHighlightMarginBottom ?? 2;
           _transparentOrNull = null;
         }
-        break;
       case FlexIndicatorStyle.stadium:
         {
           _start = menuHighlightMarginStart ?? 3;
@@ -76,7 +73,6 @@ class FlexMenuIndicator {
           _bottom = menuHighlightMarginBottom ?? 2;
           _transparentOrNull = null;
         }
-        break;
       case FlexIndicatorStyle.endStadium:
         {
           _start = menuHighlightMarginStart ?? 0;
@@ -85,7 +81,6 @@ class FlexMenuIndicator {
           _bottom = menuHighlightMarginBottom ?? 2;
           _transparentOrNull = null;
         }
-        break;
       case FlexIndicatorStyle.startBar:
         {
           _start = menuHighlightMarginStart ?? 0;
@@ -94,7 +89,6 @@ class FlexMenuIndicator {
           _bottom = menuHighlightMarginBottom ?? 2;
           _transparentOrNull = Colors.transparent;
         }
-        break;
       case FlexIndicatorStyle.endBar:
         {
           _start = menuHighlightMarginStart ?? 0;
@@ -103,7 +97,6 @@ class FlexMenuIndicator {
           _bottom = menuHighlightMarginBottom ?? 2;
           _transparentOrNull = Colors.transparent;
         }
-        break;
     }
   }
 
