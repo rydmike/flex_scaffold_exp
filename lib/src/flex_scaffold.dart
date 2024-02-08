@@ -813,9 +813,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
         _isMenuHidden = value;
         _scrollHiddenBottomBar = false;
         widget.onMenuHide?.call(value);
-        if (_debug) {
-          debugPrint('FlexScaffold: hideMenu set to $_isMenuHidden');
-        }
+        if (_debug) debugPrint('FlexScaffold: hideMenu set to $_isMenuHidden');
       });
     }
   }
@@ -911,9 +909,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
       );
       widget.onDestination(destination);
       _onDestination = destination;
-      if (_debug) {
-        debugPrint('FlexScaffold: navigate to bottom $_target');
-      }
+      if (_debug) debugPrint('FlexScaffold: navigate to bottom $_target');
       if (preferPush) _assumePushed();
     });
   }
@@ -947,9 +943,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
         );
         widget.onDestination(destination);
         _onDestination = destination;
-        if (_debug) {
-          debugPrint('FlexScaffold: navigate to bottom $_target');
-        }
+        if (_debug) debugPrint('FlexScaffold: navigate to bottom $_target');
       },
     );
   }
