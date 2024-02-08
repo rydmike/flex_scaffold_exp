@@ -11,7 +11,7 @@ import 'flex_scaffold_constants.dart';
 // so in theory anything behind an if (_kDebugMe) {} and the entire if
 // statement as well, should get tree shaken away totally in a release build,
 // by the Dart AOT compiler.
-const bool _kDebugMe = kDebugMode && true;
+const bool _debug = kDebugMode && false;
 
 /// A stateful wrapper for a [Drawer] used by [FlexScaffold].
 ///
@@ -147,7 +147,7 @@ class _FlexDrawerState extends State<FlexDrawer> {
       final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
       final bool isEndDrawerOpen = scaffold?.isEndDrawerOpen ?? false;
       if (isDrawerOpen || isEndDrawerOpen) {
-        if (_kDebugMe) debugPrint('onAfterBuild(): Open Drawer popped!');
+        if (_debug) debugPrint('onAfterBuild(): Open Drawer popped!');
         Navigator.of(context).pop();
       }
     });

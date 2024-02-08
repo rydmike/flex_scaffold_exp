@@ -17,8 +17,8 @@ import 'flex_target.dart';
 
 // Set to true to observe debug prints. In release mode this compile time
 // const always evaluate to false, so in theory anything with only an
-// if (_kDebugMe) {} should get tree shaken away totally in a release build.
-const bool _kDebugMe = kDebugMode && true;
+// if (_debug) {} should get tree shaken away totally in a release build.
+const bool _debug = kDebugMode && false;
 
 // TODO(rydmike): Review existing implementations.
 // - Add a controller that contain menu of the control properties?
@@ -813,7 +813,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
         _isMenuHidden = value;
         _scrollHiddenBottomBar = false;
         widget.onMenuHide?.call(value);
-        if (_kDebugMe) {
+        if (_debug) {
           debugPrint('FlexScaffold: hideMenu set to $_isMenuHidden');
         }
       });
@@ -825,7 +825,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
     setState(() {
       _menuPrefersRail = value;
       widget.onMenuPrefersRail?.call(value);
-      if (_kDebugMe) {
+      if (_debug) {
         debugPrint('FlexScaffold: menuPrefersRail set to $_menuPrefersRail');
       }
     });
@@ -841,7 +841,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
               widget.destinations[_selectedIndex].hasSidebar &&
               widget.sidebar != null;
       widget.onSidebarHide?.call(value);
-      if (_kDebugMe) {
+      if (_debug) {
         debugPrint('FlexScaffold: sidebarIsHidden set to $_isSidebarHidden');
       }
     });
@@ -866,7 +866,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
   void scrollHideBottomBar(bool value) {
     setState(() {
       _scrollHiddenBottomBar = value;
-      if (_kDebugMe) {
+      if (_debug) {
         debugPrint('FlexScaffold: scrollHideBottomBar '
             'set to $_scrollHiddenBottomBar');
       }
@@ -911,7 +911,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
       );
       widget.onDestination(destination);
       _onDestination = destination;
-      if (_kDebugMe) {
+      if (_debug) {
         debugPrint('FlexScaffold: navigate to bottom $_target');
       }
       if (preferPush) _assumePushed();
@@ -947,7 +947,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
         );
         widget.onDestination(destination);
         _onDestination = destination;
-        if (_kDebugMe) {
+        if (_debug) {
           debugPrint('FlexScaffold: navigate to bottom $_target');
         }
       },
@@ -1664,7 +1664,7 @@ class _FlexScaffoldModel extends InheritedModel<_FlexScaffoldAspect> {
   bool updateShouldNotify(_FlexScaffoldModel oldWidget) {
     // return false;
     final bool result = data != oldWidget.data;
-    if (_kDebugMe) {
+    if (_debug) {
       debugPrint('_InheritedFlexScaffoldModel: updateShouldNotify: $result');
       debugPrint('oldWidget.data.menuIsHidden: ${oldWidget.data.isMenuHidden}');
       debugPrint('          data.menuIsHidden: ${data.isMenuHidden}');
@@ -1717,7 +1717,7 @@ class _FlexScaffoldModel extends InheritedModel<_FlexScaffoldAspect> {
             dependencies.contains(_FlexScaffoldAspect.selectedDestination)) ||
         (data.onDestination != oldWidget.data.onDestination &&
             dependencies.contains(_FlexScaffoldAspect.onDestination));
-    if (_kDebugMe) {
+    if (_debug) {
       debugPrint('_InheritedFlexScaffoldModel: '
           'updateShouldNotifyDependent: $result');
     }
@@ -1752,7 +1752,8 @@ class _InheritedFlexScaffold extends InheritedWidget {
   /// the icon button value, you can safely read their widget values.
   @override
   bool updateShouldNotify(_InheritedFlexScaffold oldWidget) {
-    debugPrint('_InheritedFlexScaffold updateShouldNotify: ALWAYS FALSE');
+    if (_debug)
+      debugPrint('_InheritedFlexScaffold updateShouldNotify: ALWAYS FALSE');
     return false;
   }
 }

@@ -12,8 +12,8 @@ import 'flex_scaffold_theme.dart';
 
 // Set to true to observe debug prints. In release mode this compile time
 // const always evaluate to false, so in theory anything with only an
-// if (_kDebugMe) {} should get tree shaken away totally in a release build.
-const bool _kDebugMe = kDebugMode && true;
+// if (_debug) {} should get tree shaken away totally in a release build.
+const bool _debug = kDebugMode && false;
 
 /// A bottom bar wrapper used by [FlexScaffold] to use and operate the
 /// default built-in and custom bottom navigation options in Flutter.
@@ -62,7 +62,7 @@ class FlexBottomBar extends StatelessWidget {
             useMaterial3 ? FlexBottomType.material3 : FlexBottomType.material2;
       }
     }
-    if (_kDebugMe) {
+    if (_debug) {
       debugPrint('FlexScaffoldBottomBar: effectiveType = $effectiveType');
     }
     final bool useCustomBar =
