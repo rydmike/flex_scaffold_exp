@@ -711,8 +711,8 @@ class FlexAppBar {
 
     /// The amount of 'opacity' to be used on the styled app bar.
     ///
-    /// Defaults to 0.9.
-    double opacity = 0.9,
+    /// Defaults to 1.0.
+    double opacity = 1.0,
 
     /// Opacity value for the start color, defaults to 1.
     ///
@@ -741,7 +741,7 @@ class FlexAppBar {
     /// of the app bar background color. The shade strength can be modified
     /// with 'gradientPercentage'.
     ///
-    /// Defaults to true.
+    /// Defaults to false.
     bool gradient = true,
 
     /// The percentage of color change we should apply to the app bar color
@@ -844,8 +844,8 @@ class FlexAppBar {
     /// same color as the background, or very close to it, looks better when
     /// there is some separation between it and the background.
     ///
-    /// Defaults to true.
-    bool hasBorderOnSurface = true,
+    /// Defaults to false.
+    bool hasBorderOnSurface = false,
 
     /// The border to use on the styled app bar.
     ///

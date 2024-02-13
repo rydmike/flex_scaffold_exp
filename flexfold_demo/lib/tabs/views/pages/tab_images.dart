@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flexfold/flexfold.dart';
+import 'package:flex_scaffold/flex_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

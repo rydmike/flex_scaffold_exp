@@ -1,5 +1,5 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
-import 'package:flexfold/flexfold.dart';
+import 'package:flex_scaffold/flex_scaffold.dart';
 import 'package:flutter/material.dart';
 
 import '../core/models/app_animation_curve.dart';

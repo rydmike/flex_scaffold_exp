@@ -1,5 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:flexfold/flexfold.dart';
+import 'package:flex_scaffold/flex_scaffold.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

@@ -1,4 +1,4 @@
-import 'package:flexfold/flexfold.dart';
+import 'package:flex_scaffold/flex_scaffold.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/const/app_icons.dart';
