@@ -899,8 +899,9 @@ class FlexAppBar {
 
     final ThemeData theme = Theme.of(context);
     final AppBarTheme appBarTheme = theme.appBarTheme;
-    final Color appBarColor =
-        backgroundColor ?? appBarTheme.backgroundColor ?? theme.primaryColor;
+    final Color appBarColor = backgroundColor ??
+        appBarTheme.backgroundColor ??
+        theme.colorScheme.surface;
 
     final Color endColor = theme.brightness == Brightness.light
         ? appBarColor.lighten(gradient ? gradientPercentage : 0)
