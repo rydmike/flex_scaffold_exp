@@ -24,7 +24,7 @@ import '../views/widgets/push_wrapper.dart';
 // Set to true to observe debug prints. In release mode this compile time
 // const always evaluates to false, so in theory anything with only an
 // if (_kDebugMe) {} should get tree shaken away in a release build.
-const bool _kDebugMe = kDebugMode && false;
+const bool _debug = kDebugMode && false;
 
 // This is a custom transition builder that uses the animations from the
 // Google animations package combined with Flexfold info about navigation

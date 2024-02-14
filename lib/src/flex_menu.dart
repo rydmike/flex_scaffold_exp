@@ -179,19 +179,15 @@ class _FlexMenuState extends State<FlexMenu> {
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
     final bool hasDrawer = scaffold?.hasDrawer ?? false;
     final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
-
-    // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
-    //   reference: https://github.com/flutter/flutter/pull/114459
-    final MediaQueryData mediaData = MediaQuery.of(context);
-    // final double topPadding = mediaData.padding.top;
-    final double leftPadding = mediaData.padding.left;
-    final double rightPadding = mediaData.padding.right;
+    final EdgeInsets padding = MediaQuery.paddingOf(context);
+    final double leftPadding = padding.left;
+    final double rightPadding = padding.right;
     final double startPadding = Directionality.of(context) == TextDirection.ltr
         ? leftPadding
         : rightPadding;
-    final double screenWidth = mediaData.size.width;
-    final double screenHeight = mediaData.size.height;
-
+    final Size size = MediaQuery.sizeOf(context);
+    final double screenWidth = size.width;
+    final double screenHeight = size.height;
     final ThemeData theme = Theme.of(context);
     // Get effective FlexTheme:
     //  1. If one exist in Theme, use it, fill undefined props with default.
@@ -199,7 +195,6 @@ class _FlexMenuState extends State<FlexMenu> {
     final FlexScaffoldTheme flexTheme =
         theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
             const FlexScaffoldTheme().withDefaults(context);
-
     final double breakpointRail = flexTheme.breakpointRail!;
     final double breakpointMenu = flexTheme.breakpointMenu!;
     final double breakpointDrawer = flexTheme.breakpointDrawer!;
@@ -209,7 +204,6 @@ class _FlexMenuState extends State<FlexMenu> {
     /// Depend on aspects of the FlexScaffold and only rebuild if they change.
     final bool menuIsHidden = FlexScaffold.isMenuHiddenOf(context);
     final bool menuPrefersRail = FlexScaffold.menuPrefersRailOf(context);
-
     // Based on height and breakpoint, we are making a phone landscape layout.
     final bool isPhoneLandscape = screenHeight < breakpointDrawer;
     // True if the menu should be used as a drawer.
@@ -274,12 +268,10 @@ class _FlexMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
-    //   reference: https://github.com/flutter/flutter/pull/114459
-    final MediaQueryData mediaData = MediaQuery.of(context);
-    final double topPadding = mediaData.padding.top;
-    final double leftPadding = mediaData.padding.left;
-    final double rightPadding = mediaData.padding.right;
+    final EdgeInsets padding = MediaQuery.paddingOf(context);
+    final double topPadding = padding.top;
+    final double leftPadding = padding.left;
+    final double rightPadding = padding.right;
     final double startPadding = Directionality.of(context) == TextDirection.ltr
         ? leftPadding
         : rightPadding;
@@ -288,17 +280,14 @@ class _FlexMenu extends StatelessWidget {
     final bool canUseMenu = FlexScaffold.menuControlEnabledOf(context);
     final bool showBottomItemsInDrawer =
         FlexScaffold.showBottomDestinationsInDrawerOf(context);
-
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
     final bool hasDrawer = scaffold?.hasDrawer ?? false;
     final bool isDrawerOpen = scaffold?.isDrawerOpen ?? false;
-
-    final double screenWidth = mediaData.size.width;
-    final double screenHeight = mediaData.size.height;
-
+    final Size size = MediaQuery.sizeOf(context);
+    final double screenWidth = size.width;
+    final double screenHeight = size.height;
     final ThemeData theme = Theme.of(context);
     final Color scaffoldColor = theme.scaffoldBackgroundColor;
-
     // Get effective FlexTheme:
     //  1. If one exist in Theme, use it, fill undefined props with default.
     //  2. If no FlexTheme in Theme, fallback to one with all default values.
@@ -416,67 +405,60 @@ class _FlexMenu extends StatelessWidget {
                     alignment: AlignmentDirectional.topStart,
                     minWidth: 0,
                     maxWidth: menuWidth,
-                    child: ScrollConfiguration(
-                        // The menu can scroll, but all bounce and glow scroll
-                        // effects are removed.
-                        behavior: ScrollNoEdgeEffect(),
-                        child: Column(
-                          children: <Widget>[
-                            if (header != null) header!,
-                            Expanded(
-                              child: _FooterLayout(
-                                body: Align(
-                                  alignment: alignment,
-                                  child: ListView(
-                                    shrinkWrap: true,
-                                    padding: EdgeInsets.zero,
-                                    children: <Widget>[
-                                      // Add the leading widget to the menu
-                                      if (leading != null) leading!,
-                                      // The menu items
-                                      for (int i = 0;
-                                          i < destinations.length;
-                                          i++)
-                                        if ((destinations[i]
-                                                    .inBottomNavigation &&
-                                                showBottomItemsInDrawer) ||
-                                            !destinations[i]
-                                                .inBottomNavigation ||
-                                            !isDrawer)
-                                          _FlexMenuItem(
-                                            destination: destinations[i],
-                                            iconTheme: unselectedIconTheme,
-                                            selectedIconTheme:
-                                                selectedIconTheme,
-                                            labelTextStyle:
-                                                unselectedLabelTextStyle,
-                                            selectedLabelTextStyle:
-                                                selectedLabelTextStyle,
-                                            headingTextStyle: headingTextStyle,
-                                            isSelected: selectedIndex == i,
-                                            width: size.maxWidth,
-                                            startPadding: startPadding,
-                                            autoFocus: selectedIndex == i,
-                                            onTap: () {
-                                              if (isDrawerOpen) {
-                                                Navigator.of(context).pop();
-                                              }
-                                              flexScaffold.setSelectedIndex(i);
-                                            },
-                                            flexTheme: flexTheme,
-                                          ),
-                                      //
-                                      // Add the trailing widget to the menu
-                                      if (trailing != null) trailing!,
-                                    ],
-                                  ),
-                                ),
-                                // Add footer widget to menu
-                                footer: footer,
+                    child: Column(
+                      children: <Widget>[
+                        if (header != null) header!,
+                        Expanded(
+                          child: _FooterLayout(
+                            body: Align(
+                              alignment: alignment,
+                              child: ListView(
+                                physics: const ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                padding: EdgeInsets.zero,
+                                children: <Widget>[
+                                  // Add the leading widget to the menu
+                                  if (leading != null) leading!,
+                                  // The menu items
+                                  for (int i = 0; i < destinations.length; i++)
+                                    if ((destinations[i].inBottomNavigation &&
+                                            showBottomItemsInDrawer) ||
+                                        !destinations[i].inBottomNavigation ||
+                                        !isDrawer)
+                                      _FlexMenuItem(
+                                        destination: destinations[i],
+                                        iconTheme: unselectedIconTheme,
+                                        selectedIconTheme: selectedIconTheme,
+                                        labelTextStyle:
+                                            unselectedLabelTextStyle,
+                                        selectedLabelTextStyle:
+                                            selectedLabelTextStyle,
+                                        headingTextStyle: headingTextStyle,
+                                        isSelected: selectedIndex == i,
+                                        width: size.maxWidth,
+                                        startPadding: startPadding,
+                                        autoFocus: selectedIndex == i,
+                                        onTap: () {
+                                          if (isDrawerOpen) {
+                                            Navigator.of(context).pop();
+                                          }
+                                          flexScaffold.setSelectedIndex(i);
+                                        },
+                                        flexTheme: flexTheme,
+                                      ),
+                                  //
+                                  // Add the trailing widget to the menu
+                                  if (trailing != null) trailing!,
+                                ],
                               ),
                             ),
-                          ],
-                        )),
+                            // Add footer widget to menu
+                            footer: footer,
+                          ),
+                        ),
+                      ],
+                      // )
+                    ),
                   )),
                 )),
               ],
@@ -643,11 +625,6 @@ class _FlexMenuItem extends StatelessWidget {
 /// Lays out two widgets with one as main body and a footer widget that
 /// always appears at the bottom.
 ///
-/// This widget is courtesy of Rémi Rousselet found on Stack Overflow
-/// https://stackoverflow.com/questions/54027270/how-to-create-a-scroll-view-with-fixed-footer-with-flutter?noredirect=1&lq=1
-/// Modified it to use Widgets instead of Containers that was used in the
-/// example and to accept null widgets as input.
-///
 /// Keeping it local to this file as it is not used or needed anywhere
 /// else, but it is a generally useful widget too.
 class _FooterLayout extends StatelessWidget {
@@ -662,9 +639,7 @@ class _FooterLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomMultiChildLayout(
-      // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
-      //   reference: https://github.com/flutter/flutter/pull/114459
-      delegate: _FooterLayoutDelegate(MediaQuery.of(context).viewInsets),
+      delegate: _FooterLayoutDelegate(MediaQuery.viewInsetsOf(context)),
       children: <Widget>[
         LayoutId(
           id: _FooterPart.body,
@@ -687,15 +662,15 @@ class _FooterLayoutDelegate extends MultiChildLayoutDelegate {
   final EdgeInsets viewInsets;
 
   @override
-  void performLayout(Size size) {
-    // ignore: parameter_assignments
-    size = Size(size.width, size.height + viewInsets.bottom);
+  void performLayout(final Size size) {
+    // Add bottom insets to given size.
+    final Size sized = Size(size.width, size.height + viewInsets.bottom);
     final Size footer =
-        layoutChild(_FooterPart.footer, BoxConstraints.loose(size));
+        layoutChild(_FooterPart.footer, BoxConstraints.loose(sized));
 
     final BoxConstraints bodyConstraints = BoxConstraints.tightFor(
-      height: size.height - max(footer.height, viewInsets.bottom),
-      width: size.width,
+      height: sized.height - max(footer.height, viewInsets.bottom),
+      width: sized.width,
     );
     final Size body = layoutChild(_FooterPart.body, bodyConstraints);
     positionChild(_FooterPart.body, Offset.zero);

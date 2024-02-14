@@ -791,6 +791,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
   double _width = 600;
 
   // Local state
+  late bool _isInitializing;
   late bool _isPhone;
   late bool _isPhoneLandscape;
   late bool _isTablet;
@@ -905,7 +906,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
         source: source,
         reverse: _indexMenu.reverse,
         preferPush: preferPush,
-        hasAppBar: widget.destinations[_selectedIndex].hasAppBar,
+        noAppBar: widget.destinations[_selectedIndex].noAppBar,
+        noAppBarTitle: widget.destinations[_selectedIndex].noAppBarTitle,
       );
       widget.onDestination(destination);
       _onDestination = destination;
@@ -939,7 +941,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
           label: widget.destinations[_selectedIndex].label,
           reverse: _indexMenu.reverse,
           source: FlexNavigation.bottom,
-          hasAppBar: widget.destinations[_selectedIndex].hasAppBar,
+          noAppBar: widget.destinations[_selectedIndex].noAppBar,
+          noAppBarTitle: widget.destinations[_selectedIndex].noAppBarTitle,
         );
         widget.onDestination(destination);
         _onDestination = destination;
@@ -1005,7 +1008,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
       // Bad input, but let's return the first one if destinations is not empty
       return widget.destinations.isNotEmpty
           ? widget.destinations[0]
-          // If it was empty, then it was really bad we return a default
+          // If it was empty, then it was really bad, so we return a default
           // const destination, not very helpful, but caller can check for it.
           : const FlexDestination();
     }
@@ -1040,6 +1043,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
       source: source,
       reverse: reverse,
       preferPush: preferPush,
+      noAppBar: widget.destinations[index].noAppBar,
+      noAppBarTitle: widget.destinations[index].noAppBarTitle,
     );
   }
 
@@ -1055,6 +1060,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
   @override
   void initState() {
     super.initState();
+    _isInitializing = true;
     _selectedIndex = widget.selectedIndex;
     _indexMenu.setIndex(widget.selectedIndex);
     _target = widget.destinations[_indexMenu.index];
@@ -1068,7 +1074,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
     _isSidebarHidden = widget.sidebarHide;
     _menuPrefersRail = widget.menuPrefersRail;
     _scrollHiddenBottomBar = false;
-    // Selected destination.
 
     // TODO(rydmike): Changing orientation with drawer open may break it! Fix?
     // currentOrientation = MediaQuery.of(context).orientation;
@@ -1077,7 +1082,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
   @override
   void didUpdateWidget(FlexScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.selectedIndex != oldWidget.selectedIndex) {
+    if (widget.selectedIndex != oldWidget.selectedIndex || _isInitializing) {
+      _isInitializing = false;
+      debugPrint('*********** FlexScaffold: selectedIndex changed ***********');
       _selectedIndex = widget.selectedIndex;
       _indexMenu.setIndex(widget.selectedIndex);
       _target = widget.destinations[_indexMenu.index];
@@ -1100,7 +1107,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
         source: source,
         reverse: _indexMenu.reverse,
         preferPush: preferPush,
-        hasAppBar: widget.destinations[_selectedIndex].hasAppBar,
+        noAppBar: widget.destinations[_selectedIndex].noAppBar,
+        noAppBarTitle: widget.destinations[_selectedIndex].noAppBarTitle,
       );
     }
     if (widget.menuHide != oldWidget.menuHide) {
@@ -1136,19 +1144,19 @@ class FlexScaffoldState extends State<FlexScaffold> {
         'If bottom navigation type is custom, you have to provide a '
         'custom bottom navigator to FlexScaffold.custom.');
 
-    // TODO(rydmike): When MediaQuery as InheritedModel lands use it.
-    //   reference: https://github.com/flutter/flutter/pull/114459
     // Get media width, height, and safe area padding
     assert(debugCheckHasMediaQuery(context),
         'A valid build context is required for the MediaQuery.');
-    final MediaQueryData mediaData = MediaQuery.of(context);
-    final double leftPadding = mediaData.padding.left;
-    final double rightPadding = mediaData.padding.right;
+    // final MediaQueryData mediaData = MediaQuery.of(context);
+    final EdgeInsets padding = MediaQuery.paddingOf(context);
+    final Size size = MediaQuery.sizeOf(context);
+    final double leftPadding = padding.left;
+    final double rightPadding = padding.right;
     final double startPadding = Directionality.of(context) == TextDirection.ltr
         ? leftPadding
         : rightPadding;
-    _width = mediaData.size.width;
-    final double height = mediaData.size.height;
+    _width = size.width;
+    final double height = size.height;
 
     // Based on width and breakpoint limit, this is a phone sized layout.
     _isPhone = _width < flexTheme.breakpointRail!;
@@ -1239,7 +1247,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
         ),
         child: Row(
           children: <Widget>[
-            //
             // Main menu, when the menu is shown as a fixed menu
             ConstrainedBox(
               constraints: BoxConstraints(
@@ -1251,7 +1258,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
                 child: widget.menu,
               ),
             ),
-            //
             // Main part is an Expanded that contains a standard Scaffold.
             Expanded(
               child: Scaffold(
@@ -1261,10 +1267,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
                 //
                 // Add AppBar with leading and actions buttons, but only
                 // if the destination has an app bar.
-                appBar: widget.destinations[_selectedIndex].hasAppBar
-                    ? FlexScaffoldAppBar(appBar: widget.appBar)
-                    : null,
-                //
+                appBar: widget.destinations[_selectedIndex].noAppBar
+                    ? null
+                    : FlexScaffoldAppBar(appBar: widget.appBar),
                 // The menu when used as a drawer.
                 drawer: _isMenuInDrawer
                     ? FlexDrawer(
@@ -1275,7 +1280,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
                         child: widget.menu,
                       )
                     : null,
-                //
                 // The end drawer, ie tools menu when used as an end drawer.
                 endDrawer: _isSidebarInEndDrawer
                     ? FlexDrawer(
@@ -1286,20 +1290,17 @@ class FlexScaffoldState extends State<FlexScaffold> {
                         child: widget.sidebar,
                       )
                     : null,
-                //
                 // The bottom navigation bar
                 bottomNavigationBar: FlexBottomBar(
                   customNavigationBar: widget.customBottom,
                   customNavigationBarHeight: widget.customBottomHeight,
                 ),
-                //
                 // Floating action button in its effective location.
                 floatingActionButton:
                     widget.destinations[_selectedIndex].hasFloatingActionButton
                         ? widget.floatingActionButton
                         : null,
                 floatingActionButtonLocation: effectiveFabLocation,
-                //
                 // Build the actual content in a Row.
                 body: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1746,8 +1747,9 @@ class _InheritedFlexScaffold extends InheritedWidget {
   /// the icon button value, you can safely read their widget values.
   @override
   bool updateShouldNotify(_InheritedFlexScaffold oldWidget) {
-    if (_debug)
+    if (_debug) {
       debugPrint('_InheritedFlexScaffold updateShouldNotify: ALWAYS FALSE');
+    }
     return false;
   }
 }

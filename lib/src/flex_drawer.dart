@@ -175,12 +175,6 @@ class _FlexDrawerState extends State<FlexDrawer> {
       width: widget.width,
       semanticLabel: widget.semanticLabel,
       child: widget.child,
-      // TODO(rydmike): Removed this Material, before there was no bg color
-      //   in Drawer, but it might not be needed anymore now, test it!
-      // child: Material(
-      //   color: widget.backgroundColor,
-      //   child: widget.child,
-      // ),
     );
   }
 }

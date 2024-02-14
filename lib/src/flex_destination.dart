@@ -27,7 +27,8 @@ class FlexDestination {
     this.alwaysPush = false,
     this.hasSidebar = false,
     this.hasFloatingActionButton = false,
-    this.hasAppBar = true,
+    this.noAppBar = false,
+    this.noAppBarTitle = false,
     this.inBottomNavigation = false,
     this.dividerBefore = false,
     this.dividerAfter = false,
@@ -161,7 +162,7 @@ class FlexDestination {
   /// This destination has a floating action button. Defaults to false.
   final bool hasFloatingActionButton;
 
-  /// This destination has an AppBar.
+  /// This destination has no [AppBar].
   ///
   /// By default all destinations in Flexfold gets an app bar. If an app bar is
   /// not provided a default one is created. The default app bar only
@@ -171,7 +172,7 @@ class FlexDestination {
   /// at all. For example if you want to use a sliver app bar or a custom
   /// persistent header, then you have to make that as a part of the
   /// destination's body and do not want any app bar provided by FlexScaffold.
-  /// For such destinations set [hasAppBar] to false.
+  /// For such destinations set [noAppBar] to false.
   ///
   /// Only AppBar's provided by the FlexScaffold can be a part of the layout
   /// shell that does not change or transition when you navigate to a new
@@ -186,8 +187,16 @@ class FlexDestination {
   /// actions to operate the drawers manually. The examples and docs
   /// show you how to do this.
   ///
-  /// Defaults to true.
-  final bool hasAppBar;
+  /// Defaults to false.
+  final bool noAppBar;
+
+  /// This destination has an app bar that does not show its title
+  /// and a transparent background.
+  ///
+  /// The leading and widget action widgets will still be shown.
+  ///
+  /// If [noAppBar] is false, this property has no effect.
+  final bool noAppBarTitle;
 
   /// In a rail or menu, draw a divider before the destination
   final bool dividerBefore;
@@ -211,7 +220,8 @@ class FlexDestination {
         other.alwaysPush == alwaysPush &&
         other.hasSidebar == hasSidebar &&
         other.hasFloatingActionButton == hasFloatingActionButton &&
-        other.hasAppBar == hasAppBar &&
+        other.noAppBar == noAppBar &&
+        other.noAppBarTitle == noAppBarTitle &&
         other.inBottomNavigation == inBottomNavigation &&
         other.dividerBefore == dividerBefore &&
         other.dividerAfter == dividerAfter;
@@ -230,7 +240,8 @@ class FlexDestination {
         alwaysPush,
         hasSidebar,
         hasFloatingActionButton,
-        hasAppBar,
+        noAppBar,
+        noAppBarTitle,
         inBottomNavigation,
         dividerBefore,
         dividerAfter,

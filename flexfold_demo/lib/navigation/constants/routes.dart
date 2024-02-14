@@ -54,6 +54,7 @@ class Routes {
     FlexDestination(
       label: Routes.homeLabel,
       route: Routes.home,
+      noAppBarTitle: true,
       icon: Icon(AppIcons.home),
       selectedIcon: Icon(AppIcons.homeSelected),
     ),
@@ -98,7 +99,7 @@ class Routes {
       route: Routes.slivers,
       icon: Icon(AppIcons.slivers),
       selectedIcon: Icon(AppIcons.sliversSelected),
-      hasAppBar: false,
+      noAppBar: false,
       hasSidebar: true,
       inBottomNavigation: true,
     ),

@@ -309,31 +309,6 @@ class FlexAppBar {
   /// The [actions] become the trailing component of the [NavigationToolbar]
   /// built by this widget. The height of each action is constrained to be no
   /// bigger than the [toolbarHeight].
-  ///
-  /// {@tool snippet}
-  ///
-  /// ```dart
-  /// Scaffold(
-  ///   body: CustomScrollView(
-  ///     primary: true,
-  ///     slivers: <Widget>[
-  ///       SliverAppBar(
-  ///         title: Text('Hello World'),
-  ///         actions: <Widget>[
-  ///           IconButton(
-  ///             icon: Icon(Icons.shopping_cart),
-  ///             tooltip: 'Open shopping cart',
-  ///             onPressed: () {
-  ///               // handle the press
-  ///             },
-  ///           ),
-  ///         ],
-  ///       ),
-  ///       // ...rest of body...
-  ///     ],
-  ///   ),
-  /// )
-  /// ```
   final List<Widget>? actions;
 
   /// This widget is stacked behind the toolbar and the tab bar. Its height
@@ -731,8 +706,8 @@ class FlexAppBar {
     /// This filter is bit expensive and is only applied when 'blurred' is true,
     /// and when 'opacity' or 'startOpacity' is less than 1.
     ///
-    /// Defaults to true.
-    bool blurred = true,
+    /// Defaults to false.
+    bool blurred = false,
 
     /// The styled app bar is using a color gradient.
     ///
@@ -742,7 +717,7 @@ class FlexAppBar {
     /// with 'gradientPercentage'.
     ///
     /// Defaults to false.
-    bool gradient = true,
+    bool gradient = false,
 
     /// The percentage of color change we should apply to the app bar color
     /// in the gradient at the end of the appbar.

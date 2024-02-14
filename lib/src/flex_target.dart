@@ -38,7 +38,8 @@ class FlexTarget with Diagnosticable {
     this.source = FlexNavigation.rail,
     this.reverse = false,
     this.preferPush = false,
-    this.hasAppBar = true,
+    this.noAppBar = false,
+    this.noAppBarTitle = false,
   }) : selectedIcon = selectedIcon ?? icon;
 
   /// Menu, rail or drawer index of selected destination.
@@ -116,9 +117,16 @@ class FlexTarget with Diagnosticable {
   /// case bottom destinations are always also present in the drawer.
   final bool preferPush;
 
-  /// True if the selected destination is defined to have a none transitioning
-  /// AppBar.
-  final bool hasAppBar;
+  /// True if the selected destination is defined to not use an AppBar at all.
+  /// This is typically used for destinations that use sliver app bars where
+  /// the app bar is part of the destination's body and not the Flexfold.
+  final bool noAppBar;
+
+  /// True if this destination has an app bar that does not show its title
+  /// and a transparent background.
+  ///
+  /// The leading and widget action widgets will still be shown.
+  final bool noAppBarTitle;
 
   /// Copy the object with one or more provided properties changed.
   FlexTarget copyWith({
@@ -131,7 +139,8 @@ class FlexTarget with Diagnosticable {
     FlexNavigation? source,
     bool? reverse,
     bool? preferPush,
-    bool? hasAppBar,
+    bool? noAppBar,
+    bool? noAppBarTitle,
   }) {
     return FlexTarget(
       index: index ?? this.index,
@@ -143,7 +152,8 @@ class FlexTarget with Diagnosticable {
       source: source ?? this.source,
       reverse: reverse ?? this.reverse,
       preferPush: preferPush ?? this.preferPush,
-      hasAppBar: hasAppBar ?? this.hasAppBar,
+      noAppBar: noAppBar ?? this.noAppBar,
+      noAppBarTitle: noAppBarTitle ?? this.noAppBarTitle,
     );
   }
 
@@ -162,7 +172,8 @@ class FlexTarget with Diagnosticable {
         other.source == source &&
         other.reverse == reverse &&
         other.preferPush == preferPush &&
-        other.hasAppBar == hasAppBar;
+        other.noAppBar == noAppBar &&
+        other.noAppBarTitle == noAppBarTitle;
   }
 
   /// Override for hashcode. Using Darts object hash.
@@ -177,7 +188,8 @@ class FlexTarget with Diagnosticable {
         source,
         reverse,
         preferPush,
-        hasAppBar,
+        noAppBar,
+        noAppBarTitle,
       );
 
   /// Flutter debug properties override, includes toString.
@@ -193,6 +205,8 @@ class FlexTarget with Diagnosticable {
     properties.add(EnumProperty<FlexNavigation>('source', source));
     properties.add(DiagnosticsProperty<bool>('reverse', reverse));
     properties.add(DiagnosticsProperty<bool>('preferPush', preferPush));
-    properties.add(DiagnosticsProperty<bool>('hasAppBar', hasAppBar));
+    properties.add(DiagnosticsProperty<bool>('hasAppBar', noAppBar));
+    properties
+        .add(DiagnosticsProperty<bool>('removeAppBarTitle', noAppBarTitle));
   }
 }

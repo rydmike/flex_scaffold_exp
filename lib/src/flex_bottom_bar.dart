@@ -389,7 +389,7 @@ class Material3BottomBar extends StatelessWidget {
     return IfWrapper(
       // If the bottom bar is NOT fully opaque and bottom blur is enabled, then
       // wrap the Decoration with blur backdrop filter, otherwise we leave out
-      // the blur filter, as it is a bit costly to render when not needed and
+      // the blur filter, as it is costly to render when not needed and if
       // there is no transparency its effect cannot be seen.
       condition: !isOpaque && flexTheme.bottomBlur!,
       builder: (BuildContext context, Widget child) {

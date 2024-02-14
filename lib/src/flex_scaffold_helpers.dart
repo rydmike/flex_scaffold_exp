@@ -37,25 +37,6 @@ class IndexTracker {
   bool isIndexSelected(int index) => _index == index;
 }
 
-/// Scroll behaviour that can be used with scrolling views that should
-/// never have any scroll glow or bounce.
-///
-/// The no effect could e.g. be for a side drawer or rail that just needs to
-/// scroll a bit because it is in a very small height limited viewport. Bounce
-/// and scroll effects in this case often feels wrong.
-///
-/// Found this solution here:
-/// https://stackoverflow.com/questions/51119795/how-to-remove-scroll-glow
-class ScrollNoEdgeEffect extends ScrollBehavior {
-  // TODO(rydmike): This method looks old, replace with new way
-  /// Override for buildViewportChrome
-  @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child;
-  }
-}
-
 /// Type definition for the builder function used by IfWrapper.
 typedef IfWrapBuilder = Widget Function(BuildContext context, Widget child);
 

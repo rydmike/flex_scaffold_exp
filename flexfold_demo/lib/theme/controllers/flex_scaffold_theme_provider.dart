@@ -16,7 +16,7 @@ final Provider<FlexScaffoldTheme> flexScaffoldThemeProvider =
     // shapes and they don't even have to be the same.
 
     // final TextDirection directionality = Directionality.of(context);
-    const TextDirection directionality = TextDirection.ltr;
+    // const TextDirection directionality = TextDirection.ltr;
 
     // The style of the selected highlighted item.
     final FlexMenuIndicator menuSelected = FlexMenuIndicator(
@@ -35,27 +35,21 @@ final Provider<FlexScaffoldTheme> flexScaffoldThemeProvider =
       // directionality: directionality,
     );
 
-    const bool isLight = true;
-
     return FlexScaffoldTheme(
       // TODO(rydmike): Uncomment to test background colors via properties.
       // menuBackgroundColor: Colors.pink[100],
-      //isLight ? Color(0xFFE9EFEA) : Color(0xFF18231B),
-      //     Theme.of(context).backgroundColor, //Colors.pink[100],
+      //   isLight ? Color(0xFFE9EFEA) : Color(0xFF18231B),
+      //   Theme.of(context).backgroundColor, //Colors.pink[100],
       // sidebarBackgroundColor: Colors.yellow[100],
-
       // Set if we have the menu on start or end side of screen
       menuSide: ref.watch(menuSidePod),
 
-      // Uncomment to see that menuElevation elevation works.
-      // TODO(rydmike): This elevation does not work! Figure out why not.
-      // Not going to using it in this demo even if it would work because
-      // it is ugly (opinionated), but it should of course be a supported
-      // feature.
+      // Set different values to see how elevations works.
+      // TODO(rydmike): Test and see how they look and if they work.
       menuElevation: 0,
-      // Uncomment to use sidebarElevation.
-      // Not used in this demo because it is not so pretty (opinionated).
       sidebarElevation: 0,
+      drawerElevation: 0,
+      endDrawerElevation: 0,
       // We use same width value for the drawer and the menu in this demo,
       // but they can of course be different.
       menuWidth: ref.watch(menuWidthPod),
@@ -91,13 +85,11 @@ final Provider<FlexScaffoldTheme> flexScaffoldThemeProvider =
           Duration(milliseconds: ref.watch(animationDurationPod)),
       bottomAnimationDuration:
           Duration(milliseconds: ref.watch(animationDurationPod)),
-      //
       // The animation curve for rail/menu, sidebar and bottom bar
       // can be set separately, but this demo uses the same setting for all.
       menuAnimationCurve: ref.watch(flexMenuCurveProvider),
       sidebarAnimationCurve: ref.watch(flexMenuCurveProvider),
       bottomAnimationCurve: ref.watch(flexMenuCurveProvider),
-      //
       // Bottom navigation bar theme and additional visual properties for
       // the bottom navigation bar.
       bottomType: ref.watch(bottomBarTypePod),

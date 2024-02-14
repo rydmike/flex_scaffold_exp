@@ -137,7 +137,7 @@ class _SideBar extends StatelessWidget {
     /// Depend on aspects of the FlexScaffold and only rebuild if they change.
     final bool sidebarBelongsToBody =
         FlexScaffold.sidebarBelongsToBodyOf(context);
-    final bool hasAppBar = FlexScaffold.onDestinationOf(context).hasAppBar;
+    final bool hasAppBar = FlexScaffold.onDestinationOf(context).noAppBar;
 
     return OverflowBox(
       alignment: AlignmentDirectional.topStart,

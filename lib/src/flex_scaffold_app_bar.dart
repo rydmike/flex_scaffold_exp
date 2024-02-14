@@ -64,49 +64,55 @@ class FlexScaffoldAppBar extends StatelessWidget
     final bool sidebarBelongsToBody =
         FlexScaffold.sidebarBelongsToBodyOf(context);
 
+    // The destination AppBar has no title and transparent background.
+    final bool noTitle =
+        FlexScaffold.selectedDestinationOf(context).noAppBarTitle;
+
     // Convert the main FlexfoldAppBar data object to a real AppBar.
     Widget? title = usedAppBar.title;
     final Widget impliedTitle = Text(flexScaffold.currentImpliedTitle);
-    if (title == null && usedAppBar.automaticallyImplyTitle) {
-      title = impliedTitle;
-    } else if (usedAppBar.automaticallyImplyTitle && title != null) {
-      // If the title was not null and we imply title in a styled FlexAppBar,
-      // we will assume that if the title is a Row, that row only contains
-      // the widget that shows screen size and we need to insert the implicit
-      // title widget. We also need to check centering again.
-      if (title is Row) {
-        // Effective center title logic is from the Flutter app bar source, we
-        // use same logic also for styled AppBar when screen size is shown.
-        bool effectiveCenterTitle() {
-          final ThemeData theme = Theme.of(context);
-          final AppBarTheme appBarTheme = AppBarTheme.of(context);
-          if (usedAppBar.centerTitle != null) return usedAppBar.centerTitle!;
-          if (appBarTheme.centerTitle != null) {
-            return appBarTheme.centerTitle!;
+    if (!noTitle) {
+      if (title == null && usedAppBar.automaticallyImplyTitle) {
+        title = impliedTitle;
+      } else if (usedAppBar.automaticallyImplyTitle && title != null) {
+        // If the title was not null and we imply title in a styled FlexAppBar,
+        // we will assume that if the title is a Row, that row only contains
+        // the widget that shows screen size and we need to insert the implicit
+        // title widget. We also need to check centering again.
+        if (title is Row) {
+          // Effective center title logic is from the Flutter app bar source, we
+          // use same logic also for styled AppBar when screen size is shown.
+          bool effectiveCenterTitle() {
+            final ThemeData theme = Theme.of(context);
+            final AppBarTheme appBarTheme = AppBarTheme.of(context);
+            if (usedAppBar.centerTitle != null) return usedAppBar.centerTitle!;
+            if (appBarTheme.centerTitle != null) {
+              return appBarTheme.centerTitle!;
+            }
+            switch (theme.platform) {
+              case TargetPlatform.android:
+              case TargetPlatform.fuchsia:
+              case TargetPlatform.linux:
+              case TargetPlatform.windows:
+                return false;
+              case TargetPlatform.iOS:
+              case TargetPlatform.macOS:
+                return usedAppBar.actions == null ||
+                    (usedAppBar.actions?.length ?? 0) < 2;
+            }
           }
-          switch (theme.platform) {
-            case TargetPlatform.android:
-            case TargetPlatform.fuchsia:
-            case TargetPlatform.linux:
-            case TargetPlatform.windows:
-              return false;
-            case TargetPlatform.iOS:
-            case TargetPlatform.macOS:
-              return usedAppBar.actions == null ||
-                  (usedAppBar.actions?.length ?? 0) < 2;
-          }
-        }
 
-        if (effectiveCenterTitle()) {
-          title = Row(children: <Widget>[
-            const Spacer(),
-            impliedTitle,
-            Expanded(child: title),
-          ]);
-        } else {
-          title = Row(
-            children: <Widget>[impliedTitle, Expanded(child: title)],
-          );
+          if (effectiveCenterTitle()) {
+            title = Row(children: <Widget>[
+              const Spacer(),
+              impliedTitle,
+              Expanded(child: title),
+            ]);
+          } else {
+            title = Row(
+              children: <Widget>[impliedTitle, Expanded(child: title)],
+            );
+          }
         }
       }
     }
@@ -114,7 +120,9 @@ class FlexScaffoldAppBar extends StatelessWidget
       automaticallyImplyLeading: false,
       // Only add the menu button on the main AppBar, if menu is in a Drawer.
       leading: isMenuInDrawer ? FlexMenuButton(onPressed: () {}) : null,
-      title: title,
+      // Overrides for destination without and app bar.
+      title: noTitle ? null : title,
+      backgroundColor: noTitle ? Colors.transparent : null,
       actions: <Widget>[
         // Insert any pre-existing actions AND
         // in order to not get a default shown end drawer button in the

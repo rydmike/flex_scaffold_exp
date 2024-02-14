@@ -1061,8 +1061,9 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
               kFlexIndicatorMarginTop,
               kFlexIndicatorMarginEnd,
               kFlexIndicatorMarginBottom),
-      menuSelectedColor:
-          menuSelectedColor ?? theme.colorScheme.primary.withAlpha(0x3d),
+      // TODO(rydmike): Review default against M2 & M3 for colors.
+      menuSelectedColor: menuSelectedColor ??
+          theme.colorScheme.primaryContainer, //.withAlpha(0x3d),
       // The focus, hover, highlight and splash remain null as default.
       // The used InkWell will set null values in that case and the theme
       // defaults for ink effects will be used.
@@ -1105,13 +1106,14 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
           opacity: selectedIconTheme?.opacity ?? 1.0),
       // The default unselected label text styles with a merge of the provided
       // style, if any style was given.
+      // TODO(rydmike): Review default against M2 & M3 for colors.
       labelTextStyle: theme.textTheme.bodyLarge!
-          .copyWith(color: theme.colorScheme.onSurface.withOpacity(0.64))
+          // .copyWith(color: theme.colorScheme.onSurface.withOpacity(0.64))
           .merge(labelTextStyle),
       // The default selected label text styles with a merge of the provided
       // style, if any style was given.
       selectedLabelTextStyle: theme.textTheme.bodyLarge!
-          .copyWith(color: theme.colorScheme.primary)
+          .copyWith(color: theme.colorScheme.onPrimaryContainer)
           .merge(selectedLabelTextStyle),
       // style, if any style was given.
       headingTextStyle: theme.textTheme.bodyLarge!
