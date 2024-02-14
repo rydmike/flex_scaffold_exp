@@ -123,6 +123,7 @@ class FlexScaffoldAppBar extends StatelessWidget
       // Overrides for destination without and app bar.
       title: noTitle ? null : title,
       backgroundColor: noTitle ? Colors.transparent : null,
+      flexibleSpace: noTitle ? const SizedBox.shrink() : null,
       actions: <Widget>[
         // Insert any pre-existing actions AND
         // in order to not get a default shown end drawer button in the
