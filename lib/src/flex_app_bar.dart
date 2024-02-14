@@ -1035,6 +1035,7 @@ class FlexAppBar {
         borderRadius: borderRadius,
         borderColor: bottomBorderColor,
         elevation: elevation,
+        shadowColor: shadowColor,
       ),
       bottom: bottom,
       elevation: 0,
@@ -1220,6 +1221,7 @@ class FlexAppBarStyling extends StatelessWidget {
     this.borderRadius,
     this.borderColor,
     this.elevation,
+    this.shadowColor,
     this.child,
   })  : assert(startOpacity >= 0 && startOpacity <= 1.0,
             'Start opacity must be from 0 to 1.'),
@@ -1352,6 +1354,9 @@ class FlexAppBarStyling extends StatelessWidget {
   /// it defaults to 0.
   final double? elevation;
 
+  /// Shadow color of the flexible space of the styled app bar.
+  final Color? shadowColor;
+
   /// Optional child for the styled flexible space of an app bar.
   ///
   /// Normally null.
@@ -1387,6 +1392,7 @@ class FlexAppBarStyling extends StatelessWidget {
           child: Material(
             color: Colors.transparent,
             elevation: elevation ?? theme.appBarTheme.elevation ?? 0,
+            shadowColor: shadowColor ?? Colors.transparent,
             clipBehavior: Clip.antiAlias,
             borderRadius: effectiveBorderRadius,
             child: IfWrapper(
