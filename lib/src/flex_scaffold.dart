@@ -1326,7 +1326,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Expanded(
-                      child: widget.body ?? Container(),
+                      child: widget.body ?? const SizedBox(),
                     ),
                     // The Sidebar when shown as a fixed item and it belongs
                     // to the body. Material default sidebar layout.
@@ -1338,7 +1338,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
                             BoxConstraints(maxWidth: flexTheme.sidebarWidth!),
                         child: Material(
                           color: flexTheme.sidebarBackgroundColor,
-                          elevation: flexTheme.sidebarElevation!,
+                          elevation: flexTheme.sidebarElevation ??
+                              flexTheme.menuElevation ??
+                              0,
                           child: widget.sidebar,
                         ),
                       ),

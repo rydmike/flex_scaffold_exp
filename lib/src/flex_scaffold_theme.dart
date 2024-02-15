@@ -944,9 +944,9 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       breakpointMenu: breakpointMenu ?? kFlexBreakpointMenu,
       breakpointSidebar: breakpointSidebar ?? kFlexBreakpointSidebar,
       // Edge border properties
-      borderOnMenu: borderOnMenu ?? true,
-      borderOnSidebar: borderOnSidebar ?? true,
-      borderOnDarkDrawer: borderOnDarkDrawer ?? true,
+      borderOnMenu: borderOnMenu ?? false,
+      borderOnSidebar: borderOnSidebar ?? false,
+      borderOnDarkDrawer: borderOnDarkDrawer ?? false,
       borderOnLightDrawer: borderOnLightDrawer ?? false,
       borderColor:
           borderColor ?? theme.dividerTheme.color ?? theme.dividerColor,
