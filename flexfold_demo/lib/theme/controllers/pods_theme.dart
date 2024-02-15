@@ -71,8 +71,20 @@ final StateProvider<ThemeData> lightThemeProvider =
     fontFamily: AppFonts.mainFont,
     platform: ref.watch(platformProvider),
     typography: Typography.material2021(platform: ref.watch(platformProvider)),
-    subThemesData: const FlexSubThemesData(),
+    subThemesData: const FlexSubThemesData(
+      bottomNavigationBarElevation: 10,
+      navigationBarElevation: 10,
+      navigationBarMutedUnselectedLabel: false,
+      navigationBarMutedUnselectedIcon: false,
+    ),
     extensions: <ThemeExtension<dynamic>>{ref.watch(flexScaffoldThemeProvider)},
+  ).copyWith(
+    navigationBarTheme: const NavigationBarThemeData(
+      elevation: 0,
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      elevation: 0,
+    ),
   );
 });
 

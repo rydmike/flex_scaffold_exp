@@ -45,24 +45,19 @@ class _FlexSidebarState extends State<FlexSidebar> {
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
     final bool hasEndDrawer = scaffold?.hasEndDrawer ?? false;
     final bool isEndDrawerOpen = scaffold?.isEndDrawerOpen ?? false;
-
-    final double screenWidth = MediaQuery.of(context).size.width;
-
+    final double screenWidth = MediaQuery.sizeOf(context).width;
     final FlexScaffoldTheme flexTheme = Theme.of(context)
             .extension<FlexScaffoldTheme>()
             ?.withDefaults(context) ??
         const FlexScaffoldTheme().withDefaults(context);
     final double breakpointSidebar = flexTheme.breakpointSidebar!;
     final double sidebarWidth = flexTheme.sidebarWidth!;
-
-    /// Depend on aspects of the FlexScaffold and only rebuild if they change.
+    // Depend on aspects of the FlexScaffold and only rebuild if they change.
     final bool isSidebarHidden = FlexScaffold.isSidebarHiddenOf(context);
-
     final bool isInEndDrawer =
         (isSidebarHidden || screenWidth < breakpointSidebar) &&
             hasEndDrawer &&
             isEndDrawerOpen;
-
     if (isInEndDrawer) {
       return _SideBar(
         sidebarAppBar: widget.appBar,
@@ -112,7 +107,7 @@ class _SideBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double topPadding = MediaQuery.of(context).padding.top;
+    final double topPadding = MediaQuery.paddingOf(context).top;
 
     final ScaffoldState? scaffold = Scaffold.maybeOf(context);
     final bool isEndDrawerOpen = scaffold?.isEndDrawerOpen ?? false;
@@ -137,7 +132,7 @@ class _SideBar extends StatelessWidget {
     /// Depend on aspects of the FlexScaffold and only rebuild if they change.
     final bool sidebarBelongsToBody =
         FlexScaffold.sidebarBelongsToBodyOf(context);
-    final bool hasAppBar = FlexScaffold.onDestinationOf(context).noAppBar;
+    final bool noAppBar = FlexScaffold.onDestinationOf(context).noAppBar;
 
     return OverflowBox(
       alignment: AlignmentDirectional.topStart,
@@ -158,7 +153,7 @@ class _SideBar extends StatelessWidget {
             //
             // Add SidebarAppBar if in end Drawer mode or Sidebar is a menu
             // and it does not belong to the body.
-            if (isEndDrawerOpen || !sidebarBelongsToBody || !hasAppBar)
+            if (isEndDrawerOpen || !sidebarBelongsToBody || noAppBar)
               _SidebarAppBar(sidebarAppBar: sidebarAppBar)
             // Else sidebar was not in drawer but does belong to the body
             else

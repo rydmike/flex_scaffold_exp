@@ -49,47 +49,35 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Creates a theme that can be used to customize the [FlexScaffold] look
   /// and behavior.
   const FlexScaffoldTheme({
-    //
-    // Sub-theme priority selections
-    this.bottomNavigationBarPreferSubTheme,
-    this.navigationBarPreferSubTheme,
-    this.railPreferSubTheme,
-    //
     // Background color properties
     this.menuBackgroundColor,
     this.sidebarBackgroundColor,
     this.bottomBackgroundColor,
-    //
     // Menu side settings
     this.menuSide,
-    //
     // Elevation properties
     this.menuElevation,
     this.sidebarElevation,
     this.drawerElevation,
     this.endDrawerElevation,
     this.bottomElevation,
-    //
     // Width properties
     this.menuWidth,
     this.railWidth,
     this.sidebarWidth,
     this.drawerWidth,
     this.endDrawerWidth,
-    //
     // Navigation type breakpoints
     this.breakpointDrawer,
     this.breakpointRail,
     this.breakpointMenu,
     this.breakpointSidebar,
-    //
     // Edge border properties
     this.borderOnMenu,
     this.borderOnSidebar,
     this.borderOnDarkDrawer,
     this.borderOnLightDrawer,
     this.borderColor,
-    //
     // Menu selection and highlight style
     this.menuShape,
     this.menuSelectedShape,
@@ -100,7 +88,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     this.menuHoverColor,
     this.menuHighlightColor,
     this.menuSplashColor,
-    //
     // Animation durations and curves for menus and bottom bar animations
     this.menuAnimationDuration,
     this.menuAnimationCurve,
@@ -108,22 +95,19 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     this.sidebarAnimationCurve,
     this.bottomAnimationDuration,
     this.bottomAnimationCurve,
-    //
     // Bottom navigation bar properties
     this.bottomType,
     this.bottomIsTransparent,
     this.bottomBlur,
     this.bottomOpacity,
     this.bottomTopBorder,
-    //
-    // The icon and text styles of the menu, rail and bottom bar.
+    // The icon and text styles of the side menu/rail/drawer menu.
     this.iconTheme,
     this.selectedIconTheme,
     this.labelTextStyle,
     this.selectedLabelTextStyle,
     // The text style for headings above menu label items
     this.headingTextStyle,
-    //
     // Tooltip properties
     this.useTooltips,
     this.menuOpenTooltip,
@@ -215,78 +199,7 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
                 (bottomOpacity >= 0.0 && bottomOpacity <= 1.0),
             'The bottomBarOpacity must be null OR between 0 and 1.');
 
-  /// Set to true to let [BottomNavigationBarTheme] properties that are defined
-  /// have priority over [FlexScaffoldTheme] settings.
-  ///
-  /// If set to false [BottomNavigationBarTheme] properties will use
-  /// [FlexScaffoldTheme] properties like [iconTheme], [selectedIconTheme],
-  /// [labelTextStyle] and [selectedLabelTextStyle] as well as highlight
-  /// styles when they are defined with higher priority than in [ThemeData]
-  /// defined [BottomNavigationBarTheme] properties.
-  ///
-  /// Keeping it false, gives you consistent style across the [FlexScaffold] by
-  /// just defining its theme and style. Properties in
-  /// [BottomNavigationBarTheme] that don't have a counterpart in
-  /// [FlexScaffoldTheme] still come into effect from [BottomNavigationBarTheme]
-  /// when defined, even if this value is false.
-  ///
-  /// Setting this value to true, enables different style for the side
-  /// navigation and the bottom navigation.
-  ///
-  /// This setting only has any impact when [BottomNavigationBar] is used as
-  /// bottom navigation.
-  ///
-  /// Defaults to false.
-  final bool? bottomNavigationBarPreferSubTheme;
-
-  /// Set to true to let [NavigationBarTheme] properties that are defined have
-  /// priority over [FlexScaffoldTheme] settings.
-  ///
-  /// If set to false [NavigationBarTheme] properties will use
-  /// [FlexScaffoldTheme] properties like [iconTheme], [selectedIconTheme],
-  /// [labelTextStyle] and [selectedLabelTextStyle] as well as highlight styles
-  /// when they are defined with higher priority than in [ThemeData] defined
-  /// [NavigationBarTheme] properties.
-  ///
-  /// Keeping it false, gives you consistent style across the [FlexScaffold] by
-  /// just defining its theme and style. Properties in [NavigationBarTheme]
-  /// that don't have a counterpart in [FlexScaffoldTheme] still come into
-  /// effect from [NavigationBarTheme] when defined, even if this value is
-  /// false.
-  ///
-  /// Setting this value to true, enables different style for the side
-  /// navigation and the bottom navigation.
-  ///
-  /// This setting only has any impact when [NavigationBar] is used as
-  /// bottom navigation.
-  ///
-  /// Defaults to false.
-  final bool? navigationBarPreferSubTheme;
-
-  /// Set to true to let [NavigationRailTheme] properties that are defined have
-  /// priority over [FlexScaffoldTheme] settings.
-  ///
-  /// If set to false [NavigationRail] properties will use [FlexScaffoldTheme]
-  /// properties like [iconTheme], [selectedIconTheme], [labelTextStyle] and
-  /// [selectedLabelTextStyle] as well as highlight styles when they are defined
-  /// with higher priority than in [ThemeData] defined [NavigationRailTheme]
-  /// properties.
-  ///
-  /// Keeping it false, gives you consistent style across the [FlexScaffold] by
-  /// just defining its theme and style. Properties in [NavigationRailTheme]
-  /// that don't have a counterpart in [FlexScaffoldTheme] still come into
-  /// effect from [NavigationRailTheme] when defined, even if this value is
-  /// false.
-  ///
-  /// Setting this value to true, enables different style for the side
-  /// navigation and the bottom navigation.
-  ///
-  /// This setting only has any impact when [NavigationRail] is used for
-  /// side navigation instead of [FlexScaffold]'s own side navigation widget.
-  ///
-  /// Defaults to false.
-  final bool? railPreferSubTheme;
-
+  // TODO(rydmike): Fix this defaults doc comment
   /// Color to be used for the [FlexScaffold]'s rail, menu and drawer
   /// background.
   ///
@@ -297,6 +210,7 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   ///   ThemeData.colorScheme.background from the Material the menu uses.
   final Color? menuBackgroundColor;
 
+  // TODO(rydmike): Fix this defaults doc comment
   /// Color to be used for the [FlexScaffold] sidebar background.
   ///
   /// The [sidebarBackgroundColor] value is determined in the order:
@@ -307,6 +221,7 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   ///   ThemeData.colorScheme.background from the Material the menu uses.
   final Color? sidebarBackgroundColor;
 
+  // TODO(rydmike): Fix this defaults doc comment
   /// Color to be used for the [FlexScaffold]'s bottom navigation background.
   ///
   /// The [menuBackgroundColor] value is determined in the order:
@@ -326,6 +241,7 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// * [menuSide] = MenuSide.start, by default if null.
   final FlexMenuSide? menuSide;
 
+  // TODO(rydmike): Fix this defaults doc comment
   // TODO(rydmike): This elevation does not work, why not? Works on sidebar.
   // Figure out how to fix the elevation. Most likely it is obscured for some
   // reason by the widget next to it. Elevation of the side menu does not look
@@ -339,6 +255,7 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// * [menuElevation] = 0, by default no elevation is used.
   final double? menuElevation;
 
+  // TODO(rydmike): Fix this defaults doc comment
   /// The z-coordinate to be used for the sidebar's elevation.
   ///
   /// The [sidebarElevation] value is determined in the order:
@@ -347,6 +264,7 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// * [sidebarElevation] = 0, by default no elevation is used.
   final double? sidebarElevation;
 
+  // TODO(rydmike): Fix this defaults doc comment
   /// The z-coordinate to be used for the menu drawer elevation.
   ///
   /// The [drawerElevation] value is determined in the order:
@@ -355,6 +273,7 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// * [drawerElevation] = 16, default for Material drawer.
   final double? drawerElevation;
 
+  // TODO(rydmike): Fix this defaults doc comment
   /// The z-coordinate to be used for the sidebar end drawer elevation.
   ///
   /// The [endDrawerElevation] value is determined in the order:
@@ -363,6 +282,7 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// * [endDrawerElevation] = 16, default for Material end drawer.
   final double? endDrawerElevation;
 
+  // TODO(rydmike): Fix this defaults doc comment
   /// The z-coordinate to be used for the sidebar end drawer elevation.
   ///
   /// The [bottomElevation] value is determined in the order:
@@ -900,48 +820,35 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       return this;
     }
     return copyWith(
-      //
-      // Sub-theme priority selections
-      bottomNavigationBarPreferSubTheme:
-          other.bottomNavigationBarPreferSubTheme,
-      navigationBarPreferSubTheme: other.navigationBarPreferSubTheme,
-      railPreferSubTheme: other.railPreferSubTheme,
-      //
       // Background color properties
       menuBackgroundColor: other.menuBackgroundColor,
       sidebarBackgroundColor: other.sidebarBackgroundColor,
       bottomBackgroundColor: other.bottomBackgroundColor,
-      //
       // Menu side settings
       menuSide: other.menuSide,
-      //
       // Elevation properties
       menuElevation: other.menuElevation,
       sidebarElevation: other.sidebarElevation,
       drawerElevation: other.drawerElevation,
       endDrawerElevation: other.endDrawerElevation,
       bottomElevation: other.bottomElevation,
-      //
       // Width properties
       menuWidth: other.menuWidth,
       railWidth: other.railWidth,
       sidebarWidth: other.sidebarWidth,
       drawerWidth: other.drawerWidth,
       endDrawerWidth: other.endDrawerWidth,
-      //
       // Navigation type breakpoints
       breakpointDrawer: other.breakpointDrawer,
       breakpointRail: other.breakpointRail,
       breakpointMenu: other.breakpointMenu,
       breakpointSidebar: other.breakpointSidebar,
-      //
       // Edge border properties
       borderOnMenu: other.borderOnMenu,
       borderOnSidebar: other.borderOnSidebar,
       borderOnDarkDrawer: other.borderOnDarkDrawer,
       borderOnLightDrawer: other.borderOnLightDrawer,
       borderColor: other.borderColor,
-      //
       // Menu selection and highlight style
       menuShape: other.menuShape,
       menuSelectedShape: other.menuSelectedShape,
@@ -952,7 +859,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       menuHoverColor: other.menuHoverColor,
       menuHighlightColor: other.menuHighlightColor,
       menuSplashColor: other.menuSplashColor,
-      //
       // Animation durations and curves for menu and bottom bar animations
       menuAnimationDuration: other.menuAnimationDuration,
       menuAnimationCurve: other.menuAnimationCurve,
@@ -960,14 +866,12 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       sidebarAnimationCurve: other.sidebarAnimationCurve,
       bottomAnimationDuration: other.bottomAnimationDuration,
       bottomAnimationCurve: other.bottomAnimationCurve,
-      //
       // Bottom navigation bar properties
       bottomType: other.bottomType,
       bottomIsTransparent: other.bottomIsTransparent,
       bottomBlur: other.bottomBlur,
       bottomOpacity: other.bottomOpacity,
       bottomTopBorder: other.bottomTopBorder,
-      //
       // The icon and text styles of the menu, rail and bottom bar.
       iconTheme: other.iconTheme,
       selectedIconTheme: other.selectedIconTheme,
@@ -975,7 +879,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       selectedLabelTextStyle: other.selectedLabelTextStyle,
       // The text style for headings above menu label items
       headingTextStyle: other.headingTextStyle,
-      //
       // Tooltip properties
       useTooltips: other.useTooltips,
       menuOpenTooltip: other.menuOpenTooltip,
@@ -995,7 +898,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// values for [FlexScaffoldTheme] in the build context.
   FlexScaffoldTheme withDefaults(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final bool useMaterial3 = theme.useMaterial3;
     final MaterialLocalizations hints = MaterialLocalizations.of(context);
     final String openHint = hints.openAppDrawerTooltip;
     final String closeHint = hints.closeButtonTooltip;
@@ -1003,43 +905,44 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     final String collapseHint = hints.expandedIconTapHint;
 
     return copyWith(
-      //
-      // Sub-theme priority selections
-      bottomNavigationBarPreferSubTheme:
-          bottomNavigationBarPreferSubTheme ?? false,
-      navigationBarPreferSubTheme: navigationBarPreferSubTheme ?? false,
-      railPreferSubTheme: railPreferSubTheme ?? false,
-      //
-      // Background color properties
-      menuBackgroundColor: menuBackgroundColor ?? theme.colorScheme.background,
-      sidebarBackgroundColor:
-          sidebarBackgroundColor ?? theme.colorScheme.background,
-      bottomBackgroundColor:
-          bottomBackgroundColor ?? theme.colorScheme.background,
-      //
+      // Default fallthrough for menuBackgroundColor:
+      // menuBackgroundColor drawerTheme.backgroundColor colorScheme.background
+      menuBackgroundColor: menuBackgroundColor,
+      // Default fallthrough for sidebarBackgroundColor:
+      // menuBackgroundColor drawerTheme.backgroundColor colorScheme.background
+      sidebarBackgroundColor: sidebarBackgroundColor,
+      // Default fallthrough for bottomBackgroundColor:
+      // bottomBackgroundColor, then respective themed background of used bottom
+      // bar type, then menuBackgroundColor and finally colorScheme.background.
+      bottomBackgroundColor: bottomBackgroundColor,
       // Menu side settings
-      menuSide: menuSide ?? FlexMenuSide.start,
-      //
-      // Elevation properties
+      menuSide: menuSide ?? FlexMenuSide.end,
+      // Elevation properties for menu, defaults to 0
       menuElevation: menuElevation ?? 0,
-      sidebarElevation: sidebarElevation ?? 0,
-      drawerElevation: drawerElevation ?? (useMaterial3 ? 1 : 16),
-      endDrawerElevation: endDrawerElevation ?? (useMaterial3 ? 1 : 16),
-      bottomElevation: bottomElevation ?? 0,
-      //
+      // Elevation properties for, defaults to menuElevation ?? 0
+      sidebarElevation: sidebarElevation,
+      // The drawer elevation default value fallthrough is:
+      // drawerTheme.elevation and then SDK default, ie 1 in M3, 16 in M2.
+      drawerElevation: drawerElevation,
+      // The end drawer elevation default value fallthrough is:
+      // drawerElevation drawerTheme.elevation and then SDK default.
+      endDrawerElevation: endDrawerElevation,
+      // The bottom bar elevation fallthrough is:
+      // bottomElevation, then themed elevation for the bottom bar type,
+      // then finally it defaults to SDK default for the used type.
+      // The iOS CupertinoTabBar has no elevation.
+      bottomElevation: bottomElevation,
       // Width properties
       menuWidth: menuWidth ?? kFlexMenuWidth,
       railWidth: railWidth ?? kFlexRailWidth,
       sidebarWidth: sidebarWidth ?? kFlexSidebarWidth,
       drawerWidth: drawerWidth ?? kFlexDrawerWidth,
-      //
       // Navigation type breakpoints
       endDrawerWidth: endDrawerWidth ?? kFlexDrawerWidth,
       breakpointDrawer: breakpointDrawer ?? kFlexBreakpointDrawer,
       breakpointRail: breakpointRail ?? kFlexBreakpointRail,
       breakpointMenu: breakpointMenu ?? kFlexBreakpointMenu,
       breakpointSidebar: breakpointSidebar ?? kFlexBreakpointSidebar,
-      //
       // Edge border properties
       borderOnMenu: borderOnMenu ?? true,
       borderOnSidebar: borderOnSidebar ?? true,
@@ -1047,7 +950,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       borderOnLightDrawer: borderOnLightDrawer ?? false,
       borderColor:
           borderColor ?? theme.dividerTheme.color ?? theme.dividerColor,
-      //
       // Menu selection and highlight style
       menuShape: menuShape ??
           menuSelectedShape ??
@@ -1061,9 +963,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
               kFlexIndicatorMarginTop,
               kFlexIndicatorMarginEnd,
               kFlexIndicatorMarginBottom),
-      // TODO(rydmike): Review default against M2 & M3 for colors.
-      menuSelectedColor: menuSelectedColor ??
-          theme.colorScheme.primaryContainer, //.withAlpha(0x3d),
+      menuSelectedColor:
+          menuSelectedColor ?? theme.colorScheme.secondaryContainer,
       // The focus, hover, highlight and splash remain null as default.
       // The used InkWell will set null values in that case and the theme
       // defaults for ink effects will be used.
@@ -1079,14 +980,12 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       bottomAnimationDuration:
           bottomAnimationDuration ?? kFlexBottomAnimationDuration,
       bottomAnimationCurve: bottomAnimationCurve ?? kFlexBottomAnimationCurve,
-      //
       // Bottom navigation bar properties
       bottomType: bottomType ?? FlexBottomType.adaptive,
-      bottomIsTransparent: bottomIsTransparent ?? true,
-      bottomBlur: bottomBlur ?? true,
-      bottomOpacity: bottomOpacity ?? 0.90,
-      bottomTopBorder: bottomTopBorder ?? true,
-      //
+      bottomIsTransparent: bottomIsTransparent ?? false,
+      bottomBlur: bottomBlur ?? false,
+      bottomOpacity: bottomOpacity ?? 1.00,
+      bottomTopBorder: bottomTopBorder ?? false,
       // TODO(rydmike): Review default against M2 & M3 for icons and text.
       // The default unselected menu icon styles, provided values from the
       // passed in IconThemeData are used if the theme was not null and any
@@ -1095,21 +994,20 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       iconTheme: IconThemeData(
           size: iconTheme?.size ?? 24.0,
           color: iconTheme?.color ?? theme.colorScheme.onSurface,
-          opacity: iconTheme?.opacity ?? 0.55),
+          opacity: iconTheme?.opacity ?? 1.00),
       // The default selected menu icon styles, provided values from the
       // passed in IconThemeData are used if the theme was not null and any
       // property in it had a none null value. If some value is missing they
       // get FlexScaffold defaults.
       selectedIconTheme: IconThemeData(
           size: selectedIconTheme?.size ?? 24.0,
-          color: selectedIconTheme?.color ?? theme.colorScheme.primary,
+          color: selectedIconTheme?.color ??
+              theme.colorScheme.onSecondaryContainer,
           opacity: selectedIconTheme?.opacity ?? 1.0),
       // The default unselected label text styles with a merge of the provided
       // style, if any style was given.
       // TODO(rydmike): Review default against M2 & M3 for colors.
-      labelTextStyle: theme.textTheme.bodyLarge!
-          // .copyWith(color: theme.colorScheme.onSurface.withOpacity(0.64))
-          .merge(labelTextStyle),
+      labelTextStyle: theme.textTheme.bodyLarge!.merge(labelTextStyle),
       // The default selected label text styles with a merge of the provided
       // style, if any style was given.
       selectedLabelTextStyle: theme.textTheme.bodyLarge!
@@ -1122,9 +1020,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
               fontWeight: FontWeight.w700,
               color: theme.colorScheme.primary)
           .merge(headingTextStyle),
-      //
       // Tooltip properties
-      useTooltips: useTooltips ?? true,
+      useTooltips: useTooltips ?? false,
       menuOpenTooltip: menuOpenTooltip ?? openHint,
       menuCloseTooltip: menuCloseTooltip ?? closeHint,
       menuExpandTooltip: menuExpandTooltip ?? expandHint,
@@ -1141,47 +1038,35 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Copy this object with the given fields replaced with the new values.
   @override
   FlexScaffoldTheme copyWith({
-    //
-    // Sub-theme priority selections
-    bool? bottomNavigationBarPreferSubTheme,
-    bool? navigationBarPreferSubTheme,
-    bool? railPreferSubTheme,
-    //
     // Background color properties
     Color? menuBackgroundColor,
     Color? sidebarBackgroundColor,
     Color? bottomBackgroundColor,
-    //
     // Menu side settings
     FlexMenuSide? menuSide,
-    //
     // Elevation properties
     double? menuElevation,
     double? sidebarElevation,
     double? drawerElevation,
     double? endDrawerElevation,
     double? bottomElevation,
-    //
     // Width properties
     double? menuWidth,
     double? railWidth,
     double? sidebarWidth,
     double? drawerWidth,
     double? endDrawerWidth,
-    //
     // Navigation type breakpoints
     double? breakpointDrawer,
     double? breakpointRail,
     double? breakpointMenu,
     double? breakpointSidebar,
-    //
     // Edge border properties
     bool? borderOnMenu,
     bool? borderOnSidebar,
     bool? borderOnDarkDrawer,
     bool? borderOnLightDrawer,
     Color? borderColor,
-    //
     // Menu selection and highlight style
     ShapeBorder? menuShape,
     ShapeBorder? menuSelectedShape,
@@ -1207,7 +1092,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     bool? bottomBlur,
     double? bottomOpacity,
     bool? bottomTopBorder,
-    //
     // The icon and text styles of the menu, rail and bottom bar.
     IconThemeData? iconTheme,
     IconThemeData? selectedIconTheme,
@@ -1215,7 +1099,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     TextStyle? selectedLabelTextStyle,
     // The text style for headings above menu label items
     TextStyle? headingTextStyle,
-    //
     // Tooltip properties
     bool? useTooltips,
     String? menuOpenTooltip,
@@ -1230,51 +1113,37 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     String? sidebarCollapseTooltip,
   }) {
     return FlexScaffoldTheme(
-      //
-      // Sub-theme priority selections
-      bottomNavigationBarPreferSubTheme: bottomNavigationBarPreferSubTheme ??
-          this.bottomNavigationBarPreferSubTheme,
-      navigationBarPreferSubTheme:
-          navigationBarPreferSubTheme ?? this.navigationBarPreferSubTheme,
-      railPreferSubTheme: railPreferSubTheme ?? this.railPreferSubTheme,
-      //
       // Background color properties
       menuBackgroundColor: menuBackgroundColor ?? this.menuBackgroundColor,
       sidebarBackgroundColor:
           sidebarBackgroundColor ?? this.sidebarBackgroundColor,
       bottomBackgroundColor:
           bottomBackgroundColor ?? this.bottomBackgroundColor,
-      //
       // Menu start and side settings
       menuSide: menuSide ?? this.menuSide,
-      //
       // Elevation properties
       menuElevation: menuElevation ?? this.menuElevation,
       sidebarElevation: sidebarElevation ?? this.sidebarElevation,
       drawerElevation: drawerElevation ?? this.drawerElevation,
       endDrawerElevation: endDrawerElevation ?? this.endDrawerElevation,
       bottomElevation: bottomElevation ?? this.bottomElevation,
-      //
       // Width properties
       menuWidth: menuWidth ?? this.menuWidth,
       railWidth: railWidth ?? this.railWidth,
       sidebarWidth: sidebarWidth ?? this.sidebarWidth,
       drawerWidth: drawerWidth ?? this.drawerWidth,
       endDrawerWidth: endDrawerWidth ?? this.endDrawerWidth,
-      //
       // Navigation type breakpoints
       breakpointDrawer: breakpointDrawer ?? this.breakpointDrawer,
       breakpointRail: breakpointRail ?? this.breakpointRail,
       breakpointMenu: breakpointMenu ?? this.breakpointMenu,
       breakpointSidebar: breakpointSidebar ?? this.breakpointSidebar,
-      //
       // Edge border properties
       borderOnMenu: borderOnMenu ?? this.borderOnMenu,
       borderOnSidebar: borderOnSidebar ?? this.borderOnSidebar,
       borderOnDarkDrawer: borderOnDarkDrawer ?? this.borderOnDarkDrawer,
       borderOnLightDrawer: borderOnLightDrawer ?? this.borderOnLightDrawer,
       borderColor: borderColor ?? this.borderColor,
-      //
       // Menu selection and highlight style
       menuShape: menuShape ?? this.menuShape,
       menuSelectedShape: menuSelectedShape ?? this.menuSelectedShape,
@@ -1285,7 +1154,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       menuHoverColor: menuHoverColor ?? this.menuHoverColor,
       menuHighlightColor: menuHighlightColor ?? this.menuHighlightColor,
       menuSplashColor: menuSplashColor ?? this.menuSplashColor,
-      //
       // Animation durations and curves for menus and bottom bar animations
       menuAnimationDuration:
           menuAnimationDuration ?? this.menuAnimationDuration,
@@ -1297,14 +1165,12 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       bottomAnimationDuration:
           bottomAnimationDuration ?? this.bottomAnimationDuration,
       bottomAnimationCurve: bottomAnimationCurve ?? this.bottomAnimationCurve,
-      //
       // Bottom navigation bar properties
       bottomType: bottomType ?? this.bottomType,
       bottomIsTransparent: bottomIsTransparent ?? this.bottomIsTransparent,
       bottomBlur: bottomBlur ?? this.bottomBlur,
       bottomOpacity: bottomOpacity ?? this.bottomOpacity,
       bottomTopBorder: bottomTopBorder ?? this.bottomTopBorder,
-      //
       // The icon and text styles of the menu, rail and bottom bar.
       iconTheme: iconTheme ?? this.iconTheme,
       selectedIconTheme: selectedIconTheme ?? this.selectedIconTheme,
@@ -1313,7 +1179,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
           selectedLabelTextStyle ?? this.selectedLabelTextStyle,
       // The text style for headings above menu label items
       headingTextStyle: headingTextStyle ?? this.headingTextStyle,
-      //
       // Tooltip properties
       useTooltips: useTooltips ?? this.useTooltips,
       menuOpenTooltip: menuOpenTooltip ?? this.menuOpenTooltip,
@@ -1339,17 +1204,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       return this;
     }
     return FlexScaffoldTheme(
-      //
-      // Sub-theme priority selections
-      bottomNavigationBarPreferSubTheme: t < 0.5
-          ? bottomNavigationBarPreferSubTheme
-          : other.bottomNavigationBarPreferSubTheme,
-      navigationBarPreferSubTheme: t < 0.5
-          ? navigationBarPreferSubTheme
-          : other.navigationBarPreferSubTheme,
-      railPreferSubTheme:
-          t < 0.5 ? railPreferSubTheme : other.railPreferSubTheme,
-      //
       // Background color properties
       menuBackgroundColor:
           Color.lerp(menuBackgroundColor, other.menuBackgroundColor, t),
@@ -1357,10 +1211,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
           Color.lerp(sidebarBackgroundColor, other.sidebarBackgroundColor, t),
       bottomBackgroundColor:
           Color.lerp(bottomBackgroundColor, other.bottomBackgroundColor, t),
-      //
       // Menu start and side settings
       menuSide: t < 0.5 ? menuSide : other.menuSide,
-      //
       // Elevation properties
       menuElevation: lerpDouble(menuElevation, other.menuElevation, t),
       sidebarElevation: lerpDouble(sidebarElevation, other.sidebarElevation, t),
@@ -1368,21 +1220,18 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       endDrawerElevation:
           lerpDouble(endDrawerElevation, other.endDrawerElevation, t),
       bottomElevation: lerpDouble(bottomElevation, other.bottomElevation, t),
-      //
       // Width properties
       menuWidth: lerpDouble(menuWidth, other.menuWidth, t),
       railWidth: lerpDouble(railWidth, other.railWidth, t),
       sidebarWidth: lerpDouble(sidebarWidth, other.sidebarWidth, t),
       drawerWidth: lerpDouble(drawerWidth, other.drawerWidth, t),
       endDrawerWidth: lerpDouble(endDrawerWidth, other.endDrawerWidth, t),
-      //
       // Navigation type breakpoints
       breakpointDrawer: lerpDouble(breakpointDrawer, other.breakpointDrawer, t),
       breakpointRail: lerpDouble(breakpointRail, other.breakpointRail, t),
       breakpointMenu: lerpDouble(breakpointMenu, other.breakpointMenu, t),
       breakpointSidebar:
           lerpDouble(breakpointSidebar, other.breakpointSidebar, t),
-      //
       // Edge border properties
       borderOnMenu: t < 0.5 ? borderOnMenu : other.borderOnMenu,
       borderOnSidebar: t < 0.5 ? borderOnSidebar : other.borderOnSidebar,
@@ -1391,7 +1240,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       borderOnLightDrawer:
           t < 0.5 ? borderOnLightDrawer : other.borderOnLightDrawer,
       borderColor: Color.lerp(borderColor, other.borderColor, t),
-      //
       // Menu selection and highlight style
       menuShape: ShapeBorder.lerp(menuShape, other.menuShape, t),
       menuSelectedShape:
@@ -1407,7 +1255,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       menuHighlightColor:
           Color.lerp(menuHighlightColor, other.menuHighlightColor, t),
       menuSplashColor: Color.lerp(menuSplashColor, other.menuSplashColor, t),
-      //
       // Animation durations and curves for menus and bottom bar animations
       menuAnimationDuration:
           t < 0.5 ? menuAnimationDuration : other.menuAnimationDuration,
@@ -1421,7 +1268,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
           t < 0.5 ? bottomAnimationDuration : other.bottomAnimationDuration,
       bottomAnimationCurve:
           t < 0.5 ? bottomAnimationCurve : other.bottomAnimationCurve,
-      //
       // Bottom navigation bar properties
       bottomType: t < 0.5 ? bottomType : other.bottomType,
       bottomIsTransparent:
@@ -1429,7 +1275,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       bottomBlur: t < 0.5 ? bottomBlur : other.bottomBlur,
       bottomOpacity: lerpDouble(bottomOpacity, other.bottomOpacity, t),
       bottomTopBorder: t < 0.5 ? bottomTopBorder : other.bottomTopBorder,
-      //
       // The icon and text styles of the menu, rail and bottom bar.
       iconTheme: IconThemeData.lerp(iconTheme, other.iconTheme, t),
       selectedIconTheme:
@@ -1440,7 +1285,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       // The text style for headings above menu label items
       headingTextStyle:
           TextStyle.lerp(headingTextStyle, other.headingTextStyle, t),
-      //
       // Tooltip properties
       useTooltips: t < 0.5 ? useTooltips : other.useTooltips,
       menuOpenTooltip: t < 0.5 ? menuOpenTooltip : other.menuOpenTooltip,
@@ -1466,47 +1310,35 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
 
   @override
   int get hashCode => Object.hashAll(<Object?>[
-        //
-        // Sub-theme priority selections
-        bottomNavigationBarPreferSubTheme,
-        navigationBarPreferSubTheme,
-        railPreferSubTheme,
-        //
         // Background color properties
         menuBackgroundColor,
         sidebarBackgroundColor,
         bottomBackgroundColor,
-        //
         // Menu start and side settings
         menuSide,
-        //
         // Elevation properties
         menuElevation,
         sidebarElevation,
         drawerElevation,
         endDrawerElevation,
         bottomElevation,
-        //
         // Width properties
         menuWidth,
         railWidth,
         sidebarWidth,
         drawerWidth,
         endDrawerWidth,
-        //
         // Navigation type breakpoints
         breakpointDrawer,
         breakpointRail,
         breakpointMenu,
         breakpointSidebar,
-        //
         // Edge border properties
         borderOnMenu,
         borderOnSidebar,
         borderOnDarkDrawer,
         borderOnLightDrawer,
         borderColor,
-        //
         // Menu selection and highlight style
         menuShape,
         menuSelectedShape,
@@ -1517,7 +1349,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
         menuHoverColor,
         menuHighlightColor,
         menuSplashColor,
-        //
         // Animation durations and curves for menus and bottom bar animations
         menuAnimationDuration,
         menuAnimationCurve,
@@ -1525,14 +1356,12 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
         sidebarAnimationCurve,
         bottomAnimationDuration,
         bottomAnimationCurve,
-        //
         // Bottom navigation bar properties
         bottomType,
         bottomIsTransparent,
         bottomBlur,
         bottomOpacity,
         bottomTopBorder,
-        //
         // The icon and text styles of the menu, rail and bottom bar.
         iconTheme,
         selectedIconTheme,
@@ -1540,7 +1369,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
         selectedLabelTextStyle,
         // The text style for headings above menu label items
         headingTextStyle,
-        //
         // Tooltip properties
         useTooltips,
         menuOpenTooltip,
@@ -1560,48 +1388,35 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
     return other is FlexScaffoldTheme &&
-        //
-        // Sub-theme priority selections
-        other.bottomNavigationBarPreferSubTheme ==
-            bottomNavigationBarPreferSubTheme &&
-        other.navigationBarPreferSubTheme == navigationBarPreferSubTheme &&
-        other.railPreferSubTheme == railPreferSubTheme &&
-        //
         // Background color properties
         other.menuBackgroundColor == menuBackgroundColor &&
         other.sidebarBackgroundColor == sidebarBackgroundColor &&
         other.bottomBackgroundColor == bottomBackgroundColor &&
-        //
         // Menu side settings
         other.menuSide == menuSide &&
-        //
         // Elevation properties
         other.menuElevation == menuElevation &&
         other.sidebarElevation == sidebarElevation &&
         other.drawerElevation == drawerElevation &&
         other.endDrawerElevation == endDrawerElevation &&
         other.bottomElevation == bottomElevation &&
-        //
         // Width properties
         other.menuWidth == menuWidth &&
         other.railWidth == railWidth &&
         other.sidebarWidth == sidebarWidth &&
         other.drawerWidth == drawerWidth &&
         other.endDrawerWidth == endDrawerWidth &&
-        //
         // Navigation type breakpoints
         other.breakpointDrawer == breakpointDrawer &&
         other.breakpointRail == breakpointRail &&
         other.breakpointMenu == breakpointMenu &&
         other.breakpointSidebar == breakpointSidebar &&
-        //
         // Edge border properties
         other.borderOnMenu == borderOnMenu &&
         other.borderOnSidebar == borderOnSidebar &&
         other.borderOnDarkDrawer == borderOnDarkDrawer &&
         other.borderOnLightDrawer == borderOnLightDrawer &&
         other.borderColor == borderColor &&
-        //
         // Menu selection and highlight style
         other.menuShape == menuShape &&
         other.menuSelectedShape == menuSelectedShape &&
@@ -1612,7 +1427,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
         other.menuHoverColor == menuHoverColor &&
         other.menuHighlightColor == menuHighlightColor &&
         other.menuSplashColor == menuSplashColor &&
-        //
         // Animation durations and curves for menus and bottom bar animations
         other.menuAnimationDuration == menuAnimationDuration &&
         other.menuAnimationCurve == menuAnimationCurve &&
@@ -1620,14 +1434,12 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
         other.sidebarAnimationCurve == sidebarAnimationCurve &&
         other.bottomAnimationDuration == bottomAnimationDuration &&
         other.bottomAnimationCurve == bottomAnimationCurve &&
-        //
         // Bottom navigation bar properties
         other.bottomType == bottomType &&
         other.bottomIsTransparent == bottomIsTransparent &&
         other.bottomBlur == bottomBlur &&
         other.bottomOpacity == bottomOpacity &&
         other.bottomTopBorder == bottomTopBorder &&
-        //
         // The icon and text styles of the menu, rail and bottom bar.
         other.iconTheme == iconTheme &&
         other.selectedIconTheme == selectedIconTheme &&
@@ -1635,7 +1447,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
         other.selectedLabelTextStyle == selectedLabelTextStyle &&
         // The text style for headings above menu label items
         other.headingTextStyle == headingTextStyle &&
-        //
         // Tooltip properties
         other.useTooltips == useTooltips &&
         other.menuOpenTooltip == menuOpenTooltip &&
@@ -1654,21 +1465,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     const FlexScaffoldTheme defaultData = FlexScaffoldTheme();
-    //
-    // Sub-theme priority selections
-    properties.add(DiagnosticsProperty<bool>(
-        'bottomNavigationBarPreferSubTheme', bottomNavigationBarPreferSubTheme,
-        defaultValue: defaultData.bottomNavigationBarPreferSubTheme,
-        level: DiagnosticLevel.debug));
-    properties.add(DiagnosticsProperty<bool>(
-        'navigationBarPreferSubTheme', navigationBarPreferSubTheme,
-        defaultValue: defaultData.navigationBarPreferSubTheme,
-        level: DiagnosticLevel.debug));
-    properties.add(DiagnosticsProperty<bool>(
-        'railPreferSubTheme', railPreferSubTheme,
-        defaultValue: defaultData.railPreferSubTheme,
-        level: DiagnosticLevel.debug));
-    //
     // Background color properties
     properties.add(ColorProperty('menuBackgroundColor', menuBackgroundColor,
         defaultValue: defaultData.menuBackgroundColor,
@@ -1680,11 +1476,9 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     properties.add(ColorProperty('bottomBackgroundColor', bottomBackgroundColor,
         defaultValue: defaultData.bottomBackgroundColor,
         level: DiagnosticLevel.debug));
-    //
     // Menu side settings
     properties.add(DiagnosticsProperty<FlexMenuSide>('menuSide', menuSide,
         defaultValue: defaultData.menuSide, level: DiagnosticLevel.debug));
-    //
     // Elevation properties
     properties.add(DoubleProperty('menuElevation', menuElevation,
         defaultValue: defaultData.menuElevation, level: DiagnosticLevel.debug));
@@ -1700,7 +1494,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     properties.add(DoubleProperty('bottomElevation', bottomElevation,
         defaultValue: defaultData.bottomElevation,
         level: DiagnosticLevel.debug));
-    //
     // Width properties
     properties.add(DoubleProperty('menuWidth', menuWidth,
         defaultValue: defaultData.menuWidth, level: DiagnosticLevel.debug));
@@ -1713,7 +1506,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     properties.add(DoubleProperty('endDrawerWidth', endDrawerWidth,
         defaultValue: defaultData.endDrawerWidth,
         level: DiagnosticLevel.debug));
-    //
     // Navigation type breakpoints
     properties.add(DoubleProperty('breakpointDrawer', breakpointDrawer,
         defaultValue: defaultData.breakpointDrawer,
@@ -1727,7 +1519,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     properties.add(DoubleProperty('breakpointSidebar', breakpointSidebar,
         defaultValue: defaultData.breakpointSidebar,
         level: DiagnosticLevel.debug));
-    //
     // Edge border properties
     properties.add(DiagnosticsProperty<bool>('borderOnMenu', borderOnMenu,
         defaultValue: defaultData.borderOnMenu, level: DiagnosticLevel.debug));
@@ -1744,7 +1535,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
         level: DiagnosticLevel.debug));
     properties.add(ColorProperty('borderColor', borderColor,
         defaultValue: defaultData.borderColor, level: DiagnosticLevel.debug));
-    //
     // Menu selection and highlight style
     properties.add(DiagnosticsProperty<ShapeBorder>('menuShape', menuShape,
         defaultValue: defaultData.menuShape, level: DiagnosticLevel.debug));
@@ -1774,7 +1564,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     properties.add(ColorProperty('menuSplashColor', menuSplashColor,
         defaultValue: defaultData.menuSplashColor,
         level: DiagnosticLevel.debug));
-    //
     // Animation durations and curves for menus and bottom bar animations
     properties.add(DiagnosticsProperty<Duration>(
         'menuAnimationDuration', menuAnimationDuration,
@@ -1800,7 +1589,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
         'bottomAnimationCurve', bottomAnimationCurve,
         defaultValue: defaultData.bottomAnimationCurve,
         level: DiagnosticLevel.debug));
-    //
     // Bottom navigation bar properties
     properties.add(EnumProperty<FlexBottomType>('bottomType', bottomType,
         defaultValue: defaultData.bottomType, level: DiagnosticLevel.debug));
@@ -1815,7 +1603,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
     properties.add(DiagnosticsProperty<bool>('bottomTopBorder', bottomTopBorder,
         defaultValue: defaultData.bottomTopBorder,
         level: DiagnosticLevel.debug));
-    //
     // The icon and text styles of the menu, rail and bottom bar.
     properties.add(DiagnosticsProperty<IconThemeData>(
         'unselectedIconTheme', iconTheme,
@@ -1837,7 +1624,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
         'headingTextStyle', headingTextStyle,
         defaultValue: defaultData.headingTextStyle,
         level: DiagnosticLevel.debug));
-    //
     // Tooltip properties
     properties.add(DiagnosticsProperty<bool>('useTooltips', useTooltips,
         defaultValue: defaultData.useTooltips, level: DiagnosticLevel.debug));

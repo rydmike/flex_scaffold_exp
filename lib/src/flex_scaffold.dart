@@ -1196,6 +1196,24 @@ class FlexScaffoldState extends State<FlexScaffold> {
         (!_isPhone &&
             (!widget.showBottomWhenMenuInDrawer &&
                 !widget.showBottomWhenMenuShown));
+    // The effective background color for the menu.
+    final Color effectiveMenuBackgroundColor = flexTheme.menuBackgroundColor ??
+        theme.drawerTheme.backgroundColor ??
+        theme.colorScheme.background;
+    // The effective background color for the sidebar.
+    final Color effectiveSidebarBackgroundColor =
+        flexTheme.sidebarBackgroundColor ??
+            flexTheme.menuBackgroundColor ??
+            theme.drawerTheme.backgroundColor ??
+            theme.colorScheme.background;
+    // The effective elevation for the drawer.
+    // If not set it gets default from SDK default (1 in M3, 16 in M2).
+    final double? effectiveDrawerElevation =
+        flexTheme.drawerElevation ?? theme.drawerTheme.elevation;
+    final double? effectiveEndDrawerElevation = flexTheme.endDrawerElevation ??
+        flexTheme.drawerElevation ??
+        theme.drawerTheme.elevation;
+
     // Set location of floating action button (FAB) depending on media
     // size, use default locations if null.
     final FloatingActionButtonLocation effectiveFabLocation = _isPhone
@@ -1215,7 +1233,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
                 // Default should be start top, but that is in the way so
                 // we use startFloat, it works well with rail navigation.
                 FloatingActionButtonLocation.startFloat;
-    //
     // Build the actual FlexScaffold content
     return _InheritedFlexScaffold(
       data: this,
@@ -1253,8 +1270,11 @@ class FlexScaffoldState extends State<FlexScaffold> {
                 maxWidth: flexTheme.menuWidth! + startPadding,
               ),
               child: Material(
-                color: flexTheme.menuBackgroundColor,
-                elevation: flexTheme.menuElevation!,
+                color: effectiveMenuBackgroundColor,
+                elevation: flexTheme.menuElevation ?? 0,
+                // TODO(rydmike): Review shadow and tint colors.
+                // shadowColor: Colors.pinkAccent,
+                // surfaceTintColor: Colors.pinkAccent,
                 child: widget.menu,
               ),
             ),
@@ -1274,8 +1294,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
                 drawer: _isMenuInDrawer
                     ? FlexDrawer(
                         currentScreenWidth: _width,
-                        backgroundColor: flexTheme.menuBackgroundColor,
-                        elevation: flexTheme.drawerElevation,
+                        backgroundColor: effectiveMenuBackgroundColor,
+                        elevation: effectiveDrawerElevation,
                         width: flexTheme.drawerWidth! + startPadding,
                         child: widget.menu,
                       )
@@ -1284,8 +1304,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
                 endDrawer: _isSidebarInEndDrawer
                     ? FlexDrawer(
                         currentScreenWidth: _width,
-                        backgroundColor: flexTheme.sidebarBackgroundColor,
-                        elevation: flexTheme.endDrawerElevation,
+                        backgroundColor: effectiveSidebarBackgroundColor,
+                        elevation: effectiveEndDrawerElevation,
                         width: flexTheme.endDrawerWidth,
                         child: widget.sidebar,
                       )
@@ -1339,8 +1359,13 @@ class FlexScaffoldState extends State<FlexScaffold> {
               ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: flexTheme.sidebarWidth!),
                 child: Material(
-                  color: flexTheme.sidebarBackgroundColor,
-                  elevation: flexTheme.sidebarElevation!,
+                  color: effectiveSidebarBackgroundColor,
+                  elevation: flexTheme.sidebarElevation ??
+                      flexTheme.menuElevation ??
+                      0,
+                  // TODO(rydmike): Review shadow and tint colors.
+                  // shadowColor: Colors.pinkAccent,
+                  // surfaceTintColor: Colors.pinkAccent,
                   child: widget.sidebar,
                 ),
               ),

@@ -181,57 +181,24 @@ class Material2BottomBar extends StatelessWidget {
             .extension<FlexScaffoldTheme>()
             ?.withDefaults(context) ??
         const FlexScaffoldTheme().withDefaults(context);
-    final bool useFlexTheme =
-        flexTheme.bottomNavigationBarPreferSubTheme ?? false;
-
     // Get and compute effective background color
     final double opacity =
         flexTheme.bottomIsTransparent! ? flexTheme.bottomOpacity! : 1.0;
-    final Color effectiveBackgroundColor =
-        flexTheme.bottomBackgroundColor?.withOpacity(opacity) ??
-            scheme.background.withOpacity(opacity);
+    final Color effectiveBackgroundColor = (flexTheme.bottomBackgroundColor ??
+            theme.bottomNavigationBarTheme.backgroundColor ??
+            flexTheme.menuBackgroundColor ??
+            scheme.background)
+        .withOpacity(opacity);
 
     // Check if the result of effectiveBackgroundColor is opaque
     final bool isOpaque = effectiveBackgroundColor.alpha == 0xFF;
-
-    // Get effective elevation for the bottom navigation bar
-    final double? elevation = useFlexTheme ? flexTheme.bottomElevation : null;
-
-    // Get effective bottom bar type for the bottom navigation bar
-    const BottomNavigationBarType type = BottomNavigationBarType.fixed;
-    // flexTheme.bottomNavigationBarTheme?.type;
-
-    // Get effective icons themes for the bottom navigation bar
-    final IconThemeData? selectedIconTheme =
-        useFlexTheme ? flexTheme.selectedIconTheme : null;
-
-    final IconThemeData? unselectedIconTheme =
-        useFlexTheme ? flexTheme.iconTheme : null;
-
-    // Get effective item color for the bottom navigation bar
-    final Color? selectedItemColor =
-        useFlexTheme ? flexTheme.selectedIconTheme?.color : null;
-
-    // Get effective item color for the bottom navigation bar
-    final Color? unselectedItemColor =
-        useFlexTheme ? flexTheme.iconTheme?.color : null;
-
-    // Get effective text styles for the bottom navigation bar
-    final TextStyle? selectedLabelStyle =
-        useFlexTheme ? flexTheme.selectedLabelTextStyle : null;
-
-    final TextStyle? unselectedLabelStyle =
-        useFlexTheme ? flexTheme.labelTextStyle : null;
-
-    // // Get effective values for showing the labels
-    // final bool? showSelectedLabels =
-    //     flexTheme.bottomNavigationBarTheme?.showSelectedLabels;
-    //
-    // final bool? showUnselectedLabels =
-    //     flexTheme.bottomNavigationBarTheme?.showUnselectedLabels;
-
     // Check if FlexScaffold tooltips should be shown.
-    final bool useTooltips = flexTheme.useTooltips ?? true;
+    final bool useTooltips = flexTheme.useTooltips ?? false;
+
+    // Effective elevation for the BottomNavigationBar.
+    // May be null and fall via theme for bottom nav bar and then SDK defaults
+    // which is 8 for the BottomNavigationBar
+    final double? elevation = flexTheme.bottomElevation;
 
     return IfWrapper(
       // If the bottom bar is NOT fully opaque and bottom blur is enabled, then
@@ -264,15 +231,6 @@ class Material2BottomBar extends StatelessWidget {
           elevation: elevation,
           currentIndex: selectedIndex,
           onTap: onDestinationSelected,
-          // type: type,
-          selectedIconTheme: selectedIconTheme,
-          unselectedIconTheme: unselectedIconTheme,
-          selectedItemColor: selectedItemColor,
-          unselectedItemColor: unselectedItemColor,
-          selectedLabelStyle: selectedLabelStyle,
-          unselectedLabelStyle: unselectedLabelStyle,
-          // showSelectedLabels: showSelectedLabels,
-          // showUnselectedLabels: showUnselectedLabels,
           items: <BottomNavigationBarItem>[
             for (final FlexDestination item in destinations)
               BottomNavigationBarItem(
@@ -336,55 +294,27 @@ class Material3BottomBar extends StatelessWidget {
     final FlexScaffoldTheme flexTheme =
         theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
             const FlexScaffoldTheme().withDefaults(context);
-    final bool useFlexTheme = flexTheme.navigationBarPreferSubTheme ?? false;
+
+    // final bool useFlexTheme = flexTheme.navigationBarPreferSubTheme ?? false;
 
     // Get and compute effective background color
     final double opacity =
         flexTheme.bottomIsTransparent! ? flexTheme.bottomOpacity! : 1.0;
-    final Color effectiveBackgroundColor =
-        flexTheme.bottomBackgroundColor?.withOpacity(opacity) ??
-            scheme.background.withOpacity(opacity);
+    final Color effectiveBackgroundColor = (flexTheme.bottomBackgroundColor ??
+            theme.navigationBarTheme.backgroundColor ??
+            flexTheme.menuBackgroundColor ??
+            scheme.background)
+        .withOpacity(opacity);
 
     // Check if the result of effectiveBackgroundColor is opaque
     final bool isOpaque = effectiveBackgroundColor.alpha == 0xFF;
-
-    // Get effective elevation for the bottom navigation bar
-    final double? elevation = useFlexTheme ? flexTheme.bottomElevation : null;
-
     // Check if FlexScaffold tooltips should be shown.
-    final bool useTooltips = flexTheme.useTooltips ?? true;
+    final bool useTooltips = flexTheme.useTooltips ?? false;
 
-    // // Get effective bottom bar type for the bottom navigation bar
-    // final BottomNavigationBarType? type =
-    //     flexTheme.bottomNavigationBarTheme?.type;
-    //
-    // // Get effective icons themes for the bottom navigation bar
-    // final IconThemeData? selectedIconTheme = flexTheme.selectedIconTheme;
-    // final IconThemeData? unselectedIconTheme = flexTheme.iconTheme;
-    //
-    // Get effective item color for the bottom navigation bar
-    final Color? selectedItemColor =
-        useFlexTheme ? flexTheme.selectedIconTheme?.color : null;
-
-    // Get effective item color for the bottom navigation bar
-    final Color? unselectedItemColor =
-        useFlexTheme ? flexTheme.iconTheme?.color : null;
-    //
-    // // Get effective text styles for the bottom navigation bar
-    // final TextStyle? selectedLabelStyle =
-    //     flexTheme.bottomNavigationBarTheme?.selectedLabelStyle;
-    //
-    // final TextStyle? unselectedLabelStyle =
-    //     flexTheme.bottomNavigationBarTheme?.unselectedLabelStyle;
-    //
-    // // Get effective values for showing the labels
-    // final bool? showSelectedLabels =
-    //     flexTheme.bottomNavigationBarTheme?.showSelectedLabels;
-    //
-    // final bool? showUnselectedLabels =
-    //     flexTheme.bottomNavigationBarTheme?.showUnselectedLabels;
-    //
-    // final bool useTooltips = flexTheme.useTooltips ?? true;
+    // Effective elevation for the NavigationBar.
+    // May be null and fall via theme for bottom nav bar and then SDK defaults
+    // which is 3 for the NavigationBar in M3 and 0 in M2.
+    final double? elevation = flexTheme.bottomElevation;
 
     return IfWrapper(
       // If the bottom bar is NOT fully opaque and bottom blur is enabled, then
@@ -421,22 +351,8 @@ class Material3BottomBar extends StatelessWidget {
             for (final FlexDestination item in destinations)
               NavigationDestination(
                 label: item.label,
-                icon:
-                    // Theme(
-                    //   data: Theme.of(context).copyWith(
-                    //     iconTheme: IconThemeData(color: selectedItemColor),
-                    //   ),
-                    //   child:
-                    item.icon,
-                // ),
-                selectedIcon:
-                    // Theme(
-                    //   data: Theme.of(context).copyWith(
-                    //     iconTheme: IconThemeData(color: unselectedItemColor),
-                    //   ),
-                    //   child:
-                    item.selectedIcon,
-                // ),
+                icon: item.icon,
+                selectedIcon: item.selectedIcon,
                 tooltip: useTooltips &&
                         item.tooltip != item.label &&
                         item.tooltip != null
@@ -500,9 +416,10 @@ class CupertinoBottomBar extends StatelessWidget {
     // Get and compute effective background color
     final double opacity =
         flexTheme.bottomIsTransparent! ? flexTheme.bottomOpacity! : 1.0;
-    final Color effectiveBackgroundColor =
-        flexTheme.bottomBackgroundColor?.withOpacity(opacity) ??
-            scheme.background.withOpacity(opacity);
+    final Color effectiveBackgroundColor = (flexTheme.bottomBackgroundColor ??
+            flexTheme.menuBackgroundColor ??
+            scheme.background)
+        .withOpacity(opacity);
 
     // The Flexfold CupertinoTabBar does not support all theming or style
     // options in FlexfoldTheme. It is a cupertino tab bar but it will
