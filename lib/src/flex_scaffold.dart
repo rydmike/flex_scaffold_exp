@@ -34,7 +34,6 @@ const bool _debug = kDebugMode && false;
 // - https://pub.dev/packages/easy_sidemenu 178 likes
 // - https://pub.dev/packages/flutter_side_menu 12 likes
 // - https://pub.dev/packages/navigation_drawer_menu 23 likes (findlay)
-// -
 //
 // Examples of adaptive scaffold:
 // - by Flutter https://pub.dev/packages/flutter_adaptive_scaffold 120 likes
@@ -44,7 +43,6 @@ const bool _debug = kDebugMode && false;
 // - https://pub.dev/packages/auto_scaffold
 // - https://pub.dev/packages/adaptive_scaffold 10 likes
 // - https://pub.dev/packages/scaffold_responsive 15 likes
-//
 // - https://pub.dev/packages/master_detail_scaffold 18 likes
 // - by material.io https://pub.dev/packages/adaptive_components 56 like
 //
@@ -1021,7 +1019,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
   late bool _isInitializing;
   late bool _isPhone;
   late bool _isPhoneLandscape;
-  late bool _isTablet;
   late bool _isDesktop;
   late bool _isMenuInDrawer;
   late bool _isMenuInMenu;
@@ -1029,7 +1026,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
   late bool _isSidebarInMenu;
   late bool _isBottomBarVisible;
   late bool _showBottomDestinationsInDrawer;
-  late Orientation _currentOrientation;
   FlexTarget _onDestination = const FlexTarget();
   FlexTarget _selectedDestination = const FlexTarget();
 
@@ -1286,6 +1282,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
 
   @override
   void initState() {
+    if (_debug) debugPrint('FlexScaffold: initState');
     super.initState();
     _isInitializing = true;
     _selectedIndex = widget.selectedIndex;
@@ -1301,17 +1298,34 @@ class FlexScaffoldState extends State<FlexScaffold> {
     _isSidebarHidden = widget.sidebarHide;
     _menuPrefersRail = widget.menuPrefersRail;
     _scrollHiddenBottomBar = false;
+    _selectedDestination = FlexTarget(
+      index: _selectedIndex,
+      bottomIndex: bottomIndex,
+      route: widget.destinations[_selectedIndex].route,
+      icon: widget.destinations[_selectedIndex].icon,
+      selectedIcon: widget.destinations[_selectedIndex].selectedIcon,
+      label: widget.destinations[_selectedIndex].label,
+      source: FlexNavigation.menu,
+      reverse: _indexMenu.reverse,
+      preferPush: false,
+      noAppBar: widget.destinations[_selectedIndex].noAppBar,
+      noAppBarTitle: widget.destinations[_selectedIndex].noAppBarTitle,
+    );
+  }
 
-    // TODO(rydmike): Changing orientation with drawer open may break it! Fix?
-    // currentOrientation = MediaQuery.of(context).orientation;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_debug) debugPrint('FlexScaffold: didChangeDependencies');
   }
 
   @override
   void didUpdateWidget(FlexScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (_debug) debugPrint('FlexScaffold: didUpdateWidget');
     if (widget.selectedIndex != oldWidget.selectedIndex || _isInitializing) {
+      if (_debug) debugPrint('FlexScaffold: selectedIndex changed or init');
       _isInitializing = false;
-      debugPrint('*********** FlexScaffold: selectedIndex changed ***********');
       _selectedIndex = widget.selectedIndex;
       _indexMenu.setIndex(widget.selectedIndex);
       _target = widget.destinations[_indexMenu.index];
@@ -1337,6 +1351,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
         noAppBar: widget.destinations[_selectedIndex].noAppBar,
         noAppBarTitle: widget.destinations[_selectedIndex].noAppBarTitle,
       );
+      if (_debug) {
+        debugPrint('FlexScaffold: _selectedDestination $_selectedDestination');
+      }
     }
     if (widget.menuHide != oldWidget.menuHide) {
       _isMenuHidden = widget.menuHide;
@@ -1356,6 +1373,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    if (_debug) debugPrint('FlexScaffold: build');
     // Get the main surrounding theme
     final ThemeData theme = Theme.of(context);
     // Get effective FlexTheme:
@@ -1364,13 +1382,11 @@ class FlexScaffoldState extends State<FlexScaffold> {
     final FlexScaffoldTheme flexTheme =
         theme.extension<FlexScaffoldTheme>()?.withDefaults(context) ??
             const FlexScaffoldTheme().withDefaults(context);
-
     assert(
         !(flexTheme.bottomType == FlexBottomType.custom &&
             widget.customBottom == null),
         'If bottom navigation type is custom, you have to provide a '
         'custom bottom navigator to FlexScaffold.custom.');
-
     // Get media width, height, and safe area padding
     assert(debugCheckHasMediaQuery(context),
         'A valid build context is required for the MediaQuery.');
@@ -1384,16 +1400,12 @@ class FlexScaffoldState extends State<FlexScaffold> {
         : rightPadding;
     _width = size.width;
     final double height = size.height;
-
     // Based on width and breakpoint limit, this is a phone sized layout.
     _isPhone = _width < flexTheme.breakpointRail!;
     // Based on height and breakpoint, this is a phone landscape layout.
     _isPhoneLandscape = height < flexTheme.breakpointDrawer!;
     // Based on width & breakpoint limit, this is a desktop sized layout.
     _isDesktop = (_width >= flexTheme.breakpointMenu!) && !_isPhoneLandscape;
-    // This is only based on that we are not doing phone or desktop size.
-    _isTablet = !_isPhone && !_isDesktop;
-
     // The menu will exist as a Drawer widget in the widget tree.
     _isMenuInDrawer = _isPhone || widget.menuHide || _isPhoneLandscape;
     // The menu is shown as a full sized menu before the body.
@@ -1440,7 +1452,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
     final double? effectiveEndDrawerElevation = flexTheme.endDrawerElevation ??
         flexTheme.drawerElevation ??
         theme.drawerTheme.elevation;
-
     // Set location of floating action button (FAB) depending on media
     // size, use default locations if null.
     final FloatingActionButtonLocation effectiveFabLocation = _isPhone
@@ -1586,7 +1597,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
                     Expanded(
                       // TODO(rydmike): Review if TraversalGroup is needed here.
                       child: FocusTraversalGroup(
-                          child: widget.body ?? const SizedBox()),
+                        child: widget.body ?? const SizedBox(),
+                      ),
                     ),
                     // The Sidebar when shown as a fixed item and it belongs
                     // to the body. Material default sidebar layout.
