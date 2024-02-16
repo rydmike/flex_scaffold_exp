@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart' show Diagnosticable, kDebugMode;
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -79,12 +80,13 @@ class FlexScaffold extends StatefulWidget {
   /// Default constructor
   const FlexScaffold({
     super.key,
-    //
     // The main app bar for the body part of the scaffold
     this.appBar,
-    //
+    // The page content that will be in the scaffold body.
+    this.body,
     // Destination properties for the menu, rail and bottom navigation bar.
     required this.destinations,
+    // Active destination index and callback for when a destination is selected.
     required this.selectedIndex,
     required this.onDestination,
     // Default to using first module.
@@ -92,7 +94,7 @@ class FlexScaffold extends StatefulWidget {
     this.activeModule = 0,
     // Menu, its control and content properties, other than the destinations.
     required this.menu,
-    this.menuControlEnabled = true,
+    this.menuControlEnabled = false,
     this.menuIcon,
     this.menuIconExpand,
     this.menuIconCollapse,
@@ -102,12 +104,10 @@ class FlexScaffold extends StatefulWidget {
     this.onMenuHide,
     this.menuPrefersRail = false,
     this.onMenuPrefersRail,
-    // Behaviour for menu and sidebar.
-    this.cycleViaDrawer = true,
-    //
+    this.cycleViaDrawer = false,
     // Sidebar, its control and icons.
     this.sidebar,
-    this.sidebarControlEnabled = true,
+    this.sidebarControlEnabled = false,
     this.sidebarIcon,
     this.sidebarIconExpand,
     this.sidebarIconExpandHidden,
@@ -116,7 +116,6 @@ class FlexScaffold extends StatefulWidget {
     this.sidebarHide = false,
     this.onSidebarHide,
     this.sidebarBelongsToBody = false,
-    //
     // Bottom navigation bar properties.
     this.hideBottom = false,
     this.showBottomWhenMenuInDrawer = false,
@@ -124,33 +123,57 @@ class FlexScaffold extends StatefulWidget {
     this.bottomDestinationsInDrawer = false,
     this.customBottom,
     this.customBottomHeight,
-    //
     // Floating action button properties.
     this.floatingActionButton,
     this.floatingActionButtonLocationPhone,
     this.floatingActionButtonLocationTablet,
     this.floatingActionButtonLocationDesktop,
-    //
-    // Body properties.
-    this.extendBody = true,
-    this.extendBodyBehindAppBar = true,
-    //
-    // The actual content that will be in the FlexScaffold scaffold body.
-    this.body,
-    //
+    this.floatingActionButtonAnimator,
+    // Persistent footer buttons.
+    this.persistentFooterButtons,
+    this.persistentFooterAlignment = AlignmentDirectional.centerEnd,
+    // Pass through properties to Scaffold,
+    this.bottomSheet,
+    this.backgroundColor,
+    this.resizeToAvoidBottomInset,
+    this.primary = true,
+    this.drawerDragStartBehavior = DragStartBehavior.start,
+    this.extendBody = false,
+    this.extendBodyBehindAppBar = false,
+    this.drawerScrimColor,
+    this.drawerEdgeDragWidth,
+    this.drawerEnableOpenDragGesture = true,
+    this.endDrawerEnableOpenDragGesture = true,
+    this.restorationId,
   }) : assert(
-            destinations.length >= 2, 'There must be at least 2 destinations');
+          destinations.length >= 2,
+          'There must be at least 2 destinations',
+        );
 
   /// The appbar for the main scaffold body.
   ///
   /// [FlexScaffold] does not use a standard [AppBar] widget directly, it needs
-  /// to inject some functionality into an AppBar and use a data class as an
-  /// interface from which the actual app bar is created with the
+  /// to inject some functionality into an AppBar and uses a data class as an
+  /// interface, from which the actual [AppBar] is created with the
   /// [FlexAppBar.toAppBar] method.
+  ///
   /// The [FlexAppBar] has all the same properties as the [AppBar] class
   /// but none of its methods or functionality, it just holds the data needed
-  /// to create an app bar.
+  /// to create an a[AppBar].
   final FlexAppBar? appBar;
+
+  /// The body of the FlexScaffold
+  ///
+  /// The content widget for the FlexScaffold scaffold screen.
+  ///
+  /// The body is the main content of the scaffold, it is typically a widget
+  /// that represents a destination page. It differs from the body in normal
+  /// [Scaffold] by not having the app bar, bottom bar as part or side menu/rail
+  /// and the side bar, as a part of the body.
+  ///
+  /// The body is intended to in nested navigator so only the content of the
+  /// scaffold body changes when navigating between destinations.
+  final Widget? body;
 
   /// Defines the appearance of the navigation button items that are listed in
   /// the drawer, rail, menu and bottom bar.
@@ -162,12 +185,13 @@ class FlexScaffold extends StatefulWidget {
   /// [FlexDestination].
   final int selectedIndex;
 
+  // TODO(rydmike): Consider setting up a controller for the destinations.
   /// Callback called when one of the [destinations] is selected.
   ///
-  /// The stateful widget that creates the navigation rail needs to keep
-  /// track of the index of the selected [FlexDestination] and call
-  /// `setState` to rebuild the menu, drawer, rail or bottom bar
-  /// with the new [selectedIndex].
+  /// The stateful widget or other state management used, that controls the
+  /// navigation destinations needs to keep track of the index of the selected
+  /// [FlexDestination] and call `setState` to rebuild the menu, drawer, rail or
+  /// bottom navigation bar with the new [selectedIndex].
   final ValueChanged<FlexTarget> onDestination;
 
   // TODO(rydmike): Implement modules!
@@ -207,7 +231,8 @@ class FlexScaffold extends StatefulWidget {
   /// as the [FlexMenu] default menu is pretty configurable.
   ///
   /// If you make a custom rail/menu or use a package for one you can use the
-  /// Flutter [NavigationRail] example as a guide for how to implement it.
+  /// FlexScaffold example that show how to use the Flutter [NavigationRail]
+  /// example, as a guide for how to implement it.
   final Widget menu;
 
   /// The menu mode can be manually controlled by the user when true.
@@ -219,7 +244,9 @@ class FlexScaffold extends StatefulWidget {
   /// is triggered. You can still control it via the API, there just is no
   /// user control enabled.
   ///
-  /// Defaults to true so users can toggle the menu and rail visibility as they
+  /// Defaults to false.
+  ///
+  /// Set it to true so users can toggle the menu and rail visibility as they
   /// prefer on a large canvas.
   final bool menuControlEnabled;
 
@@ -233,11 +260,12 @@ class FlexScaffold extends StatefulWidget {
   ///
   /// If you use icons with arrow directions, use icons with direction
   /// applicable for LTR. If the used locale direction is RTL, the icon
-  /// will be rotated 180 degrees to work on reversed directionality.
+  /// will be rotated automatically 180 degrees to work on reversed
+  /// directionality.
   final Widget? menuIcon;
 
-  /// A widget used on an opened drawer menu button when operating it will
-  /// change it to a side menu.
+  /// A widget used on an opened drawer menu button, in a situation where when
+  /// operating it will expand it to a side menu.
   ///
   /// Typically an [Icon] widget is used.
   ///
@@ -250,8 +278,8 @@ class FlexScaffold extends StatefulWidget {
   /// will be rotated 180 degrees to work on reversed directionality.
   final Widget? menuIconExpand;
 
-  /// A widget used on the menu button when operating it will expand the
-  /// menu to a rail or to a side menu.
+  /// A widget used on the menu button, in a situation where operating it will
+  /// expand the hidden menu to a rail or to a side menu.
   ///
   /// Typically an [Icon] widget is used.
   ///
@@ -312,13 +340,15 @@ class FlexScaffold extends StatefulWidget {
   /// When the menu or sidebar can be locked on screen, as a rail, menu or
   /// sidebar, and we expand it again, it first cycles via the Drawer if true.
   ///
-  /// If set to false it skips the cycle via the drawer and expands it directly
+  /// If kept false it skips the cycle via the drawer and expands it directly
   /// to a rail, menu or sidebar, depending on current screen width and if it is
   /// larger than the breakpoint for menu or not. If screen width is below rail
   /// breakpoint this setting has no effect, the only way to show the menu is
   /// as a drawer, so the drawer will be opened.
   ///
   /// Affects both drawer and sidebar end drawer.
+  ///
+  /// Defaults to false.
   final bool cycleViaDrawer;
 
   /// The end drawer and sidebar, often used as a tools menu, filters etc.
@@ -336,8 +366,10 @@ class FlexScaffold extends StatefulWidget {
   /// is triggered. You can still control it via the API, there just is no
   /// user control over.
   ///
-  /// Defaults to true so users can toggle the menu and rail visibility as they
+  /// If set to true users can toggle the menu and rail visibility as they
   /// prefer on a large canvas.
+  ///
+  /// Defaults to false.
   final bool sidebarControlEnabled;
 
   /// A Widget used on the sidebar button when the sidebar is operated as an
@@ -416,7 +448,8 @@ class FlexScaffold extends StatefulWidget {
   /// columns in one row: menu, appbar with body in same column under it and the
   /// sidebar.
   ///
-  /// By default sidebar belongs [sidebarBelongsToBody] = false.
+  /// Defaults to false.
+  ///
   /// This is an opinionated FlexScaffold default, it works better if a
   /// bottom navigation bar is used with a sidebar and it also keeps the Flutter
   /// standard FAB locations correctly positioned when the sidebar is visible
@@ -430,8 +463,8 @@ class FlexScaffold extends StatefulWidget {
   /// See package documentation and examples on how to configure custom bottom
   /// navigation bars.
   ///
-  /// Typically this property is null and the FlexScaffoldTheme.type
-  /// is used to determine if [CupertinoTabBar], [NavigationBar] ot
+  /// Typically this property is null and the [FlexScaffoldTheme.bottomType]
+  /// is used to determine if [CupertinoTabBar], [NavigationBar] or
   /// [BottomNavigationBar] is used to
   /// determine if the [FlexScaffold] use [CupertinoBottomBar],
   ///
@@ -444,47 +477,61 @@ class FlexScaffold extends StatefulWidget {
 
   /// The height of the custom navigation bar.
   ///
-  /// If not provided it assumed to be same height as Material 2 bottom
+  /// If not provided it assumed to be same height as Material-2 bottom
   /// navigation bar height, which is [kBottomNavigationBarHeight].
   final double? customBottomHeight;
 
-  /// Should the bottom navigation be displayed or not?
+  /// Should the bottom navigation always be hidden?
   ///
-  /// Defaults to false, if set to true the bottom navigation bar will not be
-  /// shown in bottom navigation mode. Navigation will only be possible via the
+  /// Defaults to false,
+  ///
+  /// If set to true the bottom navigation bar will never be shown in bottom
+  /// navigation mode. Navigation will only be possible via the
   /// drawer menu in a phone sized app.
   final bool hideBottom;
 
   /// When true, bottom navigation destinations will be shown as soon as the
   /// menu is hidden in the drawer.
   ///
-  /// Normally the bottom navigation bar is not shown
-  /// until width is below the breakpoint for showing the bottom navigation
-  /// bar. If you set this to true, it will be shown also if the menu and rail
-  /// is toggled to be hidden.
+  /// Normally the bottom navigation bar is not shown until media width is below
+  /// the breakpoint for showing the bottom navigation bar. If you set this to
+  /// true, it will be shown also if the menu and rail is toggled to be hidden,
+  /// regardless of media size.
   ///
   /// Defaults to false.
   final bool showBottomWhenMenuInDrawer;
 
   /// Set to true if bottom bar should also be shown when the menu is visible.
   ///
-  /// This defaults to false. Normally you do not want to see or use the bottom
-  /// bar when the rail or menu is shown, if you enable this property it
-  /// will however be shown. Use with care, as this can be confusing for users.
+  /// Defaults to false.
+  ///
+  /// Normally you do not want to see or use the bottom navigation
+  /// bar when the rail or menu is shown. If you enable this property it will
+  /// however always be shown. Use with care, this may be confusing for users.
+  ///
   /// It is mainly a toggle to use during testing and development. This feature
   /// can potentially also be used as an accessibility feature.
   final bool showBottomWhenMenuShown;
 
-  /// Set it to true if bottom bar destinations should also be included in the
-  /// drawer when the bottom navigation mode is being used.
+  /// Set to true if bottom bar destinations should also be included in the
+  /// drawer, when the bottom navigation mode is being used.
   ///
   /// By default this is false. Normally the bottom destinations are not shown
-  /// in the drawer when you are in bottom navigation mode and open the drawer
-  /// it only contain none bottom navigation bar items. If you set it to true
-  /// the bottom destinations will always be shown in the drawer.
+  /// in the drawer when you are in bottom navigation mode. If you open the
+  /// drawer it only contain none bottom navigation bar items. If you set
+  /// [bottomDestinationsInDrawer] to true the bottom destinations will always
+  /// be shown in the drawer.
+  ///
+  /// If you in large screen mode have a side menu/rails with more destinations
+  /// than can fit on a bottom bar and are on such a destination and resize
+  /// the media to phone size, the bottom destinations will be shown in the
+  /// drawer, regardless of this setting. As it is needed to be able to get
+  /// to bottom destinations.
   final bool bottomDestinationsInDrawer;
 
-  /// Floating action button widget for the layout.
+  /// A button displayed floating above [body], in the bottom right corner.
+  ///
+  /// Typically a [FloatingActionButton].
   final FloatingActionButton? floatingActionButton;
 
   /// Location of the floating action button for phone layout
@@ -502,20 +549,199 @@ class FlexScaffold extends StatefulWidget {
   /// Defaults to [FloatingActionButtonLocation.startFloat].
   final FloatingActionButtonLocation? floatingActionButtonLocationDesktop;
 
+  /// Animator to move the [floatingActionButton] to a new
+  /// [floatingActionButtonLocation].
+  ///
+  /// If null, the [ScaffoldState] will use the default animator,
+  /// [FloatingActionButtonAnimator.scaling].
+  final FloatingActionButtonAnimator? floatingActionButtonAnimator;
+
+  /// A set of buttons that are displayed at the bottom of the scaffold.
+  ///
+  /// Typically this is a list of [TextButton] widgets. These buttons are
+  /// persistently visible, even if the [body] of the scaffold scrolls.
+  ///
+  /// These widgets will be wrapped in an [OverflowBar].
+  ///
+  /// The [persistentFooterButtons] are rendered above the
+  /// [bottomNavigationBar] but below the [body].
+  final List<Widget>? persistentFooterButtons;
+
+  /// The alignment of the [persistentFooterButtons] inside the [OverflowBar].
+  ///
+  /// Defaults to [AlignmentDirectional.centerEnd].
+  final AlignmentDirectional persistentFooterAlignment;
+
+  /// The persistent bottom sheet to display.
+  ///
+  /// A persistent bottom sheet shows information that supplements the primary
+  /// content of the app. A persistent bottom sheet remains visible even when
+  /// the user interacts with other parts of the app.
+  ///
+  /// A closely related widget is a modal bottom sheet, which is an alternative
+  /// to a menu or a dialog and prevents the user from interacting with the rest
+  /// of the app. Modal bottom sheets can be created and displayed with the
+  /// [showModalBottomSheet] function.
+  ///
+  /// Unlike the persistent bottom sheet displayed by [showBottomSheet]
+  /// this bottom sheet is not a [LocalHistoryEntry] and cannot be dismissed
+  /// with the scaffold appbar's back button.
+  ///
+  /// If a persistent bottom sheet created with [showBottomSheet] is already
+  /// visible, it must be closed before building the Scaffold with a new
+  /// [bottomSheet].
+  ///
+  /// The value of [bottomSheet] can be any widget at all. It's unlikely to
+  /// actually be a [BottomSheet], which is used by the implementations of
+  /// [showBottomSheet] and [showModalBottomSheet]. Typically it's a widget
+  /// that includes [Material].
+  ///
+  /// See also:
+  ///
+  ///  * [showBottomSheet], which displays a bottom sheet as a route that can
+  ///    be dismissed with the scaffold's back button.
+  ///  * [showModalBottomSheet], which displays a modal bottom sheet.
+  ///  * [BottomSheetThemeData], which can be used to customize the default
+  ///    bottom sheet property values when using a [BottomSheet].
+  final Widget? bottomSheet;
+
+  /// The color of the [Material] widget that underlies the entire Scaffold.
+  ///
+  /// The theme's [ThemeData.scaffoldBackgroundColor] by default.
+  final Color? backgroundColor;
+
+  /// If true the [body] and the scaffold's floating widgets should size
+  /// themselves to avoid the onscreen keyboard whose height is defined by the
+  /// ambient [MediaQuery]'s [MediaQueryData.viewInsets] `bottom` property.
+  ///
+  /// For example, if there is an onscreen keyboard displayed above the
+  /// scaffold, the body can be resized to avoid overlapping the keyboard, which
+  /// prevents widgets inside the body from being obscured by the keyboard.
+  ///
+  /// Defaults to true.
+  final bool? resizeToAvoidBottomInset;
+
+  /// Whether this scaffold is being displayed at the top of the screen.
+  ///
+  /// If true then the height of the [appBar] will be extended by the height
+  /// of the screen's status bar, i.e. the top padding for [MediaQuery].
+  ///
+  /// The default value of this property, like the default value of
+  /// [AppBar.primary], is true.
+  final bool primary;
+
+  /// Determines the way that drag start behavior is handled.
+  ///
+  /// If set to [DragStartBehavior.start], the drag behavior used for opening
+  /// and closing a drawer will begin at the position where the drag gesture won
+  /// the arena. If set to [DragStartBehavior.down] it will begin at the position
+  /// where a down event is first detected.
+  ///
+  /// In general, setting this to [DragStartBehavior.start] will make drag
+  /// animation smoother and setting it to [DragStartBehavior.down] will make
+  /// drag behavior feel slightly more reactive.
+  ///
+  /// By default, the drag start behavior is [DragStartBehavior.start].
+  ///
+  /// See also:
+  ///
+  ///  * [DragGestureRecognizer.dragStartBehavior], which gives an example for
+  ///    the different behaviors.
+  final DragStartBehavior drawerDragStartBehavior;
+
   /// Set to true to extend the body behind bottom bar.
   ///
-  /// This is the same property as on standard Scaffold.
+  /// This is the same property as on standard [Scaffold].
+  ///
+  /// If true, and [bottomNavigationBar] or [persistentFooterButtons]
+  /// is specified, then the [body] extends to the bottom of the Scaffold,
+  /// instead of only extending to the top of the [bottomNavigationBar]
+  /// or the [persistentFooterButtons].
+  ///
+  /// If true, a [MediaQuery] widget whose bottom padding matches the height
+  /// of the [bottomNavigationBar] will be added above the scaffold's [body].
+  ///
+  /// This property is often useful when the [bottomNavigationBar] has
+  /// a non-rectangular shape, like [CircularNotchedRectangle], which
+  /// adds a [FloatingActionButton] sized notch to the top edge of the bar.
+  /// In this case specifying `extendBody: true` ensures that scaffold's
+  /// body will be visible through the bottom navigation bar's notch.
+  ///
+  /// See also:
+  ///
+  ///  * [extendBodyBehindAppBar], which extends the height of the body
+  ///    to the top of the scaffold.
+  ///
+  /// Defaults to false.
   final bool extendBody;
 
   /// Set to true to extend the body behind the appbar.
   ///
-  /// This is the same property as on standard Scaffold.
+  /// This is the same property as on standard [Scaffold].
+  ///
+  /// If true, and an [appBar] is specified, then the height of the [body] is
+  /// extended to include the height of the app bar and the top of the body
+  /// is aligned with the top of the app bar.
+  ///
+  /// This is useful if the app bar's [AppBar.backgroundColor] is not
+  /// completely opaque.
+  ///
+  /// This property is false by default.
+  ///
+  /// See also:
+  ///
+  ///  * [extendBody], which extends the height of the body to the bottom
+  ///    of the scaffold.
+  ///
+  /// Defaults to false.
   final bool extendBodyBehindAppBar;
 
-  /// The body of the scaffold
+  /// The color to use for the scrim that obscures primary content while a drawer is open.
   ///
-  /// The content widget for the FlexScaffold scaffold screen.
-  final Widget? body;
+  /// If this is null, then [DrawerThemeData.scrimColor] is used. If that
+  /// is also null, then it defaults to [Colors.black54].
+  final Color? drawerScrimColor;
+
+  /// The width of the area within which a horizontal swipe will open the
+  /// drawer.
+  ///
+  /// By default, the value used is 20.0 added to the padding edge of
+  /// `MediaQuery.paddingOf(context)` that corresponds to the surrounding
+  /// [TextDirection]. This ensures that the drag area for notched devices is
+  /// not obscured. For example, if `TextDirection.of(context)` is set to
+  /// [TextDirection.ltr], 20.0 will be added to
+  /// `MediaQuery.paddingOf(context).left`.
+  final double? drawerEdgeDragWidth;
+
+  /// Determines if the [Scaffold.drawer] can be opened with a drag
+  /// gesture on mobile.
+  ///
+  /// On desktop platforms, the drawer is not draggable.
+  ///
+  /// By default, the drag gesture is enabled on mobile.
+  final bool drawerEnableOpenDragGesture;
+
+  /// Determines if the [Scaffold.endDrawer] can be opened with a
+  /// gesture on mobile.
+  ///
+  /// On desktop platforms, the drawer is not draggable.
+  ///
+  /// By default, the drag gesture is enabled on mobile.
+  final bool endDrawerEnableOpenDragGesture;
+
+  /// Restoration ID to save and restore the state of the [Scaffold].
+  ///
+  /// If it is non-null, the scaffold will persist and restore whether the
+  /// [drawer] and [endDrawer] was open or closed.
+  ///
+  /// The state of this widget is persisted in a [RestorationBucket] claimed
+  /// from the surrounding [RestorationScope] using the provided restoration ID.
+  ///
+  /// See also:
+  ///
+  ///  * [RestorationManager], which explains how state restoration works in
+  ///    Flutter.
+  final String? restorationId;
 
   /// Finds the [FlexScaffoldState] from the closest instance of this class that
   /// encloses the given context.
@@ -1250,7 +1476,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
           sidebarControlEnabled: widget.sidebarControlEnabled,
           cycleViaDrawer: widget.cycleViaDrawer,
           //
-          menuBelongsToBody: false, // TODO(rydmike): Add feature
+          menuBelongsToBody: false, // TODO(rydmike): Maybe add this feature
           sidebarBelongsToBody: widget.sidebarBelongsToBody,
           //
           isBottomTarget: _isBottomTarget,
@@ -1282,14 +1508,12 @@ class FlexScaffoldState extends State<FlexScaffold> {
             Expanded(
               child: Scaffold(
                 key: widget.key,
-                extendBody: widget.extendBody,
-                extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
-                //
                 // Add AppBar with leading and actions buttons, but only
                 // if the destination has an app bar.
                 appBar: widget.destinations[_selectedIndex].noAppBar
                     ? null
                     : FlexScaffoldAppBar(appBar: widget.appBar),
+                // TODO(rydmike): Maybe utilize onDrawerChanged?
                 // The menu when used as a drawer.
                 drawer: _isMenuInDrawer
                     ? FlexDrawer(
@@ -1300,6 +1524,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
                         child: widget.menu,
                       )
                     : null,
+                // TODO(rydmike): Maybe utilize onEndDrawerChanged?
                 // The end drawer, ie tools menu when used as an end drawer.
                 endDrawer: _isSidebarInEndDrawer
                     ? FlexDrawer(
@@ -1310,6 +1535,17 @@ class FlexScaffoldState extends State<FlexScaffold> {
                         child: widget.sidebar,
                       )
                     : null,
+                // TODO(rydmike): Fix the Drawers not in tree complication.
+                // To avoid the issue and complication of drawer not being
+                // present in the tree at all in desktop/tablet size mode,
+                // as used now. Consider keeping them there at all times
+                // but setting drawerEnableOpenDragGesture and
+                // endDrawerEnableOpenDragGesture when they are in their
+                // visible pinned modes. Need to update the button toggle
+                // logic as well. This should however be simpler and safer
+                // than current work-around. The above properties did not
+                // exist when the work-around was implemented.
+
                 // The bottom navigation bar
                 bottomNavigationBar: FlexBottomBar(
                   customNavigationBar: widget.customBottom,
@@ -1321,6 +1557,24 @@ class FlexScaffoldState extends State<FlexScaffold> {
                         ? widget.floatingActionButton
                         : null,
                 floatingActionButtonLocation: effectiveFabLocation,
+                floatingActionButtonAnimator:
+                    widget.floatingActionButtonAnimator,
+                // Pass through properties to Scaffold.
+                persistentFooterButtons: widget.persistentFooterButtons,
+                persistentFooterAlignment: widget.persistentFooterAlignment,
+                bottomSheet: widget.bottomSheet,
+                backgroundColor: widget.backgroundColor,
+                resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+                primary: widget.primary,
+                drawerDragStartBehavior: widget.drawerDragStartBehavior,
+                extendBody: widget.extendBody,
+                extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+                drawerScrimColor: widget.drawerScrimColor,
+                drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
+                drawerEnableOpenDragGesture: widget.drawerEnableOpenDragGesture,
+                endDrawerEnableOpenDragGesture:
+                    widget.endDrawerEnableOpenDragGesture,
+                restorationId: widget.restorationId,
                 // Build the actual content in a Row.
                 body: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
