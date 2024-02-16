@@ -343,129 +343,140 @@ class _FlexMenu extends StatelessWidget {
     // Get effective menu and rail width
     final double railWidth = flexTheme.railWidth! + startPadding;
     final double menuWidth = flexTheme.menuWidth! + startPadding;
-
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints size) {
-        final Widget? railLeadingFiller =
-            size.maxWidth == railWidth ? SizedBox(width: railWidth) : null;
-        return OverflowBox(
-          alignment: AlignmentDirectional.topStart,
-          minWidth: 0,
-          maxWidth: isDrawerOpen ? null : menuWidth,
-          // Container used to draw an edge on the drawer in dark or light
-          // mode, when so configured.
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              border: isDrawerOpen && useDrawerBorderEdge
-                  ? BorderDirectional(end: BorderSide(color: borderColor))
-                  : null,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                // The Menu AppBar with menu action button and logo
-                Stack(
-                  children: <Widget>[
-                    // We put the appbar in Stack so we can put the Scaffold
-                    // background color on a Container behind the AppBar so we
-                    // get transparency against the scaffold background color
-                    // and not the canvas color.
-                    Container(
-                      height: kToolbarHeight + topPadding,
-                      color: scaffoldColor,
-                    ),
-                    appBar!.toAppBar(
-                      automaticallyImplyLeading: false,
-                      leading: canUseMenu || isDrawerOpen
-                          ? FlexMenuButton(onPressed: () {})
-                          : railLeadingFiller,
-                      // Insert any existing actions
-                      actions: (appBar?.actions != null)
-                          ? <Widget>[...appBar!.actions!]
-                          : <Widget>[const SizedBox.shrink()],
-                    ),
-                  ],
-                ),
-                // Menu content with:
-                //  - Heading widget
-                //  - Leading widget
-                //  - Menu items with: Divider, Header, Item, Divider
-                //  - Trailing widget
-                //  - Footer widget
-                Expanded(
-                    child: Container(
-                  decoration: BoxDecoration(
-                    border: borderOnMenu && !isDrawerOpen
-                        ? BorderDirectional(end: BorderSide(color: borderColor))
-                        : null,
+    // TODO(rydmike): Review if TraversalGroup is needed here.
+    return FocusTraversalGroup(
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints size) {
+          final Widget? railLeadingFiller =
+              size.maxWidth == railWidth ? SizedBox(width: railWidth) : null;
+          return OverflowBox(
+            alignment: AlignmentDirectional.topStart,
+            minWidth: 0,
+            maxWidth: isDrawerOpen ? null : menuWidth,
+            // Container used to draw an edge on the drawer in dark or light
+            // mode, when so configured.
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                border: isDrawerOpen && useDrawerBorderEdge
+                    ? BorderDirectional(end: BorderSide(color: borderColor))
+                    : null,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // The Menu AppBar with menu action button and logo
+                  Stack(
+                    children: <Widget>[
+                      // We put the appbar in Stack so we can put the Scaffold
+                      // background color on a Container behind the AppBar so we
+                      // get transparency against the scaffold background color
+                      // and not the canvas color.
+                      Container(
+                        height: kToolbarHeight + topPadding,
+                        color: scaffoldColor,
+                      ),
+                      appBar!.toAppBar(
+                        automaticallyImplyLeading: false,
+                        leading: canUseMenu || isDrawerOpen
+                            ? FlexMenuButton(onPressed: () {})
+                            : railLeadingFiller,
+                        // Insert any existing actions
+                        actions: (appBar?.actions != null)
+                            ? <Widget>[...appBar!.actions!]
+                            : <Widget>[const SizedBox.shrink()],
+                      ),
+                    ],
                   ),
-                  width: size.maxWidth,
-                  child: ClipRect(
-                      child: OverflowBox(
-                    alignment: AlignmentDirectional.topStart,
-                    minWidth: 0,
-                    maxWidth: menuWidth,
-                    child: Column(
-                      children: <Widget>[
-                        if (header != null) header!,
-                        Expanded(
-                          child: _FooterLayout(
-                            body: Align(
-                              alignment: alignment,
-                              child: ListView(
-                                physics: const ClampingScrollPhysics(),
-                                shrinkWrap: true,
-                                padding: EdgeInsets.zero,
-                                children: <Widget>[
-                                  // Add the leading widget to the menu
-                                  if (leading != null) leading!,
-                                  // The menu items
-                                  for (int i = 0; i < destinations.length; i++)
-                                    if ((destinations[i].inBottomNavigation &&
-                                            showBottomItemsInDrawer) ||
-                                        !destinations[i].inBottomNavigation ||
-                                        !isDrawer)
-                                      _FlexMenuItem(
-                                        destination: destinations[i],
-                                        iconTheme: unselectedIconTheme,
-                                        selectedIconTheme: selectedIconTheme,
-                                        labelTextStyle:
-                                            unselectedLabelTextStyle,
-                                        selectedLabelTextStyle:
-                                            selectedLabelTextStyle,
-                                        headingTextStyle: headingTextStyle,
-                                        isSelected: selectedIndex == i,
-                                        width: size.maxWidth,
-                                        startPadding: startPadding,
-                                        autoFocus: selectedIndex == i,
-                                        onTap: () {
-                                          if (isDrawerOpen) {
-                                            Navigator.of(context).pop();
-                                          }
-                                          flexScaffold.setSelectedIndex(i);
-                                        },
-                                        flexTheme: flexTheme,
-                                      ),
-                                  //
-                                  // Add the trailing widget to the menu
-                                  if (trailing != null) trailing!,
-                                ],
-                              ),
-                            ),
-                            // Add footer widget to menu
-                            footer: footer,
-                          ),
-                        ),
-                      ],
-                      // )
+                  // Menu content with:
+                  //  - Heading widget
+                  //  - Leading widget
+                  //  - Menu items with: Divider, Header, Item, Divider
+                  //  - Trailing widget
+                  //  - Footer widget
+                  Expanded(
+                      child: Container(
+                    decoration: BoxDecoration(
+                      border: borderOnMenu && !isDrawerOpen
+                          ? BorderDirectional(
+                              end: BorderSide(color: borderColor))
+                          : null,
                     ),
+                    width: size.maxWidth,
+                    child: ClipRect(
+                        child: OverflowBox(
+                      alignment: AlignmentDirectional.topStart,
+                      minWidth: 0,
+                      maxWidth: menuWidth,
+                      child: Column(
+                        children: <Widget>[
+                          if (header != null) header!,
+                          Expanded(
+                            child: _FooterLayout(
+                              body: Align(
+                                alignment: alignment,
+                                // TODO(rydmike): Review TraversalGroup need.
+                                child: FocusTraversalGroup(
+                                  child: ListView(
+                                    physics: const ClampingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.zero,
+                                    children: <Widget>[
+                                      // Add the leading widget to the menu
+                                      if (leading != null) leading!,
+                                      // The menu items
+                                      for (int i = 0;
+                                          i < destinations.length;
+                                          i++)
+                                        if ((destinations[i]
+                                                    .inBottomNavigation &&
+                                                showBottomItemsInDrawer) ||
+                                            !destinations[i]
+                                                .inBottomNavigation ||
+                                            !isDrawer)
+                                          _FlexMenuItem(
+                                            destination: destinations[i],
+                                            iconTheme: unselectedIconTheme,
+                                            selectedIconTheme:
+                                                selectedIconTheme,
+                                            labelTextStyle:
+                                                unselectedLabelTextStyle,
+                                            selectedLabelTextStyle:
+                                                selectedLabelTextStyle,
+                                            headingTextStyle: headingTextStyle,
+                                            isSelected: selectedIndex == i,
+                                            width: size.maxWidth,
+                                            startPadding: startPadding,
+                                            autoFocus: selectedIndex == i,
+                                            onTap: () {
+                                              if (isDrawerOpen) {
+                                                Navigator.of(context).pop();
+                                              }
+                                              flexScaffold.setSelectedIndex(i);
+                                            },
+                                            flexTheme: flexTheme,
+                                          ),
+                                      //
+                                      // Add the trailing widget to the menu
+                                      if (trailing != null) trailing!,
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              // Add footer widget to menu
+                              footer: footer,
+                            ),
+                          ),
+                        ],
+                        // )
+                      ),
+                    )),
                   )),
-                )),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

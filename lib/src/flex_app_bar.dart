@@ -1355,62 +1355,64 @@ class FlexAppBarStyling extends StatelessWidget {
                 ? Border.all(color: effectiveBorderColor)
                 : Border(bottom: BorderSide(color: effectiveBorderColor)))
         : null;
-
-    return Column(
-      children: <Widget>[
-        SizedBox(height: effectiveTopPadding),
-        Padding(
-          padding: floatAppBar
-              ? EdgeInsetsDirectional.fromSTEB(
-                  floatPadding.start, 0, floatPadding.end, floatPadding.bottom)
-              : EdgeInsets.zero,
-          child: Material(
-            color: Colors.transparent,
-            elevation: elevation ?? theme.appBarTheme.elevation ?? 0,
-            shadowColor: shadowColor ?? Colors.transparent,
-            clipBehavior: Clip.antiAlias,
-            borderRadius: effectiveBorderRadius,
-            child: IfWrapper(
-              condition: blurred && (opacity < 1 || startOpacity < 1),
-              builder: (BuildContext context, Widget child) {
-                return ClipRect(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                    child: child,
+    // TODO(rydmike): Review if TraversalGroup is needed here.
+    return FocusTraversalGroup(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: effectiveTopPadding),
+          Padding(
+            padding: floatAppBar
+                ? EdgeInsetsDirectional.fromSTEB(floatPadding.start, 0,
+                    floatPadding.end, floatPadding.bottom)
+                : EdgeInsets.zero,
+            child: Material(
+              color: Colors.transparent,
+              elevation: elevation ?? theme.appBarTheme.elevation ?? 0,
+              shadowColor: shadowColor ?? Colors.transparent,
+              clipBehavior: Clip.antiAlias,
+              borderRadius: effectiveBorderRadius,
+              child: IfWrapper(
+                condition: blurred && (opacity < 1 || startOpacity < 1),
+                builder: (BuildContext context, Widget child) {
+                  return ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: child,
+                    ),
+                  );
+                },
+                child: Container(
+                  height: height -
+                      effectiveTopPadding -
+                      (floatAppBar ? floatPadding.bottom : 0),
+                  decoration: BoxDecoration(
+                    color: gradient ? null : color.withOpacity(opacity),
+                    borderRadius: effectiveBorderRadius,
+                    border: effectiveBorder,
+                    gradient: gradient
+                        ? LinearGradient(
+                            begin: AlignmentDirectional.centerStart,
+                            end: AlignmentDirectional.centerEnd,
+                            colors: <Color>[
+                              if (reverseGradient)
+                                endColor.withOpacity(opacity)
+                              else
+                                color.withOpacity(startOpacity),
+                              if (reverseGradient)
+                                color.withOpacity(startOpacity)
+                              else
+                                endColor.withOpacity(opacity),
+                            ],
+                          )
+                        : null,
                   ),
-                );
-              },
-              child: Container(
-                height: height -
-                    effectiveTopPadding -
-                    (floatAppBar ? floatPadding.bottom : 0),
-                decoration: BoxDecoration(
-                  color: gradient ? null : color.withOpacity(opacity),
-                  borderRadius: effectiveBorderRadius,
-                  border: effectiveBorder,
-                  gradient: gradient
-                      ? LinearGradient(
-                          begin: AlignmentDirectional.centerStart,
-                          end: AlignmentDirectional.centerEnd,
-                          colors: <Color>[
-                            if (reverseGradient)
-                              endColor.withOpacity(opacity)
-                            else
-                              color.withOpacity(startOpacity),
-                            if (reverseGradient)
-                              color.withOpacity(startOpacity)
-                            else
-                              endColor.withOpacity(opacity),
-                          ],
-                        )
-                      : null,
+                  child: child,
                 ),
-                child: child,
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

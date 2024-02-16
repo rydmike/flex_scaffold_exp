@@ -106,30 +106,33 @@ class FlexBottomBar extends StatelessWidget {
             curve: flexTheme.bottomAnimationCurve!,
             child: SizedBox(
               height: isBottomBarVisible ? effectiveToolBarHeight : 0.0,
-              child: Wrap(
-                children: <Widget>[
-                  if (customNavigationBar == null)
-                    if (effectiveType == FlexBottomType.cupertino)
-                      CupertinoBottomBar(
-                        destinations: flexScaffold.bottomDestinations,
-                        selectedIndex: flexScaffold.indexBottom.index,
-                        onDestinationSelected: flexScaffold.setBottomIndex,
-                      )
-                    else if (effectiveType == FlexBottomType.material3)
-                      Material3BottomBar(
-                        destinations: flexScaffold.bottomDestinations,
-                        selectedIndex: flexScaffold.indexBottom.index,
-                        onDestinationSelected: flexScaffold.setBottomIndex,
-                      )
+              // TODO(rydmike): Review if TraversalGroup is needed here.
+              child: FocusTraversalGroup(
+                child: Wrap(
+                  children: <Widget>[
+                    if (customNavigationBar == null)
+                      if (effectiveType == FlexBottomType.cupertino)
+                        CupertinoBottomBar(
+                          destinations: flexScaffold.bottomDestinations,
+                          selectedIndex: flexScaffold.indexBottom.index,
+                          onDestinationSelected: flexScaffold.setBottomIndex,
+                        )
+                      else if (effectiveType == FlexBottomType.material3)
+                        Material3BottomBar(
+                          destinations: flexScaffold.bottomDestinations,
+                          selectedIndex: flexScaffold.indexBottom.index,
+                          onDestinationSelected: flexScaffold.setBottomIndex,
+                        )
+                      else
+                        Material2BottomBar(
+                          destinations: flexScaffold.bottomDestinations,
+                          selectedIndex: flexScaffold.indexBottom.index,
+                          onDestinationSelected: flexScaffold.setBottomIndex,
+                        )
                     else
-                      Material2BottomBar(
-                        destinations: flexScaffold.bottomDestinations,
-                        selectedIndex: flexScaffold.indexBottom.index,
-                        onDestinationSelected: flexScaffold.setBottomIndex,
-                      )
-                  else
-                    customNavigationBar!,
-                ],
+                      customNavigationBar!,
+                  ],
+                ),
               ),
             ),
           )

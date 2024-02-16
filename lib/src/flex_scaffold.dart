@@ -634,8 +634,8 @@ class FlexScaffold extends StatefulWidget {
   ///
   /// If set to [DragStartBehavior.start], the drag behavior used for opening
   /// and closing a drawer will begin at the position where the drag gesture won
-  /// the arena. If set to [DragStartBehavior.down] it will begin at the position
-  /// where a down event is first detected.
+  /// the arena. If set to [DragStartBehavior.down] it will begin at the
+  /// position where a down event is first detected.
   ///
   /// In general, setting this to [DragStartBehavior.start] will make drag
   /// animation smoother and setting it to [DragStartBehavior.down] will make
@@ -696,7 +696,8 @@ class FlexScaffold extends StatefulWidget {
   /// Defaults to false.
   final bool extendBodyBehindAppBar;
 
-  /// The color to use for the scrim that obscures primary content while a drawer is open.
+  /// The color to use for the scrim that obscures primary content while a
+  /// drawer is open.
   ///
   /// If this is null, then [DrawerThemeData.scrimColor] is used. If that
   /// is also null, then it defaults to [Colors.black54].
@@ -1495,13 +1496,16 @@ class FlexScaffoldState extends State<FlexScaffold> {
               constraints: BoxConstraints(
                 maxWidth: flexTheme.menuWidth! + startPadding,
               ),
-              child: Material(
-                color: effectiveMenuBackgroundColor,
-                elevation: flexTheme.menuElevation ?? 0,
-                // TODO(rydmike): Review shadow and tint colors.
-                // shadowColor: Colors.pinkAccent,
-                // surfaceTintColor: Colors.pinkAccent,
-                child: widget.menu,
+              // TODO(rydmike): Review if TraversalGroup is needed here.
+              child: FocusTraversalGroup(
+                child: Material(
+                  color: effectiveMenuBackgroundColor,
+                  elevation: flexTheme.menuElevation ?? 0,
+                  // TODO(rydmike): Review shadow and tint colors.
+                  // shadowColor: Colors.pinkAccent,
+                  // surfaceTintColor: Colors.pinkAccent,
+                  child: widget.menu,
+                ),
               ),
             ),
             // Main part is an Expanded that contains a standard Scaffold.
@@ -1580,7 +1584,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Expanded(
-                      child: widget.body ?? const SizedBox(),
+                      // TODO(rydmike): Review if TraversalGroup is needed here.
+                      child: FocusTraversalGroup(
+                          child: widget.body ?? const SizedBox()),
                     ),
                     // The Sidebar when shown as a fixed item and it belongs
                     // to the body. Material default sidebar layout.
@@ -1590,12 +1596,15 @@ class FlexScaffoldState extends State<FlexScaffold> {
                       ConstrainedBox(
                         constraints:
                             BoxConstraints(maxWidth: flexTheme.sidebarWidth!),
-                        child: Material(
-                          color: flexTheme.sidebarBackgroundColor,
-                          elevation: flexTheme.sidebarElevation ??
-                              flexTheme.menuElevation ??
-                              0,
-                          child: widget.sidebar,
+                        // TODO(rydmike): Review if TraversalGroup is needed.
+                        child: FocusTraversalGroup(
+                          child: Material(
+                            color: flexTheme.sidebarBackgroundColor,
+                            elevation: flexTheme.sidebarElevation ??
+                                flexTheme.menuElevation ??
+                                0,
+                            child: widget.sidebar,
+                          ),
                         ),
                       ),
                   ],
