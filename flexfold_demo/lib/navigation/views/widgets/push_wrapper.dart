@@ -48,7 +48,7 @@ class PushWrapper extends ConsumerWidget {
           hasBorder: ref.watch(appBarBorderPod),
           showScreenSize: ref.watch(appBarShowScreenSizePod),
           // TODO(rydmike): Experimental AppBar feature, keep or not?
-          floatAppBar: ref.watch(appBarFloatPod),
+          detachedAppBar: ref.watch(appBarFloatPod),
           floatPadding: const EdgeInsetsDirectional.fromSTEB(3, 4, 3, 4),
           elevation: ref.watch(appBarFloatPod) ? 1 : 0,
           scrim: ref.watch(appBarScrimPod),

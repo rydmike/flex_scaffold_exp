@@ -88,57 +88,6 @@ const Color _kMaterialDarkSurface = Color(0xff121212);
 /// [automaticallyImplyLeading] to false. In that case a null leading widget
 /// will result in the middle/title widget stretching to start.
 ///
-/// This sample shows an [AppBar] with two simple actions. The first action
-/// opens a [SnackBar], while the second action navigates to a new page.
-///
-/// ```dart
-/// Widget build(BuildContext context) {
-///   return Scaffold(
-///     appBar: AppBar(
-///       title: const Text('AppBar Demo'),
-///       actions: <Widget>[
-///         IconButton(
-///           icon: const Icon(Icons.add_alert),
-///           tooltip: 'Show Snackbar',
-///           onPressed: () {
-///             ScaffoldMessenger.of(context).showSnackBar(
-///               const SnackBar(content: Text('This is a snackbar'))
-///             );
-///           },
-///         ),
-///         IconButton(
-///           icon: const Icon(Icons.navigate_next),
-///           tooltip: 'Go to the next page',
-///           onPressed: () {
-///             Navigator.push(context, MaterialPageRoute(
-///               builder: (BuildContext context) {
-///                 return Scaffold(
-///                   appBar: AppBar(
-///                     title: const Text('Next page'),
-///                   ),
-///                   body: const Center(
-///                     child: Text(
-///                       'This is the next page',
-///                       style: TextStyle(fontSize: 24),
-///                     ),
-///                   ),
-///                 );
-///               },
-///             ));
-///           },
-///         ),
-///       ],
-///     ),
-///     body: const Center(
-///       child: Text(
-///         'This is the home page',
-///         style: TextStyle(fontSize: 24),
-///       ),
-///     ),
-///   );
-/// }
-///```
-///
 /// See also:
 ///
 ///  * [Scaffold], which displays the [AppBar] in its [Scaffold.appBar] slot.
@@ -150,8 +99,6 @@ const Color _kMaterialDarkSurface = Color(0xff121212);
 ///  * [PopupMenuButton], to show a popup menu on the app bar, via [actions].
 ///  * [FlexibleSpaceBar], which is used with [flexibleSpace] when the app bar
 ///    can expand and collapse.
-///  * <https://material.io/design/components/app-bars-top.html>
-///  * Cookbook: [Place a floating app bar above a list](https://flutter.dev/docs/cookbook/lists/floating-app-bar)
 @immutable
 class FlexAppBar {
   /// Creates a property holder for a Material design app bar that will be
@@ -564,14 +511,14 @@ class FlexAppBar {
   /// The default configuration creates a stylish gradient app bar with no
   /// status bar scrim and a light transparency towards the end, and uses
   /// frosted glass effect for the transparency.
+  ///
+  /// See [AppBar] or [FlexAppBar] for full docs on properties.
   factory FlexAppBar.styled(
     /// The context is needed because the [FlexAppBar.styled] needs to know
     /// the theme for its styling, we must pass in current build context.
     BuildContext context, {
     // AppBar properties, see AppBar for documentation
     Key? key,
-
-    /// See [AppBar] or [FlexAppBar] for full docs on properties.
 
     /// A widget to display before the toolbar's [title].
     Widget? leading,
@@ -593,10 +540,6 @@ class FlexAppBar {
 
     /// A list of Widgets to display in a row after the [title] widget.
     List<Widget>? actions,
-
-    /// This widget is stacked behind the toolbar and the tab bar. Its height
-    /// will be the same as the app bar's overall height.
-    // Widget flexibleSpace,
 
     /// This widget appears across the bottom of the app bar.
     PreferredSizeWidget? bottom,
@@ -679,19 +622,17 @@ class FlexAppBar {
     SystemUiOverlayStyle? systemOverlayStyle,
 
     // *************************************************************************
-    // *************************************************************************
     // The FlexAppBar.styled custom style properties start here
     // *************************************************************************
-    // *************************************************************************
 
-    /// The amount of 'opacity' to be used on the styled app bar.
+    /// The amount of [opacity[ to be used on the styled app bar.
     ///
     /// Defaults to 1.0.
     double opacity = 1.0,
 
     /// Opacity value for the start color, defaults to 1.
     ///
-    /// This opacity value is only used when 'gradient' is used, it is often set
+    /// This opacity value is only used when [gradient] is used, it is often set
     /// to 1 for fully opaque value for the start of the gradient, beginning at
     /// the start side of the app bar. This makes it easier to see the leading
     /// action widget and the title, that is often also at the beginning of
@@ -704,7 +645,7 @@ class FlexAppBar {
     /// that is often used on Cupertino app bars when it has some transparency.
     ///
     /// This filter is bit expensive and is only applied when 'blurred' is true,
-    /// and when 'opacity' or 'startOpacity' is less than 1.
+    /// and when [opacity] or [startOpacity] is less than 1.
     ///
     /// Defaults to false.
     bool blurred = false,
@@ -714,7 +655,7 @@ class FlexAppBar {
     /// The start color for the gradient is the app bar background color.
     /// The color used for the end gradient is an automatically computed shade
     /// of the app bar background color. The shade strength can be modified
-    /// with 'gradientPercentage'.
+    /// with [gradientPercentage].
     ///
     /// Defaults to false.
     bool gradient = false,
@@ -725,7 +666,7 @@ class FlexAppBar {
     /// In light theme the color hue will be made lighter by the given
     /// percentage value. In dark theme the app bar color hue will be made
     /// darker by the same percentage amount. The gradient is only applied
-    /// if 'gradient' is true.
+    /// if [gradient] is true.
     ///
     /// Defaults to 10 (%).
     int gradientPercentage = 10,
@@ -734,7 +675,7 @@ class FlexAppBar {
     ///
     /// The normal direction starts with app bar color from the start of the
     /// app bar and ends in the computed gradient color. Setting
-    /// 'reverseGradient' to true reverses the order.
+    /// [reverseGradient] to true reverses the order.
     ///
     /// This is useful when multiple styled app bars are used in a row layout
     /// and we want the gradients to flow from one to the next app bar by
@@ -743,43 +684,44 @@ class FlexAppBar {
     /// Defaults to false.
     bool reverseGradient = false,
 
-    /// Use a standard scrim on the top status bar when 'floatAppBar' is false.
+    /// Use a standard scrim on the top status bar when [detachedAppBar]
+    /// is false.
     ///
     /// By default, the styled app bar does not use a scrim on the status bar.
     ///
     /// If set to true, the default scrim of alpha (0x40) and black color will
-    /// will be added to the styled app bar, provided 'floatAppBar' is false
-    /// and 'statusBarColor' is null. If 'statusBarColor' is
+    /// will be added to the styled app bar, provided [detachedAppBar] is false
+    /// and [statusBarColor] is null. If [statusBarColor] is
     /// specified, it is up to the used color to include the desired alpha value
     /// for the status bar as well.
     bool scrim = false,
 
-    /// The scrim alpha value used when 'floatAppBar' is true.
+    /// The scrim alpha value used when [detachedAppBar] is true.
     ///
     /// Defaults to Hex CC. Value must be from hex 00 (0) to hex FF (255).
-    int floatScrim = 0xCC,
+    int detachedScrim = 0xCC,
 
-    /// The styled app bar is floating and not connected to screen edges.
+    /// The styled app bar is detached and not connected to screen edges.
     ///
     /// This type of app bar works best on devices that have a system status
     /// bar on top of the app bar, like iOS and Android has.
     ///
     /// Defaults to false.
-    bool floatAppBar = false,
+    bool detachedAppBar = false,
 
     /// The color of the status bar of the style app bar.
     ///
     /// By default the top 'statusBarColor' is null and its color is
-    /// determined by the app bar background color and 'floatAppBar'
+    /// determined by the app bar background color and [detachedAppBar]
     /// property.
     ///
-    /// If the styled app bar has 'floatAppBar' set to false,
+    /// If the styled app bar has [detachedAppBar] set to false,
     /// meaning it is a normal app bar that touches the edges of the screen,
     /// then the 'statusBarColor' will be equal to the current app bar
-    /// background color. If 'floatAppBar' is true, then the 'statusBarColor'
+    /// background color. If [detachedAppBar] is true, then the [statusBarColor]
     /// will be equal to current theme scaffold background color.
     ///
-    /// If a 'statusBarColor' is provided, then that color will always
+    /// If a [statusBarColor] is provided, then that color will always
     /// override the built in default color behavior and be used.
     Color? statusBarColor,
 
@@ -799,24 +741,24 @@ class FlexAppBar {
     /// you will need symmetric values from 2 to 6 for a nice floating and
     /// form the sides disconnected look.
     ///
-    /// Defaults to EdgeInsetsDirectional.fromSTEB(3, 0, 3, 0).
+    /// Defaults to `EdgeInsetsDirectional.fromSTEB(3, 0, 3, 0)`.
     EdgeInsetsDirectional floatPadding =
         const EdgeInsetsDirectional.fromSTEB(3, 0, 3, 0),
 
     /// Draw a border on the styled app bar.
     ///
-    /// If 'floatAppBar' is true, the border will be a border all around the
-    /// styled app bar, if 'floatAppBar' is false, the border will just be a
+    /// If [detachedAppBar] is true, the border will be a border all around the
+    /// styled app bar, if [detachedAppBar] is false, the border will just be a
     /// bottom border line on the styled app bar.
     ///
     /// defaults to false.
     bool hasBorder = false,
 
-    /// Identical in behavior to 'hasBorder', but the border is only drawn when
+    /// Identical in behavior to [hasBorder], but the border is only drawn when
     /// the app bar is dark/black or white, or uses surface or background color.
     ///
     /// A colored app bar usually does not need any border, but one that is the
-    /// same color as the background, or very close to it, looks better when
+    /// same color as the background, or very close to it, may look better when
     /// there is some separation between it and the background.
     ///
     /// Defaults to false.
@@ -824,21 +766,21 @@ class FlexAppBar {
 
     /// The border to use on the styled app bar.
     ///
-    /// The border is only drawn when 'hasBorder' is true or
+    /// The border is only drawn when [hasBorder] is true or
     /// 'hasBorderOnSurface' is true and app bar color has a surface like
     /// color.
     ///
-    /// If 'border' is null and 'floatAppBar' is false, then it defaults to a
-    /// 1 dp bottom border line using 'borderColor'.
-    /// If 'border' is null and 'floatAppBar' is true, it defaults to a 1 dp
-    /// rectangle with rounded corners with a border radius of 'borderRadius'
-    /// using 'borderColor'.
+    /// If [border] is null and [detachedAppBar] is false, then it defaults to a
+    /// 1 dp bottom border line using [borderColor].
+    /// If [border] is null and [detachedAppBar] is true, it defaults to a 1 dp
+    /// rectangle with rounded corners with a border radius of [borderRadius]
+    /// using [borderColor].
     Border? border,
 
     /// The border radius geometry used for the app bar border when
-    /// 'floatAppBar' is true.
+    /// [detachedAppBar] is true.
     ///
-    /// If 'floatAppBar' is true, then it defaults to
+    /// If [detachedAppBar] is true, then it defaults to
     /// BorderRadius.circular(8), otherwise it defaults to null.
     BorderRadiusGeometry? borderRadius,
 
@@ -865,7 +807,7 @@ class FlexAppBar {
         'Start opacity must be from 0 to 1.');
     assert(gradientPercentage >= 0 && gradientPercentage <= 100,
         'endPercentage must be >= 0 and <= 100');
-    assert(floatScrim >= 0 && floatScrim <= 255,
+    assert(detachedScrim >= 0 && detachedScrim <= 255,
         'looseScrim must be >= 0 and <= 255');
     assert(
         !automaticallyImplyTitle || title == null,
@@ -939,13 +881,13 @@ class FlexAppBar {
     }
 
     final Color effectiveStatusBarColor = statusBarColor ??
-        (floatAppBar
-            ? theme.scaffoldBackgroundColor.withAlpha(floatScrim)
+        (detachedAppBar
+            ? theme.scaffoldBackgroundColor.withAlpha(detachedScrim)
             : scrim
                 ? const Color(0x40000000)
                 : Colors.transparent);
     final Brightness statusBarBrightness = ThemeData.estimateBrightnessForColor(
-        floatAppBar ? theme.scaffoldBackgroundColor : appBarColor);
+        detachedAppBar ? theme.scaffoldBackgroundColor : appBarColor);
     final Brightness statusBarIconBrightness =
         statusBarBrightness == Brightness.light
             ? Brightness.dark
@@ -1003,7 +945,7 @@ class FlexAppBar {
         blurred: blurred,
         gradient: gradient,
         reverseGradient: reverseGradient,
-        floatAppBar: floatAppBar,
+        floatAppBar: detachedAppBar,
         floatPadding: floatPadding,
         hasBorder: effectiveBottomBorder,
         border: border,
