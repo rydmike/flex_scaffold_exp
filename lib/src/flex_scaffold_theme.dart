@@ -986,7 +986,6 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
       bottomBlur: bottomBlur ?? false,
       bottomOpacity: bottomOpacity ?? 1.00,
       bottomTopBorder: bottomTopBorder ?? false,
-      // TODO(rydmike): Review default against M2 & M3 for icons and text.
       // The default unselected menu icon styles, provided values from the
       // passed in IconThemeData are used if the theme was not null and any
       // property in it had a none null value. If some value is missing they
