@@ -11,15 +11,15 @@ class AppBarFloatSwitch extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SwitchTileTooltip(
-      title: const Text('Use float app bar'),
+      title: const Text('Detached app bar'),
       subtitle: const Text(
-        'The app bar floats disconnected from the screen edges.',
+        'The app bar is detached from the screen edges.',
       ),
       value: ref.watch(appBarFloatPod),
       onChanged: (bool value) =>
           ref.read(appBarFloatPod.notifier).state = value,
       tooltipEnabled: ref.watch(useTooltipsPod),
-      tooltip: 'Flexfold(appBar: FlexfoldAppBar.styled(floatAppBar: '
+      tooltip: 'Flexfold(appBar: FlexfoldAppBar.styled(detachedAppBar: '
           '${ref.watch(appBarFloatPod)}))\n\n'
           'Equivalent for Flexfold() properties menuAppBar and sidebarAppBar',
     );
