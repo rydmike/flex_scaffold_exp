@@ -1006,12 +1006,11 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
           opacity: selectedIconTheme?.opacity ?? 1.0),
       // The default unselected label text styles with a merge of the provided
       // style, if any style was given.
-      // TODO(rydmike): Review default against M2 & M3 for colors.
       labelTextStyle: theme.textTheme.bodyLarge!.merge(labelTextStyle),
       // The default selected label text styles with a merge of the provided
       // style, if any style was given.
       selectedLabelTextStyle: theme.textTheme.bodyLarge!
-          .copyWith(color: theme.colorScheme.onPrimaryContainer)
+          .copyWith(color: theme.colorScheme.onSecondaryContainer)
           .merge(selectedLabelTextStyle),
       // style, if any style was given.
       headingTextStyle: theme.textTheme.bodyLarge!
