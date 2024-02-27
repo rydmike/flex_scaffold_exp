@@ -23,8 +23,9 @@ class FlexDestination {
     this.tooltip,
     this.heading,
     this.route = '/',
-    this.maybePush = false,
-    this.alwaysPush = false,
+    String? routeFullPage,
+    this.maybeFullPage = false,
+    this.alwaysFullPage = false,
     this.hasSidebar = false,
     this.hasFloatingActionButton = false,
     this.noAppBar = false,
@@ -32,7 +33,8 @@ class FlexDestination {
     this.inBottomNavigation = false,
     this.dividerBefore = false,
     this.dividerAfter = false,
-  }) : selectedIcon = selectedIcon ?? icon;
+  })  : selectedIcon = selectedIcon ?? icon,
+        routeFullPage = routeFullPage ?? route;
 
   /// The icon widget for the icon used by the destination. Typically an
   /// [Icon] widget.
@@ -80,92 +82,129 @@ class FlexDestination {
   /// if there is one.
   final Widget? heading;
 
-  /// A named route for the destination. Typically a path segment.
+  /// The route for the destination.
   ///
-  /// You can provide named route strings to destinations. You can use them
-  /// to get named routes for your destination index and route with
-  /// named routing to the destinations.
+  /// Typically a top level a path like /about, /settings, /shop.
+  ///
+  /// You can provide route strings to destinations and use them
+  /// to get destination routes for navigation solutions like GoRouter and
+  /// AutoRoute, for your destination index and optionally route with the
+  /// paths if so needed too.
+  ///
+  /// The [route] is used as destination for a route in [FlexScaffold] that
+  /// should be inside the [FlexScaffold] body. You can provide another route
+  /// that should be used for the same destination when it is opened as a modal
+  /// full screen destination. If you do not provide a [routeFullPage] the
+  /// [route] is used for both.
   final String route;
 
+  /// The full screen page route for the destination.
+  ///
+  /// Typically a top level a path segment like /aboutpage, /settingspage.
+  ///
+  /// This is a route that is used for the destination when it is opened as a
+  /// modal full screen destination on top of the [FlexScaffold] navigation.
+  ///
+  /// You should give his route if you want to open some destinations as a
+  /// full page modal screen. This is typically used on phone size media when
+  /// you open a destination from the Drawer that is not a part of the bottom
+  /// navigation.
+  final String routeFullPage;
+
   /// If the destination should be opened as a modal screen pushed on top of
-  /// the top level destinations when it is selected from the Drawer in phone
-  /// sized media, set [maybePush] to true.
+  /// the top level destinations, when it is selected from the Drawer in phone
+  /// sized media, set [maybeFullPage] to true.
   ///
   /// That a screen should be opened as a modal screen means it should be pushed
-  /// on top of the other screens with a back button as only option to return
-  /// back to the FlexScaffold screens.
+  /// on top of the other screens with a back or close button as only option to
+  /// return back to the [FlexScaffold] screens.
   ///
-  /// A screen that is always pushed into the body content of the FlexScaffold
-  /// should never set this to true. This almost always applies to destinations
-  /// that are [inBottomNavigation]. For targets not [inBottomNavigation],
-  /// the situation depends on desired UX. If the target when opened from the
-  /// Drawer should open as a modal screen when selected from the FlexScaffold
-  /// Drawer, then set [maybePush] to true for the destination definition. If
-  /// the destination should open in the body part of the FlexScaffold Drawer
-  /// navigation on phone size, then set [maybePush] to false.
+  /// A screen that is always pushed into the body content of the [FlexScaffold]
+  /// shell navigator should always keep this as false.
   ///
-  /// Destinations where [maybePush] is true, will only cause
-  /// [FlexScaffold.onDestination] to return [FlexTarget.preferPush]
-  /// set to true, when [maybePush] is true and the destination was selected
-  /// from the Drawer and media size is phone determined to be phone sized.
+  /// This always applies to destinations that are in the [inBottomNavigation].
+  /// For targets not [inBottomNavigation], the situation depends on desired UX.
+  /// If the target, when opened from the Drawer should open as a modal screen
+  /// when selected from the [FlexScaffold] Drawer, then set [maybeFullPage] to
+  /// true for the destination definition.
+  ///
+  /// If the destination should open in the body part of the FlexScaffold Drawer
+  /// navigation on phone size, then keep [maybeFullPage] to false (default).
+  ///
+  /// Destinations where [maybeFullPage] is true, will only cause
+  /// [FlexScaffold.onDestination] to return [FlexTarget.wantsFullPage]
+  /// set to true, when [maybeFullPage] is true and the destination was selected
+  /// from the Drawer and media size was determined to be phone sized.
+  ///
   /// For all other selections, from Rail, Menu and Bottom navigation bar,
   /// it will be returned as false.
   ///
-  /// It is up to the application using FlexScaffold to actually implement the
+  /// It is up to the application using [FlexScaffold] to actually implement the
   /// desired navigation behavior. This parameter is only used to define the
-  /// design intent.
+  /// intent.
   ///
   /// Defaults to false.
-  final bool maybePush;
+  final bool maybeFullPage;
 
   /// If the destination should always be opened as a modal screen when it is
-  /// selected in Flexfold, set [alwaysPush] to true.
+  /// selected in [FlexScaffold], set [alwaysFullPage] to true.
   ///
   /// That a screen should be opened as a modal screen means it should be pushed
-  /// on top of the Flexfold scaffold with a back or close button as only
-  /// option to return back to the Flexfold scaffold screen.
+  /// on top of the [FlexScaffold] scaffold with a back or close button as only
+  /// option to return back to the FlexScaffold scaffold screen.
   ///
   /// A screen that is always pushed into the body content of the FlexScaffold
   /// should never set this to true. This almost always applies to destinations
   /// that are [inBottomNavigation]. For targets not [inBottomNavigation], the
   /// situation depends on desired UX. If the target when selected in
-  /// FlexScaffold should open as a modal screen, then set [alwaysPush] to
+  /// FlexScaffold should open as a modal screen, then set [alwaysFullPage] to
   /// true for the destination definition. If the destination should open in
-  /// the body part of the Flexfold, then keep [alwaysPush] false.
+  /// the body part of the FlexScaffold, then keep [alwaysFullPage] false.
   ///
-  /// Destinations where [alwaysPush] is true, will always cause
-  /// [FlexScaffold.onDestination] to return [FlexTarget.preferPush]
+  /// Destinations where [alwaysFullPage] is true, will always cause
+  /// [FlexScaffold.onDestination] to return [FlexTarget.wantsFullPage]
   /// set to true, this happens regardless if the destination was clicked
   /// on from the Drawer, Rail, Menu or Bottom navigation bar.
   ///
-  /// It is up to the application using Flexfold to actually implement the
-  /// desired navigation behavior. This parameter is only used to define the
-  /// design intent.
+  /// It is up to the application using [FlexScaffold]  to actually implement
+  /// the desired navigation behavior. This parameter is only used to define the
+  /// intent.
   ///
   /// Defaults to false.
-  final bool alwaysPush;
+  final bool alwaysFullPage;
 
-  /// Destination is also used as a destination in the bottom navigation bar.
+  /// The destination is used as a destination in the bottom navigation bar.
   ///
   /// By default destinations are visible in the Drawer, Rail and Menu, but not
   /// in the bottom navigation bar, you have to explicitly define which
-  /// destinations you want to have in the bottom bar, there should be 2 to 5,
-  /// typically 3 or 4. It is possible the squeeze in 6 on modern large phones,
+  /// destinations you want to have in the bottom navigation bar, there should
+  /// be two to five of them, typically three or four is nice. Using 5 may feel
+  /// cramped and six is almost always too much. It is possible the squeeze in
+  /// six top level bottom navigation destinations on modern large phones,
   /// but it is not recommended.
   final bool inBottomNavigation;
 
   /// This destination has a side bar.
   ///
+  /// If set to true, opening and closing the end side bar will be enabled for
+  /// this destination. If set to false, the end side bar will not be enabled.
+  ///
   /// Defaults to false.
   final bool hasSidebar;
 
-  /// This destination has a floating action button. Defaults to false.
+  /// This destination has a floating action button.
+  ///
+  /// If set to true, the floating action button will be enabled for this
+  /// destination. If set to false, the floating action button will not be
+  /// enabled.
+  ///
+  /// Defaults to false.
   final bool hasFloatingActionButton;
 
   /// This destination has no [AppBar].
   ///
-  /// By default all destinations in Flexfold gets an app bar. If an app bar is
-  /// not provided a default one is created. The default app bar only
+  /// By default all destinations in FlexScaffold gets an app bar. If an app bar
+  /// is not provided, a default one is created. The default app bar only
   /// has the required menu button to operate the drawer and menu.
   ///
   /// In some situations you might not want have an appbar for a destination
@@ -174,34 +213,38 @@ class FlexDestination {
   /// destination's body and do not want any app bar provided by FlexScaffold.
   /// For such destinations set [noAppBar] to false.
   ///
-  /// Only AppBar's provided by the FlexScaffold can be a part of the layout
-  /// shell that does not change or transition when you navigate to a new
-  /// destination. You can always keep the AppBar as part of the elements that
+  /// Only AppBars provided by the FlexScaffold can be a part of the layout
+  /// shell that do not change or transition when you navigate to a new
+  /// destination.
+  ///
+  /// You can always keep the AppBar as part of the elements that
   /// are included in destination navigated to, as you would on a typical
-  /// mobile UI where the entire screen changes. With FlexScaffold this is
-  /// typically not the intent and we only want transitions on the content that
-  /// is changed. Bottom bar stays put, but content transitions. With
-  /// FlexScaffold and using its AppBar, you get this effect on the AppBar as
-  /// well. You can however set this to false, and include the AppBar in the
-  /// destination as well. If you do so, you will have to provide required
-  /// actions to operate the drawers manually. The examples and docs
-  /// show you how to do this.
+  /// mobile UI where the entire screen changes.
+  ///
+  /// With [FlexScaffold] this is typically not the intent and we only want
+  /// transitions on the content that is changed. Bottom bar stays put,
+  /// but content transitions. With [FlexScaffold] and using its AppBar, you
+  /// get this effect on the AppBar as well. You can however set this
+  /// [noAppBar] to true, and include the AppBar in the destination instead.
+  /// If you do so, you will have to provide required actions to operate the
+  /// menu and drawers manually. The examples and docs show you how to do this.
   ///
   /// Defaults to false.
   final bool noAppBar;
 
-  /// This destination has an app bar that does not show its title
-  /// and a transparent background.
+  /// This destination has an [AppBar] but it does not show the destination
+  /// title automatically and it also uses a transparent background.
   ///
-  /// The leading and widget action widgets will still be shown.
+  /// The leading and widget action widgets will still be shown and allow you
+  /// to operate the menus and drawers.
   ///
-  /// If [noAppBar] is false, this property has no effect.
+  /// If [noAppBar] is true, this property has no effect.
   final bool noAppBarTitle;
 
-  /// In a rail or menu, draw a divider before the destination
+  /// In a rail or menu, draw a divider before the destination.
   final bool dividerBefore;
 
-  /// In a rail or menu, draw a divider after the destination
+  /// In a rail or menu, draw a divider after the destination.
   final bool dividerAfter;
 
   /// Override the equality operator.
@@ -216,8 +259,9 @@ class FlexDestination {
         other.tooltip == tooltip &&
         other.heading == heading &&
         other.route == route &&
-        other.maybePush == maybePush &&
-        other.alwaysPush == alwaysPush &&
+        other.routeFullPage == routeFullPage &&
+        other.maybeFullPage == maybeFullPage &&
+        other.alwaysFullPage == alwaysFullPage &&
         other.hasSidebar == hasSidebar &&
         other.hasFloatingActionButton == hasFloatingActionButton &&
         other.noAppBar == noAppBar &&
@@ -236,8 +280,9 @@ class FlexDestination {
         tooltip,
         heading,
         route,
-        maybePush,
-        alwaysPush,
+        routeFullPage,
+        maybeFullPage,
+        alwaysFullPage,
         hasSidebar,
         hasFloatingActionButton,
         noAppBar,
@@ -252,8 +297,8 @@ class FlexDestination {
 ///
 /// The [FlexNavigation.code] and
 /// [FlexNavigation.custom] options can be assigned in code when
-/// manually navigating via code to a Flexfold destination, e.g. via in app
-/// links or actions that navigates to a Flexfold destination. The code
+/// manually navigating via code to a FlexScaffold destination, e.g. via in app
+/// links or actions that navigates to a FlexScaffold destination. The code
 /// and custom sources can then be used to make a different navigation
 /// transition for such navigation. They have no other purpose than this.
 /// Typically, the code option could be used to indicate that the built-in
@@ -281,13 +326,13 @@ enum FlexNavigation {
 
   /// Navigation occurred because it was done programmatically.
   ///
-  /// Flexfold never sets this, but can be used for programmatic custom
-  /// transitions.
+  /// FlexScaffold never sets this, but it can be used for custom transitions.
+  /// used when manually navigating via code to a FlexScaffold destination.
   code,
 
   /// Custom navigation event.
   ///
-  /// Flexfold never sets this, but can be used for programmatic and custom
+  /// FlexScaffold never sets this, but can be used for programmatic and custom
   /// transitions.
   custom,
 }

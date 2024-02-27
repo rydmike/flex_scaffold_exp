@@ -18,7 +18,7 @@ import '../../tabs/views/pages/tab_modal.dart';
 import '../../tabs/views/pages/tabs_screen.dart';
 import '../../theme/views/pages/theme_page.dart';
 import '../constants/routes.dart';
-import '../views/pages/layout_shell.dart';
+import '../views/pages/navigation_shell.dart';
 import '../views/widgets/push_wrapper.dart';
 
 // Set to true to observe debug prints. In release mode this compile time
@@ -176,7 +176,7 @@ class AppRouter {
         builder: (BuildContext context, GoRouterState state, Widget child) {
           return
               // DirectionalityWrapper(child:
-              LayoutShell(body: child
+              NavigationShell(body: child
                   // ),
                   );
         },

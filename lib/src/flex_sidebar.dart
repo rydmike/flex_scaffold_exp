@@ -139,7 +139,7 @@ class _SideBar extends StatelessWidget {
       minWidth: 0,
       maxWidth: isEndDrawerOpen ? null : sidebarWidth,
       // The Container is used to draw an edge on the drawer side facing the
-      // body, this is used, when so configured in the Flexfold constructor.
+      // body, this is used, when so configured in the FlexScaffold constructor.
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: isEndDrawerOpen && useDrawerBorderEdge
@@ -198,7 +198,7 @@ class _SidebarAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // If no FlexfoldAppBar was given, we make a default one, we need it
+    // If no FlexScaffoldAppBar was given, we make a default one, we need it
     // for the control button, even if nothing else is used.
     final FlexAppBar flexAppBar = sidebarAppBar ?? const FlexAppBar();
 
@@ -223,7 +223,7 @@ class _SidebarAppBar extends StatelessWidget {
           height: kToolbarHeight + topPadding,
           color: scaffoldColor,
         ),
-        // Convert the FlexfoldAppBar data object to a real AppBar
+        // Convert the FlexScaffoldAppBar data object to a real AppBar
         flexAppBar.toAppBar(
           // We never want an automatic leading widget, so we override it to
           // false, but if some leading Widget is explicitly passed in for the

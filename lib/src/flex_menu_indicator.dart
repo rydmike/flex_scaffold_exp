@@ -100,7 +100,7 @@ class FlexMenuIndicator {
     }
   }
 
-  /// The type of Flexfold Shape.
+  /// The type of FlexScaffold Shape.
   ///
   /// Default to [FlexIndicatorStyle.stadium].
   final FlexIndicatorStyle highlightType;
@@ -147,7 +147,7 @@ class FlexMenuIndicator {
 
   /// Return the margins to be used with the menu highlight shape.
   ///
-  /// Different shape type require different margins. FlexfoldMenuHighlight
+  /// Different shape type require different margins. FlexScaffoldMenuHighlight
   /// creates suitable default margins for the ShapeBorders it creates.
   EdgeInsetsDirectional get margins =>
       EdgeInsetsDirectional.fromSTEB(_start, _top, _end, _bottom);

@@ -16,16 +16,16 @@ const Color _kMaterialDarkSurface = Color(0xff121212);
 ///
 /// Some standard app bar properties must be overridden by [FlexScaffold]
 /// scaffold, hence we are not giving it an actual final [AppBar] when we
-/// instantiate Flexfold, we just use a class with app bar identical properties,
-/// that has no widget layout or app bar methods. It is just a data class to
-/// tell the [FlexScaffold] scaffold what kind of app bar we want it to build
-/// later.
+/// instantiate FlexScaffold, we just use a class with app bar identical
+/// properties, that has no widget layout or app bar methods. It is just a data
+/// class to tell the [FlexScaffold] scaffold what kind of app bar we want it
+/// to build later.
 ///
 /// The [FlexAppBar] has the same features as a normal [AppBar], but
-/// Flexfold needs to inserts some properties required by the [FlexScaffold]
+/// FlexScaffold needs to inserts some properties required by the [FlexScaffold]
 /// scaffold navigation menu handling, this also imposes some limitations.
 /// When [FlexAppBar] is used in [FlexScaffold] the [automaticallyImplyLeading]
-/// property has no effect. Flexfold determines what is needed when it
+/// property has no effect. FlexScaffold determines what is needed when it
 /// comes to the [leading] widget for the [FlexScaffold.appBar] and the
 /// [FlexScaffold.appBar] app bars. It also determines when it needs to
 /// create the last action in [actions] for the [FlexScaffold.sidebarAppBar].
@@ -40,11 +40,11 @@ const Color _kMaterialDarkSurface = Color(0xff121212);
 /// [FlexAppBar] for this purposes. However, if you are using the
 /// [FlexAppBar.styled] factory to make a styled [FlexAppBar] data object,
 /// for your [FlexScaffold] then you can also use it to create app bars for
-/// routes and screens that exists outside the Flexfold destinations with the
-/// same factory and then convert them to AppBars as
+/// routes and screens that exists outside the FlexScaffold destinations with
+/// the same factory and then convert them to AppBars as
 /// FlexAppBar.styled(...).toAppBar(...), to get app bar designs for these
 /// screens that matches the ones you used for screens that are a part of your
-/// Flexfold destinations.
+/// FlexScaffold destinations.
 ///
 /// The comments below about AppBar usage and constructor properties are copied
 /// from the Flutter SDK repository and provided as a convenience for code
@@ -982,8 +982,8 @@ class FlexAppBar {
   /// Return an actual [AppBar] widget from the [FlexAppBar] data object.
   ///
   /// Any pre-existing property values in the [FlexAppBar] object can
-  /// be overridden before creating the [AppBar]. Flexfold uses this to adjust
-  /// leading and actions widget's functionality before it constructs its
+  /// be overridden before creating the [AppBar]. FlexScaffold uses this to
+  /// adjust leading and actions widget's functionality before it constructs its
   /// actual app bars.
   AppBar toAppBar({
     Key? key,
@@ -1047,8 +1047,8 @@ class FlexAppBar {
   /// Return an actual [SliverAppBar] widget from the [FlexAppBar] data object.
   ///
   /// Any pre-existing property values in the [FlexAppBar] object can
-  /// be overridden before creating the [AppBar]. Flexfold uses this to adjust
-  /// leading and actions widget's functionality before it constructs its
+  /// be overridden before creating the [AppBar]. FlexScaffold uses this to
+  /// adjust leading and actions widget's functionality before it constructs its
   /// actual app bars.
   SliverAppBar _toSliverAppBar({
     Key? key,

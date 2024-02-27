@@ -140,10 +140,10 @@ class FlexBottomBar extends StatelessWidget {
   }
 }
 
-/// The Material style bottom navigation bar used by Flexfold.
+/// The Material style bottom navigation bar used by FlexScaffold.
 ///
-/// The style of it is controlled by the FlexfoldTheme, its styling properties
-/// goes a bit beyond the the standard because it has opacity and blur
+/// The style of it is controlled by the FlexScaffoldTheme, its styling
+/// properties goes a bit beyond the the standard, it has opacity and  blur
 /// properties as well as top border property. The Material bottom navigation
 /// bar can thus style wise be made to imitate a CupertinoBottomBar.
 class Material2BottomBar extends StatelessWidget {
@@ -170,7 +170,7 @@ class Material2BottomBar extends StatelessWidget {
 
   /// Called when one of the [destinations] is selected.
   ///
-  /// The stateful widget that creates the Flexfold navigation needs to keep
+  /// The stateful widget that creates the FlexScaffold navigation needs to keep
   /// track of the index of the selected [FlexDestination] and call
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
@@ -254,10 +254,10 @@ class Material2BottomBar extends StatelessWidget {
   }
 }
 
-/// The Material style bottom navigation bar used by Flexfold.
+/// The Material style bottom navigation bar used by FlexScaffold.
 ///
-/// The style of it is controlled by the FlexfoldTheme, its styling properties
-/// goes a bit beyond the the standard because it has opacity and blur
+/// The style of it is controlled by the FlexScaffoldTheme, its styling
+/// properties goes a bit beyond the the standard. It has opacity and blur
 /// properties as well as top border property. The Material bottom navigation
 /// bar can thus style wise be made to imitate a CupertinoBottomBar.
 class Material3BottomBar extends StatelessWidget {
@@ -284,7 +284,7 @@ class Material3BottomBar extends StatelessWidget {
 
   /// Called when one of the [destinations] is selected.
   ///
-  /// The stateful widget that creates the Flexfold navigation needs to keep
+  /// The stateful widget that creates the FlexScaffold navigation needs to keep
   /// track of the index of the selected [FlexDestination] and call
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
@@ -369,12 +369,13 @@ class Material3BottomBar extends StatelessWidget {
   }
 }
 
-/// The Cupertino style bottom navigation bar used by Flexfold.
+/// The Cupertino style bottom navigation bar used by FlexScaffold.
 ///
-/// The style of it is controlled by the FlexfoldTheme, styling of a
+/// The style of it is controlled by the FlexScaffoldTheme, styling of a
 /// CupertinoTabBar is limited as it should look and work in very specific way.
 /// It can be made transparent and when it is it always uses blur filter, the
-/// usage of the top side border can also be controlled via the FlexfoldTheme.
+/// usage of the top side border can also be controlled via the
+/// [FlexScaffoldTheme].
 class CupertinoBottomBar extends StatelessWidget {
   /// Default constructor.
   const CupertinoBottomBar({
@@ -402,7 +403,7 @@ class CupertinoBottomBar extends StatelessWidget {
 
   /// Called when one of the [destinations] is selected.
   ///
-  /// The stateful widget that creates the Flexfold navigation needs to keep
+  /// The stateful widget that creates the FlexScaffold navigation needs to keep
   /// track of the index of the selected [FlexDestination] and call
   /// `setState` to rebuild the menu, drawer, rail or bottom bar
   /// with the new [selectedIndex].
@@ -424,8 +425,8 @@ class CupertinoBottomBar extends StatelessWidget {
             scheme.background)
         .withOpacity(opacity);
 
-    // The Flexfold CupertinoTabBar does not support all theming or style
-    // options in FlexfoldTheme. It is a cupertino tab bar but it will
+    // The FlexScaffold CupertinoTabBar does not support all theming or style
+    // options in FlexScaffoldTheme. It is a cupertino tab bar but it will
     // will respond to any normal Cupertino theme applied to it and the
     // BottomNavigationBarItem will also follow standard themes.
     return CupertinoTabBar(

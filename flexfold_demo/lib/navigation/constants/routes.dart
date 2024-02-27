@@ -108,7 +108,7 @@ class Routes {
       route: Routes.preview,
       icon: Icon(AppIcons.preview),
       selectedIcon: Icon(AppIcons.previewSelected),
-      maybePush: true,
+      maybeFullPage: true,
       dividerBefore: true,
     ),
     FlexDestination(
@@ -116,7 +116,7 @@ class Routes {
       route: Routes.help,
       icon: Icon(AppIcons.help),
       selectedIcon: Icon(AppIcons.helpSelected),
-      maybePush: true,
+      maybeFullPage: true,
     ),
     FlexDestination(
       label: Routes.aboutLabel,
@@ -124,7 +124,7 @@ class Routes {
       route: Routes.about,
       icon: Icon(AppIcons.about),
       selectedIcon: Icon(AppIcons.aboutSelected),
-      maybePush: true,
+      maybeFullPage: true,
     ),
   ];
 
@@ -138,7 +138,7 @@ class Routes {
     label: Routes.homeLabel,
     source: FlexNavigation.menu,
     reverse: true,
-    preferPush: false,
+    wantsFullPage: false,
   );
 
   // A destination we can use to go to first bottom destination.
@@ -151,6 +151,6 @@ class Routes {
     label: Routes.infoLabel,
     source: FlexNavigation.bottom,
     reverse: true,
-    preferPush: false,
+    wantsFullPage: false,
   );
 }

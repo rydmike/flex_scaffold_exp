@@ -58,7 +58,8 @@ class PageHeader extends StatelessWidget {
                 '${destination.source.toString().dotTail.capitalize}'),
             SizedText(
                 'Direction: ${destination.reverse ? 'Reverse' : 'Forward'}'),
-            SizedText('Prefer push: ${destination.preferPush ? 'Yes' : 'No'}'),
+            SizedText(
+                'Prefer push: ${destination.wantsFullPage ? 'Yes' : 'No'}'),
           ],
         ),
       ],

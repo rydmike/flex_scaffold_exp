@@ -48,7 +48,8 @@ class FlexDrawer extends StatefulWidget {
   /// The currentScreenWidth property can can be obtained with
   /// MediaQuery.of(context).size.width obtained in the parent's build method
   /// or via constraints.maxWidth from a Layout builder. If the
-  /// currentScreenWidth changes during the the lifecycle of the FlexfoldDrawer
+  /// currentScreenWidth changes during the the lifecycle of the
+  /// [FlexDrawer]
   /// any open drawer is closed automatically.
   ///
   /// This behaviour is needed to ensure that there is no open drawer that
@@ -75,7 +76,7 @@ class FlexDrawer extends StatefulWidget {
   /// is also null, then it falls back to [Material]'s default.
   final ShapeBorder? shape;
 
-  /// The width of the Flexfold drawer when opened as a drawer.
+  /// The width of the FlexScaffold drawer when opened as a drawer.
   ///
   /// If this is null, then [DrawerThemeData.width] is used. If that is also
   /// null, then it falls back to the Material spec's default (304.0).

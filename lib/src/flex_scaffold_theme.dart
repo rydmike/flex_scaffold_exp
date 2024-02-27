@@ -39,8 +39,8 @@ import 'flex_scaffold_constants.dart';
 /// [NavigationBarTheme], [NavigationRailTheme] and [IconTheme] as well as its
 /// own defaults if they exist, if not it will be based on base
 /// [Theme] property values like textTheme, colorScheme, dividerColor as
-/// well as Flexfold constant values or SDK constants and values matching the
-/// material standards and guidelines.
+/// well as FlexScaffold constant values or SDK constants and values matching
+/// the material standards and guidelines.
 ///
 /// See the individual [FlexScaffoldTheme] properties for default value details.
 @immutable
@@ -214,8 +214,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Color to be used for the [FlexScaffold] sidebar background.
   ///
   /// The [sidebarBackgroundColor] value is determined in the order:
-  /// * None null value passed in Flexfold.theme.[sidebarBackgroundColor].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[sidebarBackgroundColor].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * After this the value will remain null if no value was assigned above,
   ///   however the background color will default to
   ///   ThemeData.colorScheme.background from the Material the menu uses.
@@ -225,8 +225,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Color to be used for the [FlexScaffold]'s bottom navigation background.
   ///
   /// The [menuBackgroundColor] value is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuBackgroundColor].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuBackgroundColor].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * After this the value will remain null if no value was assigned above,
   ///   however the background color will default to
   ///   ThemeData.colorScheme.background from the Material the menu uses.
@@ -236,8 +236,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   ///
   /// The LTR and RTL directionality control if left or right side is the start.
   /// The [menuSide] value is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuSide].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuSide].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * [menuSide] = MenuSide.start, by default if null.
   final FlexMenuSide? menuSide;
 
@@ -250,8 +250,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// The z-coordinate to be used for the menu elevation.
   ///
   /// The [menuElevation] value is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuElevation].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuElevation].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * [menuElevation] = 0, by default no elevation is used.
   final double? menuElevation;
 
@@ -259,8 +259,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// The z-coordinate to be used for the sidebar's elevation.
   ///
   /// The [sidebarElevation] value is determined in the order:
-  /// * None null value passed in Flexfold.theme.[sidebarElevation].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[sidebarElevation].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * [sidebarElevation] = 0, by default no elevation is used.
   final double? sidebarElevation;
 
@@ -268,8 +268,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// The z-coordinate to be used for the menu drawer elevation.
   ///
   /// The [drawerElevation] value is determined in the order:
-  /// * None null value passed in Flexfold.theme.[drawerElevation].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[drawerElevation].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * [drawerElevation] = 16, default for Material drawer.
   final double? drawerElevation;
 
@@ -277,8 +277,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// The z-coordinate to be used for the sidebar end drawer elevation.
   ///
   /// The [endDrawerElevation] value is determined in the order:
-  /// * None null value passed in Flexfold.theme.[endDrawerElevation].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[endDrawerElevation].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * [endDrawerElevation] = 16, default for Material end drawer.
   final double? endDrawerElevation;
 
@@ -286,8 +286,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// The z-coordinate to be used for the sidebar end drawer elevation.
   ///
   /// The [bottomElevation] value is determined in the order:
-  /// * None null value passed in Flexfold.theme.[bottomElevation].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[bottomElevation].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * [bottomElevation] = 16, default for Material end drawer.
   final double? bottomElevation;
 
@@ -295,8 +295,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// [FlexScaffold].
   ///
   /// The [menuWidth] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuWidth].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuWidth].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then the default value is [kFlexMenuWidth].
   /// * The const [kFlexMenuWidth] = 250dp.
   ///
@@ -307,8 +307,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Width of the menu when it is used as a rail.
   ///
   /// The [railWidth] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[railWidth].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[railWidth].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then the default value is [kFlexRailWidth].
   /// * The [kFlexRailWidth] is set to Flutter SDK constant [kToolbarHeight]
   ///   which is 56dp.
@@ -321,8 +321,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Width of sidebar, when it is visible as a fixed sidebar in [FlexScaffold].
   ///
   /// The [sidebarWidth] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[sidebarWidth].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[sidebarWidth].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then the default value is [kFlexDrawerWidth].
   /// * The const [kFlexDrawerWidth] = 304dp, the width of standard drawer.
   ///
@@ -333,8 +333,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Width of main menu in a drawer, when it is used as a drawer menu.
   ///
   /// The [drawerWidth] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[drawerWidth].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[drawerWidth].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then the default value is [kFlexDrawerWidth].
   /// * The const [kFlexDrawerWidth] = 304dp, the width of standard drawer.
   final double? drawerWidth;
@@ -342,8 +342,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Width of the sidebar in an end drawer when it is used as an end drawer.
   ///
   /// The [endDrawerWidth] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[endDrawerWidth].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[endDrawerWidth].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then the default value is [kFlexDrawerWidth].
   /// * The const [kFlexDrawerWidth] = 304dp, the width of standard drawer.
   final double? endDrawerWidth;
@@ -358,8 +358,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// if the [breakpointMenu] width is exceeded.
   ///
   /// The [breakpointDrawer] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[breakpointDrawer].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[breakpointDrawer].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then default value is [kFlexBreakpointDrawer].
   /// * The const [kFlexBreakpointDrawer] = 550dp.
   final double? breakpointDrawer;
@@ -367,8 +367,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Screen width breakpoint when rail takes over from bottom bar.
   ///
   /// The [breakpointRail] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[breakpointRail].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[breakpointRail].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then default value is [kFlexBreakpointRail].
   /// * The const [kFlexBreakpointRail] = 600dp.
   final double? breakpointRail;
@@ -376,8 +376,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Screen width breakpoint when side menu takes over from rail.
   ///
   /// The [breakpointMenu] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[breakpointMenu].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[breakpointMenu].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then default value is [kFlexBreakpointMenu].
   /// * The const [kFlexBreakpointMenu] = 1024dp.
   final double? breakpointMenu;
@@ -386,8 +386,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Screen width breakpoint when side menu takes over from rail.
   ///
   /// The [breakpointSidebar] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[breakpointSidebar].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[breakpointSidebar].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then default value is [kFlexBreakpointSidebar].
   /// * The const [kFlexBreakpointSidebar] = 1200dp.
   final double? breakpointSidebar;
@@ -395,16 +395,16 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// The menu has an edge border towards the body
   ///
   /// The [borderOnMenu] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[borderOnMenu].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[borderOnMenu].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then default value is true.
   final bool? borderOnMenu;
 
   /// The sidebar has an edge border towards the body.
   ///
   /// The [borderOnSidebar] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[borderOnSidebar].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[borderOnSidebar].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then default value is true.
   final bool? borderOnSidebar;
 
@@ -415,8 +415,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// distinct looking. Defaults to true.
   ///
   /// The [borderOnDarkDrawer] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[borderOnDarkDrawer].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[borderOnDarkDrawer].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then default value is true.
   final bool? borderOnDarkDrawer;
 
@@ -427,8 +427,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Defaults to false.
   ///
   /// The [borderOnLightDrawer] is determined in the order:
-  /// * None null passed in Flexfold.theme.[borderOnLightDrawer].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null passed in FlexScaffold.theme.[borderOnLightDrawer].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then default value is false.
   final bool? borderOnLightDrawer;
 
@@ -438,14 +438,14 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// If null it defaults to Theme.dividerColor.
   ///
   /// The [borderColor] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[borderColor].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[borderColor].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then the default value is DividerTheme.color.
   /// * If all above null, then the default value is Theme.dividerColor.
   /// * If all above null, then the default value is Color(0x42888888),
   ///   this should not happen.
   ///
-  /// If you use FlexfoldAppBar.styled as app bar, it is recommended to use
+  /// If you use FlexScaffoldAppBar.styled as app bar, it is recommended to use
   /// the same color on its bottom border too, by default it does.
   final Color? borderColor;
 
@@ -456,16 +456,16 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// drawn on unselected items!
   ///
   /// The [menuShape] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuShape].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuShape].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, then it defaults to [menuSelectedShape].
   final ShapeBorder? menuShape;
 
   /// The shape of the highlight and borders on the selected menu item.
   ///
   /// The [menuSelectedShape] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuSelectedShape].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuSelectedShape].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, then it defaults to a rectangle without borders.
   ///   RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0));
   final ShapeBorder? menuSelectedShape;
@@ -473,8 +473,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Height of the menu selection highlight indicator.
   ///
   /// The [menuIndicatorHeight] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuIndicatorHeight].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuIndicatorHeight].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then defaults to [kFlexIndicatorHeight] = 50dp
   final double? menuIndicatorHeight;
 
@@ -529,8 +529,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Animation curve for the side menu and rail.
   ///
   /// The [menuAnimationCurve] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuAnimationCurve].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuAnimationCurve].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then
   ///   It defaults to [kFlexMenuAnimationCurve] which is set to
   ///   [Curves.easeInOut].
@@ -539,8 +539,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Animation duration for the sidebar.
   ///
   /// The [sidebarAnimationDuration] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[sidebarAnimationDuration].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[sidebarAnimationDuration].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then
   ///   It defaults to [kFlexSidebarAnimationDuration] which is set to 246ms
   ///   that match the value for the drawer.
@@ -549,8 +549,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Animation curve for the sidebar.
   ///
   /// The [sidebarAnimationCurve] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[sidebarAnimationCurve].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[sidebarAnimationCurve].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then
   ///   It defaults to [kFlexSidebarAnimationCurve] which is set to
   ///   [Curves.easeInOut].
@@ -559,8 +559,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Animation duration for the bottom navigation bar.
   ///
   /// The [bottomAnimationDuration] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[bottomAnimationDuration].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[bottomAnimationDuration].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then
   ///   It defaults to [kFlexBottomAnimationDuration] which is set to 246ms
   ///   that match the value for the drawer.
@@ -569,8 +569,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Animation curve for the bottom navigation bar.
   ///
   /// The [bottomAnimationCurve] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[bottomAnimationCurve].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[bottomAnimationCurve].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above null, then
   ///   It defaults to [kFlexBottomAnimationCurve] which is set to
   ///   [Curves.easeInOut].
@@ -579,8 +579,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// The type of bottom navigation bar to use.
   ///
   /// The [bottomType] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[bottomType].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[bottomType].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If above null, then it default to [FlexBottomType.adaptive],
   ///   which uses a CupertinoTabBar navigation bar on iOs and MacOS and a
   ///  BottomNavigationBar on all other platforms.
@@ -589,8 +589,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Toggle to turn on and off the transparency on bottom navigation bar.
   ///
   /// The [bottomIsTransparent] is determined in the order:
-  /// * None null value passed in via Flexfold.theme.[bottomIsTransparent].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in via FlexScaffold.theme.[bottomIsTransparent].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * Defaults to true if the above are null.
   final bool? bottomIsTransparent;
 
@@ -606,8 +606,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// conditions are not met, the filter call is not made.
   ///
   /// The [bottomBlur] setting is determined in the order:
-  /// * None null value passed in via Flexfold.theme.[bottomBlur].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in via FlexScaffold.theme.[bottomBlur].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, defaults to true.
   final bool? bottomBlur;
 
@@ -616,16 +616,16 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// This opacity value is only applied when [bottomIsTransparent] is true.
   ///
   /// The [bottomOpacity] is determined in the order:
-  /// * None null value passed in Flexfold.theme.[bottomOpacity].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[bottomOpacity].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * Default to 0.90 if above are null.
   final double? bottomOpacity;
 
   /// The bottom navigation bar has a top edge border.
   ///
   /// The [bottomTopBorder] is determined in the order:
-  /// * None null value passed in via Flexfold.theme.[bottomTopBorder].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in via FlexScaffold.theme.[bottomTopBorder].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If the above values are null, it defaults true.
   ///
   /// The color of the top border on bottom bar defaults to divider theme
@@ -633,11 +633,11 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   final bool? bottomTopBorder;
 
   /// The theme to merge with the default icon theme for
-  /// Flexfold destination icons, when the destination is not selected.
+  /// FlexScaffold destination icons, when the destination is not selected.
   ///
   /// The [iconTheme] is determined in the order:
-  /// * None null values passed in via Flexfold.theme.[iconTheme].
-  /// * None null values of the property in the inherited FlexfoldTheme.
+  /// * None null values passed in via FlexScaffold.theme.[iconTheme].
+  /// * None null values of the property in the inherited FlexScaffoldTheme.
   /// * If above are null or any property in them are null, they default to:
   ///   size: 24.0
   ///   color: theme?.colorScheme?.onSurface ?? const Color(0xFF888888)
@@ -648,8 +648,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// [FlexScaffold] destination icons, when the destination is selected.
   ///
   /// The [selectedIconTheme] is determined in the order:
-  /// * None null values passed in via Flexfold.theme.[selectedIconTheme].
-  /// * None null values of the property in the inherited FlexfoldTheme.
+  /// * None null values passed in via FlexScaffold.theme.[selectedIconTheme].
+  /// * None null values of the property in the inherited FlexScaffoldTheme.
   /// * If above are null or any property in them are null, they default to:
   ///   size: 24.0
   ///   color: theme?.colorScheme?.primary ?? const Color(0xFF2196F3)
@@ -657,22 +657,23 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   final IconThemeData? selectedIconTheme;
 
   /// The style to merge with the default text style for
-  /// Flexfold destination labels, when the destination is not selected.
+  /// FlexScaffold destination labels, when the destination is not selected.
   ///
   /// The [labelTextStyle] is determined in the order:
-  /// * None null passed in via Flexfold.theme.[labelTextStyle].
-  /// * None null values of the property in the inherited FlexfoldTheme.
+  /// * None null passed in via FlexScaffold.theme.[labelTextStyle].
+  /// * None null values of the property in the inherited FlexScaffoldTheme.
   /// * If the above values are null, defaults to:
   ///   theme.of(context).textTheme.bodyText1.copyWith(color:
   ///     theme.colorScheme.onSurface.withOpacity(0.64))
   final TextStyle? labelTextStyle;
 
   /// The style to merge with the default text style for
-  /// Flexfold destination labels, when the destination is selected.
+  /// FlexScaffold destination labels, when the destination is selected.
   ///
   /// The [selectedLabelTextStyle] is determined in the order:
-  /// * None null values passed in via Flexfold.theme.[selectedLabelTextStyle].
-  /// * None null values of the property in the inherited FlexfoldTheme.
+  /// * None null values passed in via
+  ///   FlexScaffold.theme.[selectedLabelTextStyle].
+  /// * None null values of the property in the inherited FlexScaffoldTheme.
   /// * If the above values are null, defaults to:
   ///   theme?.primaryTextTheme?.bodyText1?.copyWith(color:
   ///     theme?.colorScheme?.primary)
@@ -689,15 +690,15 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// used.
   ///
   /// The [headingTextStyle] is determined in the order:
-  /// * None null values passed in via Flexfold.theme.[headingTextStyle].
-  /// * None null values of the property in the inherited FlexfoldTheme.
+  /// * None null values passed in via FlexScaffold.theme.[headingTextStyle].
+  /// * None null values of the property in the inherited FlexScaffoldTheme.
   /// * If the above values are null, defaults to:
   ///   fontSize: 16.0
   //    fontWeight: FontWeight.w700
   //    color: theme?.colorScheme?.primary ?? const Color(0xFF2196F3)
   final TextStyle? headingTextStyle;
 
-  /// Use tooltips on the Flexfold widget.
+  /// Use tooltips on the FlexScaffold widget.
   ///
   /// Tooltips are nice when you are new to an app, but when you know it well
   /// they can get annoying. If your app allows users to select when they are
@@ -713,16 +714,16 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// those navigation modes.
   ///
   /// The [useTooltips] setting is determined in the order:
-  /// * None null value passed in Flexfold.theme.[useTooltips].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[useTooltips].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null it default to true.
   final bool? useTooltips;
 
   /// Tooltip label for opening the drawer menu.
   ///
   /// The [menuOpenTooltip] label is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuOpenTooltip].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuOpenTooltip].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, then it defaults to:
   ///   MaterialLocalizations.of(context).openAppDrawerTooltip
   final String? menuOpenTooltip;
@@ -730,8 +731,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Tooltip label for opening the drawer menu.
   ///
   /// The [menuCloseTooltip] label is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuCloseTooltip].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuCloseTooltip].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, then it defaults to:
   ///   MaterialLocalizations.of(context).closeButtonTooltip
   final String? menuCloseTooltip;
@@ -739,8 +740,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Tooltip label for opening the drawer menu.
   ///
   /// The [menuExpandTooltip] label is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuExpandTooltip].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuExpandTooltip].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, then it defaults to:
   ///   MaterialLocalizations.of(context).showMenuTooltip
   final String? menuExpandTooltip;
@@ -748,8 +749,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Tooltip label for opening the drawer menu.
   ///
   /// The [menuExpandHiddenTooltip] label is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuExpandHiddenTooltip].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuExpandHiddenTooltip].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, then it defaults to:
   ///   MaterialLocalizations.of(context).showMenuTooltip
   final String? menuExpandHiddenTooltip;
@@ -757,8 +758,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Tooltip label for opening the drawer menu.
   ///
   /// The [menuCollapseTooltip] label is determined in the order:
-  /// * None null value passed in Flexfold.theme.[menuCollapseTooltip].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[menuCollapseTooltip].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, then it defaults to:
   ///   MaterialLocalizations.of(context).expandedIconTapHint
   final String? menuCollapseTooltip;
@@ -766,8 +767,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Tooltip label for opening the drawer menu.
   ///
   /// The [sidebarOpenTooltip] label is determined in the order:
-  /// * None null value passed in Flexfold.theme.[sidebarOpenTooltip].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[sidebarOpenTooltip].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, then it defaults to:
   ///   MaterialLocalizations.of(context).openAppDrawerTooltip
   final String? sidebarOpenTooltip;
@@ -775,8 +776,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Tooltip label for opening the drawer menu.
   ///
   /// The [sidebarCloseTooltip] label is determined in the order:
-  /// * None null value passed in Flexfold.theme.[sidebarCloseTooltip].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[sidebarCloseTooltip].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, then it defaults to:
   ///   MaterialLocalizations.of(context).closeButtonTooltip
   final String? sidebarCloseTooltip;
@@ -784,8 +785,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Tooltip label for opening the drawer menu.
   ///
   /// The [sidebarExpandTooltip] label is determined in the order:
-  /// * None null value passed in Flexfold.theme.[sidebarExpandTooltip].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[sidebarExpandTooltip].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, then it defaults to:
   ///   MaterialLocalizations.of(context).showMenuTooltip
   final String? sidebarExpandTooltip;
@@ -793,8 +794,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Tooltip label for opening the drawer menu.
   ///
   /// The [sidebarExpandHiddenTooltip] label is determined in the order:
-  /// * None null passed in Flexfold.theme.[sidebarExpandHiddenTooltip].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null passed in FlexScaffold.theme.[sidebarExpandHiddenTooltip].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, then it defaults to:
   ///   MaterialLocalizations.of(context).showMenuTooltip
   final String? sidebarExpandHiddenTooltip;
@@ -802,8 +803,8 @@ class FlexScaffoldTheme extends ThemeExtension<FlexScaffoldTheme>
   /// Tooltip label for opening the drawer menu.
   ///
   /// The [sidebarCollapseTooltip] label is determined in the order:
-  /// * None null value passed in Flexfold.theme.[sidebarCollapseTooltip].
-  /// * None null value of the property in the inherited FlexfoldTheme.
+  /// * None null value passed in FlexScaffold.theme.[sidebarCollapseTooltip].
+  /// * None null value of the property in the inherited FlexScaffoldTheme.
   /// * If all above are null, then it defaults to:
   ///   MaterialLocalizations.of(context).expandedIconTapHint
   final String? sidebarCollapseTooltip;

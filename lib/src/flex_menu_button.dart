@@ -161,7 +161,7 @@ class FlexMenuButton extends StatelessWidget {
 
     // Set the next action as a tooltip on the menu button. By default suitable
     // localization strings that were found in MaterialLocalizations are used as
-    // tooltip labels in FlexfoldThemeData if other labels were not specified.
+    // tooltip labels in FlexScaffoldTheme if other labels were not specified.
     String tooltip;
     Widget effectiveMenuButton;
     if (hasDrawer && !isDrawerOpen && (!canLockMenu || cycleViaDrawer)) {
@@ -194,7 +194,7 @@ class FlexMenuButton extends StatelessWidget {
               } else if (hasDrawer && isDrawerOpen && !canLockMenu) {
                 Navigator.of(context).pop();
               } else if (menuIsHidden) {
-                flexScaffold.setMenuPrefersRail(false);
+                flexScaffold.setMenuIsRail(false);
                 if (hasDrawer && isDrawerOpen) {
                   Navigator.of(context).pop();
                   // TODO(rydmike): Maybe improve this for the menu to close?
@@ -205,16 +205,16 @@ class FlexMenuButton extends StatelessWidget {
                   // Drawer has closed fully and open the locked menu/rail
                   // then, but this works too, but it is a bit of a hack.
                   Future<void>.delayed(kFlexFlutterDrawerDuration, () {
-                    flexScaffold.hideMenu(false);
+                    flexScaffold.setMenuIsHidden(false);
                   });
                 } else {
-                  flexScaffold.hideMenu(false);
+                  flexScaffold.setMenuIsHidden(false);
                 }
               } else {
                 if (menuPrefersRail || mustBeRail) {
-                  flexScaffold.hideMenu(true);
+                  flexScaffold.setMenuIsHidden(true);
                 } else {
-                  flexScaffold.setMenuPrefersRail(true);
+                  flexScaffold.setMenuIsRail(true);
                 }
               }
               // Call the onPressed.

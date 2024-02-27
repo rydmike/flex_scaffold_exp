@@ -98,10 +98,10 @@ class FlexScaffold extends StatefulWidget {
     this.menuIconCollapse,
     this.menuIconExpandHidden,
     // Menu state properties and its callbacks.
-    this.menuHide = false,
-    this.onMenuHide,
-    this.menuPrefersRail = false,
-    this.onMenuPrefersRail,
+    this.menuIsHidden = false,
+    this.onMenuIsHidden,
+    this.menuIsRail = false,
+    this.onMenuIsRail,
     this.cycleViaDrawer = false,
     // Sidebar, its control and icons.
     this.sidebar,
@@ -194,8 +194,8 @@ class FlexScaffold extends StatefulWidget {
 
   // TODO(rydmike): Implement modules!
   //
-  // Consider using a list of destinations, which is List<FlexfoldDestination>,
-  // We should then store last used index per module.
+  // Consider using a list of destinations, which is
+  // List<FlexScaffoldDestination>, Then store last used index per module.
 
   /// Set the active module for the destinations.
   ///
@@ -306,32 +306,63 @@ class FlexScaffold extends StatefulWidget {
   /// will be rotated 180 degrees to work on reversed directionality.
   final Widget? menuIconCollapse;
 
-  /// Keep main menu hidden in a drawer, even when its breakpoints are exceeded.
+  /// Keep main menu hidden in a Drawer, even when its breakpoints are exceeded.
   ///
-  /// When true, both the rail and menu will be kept hidden in the drawer, even
-  /// if the breakpoint for rail or breakpoint for menu have both been exceeded.
-  final bool menuHide;
+  /// When [menuIsHidden] is true, both the rail and menu will be kept hidden
+  /// in the Drawer, even if the breakpoint for showing the rail or breakpoint
+  /// menus have both been exceeded.
+  ///
+  /// If you want to only use a Drawer, set this to true.
+  ///
+  /// If you want to control the menu visibility when the user clicks one the
+  /// menu button, use the value from the [onMenuIsHidden] callback as input to
+  /// [menuIsHidden]. The [onMenuIsHidden] callback is called by [FlexScaffold]
+  /// with correct value as the user operates the menu button and cycles via its
+  /// state, to show or hide the menu.
+  ///
+  /// You can also control the menu visibility via the API, by setting the
+  /// [menuIsHidden] property directly.
+  ///
+  /// Defaults to false.
+  final bool menuIsHidden;
 
   /// Callback that is called when menu is hidden via its menu button control.
   ///
-  /// This callback together with its set [menuHide] can be used if you
-  /// want to control hiding and showing the menu from an external control,
-  /// like a user controlled [Switch], you can then use this callback to change
-  /// the state of such a switch when user has operated hiding/showing the menu
-  /// via its menu control button.
-  final ValueChanged<bool>? onMenuHide;
+  /// If you want to control the menu visibility when the user clicks one the
+  /// menu button, use the value from the [onMenuIsHidden] callback as input to
+  /// [menuIsHidden]. The [onMenuIsHidden] callback is called by [FlexScaffold]
+  /// with correct value as the user operates the menu button and cycles via its
+  /// state, to show or hide the menu.
+  final ValueChanged<bool>? onMenuIsHidden;
 
-  /// Prefer rail as size for the menu.
+  /// Keep main menu hidden as a Rail, even when its breakpoint to where it
+  /// want to be a full side menu is exceeded.
   ///
-  /// When the menu is locked on screen and it is shown, it will remain as a
-  /// rail even if the menu breakpoint is exceeded and it should be shown as a
-  /// menu, based on defined breakpoint value for when the rail changes to menu.
-  final bool menuPrefersRail;
+  /// When [menuIsRail] is true, the menu will only expand to rail size even
+  /// if the breakpoint for showing it as a menu has been exceeded.
+  ///
+  /// If you want to only ever use a Rail, set this to true.
+  ///
+  /// If you want to control the rail visibility when the user clicks one the
+  /// menu button, use the value from the [onMenuIsRail] callback as input to
+  /// [menuIsRail]. The [onMenuIsRail] callback is called by [FlexScaffold]
+  /// with correct value as the user operates the menu button and cycles via its
+  /// state, to show or hide the rail.
+  ///
+  /// You can also control the rail visibility via the API, by setting the
+  /// [menuIsRail] property directly.
+  ///
+  /// Defaults to false.
+  final bool menuIsRail;
 
-  /// Callback that is called when prefer rail changes.
+  /// Callback that is called when rail is hidden via the menu button control.
   ///
-  /// Can be used to control and preferRail, via a toggle Switch externally.
-  final ValueChanged<bool>? onMenuPrefersRail;
+  /// If you want to control the rail visibility when the user clicks one the
+  /// menu button, use the value from the [onMenuIsRail] callback as input to
+  /// [menuIsRail]. The [onMenuIsRail] callback is called by [FlexScaffold]
+  /// with correct value as the user operates the menu button and cycles via its
+  /// state, to show or hide the rail.
+  final ValueChanged<bool>? onMenuIsRail;
 
   /// Cycle via Drawer when opening a hidden menu, rail or sidebar.
   ///
@@ -514,17 +545,20 @@ class FlexScaffold extends StatefulWidget {
   /// Set to true if bottom bar destinations should also be included in the
   /// drawer, when the bottom navigation mode is being used.
   ///
-  /// By default this is false. Normally the bottom destinations are not shown
-  /// in the drawer when you are in bottom navigation mode. If you open the
-  /// drawer it only contain none bottom navigation bar items. If you set
-  /// [bottomDestinationsInDrawer] to true the bottom destinations will always
-  /// be shown in the drawer.
+  /// Default to false.
   ///
-  /// If you in large screen mode have a side menu/rails with more destinations
-  /// than can fit on a bottom bar and are on such a destination and resize
+  /// Normally the bottom destinations are not shown
+  /// in the drawer when you are in bottom navigation mode. If you open the
+  /// Drawer it only contains none bottom navigation bar items. If you set
+  /// [bottomDestinationsInDrawer] to true the bottom destinations will always
+  /// be shown in the drawer as well.
+  ///
+  /// If you in large screen mode have a side menu/rail with more destinations
+  /// than can fit on a bottom bar, and are on such a destination and resize
   /// the media to phone size, the bottom destinations will be shown in the
-  /// drawer, regardless of this setting. As it is needed to be able to get
-  /// to bottom destinations.
+  /// drawer, regardless of this setting. This is needed to be able to get
+  /// to bottom destinations after the media resize while being on a destination
+  /// that is not in the bottom bar.
   final bool bottomDestinationsInDrawer;
 
   /// A button displayed floating above [body], in the bottom right corner.
@@ -860,7 +894,7 @@ class FlexScaffold extends StatefulWidget {
   /// Returns true if the [FlexScaffold] menu is hidden.
   ///
   /// The menu can be hidden either via internal menu toggle, or
-  /// [FlexScaffold.menuHide] can be set to true.
+  /// [FlexScaffold.menuIsHidden] can be set to true.
   static bool isMenuHiddenOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.isMenuHidden).isMenuHidden;
 
@@ -1029,24 +1063,26 @@ class FlexScaffoldState extends State<FlexScaffold> {
   FlexTarget _onDestination = const FlexTarget();
   FlexTarget _selectedDestination = const FlexTarget();
 
-  /// Set the FlexScaffold menu to be hidden. If set to false, the menu will be
-  /// shown as a rail or menu when it should, based on its breakpoints.
-  void hideMenu(bool value) {
+  /// Set the FlexScaffold menu to be hidden.
+  ///
+  /// If set to false, the menu will be shown as a rail or menu when it
+  /// should, based on its breakpoints.
+  void setMenuIsHidden(bool value) {
     if (value != _isMenuHidden) {
       setState(() {
         _isMenuHidden = value;
         _scrollHiddenBottomBar = false;
-        widget.onMenuHide?.call(value);
+        widget.onMenuIsHidden?.call(value);
         if (_debug) debugPrint('FlexScaffold: hideMenu set to $_isMenuHidden');
       });
     }
   }
 
-  /// Set the FlexScaffold menu to prefer rail state.
-  void setMenuPrefersRail(bool value) {
+  /// Set the FlexScaffold menu to prefer and be in rail state.
+  void setMenuIsRail(bool value) {
     setState(() {
       _menuPrefersRail = value;
-      widget.onMenuPrefersRail?.call(value);
+      widget.onMenuIsRail?.call(value);
       if (_debug) {
         debugPrint('FlexScaffold: menuPrefersRail set to $_menuPrefersRail');
       }
@@ -1115,27 +1151,29 @@ class FlexScaffoldState extends State<FlexScaffold> {
       FlexNavigation source = FlexNavigation.rail;
       if (_isMenuInDrawer) source = FlexNavigation.drawer;
       if (_isMenuInMenu) source = FlexNavigation.menu;
-      final bool preferPush =
-          (_isPhone && widget.destinations[_selectedIndex].maybePush) ||
-              widget.destinations[_selectedIndex].alwaysPush;
+      final bool wantsFullPage =
+          (_isPhone && widget.destinations[_selectedIndex].maybeFullPage) ||
+              widget.destinations[_selectedIndex].alwaysFullPage;
       // Make destination data to return in onDestination call.
       final FlexTarget destination = FlexTarget(
         index: _selectedIndex,
         bottomIndex: bottomIndex,
-        route: widget.destinations[_selectedIndex].route,
+        route: wantsFullPage
+            ? widget.destinations[_selectedIndex].routeFullPage
+            : widget.destinations[_selectedIndex].route,
         icon: widget.destinations[_selectedIndex].icon,
         selectedIcon: widget.destinations[_selectedIndex].selectedIcon,
         label: widget.destinations[_selectedIndex].label,
         source: source,
         reverse: _indexMenu.reverse,
-        preferPush: preferPush,
+        wantsFullPage: wantsFullPage,
         noAppBar: widget.destinations[_selectedIndex].noAppBar,
         noAppBarTitle: widget.destinations[_selectedIndex].noAppBarTitle,
       );
       widget.onDestination(destination);
       _onDestination = destination;
       if (_debug) debugPrint('FlexScaffold: navigate to bottom $_target');
-      if (preferPush) _assumePushed();
+      if (wantsFullPage) _assumeUsedFullScreen();
     });
   }
 
@@ -1154,16 +1192,22 @@ class FlexScaffoldState extends State<FlexScaffold> {
         _indexBottom.setIndex(index);
         _selectedIndex = toMenuIndex(_target);
         _indexMenu.setIndex(_selectedIndex);
+        final bool wantsFullPage =
+            (_isPhone && widget.destinations[_selectedIndex].maybeFullPage) ||
+                widget.destinations[_selectedIndex].alwaysFullPage;
         // Make tap destination data to return
         final FlexTarget destination = FlexTarget(
           index: _selectedIndex,
           bottomIndex: index,
-          route: widget.destinations[_selectedIndex].route,
+          route: wantsFullPage
+              ? widget.destinations[_selectedIndex].routeFullPage
+              : widget.destinations[_selectedIndex].route,
           icon: widget.destinations[_selectedIndex].icon,
           selectedIcon: widget.destinations[_selectedIndex].selectedIcon,
           label: widget.destinations[_selectedIndex].label,
-          reverse: _indexMenu.reverse,
           source: FlexNavigation.bottom,
+          reverse: _indexMenu.reverse,
+          wantsFullPage: wantsFullPage,
           noAppBar: widget.destinations[_selectedIndex].noAppBar,
           noAppBarTitle: widget.destinations[_selectedIndex].noAppBarTitle,
         );
@@ -1265,13 +1309,13 @@ class FlexScaffoldState extends State<FlexScaffold> {
       label: widget.destinations[index].label,
       source: source,
       reverse: reverse,
-      preferPush: preferPush,
+      wantsFullPage: preferPush,
       noAppBar: widget.destinations[index].noAppBar,
       noAppBarTitle: widget.destinations[index].noAppBarTitle,
     );
   }
 
-  void _assumePushed() {
+  void _assumeUsedFullScreen() {
     _selectedIndex = widget.selectedIndex;
     _indexMenu.setIndex(widget.selectedIndex);
     _target = widget.destinations[_indexMenu.index];
@@ -1294,9 +1338,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
     final int? bottomIndex = toBottomIndex(_target);
     _indexBottom.setIndex(bottomIndex);
     _isBottomTarget = bottomIndex != null;
-    _isMenuHidden = widget.menuHide;
+    _isMenuHidden = widget.menuIsHidden;
     _isSidebarHidden = widget.sidebarHide;
-    _menuPrefersRail = widget.menuPrefersRail;
+    _menuPrefersRail = widget.menuIsRail;
     _scrollHiddenBottomBar = false;
     _selectedDestination = FlexTarget(
       index: _selectedIndex,
@@ -1307,7 +1351,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
       label: widget.destinations[_selectedIndex].label,
       source: FlexNavigation.menu,
       reverse: _indexMenu.reverse,
-      preferPush: false,
+      wantsFullPage: false,
       noAppBar: widget.destinations[_selectedIndex].noAppBar,
       noAppBarTitle: widget.destinations[_selectedIndex].noAppBarTitle,
     );
@@ -1336,8 +1380,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
       if (_isMenuInDrawer) source = FlexNavigation.drawer;
       if (_isMenuInMenu) source = FlexNavigation.menu;
       final bool preferPush =
-          (_isPhone && widget.destinations[_selectedIndex].maybePush) ||
-              widget.destinations[_selectedIndex].alwaysPush;
+          (_isPhone && widget.destinations[_selectedIndex].maybeFullPage) ||
+              widget.destinations[_selectedIndex].alwaysFullPage;
       _selectedDestination = FlexTarget(
         index: _selectedIndex,
         bottomIndex: bottomIndex,
@@ -1347,7 +1391,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
         label: widget.destinations[_selectedIndex].label,
         source: source,
         reverse: _indexMenu.reverse,
-        preferPush: preferPush,
+        wantsFullPage: preferPush,
         noAppBar: widget.destinations[_selectedIndex].noAppBar,
         noAppBarTitle: widget.destinations[_selectedIndex].noAppBarTitle,
       );
@@ -1355,14 +1399,14 @@ class FlexScaffoldState extends State<FlexScaffold> {
         debugPrint('FlexScaffold: _selectedDestination $_selectedDestination');
       }
     }
-    if (widget.menuHide != oldWidget.menuHide) {
-      _isMenuHidden = widget.menuHide;
+    if (widget.menuIsHidden != oldWidget.menuIsHidden) {
+      _isMenuHidden = widget.menuIsHidden;
     }
     if (widget.sidebarHide != oldWidget.sidebarHide) {
       _isSidebarHidden = widget.sidebarHide;
     }
-    if (widget.menuPrefersRail != oldWidget.menuPrefersRail) {
-      _menuPrefersRail = widget.menuPrefersRail;
+    if (widget.menuIsRail != oldWidget.menuIsRail) {
+      _menuPrefersRail = widget.menuIsRail;
     }
     if (widget.destinations != oldWidget.destinations) {
       _bottomDestinations = widget.destinations
@@ -1407,9 +1451,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
     // Based on width & breakpoint limit, this is a desktop sized layout.
     _isDesktop = (_width >= flexTheme.breakpointMenu!) && !_isPhoneLandscape;
     // The menu will exist as a Drawer widget in the widget tree.
-    _isMenuInDrawer = _isPhone || widget.menuHide || _isPhoneLandscape;
+    _isMenuInDrawer = _isPhone || widget.menuIsHidden || _isPhoneLandscape;
     // The menu is shown as a full sized menu before the body.
-    _isMenuInMenu = _isDesktop && !widget.menuHide && !widget.menuPrefersRail;
+    _isMenuInMenu = _isDesktop && !widget.menuIsHidden && !widget.menuIsRail;
     // The sidebar will exist in an end Drawer widget in the widget tree.
     _isSidebarInEndDrawer =
         (_width < flexTheme.breakpointSidebar! || _isSidebarHidden) &&
@@ -1555,8 +1599,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
                 // present in the tree at all in desktop/tablet size mode,
                 // as used now. Consider keeping them there at all times
                 // but setting drawerEnableOpenDragGesture and
-                // endDrawerEnableOpenDragGesture when they are in their
-                // visible pinned modes. Need to update the button toggle
+                // endDrawerEnableOpenDragGesture to false when they are in
+                // their visible pinned modes. Need to update the button toggle
                 // logic as well. This should however be simpler and safer
                 // than current work-around. The above properties did not
                 // exist when the work-around was implemented.

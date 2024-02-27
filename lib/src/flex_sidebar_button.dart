@@ -149,7 +149,7 @@ class FlexSidebarButton extends StatelessWidget {
 
     // Set the next action as a tooltip on the menu button. By default suitable
     // localization strings that were found in MaterialLocalizations are used as
-    // tooltip labels in FlexfoldThemeData if other labels were not specified.
+    // tooltip labels in FlexScaffoldTheme if other labels were not specified.
     String tooltip;
     Widget effectiveMenuButton;
     if (hasEndDrawer &&

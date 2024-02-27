@@ -6,8 +6,10 @@ import 'flex_destination.dart';
 // ignore_for_file: comment_references
 
 // TODO(rydmike): Should also return active module index.
-/// Contains detailed information about the target FlexScaffold navigation
-/// destination to go to. Returned by the [FlexScaffold.onDestination] callback.
+
+/// Contains detailed information about the target [FlexScaffold] navigation
+/// destination being navigated to. This cdata is returned by the
+/// [FlexScaffold.onDestination] callback.
 ///
 /// Returned properties are selected index from the menu/rail/drawer or
 /// bottom index. The selected destination's named route,
@@ -17,13 +19,17 @@ import 'flex_destination.dart';
 /// This direction information can be used to create different page transitions
 /// based on navigation direction.
 ///
-/// There is a [preferPush] flag which will only be true, if it would be
+/// There is a [wantsFullPage] flag which will only be true, if it would be
 /// appropriate to display the target selected destination as a modal route
 /// pushed on top of other destinations, with a back button, instead of as a
 /// top level destination. This might be a more appropriate design on phone
 /// for some destinations only available via the Drawer menu.
 ///
-/// It is up to the used navigation implementation in an app using Flexfold
+/// When [wantsFullPage] is true, the target destinations
+/// [FlexDestination.routePage] is returned in the [route] property, instead
+/// of its [FlexDestination.route] property.
+///
+/// It is up to the used navigation implementation in an app using FlexScaffold
 /// to implement the actual navigation and different transitions.
 @immutable
 class FlexTarget with Diagnosticable {
@@ -35,9 +41,9 @@ class FlexTarget with Diagnosticable {
     this.icon = const Icon(Icons.home),
     Widget? selectedIcon,
     this.label = 'Home',
-    this.source = FlexNavigation.rail,
+    this.source = FlexNavigation.menu,
     this.reverse = false,
-    this.preferPush = false,
+    this.wantsFullPage = false,
     this.noAppBar = false,
     this.noAppBarTitle = false,
   }) : selectedIcon = selectedIcon ?? icon;
@@ -51,6 +57,8 @@ class FlexTarget with Diagnosticable {
   final int? bottomIndex;
 
   /// Named route of the selected destination.
+  ///
+  /// If the returned route
   final String route;
 
   /// The icon widget for the icon used by the selected destination.
@@ -87,13 +95,13 @@ class FlexTarget with Diagnosticable {
   /// Is `True` when the user navigated from a Drawer menu item that
   /// is never in the bottom navigation bar and navigation mode is
   /// bottom navigation bar and the destination's
-  /// [FlexDestination.maybePush] property was set to be true (default).
+  /// [FlexDestination.maybeFullPage] property was set to be true (default).
   ///
-  /// When [preferPush] is true, it is an indication that it is appropriate
+  /// When [wantsFullPage] is true, it is an indication that it is appropriate
   /// from an usability viewpoint to push an entire new screen on top of the
-  /// Flexfold scaffold, instead of navigating to a new Flexfold widget screen
-  /// or just a body within the current Flexfold scaffold, depending on how
-  /// the app navigation has been implemented.
+  /// FlexScaffold scaffold, instead of navigating to a new FlexScaffold widget
+  /// screen or just a body within the current FlexScaffold scaffold, depending
+  /// on how the app navigation has been implemented.
   ///
   /// In a case where a user opens the drawer, and the bottom bar is used as
   /// the main navigation mode, it may often be more appropriate or at least a
@@ -101,29 +109,29 @@ class FlexTarget with Diagnosticable {
   /// the drawer as a new screen on top of the current one navigated to via
   /// the bottom navigation bar. User then gets back from that screen to the
   /// bottom navigation screen via the back button on the screen pushed on top
-  /// of the bottom navigation screen in Flexfold. It is up to the developer
-  /// using Flexfold to implement this push route instead of a
+  /// of the bottom navigation screen in FlexScaffold. It is up to the developer
+  /// using FlexScaffold to implement this push route instead of a
   /// replacement route.
   ///
   /// Even if a replacement route would be used, and the user is navigated to
-  /// a destination in the drawer menu that does not have a bottom bar, Flexfold
-  /// detects this and in such a case always also adds all the bottom navigation
-  /// bar destinations to the drawer, so that there is a way to get back to the
-  /// bottom destinations.
+  /// a destination in the drawer menu that does not have a bottom bar,
+  /// FlexScaffold detects this and in such a case always also adds all the
+  /// bottom navigation bar destinations to the drawer, so that there is a
+  /// way to get back to the bottom destinations.
   ///
   /// Normally the bottom navigation bar destinations are not present in the
   /// drawer during bottom navigation mode, unless the
   /// [FlexScaffold.bottomDestinationsInDrawer] has been set to true, in which
   /// case bottom destinations are always also present in the drawer.
-  final bool preferPush;
+  final bool wantsFullPage;
 
-  /// True if the selected destination is defined to not use an AppBar at all.
+  /// True, if the selected destination is defined to not use an AppBar at all.
   /// This is typically used for destinations that use sliver app bars where
-  /// the app bar is part of the destination's body and not the Flexfold.
+  /// the app bar is part of the destination's body and not the FlexScaffold.
   final bool noAppBar;
 
-  /// True if this destination has an app bar that does not show its title
-  /// and a transparent background.
+  /// True, if this destination has an app bar that does not show its title
+  /// and uses transparent background.
   ///
   /// The leading and widget action widgets will still be shown.
   final bool noAppBarTitle;
@@ -138,7 +146,7 @@ class FlexTarget with Diagnosticable {
     String? label,
     FlexNavigation? source,
     bool? reverse,
-    bool? preferPush,
+    bool? wantsFullPage,
     bool? noAppBar,
     bool? noAppBarTitle,
   }) {
@@ -151,7 +159,7 @@ class FlexTarget with Diagnosticable {
       label: label ?? this.label,
       source: source ?? this.source,
       reverse: reverse ?? this.reverse,
-      preferPush: preferPush ?? this.preferPush,
+      wantsFullPage: wantsFullPage ?? this.wantsFullPage,
       noAppBar: noAppBar ?? this.noAppBar,
       noAppBarTitle: noAppBarTitle ?? this.noAppBarTitle,
     );
@@ -171,7 +179,7 @@ class FlexTarget with Diagnosticable {
         other.label == label &&
         other.source == source &&
         other.reverse == reverse &&
-        other.preferPush == preferPush &&
+        other.wantsFullPage == wantsFullPage &&
         other.noAppBar == noAppBar &&
         other.noAppBarTitle == noAppBarTitle;
   }
@@ -187,7 +195,7 @@ class FlexTarget with Diagnosticable {
         label,
         source,
         reverse,
-        preferPush,
+        wantsFullPage,
         noAppBar,
         noAppBarTitle,
       );
@@ -204,7 +212,7 @@ class FlexTarget with Diagnosticable {
     properties.add(DiagnosticsProperty<String>('label', label));
     properties.add(EnumProperty<FlexNavigation>('source', source));
     properties.add(DiagnosticsProperty<bool>('reverse', reverse));
-    properties.add(DiagnosticsProperty<bool>('preferPush', preferPush));
+    properties.add(DiagnosticsProperty<bool>('wantsFullPage', wantsFullPage));
     properties.add(DiagnosticsProperty<bool>('hasAppBar', noAppBar));
     properties
         .add(DiagnosticsProperty<bool>('removeAppBarTitle', noAppBarTitle));

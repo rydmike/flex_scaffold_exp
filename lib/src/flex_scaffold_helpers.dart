@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-// These helper classes are NOT exported by the Flexfold library, they are
+// These helper classes are NOT exported by the FlexScaffold library, they are
 // only used as internal helper classes, functions and extensions.
 
 /// Used to track the direction of a new index value in relation to its
@@ -99,7 +99,7 @@ class IfWrapper extends StatelessWidget {
 /// a tooltip string as the only property in addition to the condition and child
 /// to wrap with a tooltip if the condition is true.
 /// The rest of the Tooltip properties will be modified and changed by any
-/// Tooltip theme that is used by the application where Flexfold is used.
+/// Tooltip theme that is used by the application where FlexScaffold is used.
 class MaybeTooltip extends StatelessWidget {
   /// Default constructor.
   const MaybeTooltip({

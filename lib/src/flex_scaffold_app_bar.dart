@@ -38,7 +38,7 @@ class FlexScaffoldAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    // If no FlexfoldAppBar was given we make a default one.
+    // If no FlexScaffoldAppBar was given we make a default one.
     final FlexAppBar usedAppBar = appBar ?? const FlexAppBar();
     assert(
         usedAppBar.leading == null,
@@ -68,7 +68,7 @@ class FlexScaffoldAppBar extends StatelessWidget
     final bool noTitle =
         FlexScaffold.selectedDestinationOf(context).noAppBarTitle;
 
-    // Convert the main FlexfoldAppBar data object to a real AppBar.
+    // Convert the main FlexScaffoldAppBar data object to a real AppBar.
     Widget? title = usedAppBar.title;
     final Widget impliedTitle = Text(flexScaffold.currentImpliedTitle);
     if (!noTitle) {

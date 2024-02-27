@@ -135,7 +135,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.7"
+    version: "0.0.8"
   flex_seed_scheme:
     dependency: transitive
     description:

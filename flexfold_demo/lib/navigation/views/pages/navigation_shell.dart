@@ -1,5 +1,5 @@
 import 'package:flex_scaffold/flex_scaffold.dart';
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,16 +13,17 @@ import '../../models/app_navigation_state.dart';
 import '../widgets/menu/menu.dart';
 import '../widgets/sidebar/sidebar.dart';
 
-const bool _kDebugMe = kDebugMode && true;
+const bool _debug = kDebugMode && true;
 
-/// The [LayoutShell] returns a nested navigator and builds the [FlexScaffold].
+/// The [NavigationShell] returns a nested navigator and builds the
+/// [FlexScaffold].
 ///
 /// In this demo app there is only one FlexScaffold that handles the
 /// layout of all the main destinations in the application. The [FlexScaffold]
 /// handles the bottom navigation bar, drawer and end drawer, rail and menu
 /// based on its [FlexDestination] configurations.
-class LayoutShell extends ConsumerWidget {
-  const LayoutShell({
+class NavigationShell extends ConsumerWidget {
+  const NavigationShell({
     super.key,
     required this.body,
   });
@@ -50,13 +51,10 @@ class LayoutShell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final CurrentRoute route = ref.watch(currentRouteProvider);
-
     final String goRouterPath = GoRouterState.of(context).uri.toString();
-    if (_kDebugMe) {
-      debugPrint('LayoutShell: goRouterPath = $goRouterPath');
-    }
-
-    return WillPopScope(
+    if (_debug) debugPrint('LayoutShell: goRouterPath = $goRouterPath');
+    return PopScope(
+      canPop: false,
       // If we try to pop the scope, we will do some custom back navigation:
       //
       // If on a bottom bar destination and it is not the first one, then
@@ -65,16 +63,13 @@ class LayoutShell extends ConsumerWidget {
       // used back on iOS or Android, we pop out of the app, on other
       // platforms, desktop and Web, we remain on home.
       // TODO(rydmike): Maybe add ask about going "back" out of app on Web?
-      onWillPop: () async {
+      onPopInvoked: (bool didPop) async {
         // Store the start destination.
         final FlexTarget startDestination = route.destination;
         // If we can pop, then we pop.
         if (Navigator.of(context).canPop()) {
-          if (_kDebugMe) {
-            debugPrint('LayoutScreen(): Back can pop, so we popped!');
-          }
+          if (_debug) debugPrint('LayoutScreen: Back can pop, so we popped!');
           Navigator.pop(context);
-          return false;
         }
         // If we can no longer pop, then we test what to set as back route.
         // If bottom nav index is not null and not 0, then we will go back
@@ -109,14 +104,27 @@ class LayoutShell extends ConsumerWidget {
           final bool popOutOfScope = startDestination.route == Routes.home &&
               (platform == TargetPlatform.iOS ||
                   platform == TargetPlatform.android);
-          return popOutOfScope;
+
+          // Exiting the web app with browser back button may be unintended,
+          // so we ask for confirmation.
+          if (kIsWeb) {
+            // TODO(rydmike): Add ask about going "back" out of app on Web?
+            if (_debug) {
+              debugPrint('LayoutShell: Web back button, confirm to exit');
+            }
+          }
+          // If we are on "Home" and we are on Android or iOS, then we pop out.
+          if (popOutOfScope) {
+            if (_debug) {
+              debugPrint('LayoutScreen: Back button, pop out of app!');
+              Navigator.pop(context);
+            }
+          }
         }
       },
-
-      // Use FlexScaffold as a layout shell for the app.
-      //
-      // The is example is more complex than needed due to all the customizable
-      // settings it demonstrates.
+      // Use [FlexScaffold] as a layout shell for the app.
+      // This example is more complex than it typically needs to be, due to all
+      // the customizable properties it demonstrates.
       child: FlexScaffold(
         // The FlexScaffold appBar only takes a FlexfoldAppBar() data object.
         // Here we use the styled factory version of it, but the standard
@@ -158,22 +166,18 @@ class LayoutShell extends ConsumerWidget {
           //   IconButton(icon: const Icon(Icons.search), onPressed: () {}),
           // ],
         ),
-
-        //
         // Supply the list of main navigation destinations the app has.
         destinations: Routes.destinations,
-        //
         // Currently selected destination
         selectedIndex: route.destination.index,
-        //
         // When destination is changed we get a FlexfoldSelectedDestination
         // object in a callback that we can use to control how we do
         // routing, which can vary based on if we navigated from bottom,
         // rail or menu and if we moved forward or backwards in the index.
         onDestination: (FlexTarget destination) async {
           // If destinations prefers pushed route, then do so:
-          if (destination.preferPush) {
-            if (_kDebugMe) {
+          if (destination.wantsFullPage) {
+            if (_debug) {
               debugPrint('onDestination Push: ${destination.route}');
             }
             ref
@@ -205,7 +209,7 @@ class LayoutShell extends ConsumerWidget {
             // need to update the route with this info where we
             // navigated to show it and keep track where we are on the
             // main root nav as well.
-            if (_kDebugMe) {
+            if (_debug) {
               debugPrint('onDestination Go: ${destination.route}');
             }
             ref.read(currentRouteProvider.notifier).setDestination(destination);
@@ -224,17 +228,15 @@ class LayoutShell extends ConsumerWidget {
             : null,
         menuIconCollapse:
             ref.watch(useCustomMenuIconsPod) ? AppIcons.menuIconCollapse : null,
-        //
         // Menu controls
-        menuHide: ref.watch(hideMenuPod),
-        onMenuHide: (bool isHidden) {
+        menuIsHidden: ref.watch(hideMenuPod),
+        onMenuIsHidden: (bool isHidden) {
           ref.read(hideMenuPod.notifier).state = isHidden;
         },
         cycleViaDrawer: ref.watch(cycleViaDrawerPod),
-        menuPrefersRail: ref.watch(preferRailPod),
-        onMenuPrefersRail: (bool value) =>
+        menuIsRail: ref.watch(preferRailPod),
+        onMenuIsRail: (bool value) =>
             ref.read(preferRailPod.notifier).state = value,
-        //
         // Sidebar properties.
         sidebar: const Sidebar(),
         sidebarControlEnabled: ref.watch(sidebarControlEnabledPod),
@@ -261,15 +263,12 @@ class LayoutShell extends ConsumerWidget {
         // on large screens as the bottom navigation bar will then only
         // span the body part and not also the sidebar.
         sidebarBelongsToBody: ref.watch(sidebarBelongsToBodyPod),
-        //
         // Bottom navigation bar controls
         // scrollHiddenBottomBar: ref.watch(scrollHiddenBottomBarPod),
-        //
         hideBottom: ref.watch(hideBottomBarPod),
         showBottomWhenMenuInDrawer: ref.watch(showBottomBarWhenMenuInDrawerPod),
         showBottomWhenMenuShown: ref.watch(showBottomBarWhenMenuShownPod),
         bottomDestinationsInDrawer: ref.watch(bottomDestinationsInDrawerPod),
-        //
         // If you provide a FAB here, it will only appear on a
         // [FlexfoldDestination] that has been defined to use a FAB.
         // For this demo the FAB does not do anything else than show a
@@ -300,7 +299,6 @@ class LayoutShell extends ConsumerWidget {
           },
           child: const Icon(Icons.add),
         ),
-        //
         // Use different FAB positions.
         floatingActionButtonLocationPhone:
             FloatingActionButtonLocation.endFloat,
@@ -313,38 +311,9 @@ class LayoutShell extends ConsumerWidget {
         // used in an app to scroll behind the appbar and bottom bar.
         extendBody: ref.watch(extendBodyPod),
         extendBodyBehindAppBar: ref.watch(extendBodyBehindAppBarPod),
-        //
         // The body is a GoRouter ShellRoute that only contains the body
         // part of the Scaffold, we even exclude the AppBar
         body: body,
-
-        // TODO(rydmike): Remove old nested navigator
-        // The body is a navigator that will create a page widget for the
-        // named route we navigate to in the onDestinationSelected callback
-        // event.
-        //
-        // To the generate route function we pass the tapped destination
-        // data
-        // that contains info about where we came from and the
-        // direction. We use this info in the routing function to create
-        // different page transitions based on where we navigated
-        // from and if it was forward or reverse direction in the
-        // destination list.
-        // Navigator(
-        //   key: route.navKeyFlexfold,
-        //   onGenerateRoute: (RouteSettings settings) {
-        //     if (_kDebugMe) {
-        //       debugPrint(
-        //           'LayoutScreen(): FlexScaffold Navigator '
-        //           '** onGenerateRoute **');
-        //       debugPrint(
-        //           'LayoutScreen(): settings: '
-        //           '${route.currentDestination}');
-        //     }
-        //     return router.generateRoute(settings);
-        //   },
-        //   initialRoute: AppRoutes.home,
-        // ),
       ),
     );
   }
