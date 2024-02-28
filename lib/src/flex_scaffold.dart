@@ -73,7 +73,6 @@ const bool _debug = kDebugMode && false;
 /// - Elevation of drawers can be adjusted when they are shown (locked).
 /// - The width of left and right drawers can be adjusted when used as menus
 /// - Includes support for a bottom bar
-///
 class FlexScaffold extends StatefulWidget {
   /// Default constructor
   const FlexScaffold({
@@ -87,6 +86,7 @@ class FlexScaffold extends StatefulWidget {
     // Active destination index and callback for when a destination is selected.
     required this.selectedIndex,
     required this.onDestination,
+    this.sameDestinationTapBack = false,
     // Default to using first module.
     // TODO(rydmike): Implement modules.
     this.activeModule = 0,
@@ -111,8 +111,8 @@ class FlexScaffold extends StatefulWidget {
     this.sidebarIconExpandHidden,
     this.sidebarIconCollapse,
     // Sidebar state properties and its callback.
-    this.sidebarHide = false,
-    this.onSidebarHide,
+    this.sidebarIsHidden = false,
+    this.onSidebarIsHidden,
     this.sidebarBelongsToBody = false,
     // Bottom navigation bar properties.
     this.hideBottom = false,
@@ -191,6 +191,36 @@ class FlexScaffold extends StatefulWidget {
   /// [FlexDestination] and call `setState` to rebuild the menu, drawer, rail or
   /// bottom navigation bar with the new [selectedIndex].
   final ValueChanged<FlexTarget> onDestination;
+
+  /// Set to true if destinations should generate an [onDestination]
+  /// callback when tapped again, even if selectedIndex is the same as the
+  /// tapped index.
+  ///
+  /// By default destinations do not generate an [onDestination] callback
+  /// when tapped again if [selectedIndex] is the same as the tapped index.
+  /// Typically you would not want a callback in that case, but if you do, set
+  /// this to true.
+  ///
+  /// When do you want to set [sameDestinationTapBack] to true?
+  ///
+  /// Set it true, if you want to be able to use the feature in e.g. GoRouter
+  /// that allows you go up to the root in the same stateful shell branch, by
+  /// setting `goBranch(initialLocation: true)` in the onDestination callback
+  /// when you navigate to a destination index.
+  ///
+  /// ```dart
+  /// navigationShell.goBranch(
+  ///    destination.index,
+  ///    // A common pattern when using indexed navigation with nested
+  ///    // branch navigators, is to support navigating back to the initial
+  ///    // location ot the branch when tapping the item that is already active.
+  ///    // This done with the `initialLocation` parameter of goBranch.
+  ///    initialLocation: destination.index == navigationShell.currentIndex,
+  ///  );
+  /// ´´´
+  ///
+  /// Defaults to false.
+  final bool sameDestinationTapBack;
 
   // TODO(rydmike): Implement modules!
   //
@@ -321,7 +351,10 @@ class FlexScaffold extends StatefulWidget {
   /// state, to show or hide the menu.
   ///
   /// You can also control the menu visibility via the API, by setting the
-  /// [menuIsHidden] property directly.
+  /// [menuIsHidden] property directly as needed, without using the value
+  /// from the [onMenuIsHidden] callback.
+  ///
+  /// Defaults to false.
   ///
   /// Defaults to false.
   final bool menuIsHidden;
@@ -331,7 +364,7 @@ class FlexScaffold extends StatefulWidget {
   /// If you want to control the menu visibility when the user clicks one the
   /// menu button, use the value from the [onMenuIsHidden] callback as input to
   /// [menuIsHidden]. The [onMenuIsHidden] callback is called by [FlexScaffold]
-  /// with correct value as the user operates the menu button and cycles via its
+  /// with correct value as the user operates the menu button and cycles its
   /// state, to show or hide the menu.
   final ValueChanged<bool>? onMenuIsHidden;
 
@@ -350,7 +383,8 @@ class FlexScaffold extends StatefulWidget {
   /// state, to show or hide the rail.
   ///
   /// You can also control the rail visibility via the API, by setting the
-  /// [menuIsRail] property directly.
+  /// [menuIsRail] property directly as needed, without using the value
+  /// from the [onMenuIsRail] callback.
   ///
   /// Defaults to false.
   final bool menuIsRail;
@@ -360,7 +394,7 @@ class FlexScaffold extends StatefulWidget {
   /// If you want to control the rail visibility when the user clicks one the
   /// menu button, use the value from the [onMenuIsRail] callback as input to
   /// [menuIsRail]. The [onMenuIsRail] callback is called by [FlexScaffold]
-  /// with correct value as the user operates the menu button and cycles via its
+  /// with correct value as the user operates the menu button and cycles its
   /// state, to show or hide the rail.
   final ValueChanged<bool>? onMenuIsRail;
 
@@ -459,12 +493,36 @@ class FlexScaffold extends StatefulWidget {
   /// will be rotated 180 degrees to work on reversed directionality.
   final Widget? sidebarIconCollapse;
 
-  /// Keep sidebar hidden in an end drawer, even when its breakpoint is
-  /// exceeded.
-  final bool sidebarHide;
+  /// Keep the sidebar hidden in an end drawer, even when its breakpoint
+  /// to be displayed is exceeded.
+  ///
+  /// When [sidebarIsHidden] is true, both the sidebar will be kept hidden
+  /// in the end Drawer, even if the breakpoint for showing the sidebar has
+  /// been exceeded.
+  ///
+  /// If you want to only use the sidebar as an end drawer, set this to true.
+  ///
+  /// If you want to control the sidebar visibility when the user clicks one its
+  /// menu button, use the value from the [onSidebarIsHidden] callback as input
+  /// to [sidebarIsHidden]. The [onSidebarIsHidden] callback is called by
+  /// [FlexScaffold] with correct value as the user operates the sidebar's menu
+  /// button and cycles via its state, to show or hide the sidebar.
+  ///
+  /// You can also control the sidebar visibility via the API, by setting the
+  /// [sidebarIsHidden] property directly as needed, without using the value
+  /// from the [onSidebarIsHidden] callback.
+  ///
+  /// Defaults to false.
+  final bool sidebarIsHidden;
 
-  /// Callback that is called when [sidebarHide] changes
-  final ValueChanged<bool>? onSidebarHide;
+  /// Callback that is called when sidebar is hidden via its menu control.
+  ///
+  /// If you want to control the sidebar visibility when the user clicks one its
+  /// menu button, use the value from the [onSidebarIsHidden] callback as input
+  /// to [sidebarIsHidden]. The [onSidebarIsHidden] callback is called by
+  /// [FlexScaffold] with correct value as the user operates the sidebar's menu
+  /// button and cycles its state, to show or hide the sidebar.
+  final ValueChanged<bool>? onSidebarIsHidden;
 
   /// When sidebar belongs to the body, it is a vertical end column made in a
   /// row item after the body content.
@@ -914,7 +972,7 @@ class FlexScaffold extends StatefulWidget {
   /// Returns true if the [FlexScaffold] sidebar is hidden.
   ///
   /// The sidebar can be hidden either via internal sidebar toggle, or
-  /// [FlexScaffold.sidebarHide] can be set to true.
+  /// [FlexScaffold.sidebarIsHidden] can be set to true.
   static bool isSidebarHiddenOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.isSidebarHidden).isSidebarHidden;
 
@@ -1098,7 +1156,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
           (value || _width < _breakpointSidebar || _isSidebarHidden) &&
               widget.destinations[_selectedIndex].hasSidebar &&
               widget.sidebar != null;
-      widget.onSidebarHide?.call(value);
+      widget.onSidebarIsHidden?.call(value);
       if (_debug) {
         debugPrint('FlexScaffold: sidebarIsHidden set to $_isSidebarHidden');
       }
@@ -1136,8 +1194,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
   ///
   /// Triggers call to [FlexScaffold.onDestination] with new destination info.
   void setSelectedIndex(int index) {
-    // If we just clicked the current index we don't do anything
-    if (index == widget.selectedIndex) return;
+    // If we just clicked the current index we don't do anything, unless the
+    // option set to generate a callback for that is also set.
+    if (index == widget.selectedIndex && !widget.sameDestinationTapBack) return;
     setState(() {
       // After moving to a new destination, ensure that the bottom
       // navigation bar is never scroll hidden.
@@ -1181,8 +1240,9 @@ class FlexScaffoldState extends State<FlexScaffold> {
   ///
   /// Triggers call to [FlexScaffold.onDestination] with new destination info.
   void setBottomIndex(int index) {
-    // If we click the current index we don't do anything
-    if (index == _indexBottom.index) return;
+    // If we just clicked the current index we don't do anything, unless the
+    // option set to generate a callback for that is also set.
+    if (index == widget.selectedIndex && !widget.sameDestinationTapBack) return;
     setState(
       () {
         // After moving to a new destination, ensure that the bottom
@@ -1339,7 +1399,7 @@ class FlexScaffoldState extends State<FlexScaffold> {
     _indexBottom.setIndex(bottomIndex);
     _isBottomTarget = bottomIndex != null;
     _isMenuHidden = widget.menuIsHidden;
-    _isSidebarHidden = widget.sidebarHide;
+    _isSidebarHidden = widget.sidebarIsHidden;
     _menuPrefersRail = widget.menuIsRail;
     _scrollHiddenBottomBar = false;
     _selectedDestination = FlexTarget(
@@ -1402,8 +1462,8 @@ class FlexScaffoldState extends State<FlexScaffold> {
     if (widget.menuIsHidden != oldWidget.menuIsHidden) {
       _isMenuHidden = widget.menuIsHidden;
     }
-    if (widget.sidebarHide != oldWidget.sidebarHide) {
-      _isSidebarHidden = widget.sidebarHide;
+    if (widget.sidebarIsHidden != oldWidget.sidebarIsHidden) {
+      _isSidebarHidden = widget.sidebarIsHidden;
     }
     if (widget.menuIsRail != oldWidget.menuIsRail) {
       _menuPrefersRail = widget.menuIsRail;

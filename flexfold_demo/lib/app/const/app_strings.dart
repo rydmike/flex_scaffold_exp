@@ -8,10 +8,10 @@ class AppStrings {
   // name spaces them and gives them a self documenting group and context that
   // they belong to.
   AppStrings._();
-  static const String appName = 'FlexScaffold demo';
-  static const String version = '0.0.1';
-  static const String flutter = 'Built with channel Stable, 3.3.9, CanvasKit';
-  static const String copyright = '© 2022';
+  static const String appName = 'FlexScaffold Demo';
+  static const String version = '0.0.10';
+  static const String flutter = 'Built with channel Stable, 3.19.1, CanvasKit';
+  static const String copyright = '© 2024';
   static const String author = 'Mike Rydstrom';
   static const String license = 'BSD 3-Clause License';
 
@@ -39,5 +39,5 @@ class AppStrings {
 
   // Misc strings for the demo app.
   static const String user = 'Mike Rydstrom';
-  static const String company = 'Company Ltd';
+  static const String company = 'Rydmike Ltd';
 }

@@ -253,9 +253,9 @@ class NavigationShell extends ConsumerWidget {
             ? AppIcons.sidebarIconCollapse
             : null,
         // Setting to keep the sidebar hidden.
-        sidebarHide: ref.watch(hideSidebarPod),
+        sidebarIsHidden: ref.watch(hideSidebarPod),
         // Callback that changes when sidebar is set to be hidden.
-        onSidebarHide: (bool value) =>
+        onSidebarIsHidden: (bool value) =>
             ref.read(hideSidebarPod.notifier).state = value,
         // Have sidebar as a part of the body or outside it, if false the
         // sidebar will be outside the Flutter Scaffold body like the menu
