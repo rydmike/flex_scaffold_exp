@@ -19,7 +19,7 @@ import 'flex_target.dart';
 // Set to true to observe debug prints. In release mode this compile time
 // const always evaluate to false, so in theory anything with only an
 // if (_debug) {} should get tree shaken away totally in a release build.
-const bool _debug = kDebugMode && true;
+const bool _debug = kDebugMode && false;
 
 // TODO(rydmike): Review existing implementations.
 // - Add a controller that contain menu of the control properties?
