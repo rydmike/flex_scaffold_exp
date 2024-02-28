@@ -11,7 +11,6 @@ import '../../../core/views/widgets/universal/page_body.dart';
 import '../../../navigation/constants/routes.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
-import '../../../settings/controllers/pods_flexfold.dart';
 import '../../../settings/views/widgets/application_settings/modal_routes_switch.dart';
 
 class TabModal extends ConsumerStatefulWidget {
@@ -37,18 +36,6 @@ class _TabModalState extends ConsumerState<TabModal>
     super.initState();
     scrollController =
         ScrollController(keepScrollOffset: true, initialScrollOffset: 0);
-    scrollController.addListener(
-      () {
-        FlexScaffold.hideBottomBarOnScroll(scrollController, hide, useHide);
-      },
-    );
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    useHide = ref.watch(hideBottomBarOnScrollPod);
-    hide = FlexScaffold.use(context).scrollHideBottomBar;
   }
 
   @override

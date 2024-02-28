@@ -19,7 +19,7 @@ import 'flex_target.dart';
 // Set to true to observe debug prints. In release mode this compile time
 // const always evaluate to false, so in theory anything with only an
 // if (_debug) {} should get tree shaken away totally in a release build.
-const bool _debug = kDebugMode && false;
+const bool _debug = kDebugMode && true;
 
 // TODO(rydmike): Review existing implementations.
 // - Add a controller that contain menu of the control properties?
@@ -116,6 +116,7 @@ class FlexScaffold extends StatefulWidget {
     this.sidebarBelongsToBody = false,
     // Bottom navigation bar properties.
     this.hideBottom = false,
+    this.hideBottomBarWhenScrolling = false,
     this.showBottomWhenMenuInDrawer = false,
     this.showBottomWhenMenuShown = false,
     this.bottomDestinationsInDrawer = false,
@@ -576,6 +577,17 @@ class FlexScaffold extends StatefulWidget {
   /// navigation mode. Navigation will only be possible via the
   /// drawer menu in a phone sized app.
   final bool hideBottom;
+
+  /// Active the bottom navigation bar's hide on scroll feature.
+  ///
+  /// When set to true, the bottom bar animates down to become hidden when
+  /// scrolling down in a list view, when you scroll up it animates back into
+  /// view.
+  ///
+  /// When set to false, the bottom bar is always visible.
+  ///
+  /// Defaults to false.
+  final bool hideBottomBarWhenScrolling;
 
   /// When true, bottom navigation destinations will be shown as soon as the
   /// menu is hidden in the drawer.
@@ -1044,44 +1056,6 @@ class FlexScaffold extends StatefulWidget {
   static FlexTarget onDestinationOf(BuildContext context) =>
       _of(context, _FlexScaffoldAspect.onDestination).onDestination;
 
-  /// A static helper function intended to be used as a scroll controller
-  /// listener to show and hide the bottom navigation bar in a [FlexScaffold].
-  ///
-  /// The [scrollController] is the [ScrollController] being listened to.
-  ///
-  /// The boolean [ValueChanged] callback [hide] is called with true if the
-  /// [scrollController] scrolling direction is reverse and we should hide
-  /// the bottom navigation bar. If [scrollController] direction is forward
-  /// it is called with false, indicating we should show the bottom bar again.
-  ///
-  /// You use the FlexScaffold.of(context).scrollHideBottomBar(bool) function
-  /// to actually hide and show the bottom navigation bar.
-  ///
-  /// Set the [useHide] to false to not use the function at all, this can be
-  /// used as external control of if the hide function is even used or e.g.
-  /// turned OFF via a setting in the app.
-  static void hideBottomBarOnScroll(
-    ScrollController scrollController,
-    ValueChanged<bool> hide, [
-    bool useHide = true,
-  ]) {
-    // If scroll hiding is used we do the hide/show callback, else no op.
-    if (useHide) {
-      // Reverse direction is scrolling down, we hide it, if not hidden.
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        // if not already set to hidden, we set it to hidden.
-        hide(true);
-      }
-      // Forward direction is scrolling up, we show it, if not shown already.
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        // If it is hidden, we set it to not be hidden anymore.
-        hide(false);
-      }
-    }
-  }
-
   @override
   State<FlexScaffold> createState() => FlexScaffoldState();
 }
@@ -1120,6 +1094,28 @@ class FlexScaffoldState extends State<FlexScaffold> {
   late bool _showBottomDestinationsInDrawer;
   FlexTarget _onDestination = const FlexTarget();
   FlexTarget _selectedDestination = const FlexTarget();
+
+  // This method handles the notification from the NotificationListener that
+  // wraps the body with a UserScrollNotification.
+  bool _handleScrollNotification(UserScrollNotification notification) {
+    if (widget.hideBottomBarWhenScrolling) {
+      if (_debug) debugPrint('Notified of a UserScrollNotification.');
+      if (notification.direction == ScrollDirection.forward) {
+        if (_debug) debugPrint('Scrolling forward.');
+        setState(() {
+          _scrollHiddenBottomBar = false;
+        });
+      } else if (notification.direction == ScrollDirection.reverse) {
+        if (_debug) debugPrint('Scrolling reverse.');
+        setState(() {
+          _scrollHiddenBottomBar = true;
+        });
+      } else if (notification.direction == ScrollDirection.idle) {
+        if (_debug) debugPrint('Scrolling is idle.');
+      }
+    }
+    return false;
+  }
 
   /// Set the FlexScaffold menu to be hidden.
   ///
@@ -1176,17 +1172,39 @@ class FlexScaffoldState extends State<FlexScaffold> {
   /// Returns true if the bottom navigation is scroll hidden.
   bool get isBottomBarScrollHidden => _scrollHiddenBottomBar;
 
-  /// Set the FlexScaffold bottom navigation bar scroll visibility.
-  /// When set to true, the bottom bar animates down to become hidden
-  /// when set to false, it animates back into view.
+  /// Set the FlexScaffold bottom navigation bar scrolled visibility state.
+  ///
+  /// When set to true, the bottom bar animates down to become hidden.
+  /// When set to false, it animates back into view.
+  ///
+  /// This feature only has any effect if
+  /// [FlexScaffold.hideBottomBarWhenScrolling] is true.
+  ///
+  /// Typically you do not need to setup an external scroll controller with
+  /// listener to call this function. It is automatically handled by the
+  /// FlexScaffold when a vertically scrolling view is used in the
+  /// [FlexScaffold].
+  ///
+  /// There are however situation where you might want to control the visibility
+  /// of a scroll hidden bottom bar from an external source. typically this
+  /// is then to ensure the bottom navigation bar is visible.
+  /// To make it visible, you can call:
+  ///
+  /// ```dart
+  /// FlexScaffold.use(context).scrollHideBottomBar(false);
+  /// ```
+  ///  If the user scrolls down again it will of
+  /// course become hidden again.
   void scrollHideBottomBar(bool value) {
-    setState(() {
-      _scrollHiddenBottomBar = value;
-      if (_debug) {
-        debugPrint('FlexScaffold: scrollHideBottomBar '
-            'set to $_scrollHiddenBottomBar');
-      }
-    });
+    if (widget.hideBottomBarWhenScrolling) {
+      setState(() {
+        _scrollHiddenBottomBar = value;
+        if (_debug) {
+          debugPrint('FlexScaffold: scrollHideBottomBar '
+              'set to $_scrollHiddenBottomBar');
+        }
+      });
+    }
   }
 
   /// Set menu/rail selected index to given index value on current
@@ -1494,7 +1512,6 @@ class FlexScaffoldState extends State<FlexScaffold> {
     // Get media width, height, and safe area padding
     assert(debugCheckHasMediaQuery(context),
         'A valid build context is required for the MediaQuery.');
-    // final MediaQueryData mediaData = MediaQuery.of(context);
     final EdgeInsets padding = MediaQuery.paddingOf(context);
     final Size size = MediaQuery.sizeOf(context);
     final double leftPadding = padding.left;
@@ -1701,7 +1718,12 @@ class FlexScaffoldState extends State<FlexScaffold> {
                     Expanded(
                       // TODO(rydmike): Review if TraversalGroup is needed here.
                       child: FocusTraversalGroup(
-                        child: widget.body ?? const SizedBox(),
+                        // The body with a scroll notification listener.
+                        // We use it to hide/show the bottom navigation bar.
+                        child: NotificationListener<UserScrollNotification>(
+                          onNotification: _handleScrollNotification,
+                          child: widget.body ?? const SizedBox(),
+                        ),
                       ),
                     ),
                     // The Sidebar when shown as a fixed item and it belongs

@@ -14,7 +14,6 @@ import '../../../core/views/widgets/app/svg/svg_asset_image_switcher.dart';
 import '../../../navigation/constants/routes.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
-import '../../../settings/controllers/pods_flexfold.dart';
 
 // This tab screen is not using any of the view models, so it was left as a
 // plain stateful widget instead of making it a HookWidget or
@@ -45,11 +44,6 @@ class _TabImagesState extends ConsumerState<TabImages>
     super.initState();
     scrollController =
         ScrollController(keepScrollOffset: true, initialScrollOffset: 0);
-    scrollController.addListener(
-      () {
-        FlexScaffold.hideBottomBarOnScroll(scrollController, hide, useHide);
-      },
-    );
     // Generate a random image color data list that we will build widgets from.
     // We generate this data list in the stateful widget's init class because
     // we want its colors to remain static as long as the page is not rebuilt.
@@ -58,13 +52,6 @@ class _TabImagesState extends ConsumerState<TabImages>
     // that could be done too, but it feels a bit too random.
     imageColors = List<MaterialColor>.generate(
         _maxTiles, (int index) => RandomColor().randomMaterialColor());
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    useHide = ref.watch(hideBottomBarOnScrollPod);
-    hide = FlexScaffold.use(context).scrollHideBottomBar;
   }
 
   @override

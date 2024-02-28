@@ -108,7 +108,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen>
             onTap: (int index) {
               // If we tapped on a tab bar item, we will reveal any
               // scroll hidden bottom navigation bar
-              // ref.read(scrollHiddenBottomBarPod.notifier).state = false;
               FlexScaffold.use(context).scrollHideBottomBar(false);
               _controller.index = index;
               // if (index == 0) context.goNamed(AppRoutes.tabsGuideLabel);

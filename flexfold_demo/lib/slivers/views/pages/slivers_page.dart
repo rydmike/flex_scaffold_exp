@@ -71,18 +71,6 @@ class _SliversScreenState extends ConsumerState<SliversPage> {
     );
     scrollController =
         ScrollController(keepScrollOffset: true, initialScrollOffset: 0);
-    scrollController.addListener(
-      () {
-        FlexScaffold.hideBottomBarOnScroll(scrollController, hide, useHide);
-      },
-    );
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    useHide = ref.watch(hideBottomBarOnScrollPod);
-    hide = FlexScaffold.use(context).scrollHideBottomBar;
   }
 
   @override

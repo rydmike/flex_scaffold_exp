@@ -13,7 +13,6 @@ import '../../../navigation/controllers/current_route_provider.dart';
 // import 'package:routemaster/routemaster.dart';
 
 import '../../../navigation/models/app_navigation_state.dart';
-import '../../../settings/controllers/pods_flexfold.dart';
 import '../../../settings/views/pages/settings_page.dart';
 
 class InfoPage extends ConsumerStatefulWidget {
@@ -37,18 +36,6 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
       initialScrollOffset: 0,
       debugLabel: 'InfoScreenScrollController',
     );
-    scrollController.addListener(
-      () {
-        FlexScaffold.hideBottomBarOnScroll(scrollController, hide, useHide);
-      },
-    );
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    useHide = ref.watch(hideBottomBarOnScrollPod);
-    hide = FlexScaffold.use(context).scrollHideBottomBar;
   }
 
   @override
@@ -163,8 +150,7 @@ class _InfoScreenState extends ConsumerState<InfoPage> {
                 ref
                     .read(currentRouteProvider.notifier)
                     .setDestination(newDestination);
-                // Make sure our bottom navigation bar is not hidden.
-                // ref.read(scrollHiddenBottomBarPod.notifier).state = false;
+                // Make sure our bottom navigation bar is not scroll hidden.
                 FlexScaffold.use(context).scrollHideBottomBar(false);
                 // Actually navigate to the target route.
                 context.go(newDestination.route);

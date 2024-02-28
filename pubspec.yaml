@@ -1,6 +1,6 @@
 name: flex_scaffold
-description: FlexScaffold is an animated, responsive and adaptive application scaffold.
-version: 0.0.10
+description: FlexScaffold is an animated, responsive and adaptive Scaffold.
+version: 0.0.11
 homepage: https://github.com/rydmike/flexfold
 environment:
   sdk: '>=3.0.0 <4.0.0'

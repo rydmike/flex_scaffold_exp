@@ -266,6 +266,7 @@ class NavigationShell extends ConsumerWidget {
         // Bottom navigation bar controls
         // scrollHiddenBottomBar: ref.watch(scrollHiddenBottomBarPod),
         hideBottom: ref.watch(hideBottomBarPod),
+        hideBottomBarWhenScrolling: ref.watch(hideBottomBarOnScrollPod),
         showBottomWhenMenuInDrawer: ref.watch(showBottomBarWhenMenuInDrawerPod),
         showBottomWhenMenuShown: ref.watch(showBottomBarWhenMenuShownPod),
         bottomDestinationsInDrawer: ref.watch(bottomDestinationsInDrawerPod),

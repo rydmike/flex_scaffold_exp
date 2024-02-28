@@ -10,7 +10,6 @@ import '../../../core/views/widgets/universal/page_body.dart';
 import '../../../navigation/constants/routes.dart';
 import '../../../navigation/controllers/current_route_provider.dart';
 import '../../../navigation/models/app_navigation_state.dart';
-import '../../controllers/pods_flexfold.dart';
 import '../widgets/app_bar/settings_app_bar.dart';
 import '../widgets/application_settings/settings_application.dart';
 import '../widgets/bottom_bar/settings_bottom_bar.dart';
@@ -42,18 +41,6 @@ class _SettingsScreenState extends ConsumerState<SettingsPage> {
       initialScrollOffset: 0,
       debugLabel: 'SettingsScreenScrollController',
     );
-    scrollController.addListener(
-      () {
-        FlexScaffold.hideBottomBarOnScroll(scrollController, hide, useHide);
-      },
-    );
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    useHide = ref.watch(hideBottomBarOnScrollPod);
-    hide = FlexScaffold.use(context).scrollHideBottomBar;
   }
 
   @override
