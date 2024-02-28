@@ -7,7 +7,7 @@ This is a new experimental reworked version of the original Flexfold package tha
 This package is a work in progress and is not ready for general consumption. The intent is
 to publish this packge on pub.dev when it is ready for general use.
 
-The API and features of this public release may still change at any time.
+**The API and features of this public release may still change at any time!**
 
 
 
